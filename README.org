@@ -1,0 +1,1558 @@
+#+options: ':nil *:t -:t ::t <:t H:3 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:t todo:t |:t
+#+title: README
+#+date: <2024-03-10 Sun>
+#+author: Kristian Alexander P
+#+email: alexforsale@yahoo.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.2 (Org mode 9.6.15)
+#+cite_export:
+#+startup: indent fold
+* Literate /Emacs/ Configuration
+:PROPERTIES:
+:header-args: :tangle ./config.el
+:END:
+** header
+#+begin_src emacs-lisp +n
+  ;;; config --- Custom Configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+#+end_src
+** Modules loading
+#+begin_src emacs-lisp -n
+  (require 'config-variables (expand-file-name "modules/config-variables.el" user-emacs-directory) t)
+  (require 'config-evil nil t)
+  (require 'config-keybindings nil t)
+  (require 'config-ui nil t)
+  (require 'config-builtin nil t)
+  (require 'config-completion nil t)
+  (require 'config-shell nil t)
+  (require 'config-editing nil t)
+  (require 'config-project nil t)
+#+end_src
+
+** footer
+#+begin_src emacs-lisp -n
+  (provide 'config)
+  ;;; config.el ends.here
+#+end_src
+* variables and functions
+:PROPERTIES:
+:header-args: :tangle ./modules/config-variables.el :mkdirp t
+:END:
+*** header
+#+begin_src emacs-lisp +n
+  ;;; config-variables --- Custom variables -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+#+end_src
+*** =+config/user-modules-directory=
+#+begin_src emacs-lisp
+  (defvar +config/user-modules-directory (expand-file-name "modules/" user-emacs-directory)
+    "User modules directory.")
+#+end_src
+
+#+begin_src emacs-lisp
+  (when (file-directory-p +config/user-modules-directory)
+    (add-to-list 'load-path +config/user-modules-directory))
+#+end_src
+
+#+begin_src emacs-lisp
+  (customize-set-variable 'custom-file (expand-file-name "custom.el" user-emacs-directory))
+  (when (file-exists-p custom-file)
+    (load custom-file))
+#+end_src
+
+#+begin_src emacs-lisp
+  ;;; From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048
+  (defun merge-list-to-list (dst src)
+    "Merges content of the 2nd list with the 1st one"
+    (set dst
+         (append (eval dst) src)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (require 'package)
+  ;; Add `melpa` to `package-archives`.
+  (add-to-list 'package-archives
+               '("melpa" . "https://melpa.org/packages/"))
+  ;; gnu-devel
+  (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/"))
+  (package-initialize)
+
+  ;; gnu-devel
+  (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/"))
+
+  (custom-set-variables
+   '(use-package-enable-imenu-support t))
+  (require 'use-package)
+#+end_src
+*** footer
+#+begin_src emacs-lisp -n
+  (provide 'config-variables)
+  ;;; config-variables.el ends.here
+#+end_src
+* Evil
+:PROPERTIES:
+:header-args: :tangle ./modules/config-evil.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+    ;;; config-evil --- `evil-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package evil
+    :ensure
+    :preface
+    (customize-set-variable 'evil-want-keybinding nil)
+    (customize-set-variable 'evil-want-integration t)
+    (customize-set-variable 'evil-undo-system 'undo-redo)
+    (customize-set-variable 'evil-want-C-u-scroll t) ;; move universal arg to <leader> u
+    (customize-set-variable 'evil-want-C-u-delete t) ;; delete back to indentation in insert state
+    (customize-set-variable 'evil-want-C-g-bindings t)
+    :custom
+    (evil-undo-system #'undo-redo)
+    (evil-search-module 'evil-search)
+    (evil-ex-search-vim-style-regexp t)
+    (evil-ex-interactive-search-highlight 'selected-window)
+    (evil-kbd-macro-suppress-motion-error t)
+    (evil-visual-update-x-selection-p nil)
+    :config
+    (setq evil-normal-state-cursor 'box
+          evil-insert-state-cursor 'bar
+          evil-visual-state-cursor 'hollow)
+    (evil-select-search-module 'evil-search-module 'evil-search)
+    (evil-mode 1)
+    (with-eval-after-load 'eldoc
+      (eldoc-add-command 'evil-normal-state
+                         'evil-insert
+                         'evil-change
+                         'evil-delete
+                         'evil-replace))
+    ;; (evil-set-leader '(normal visual) (kbd "SPC"))
+    ;; (evil-set-leader '(normal visual) (kbd "C-c SPC") t)
+    ;; set the universal arg
+    ;; (evil-define-key '(normal visual) 'global (kbd "<leader>u") 'universal-argument)
+    )
+
+  (use-package evil-collection
+    :ensure t
+    :after evil
+    :init
+    (evil-collection-init)
+    :custom
+    (evil-collection-setup-minibuffer t)
+    (evil-collection-calendar-want-org-bindings t)
+    :config
+    (with-eval-after-load 'bookmark
+      (evil-collection-bookmark-setup))
+    (with-eval-after-load 'pass
+      (evil-collection-pass-setup))
+    (with-eval-after-load 'man
+      (evil-collection-man-setup))
+    (with-eval-after-load 'org
+      (evil-collection-org-setup))
+    (with-eval-after-load 'corfu
+      (evil-collection-corfu-setup))
+    (with-eval-after-load 'embark
+      (evil-collection-embark-setup))
+    (with-eval-after-load 'epa
+      (evil-collection-epa-setup))
+    (with-eval-after-load 'nov
+      (evil-collection-nov-setup))
+    (with-eval-after-load 'eww
+      (evil-collection-eww-setup))
+    (with-eval-after-load 'emms
+      (evil-collection-emms-setup)
+      (evil-collection-emms-browser-setup)))
+
+  (unless (display-graphic-p)
+    (use-package evil-terminal-cursor-changer
+      :ensure t
+      :config
+      (evil-terminal-cursor-changer-activate)))
+
+
+  (use-package evil-args
+    :after evil
+    :ensure t
+    :hook (emacs-lisp-mode . +config/evil-args-lisp)
+    :config
+    (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+    (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+    (define-key evil-normal-state-map "L" 'evil-forward-arg)
+    (define-key evil-normal-state-map "H" 'evil-backward-arg)
+    (define-key evil-motion-state-map "L" 'evil-forward-arg)
+    (define-key evil-motion-state-map "H" 'evil-backward-arg)
+    (define-key evil-normal-state-map "K" 'evil-jump-out-args)
+    (defun +config/evil-args-lisp ()
+      (setq-local evil-args-delimiters '(" "))))
+
+  (use-package evil-easymotion
+    :after evil
+    :ensure t
+    :demand t
+    :commands evilem-create evilem-default-keybindings
+    :config
+    (evilem-default-keybindings "gs")
+    (evilem-make-motion evilem-motion-search-next #'evil-ex-search-next
+                        :bind ((evil-ex-search-highlight-all nil)))
+    (evilem-make-motion evilem-motion-search-previous #'evil-ex-search-previous
+                        :bind ((evil-ex-search-highlight-all nil)))
+    (evilem-make-motion evilem-motion-search-word-forward #'evil-ex-search-word-forward
+                        :bind ((evil-ex-search-highlight-all nil)))
+    (evilem-make-motion evilem-motion-search-word-backward #'evil-ex-search-word-backward
+                        :bind ((evil-ex-search-highlight-all nil)))
+    (put 'visible 'bounds-of-thing-at-point (lambda () (cons (window-start) (window-end))))
+    (evilem-make-motion evilem-motion-forward-word-begin #'evil-forward-word-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-forward-WORD-begin #'evil-forward-WORD-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-forward-word-end #'evil-forward-word-end :scope 'visible)
+    (evilem-make-motion evilem-motion-forward-WORD-end #'evil-forward-WORD-end :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-word-begin #'evil-backward-word-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-WORD-begin #'evil-backward-WORD-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-word-end #'evil-backward-word-end :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-WORD-end #'evil-backward-WORD-end :scope 'visible))
+
+  (use-package evil-surround
+    :after evil
+    :ensure t
+    :commands (global-evil-surround-mode
+               evil-surround-edit
+               evil-Surround-edit
+               evil-surround-region)
+    :config (global-evil-surround-mode 1))
+
+  (use-package evil-embrace
+    :after evil evil-surround
+    :ensure t
+    :commands embrace-add-pair embrace-add-pair-regexp
+    :hook (LaTeX-mode . embrace-LaTeX-mode-hook)
+    :hook (org-mode . embrace-org-mode-hook)
+    :hook (ruby-mode . embrace-ruby-mode-hook)
+    :hook (emacs-lisp-mode . embrace-emacs-lisp-mode-hook)
+    :init
+    (with-eval-after-load 'evil-surround
+      (evil-embrace-enable-evil-surround-integration))
+    :config
+    (setq evil-embrace-show-help-p nil))
+
+  (use-package evil-traces
+    :diminish
+    :ensure t
+    :after evil-ex
+    :config
+    (evil-traces-mode))
+
+  (use-package evil-visualstar
+    :after evil
+    :ensure t
+    :commands (evil-visualstar/begin-search
+               evil-visualstar/begin-search-forward
+               evil-visualstar/begin-search-backward)
+    :init
+    (evil-define-key* 'visual 'global
+                      "*" #'evil-visualstar/begin-search-forward
+                      "#" #'evil-visualstar/begin-search-backward))
+
+  (use-package exato
+    :ensure t
+    :after evil
+    :demand t
+    :commands evil-outer-xml-attr evil-inner-xml-attr)
+
+  (use-package evil-multiedit
+    :after evil
+    :ensure t
+    :demand t
+    :config
+    (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match)
+    (evil-multiedit-mode)
+    (evil-multiedit-default-keybinds))
+
+  (provide 'config-evil)
+  ;;; config-evil.el ends here
+#+end_src
+* Keybindings
+:PROPERTIES:
+:header-args: :tangle ./modules/config-keybindings.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+  ;;; config-keybindings --- Keybindings -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package general
+    :ensure t
+    :init
+    (with-eval-after-load 'evil
+      (general-evil-setup))
+    (general-auto-unbind-keys)
+    :config
+    (general-override-mode)
+    (general-create-definer +config/leader-key
+                            :keymaps 'override
+                            :states  '(insert emacs normal hybrid motion visual operator)
+                            :prefix "SPC"
+                            :non-normal-prefix "s-SPC")
+    (general-create-definer +config/local-leader
+                            :keymaps 'override
+                            :states '(emacs normal hybrid motion visual operator)
+                            :prefix "m"
+                            :non-normal-prefix "s-m"
+                            "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
+    ;; useful macro
+    (defmacro +config/leader-menu! (name infix-key &rest body)
+      "Create a definer NAME `+config/leader-NAME' wrapping `+config/leader-key'.
+  Create prefix map: `+config/leader-NAME-map'. Prefix bindings in BODY with INFIX-KEY."
+      (declare (indent 2))
+      `(progn
+         (general-create-definer ,(intern (concat "+config/leader-" name))
+                                 :wrapping +config/leader-key
+                                 :prefix-map (quote ,(intern (concat "+config/leader-" name "-map")))
+                                 :infix ,infix-key
+                                 :wk-full-keys nil
+                                 "" '(:ignore t :which-key ,name))
+         (,(intern (concat "+config/leader-" name))
+          ,@body)))
+    ;; keybindings
+    (+config/leader-key
+     ";" 'pp-eval-expression
+     ":" 'execute-extended-command
+     "." '(find-file :wk "find file")
+     "^" '(subword-capitalize :wk "Capitalize subword")
+     "u" 'universal-argument)
+    ;;; First level menu
+    (+config/leader-menu! "buffer" "b")
+    (+config/leader-menu! "files" "f")
+    (+config/leader-menu! "find" "gf")
+    (+config/leader-menu! "go" "g")
+    (+config/leader-menu! "insert" "i")
+    (+config/leader-menu! "mail" "M-m")
+    (+config/leader-menu! "mark" "m")
+    (+config/leader-menu! "notes" "n")
+    (+config/leader-menu! "open" "o")
+    (+config/leader-menu! "quit" "q")
+    (+config/leader-menu! "register" "gr")
+    (+config/leader-menu! "tree" "t")
+    (+config/leader-menu! "tab" "t TAB")
+    (+config/leader-menu! "vterm" "tv")
+    (+config/leader-menu! "window" "w")
+    ;;; keybindings
+    ;;;; buffer
+    (+config/leader-buffer
+     "[" '(previous-buffer :wk "previous buffer")
+     "]" '(next-buffer :wk "next buffer")
+     "TAB" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+     "b" '(switch-to-buffer :wk "switch to buffer")
+     "s" '(basic-save-buffer :wk "save buffer")
+     "c" '(clone-indirect-buffer :wk "clone buffer")
+     "C" '(clone-indirect-buffer-other-window :wk "clone buffer other window")
+     "d" '(kill-current-buffer :wk "kill current buffer")
+     "i" 'ibuffer
+     "k" '(kill-buffer :wk "kill buffer")
+     "l" '(evil-switch-to-windows-last-buffer :wk "Switch to last open buffer")
+     "m" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :wk "switch to messages buffer")
+     "n" '(next-buffer :wk "next buffer")
+     "N" '(evil-buffer-new :wk "New unnamed buffer")
+     "p" '(previous-buffer :wk "previous buffer")
+     "o" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+     "r" '(revert-buffer-quick :wk "revert buffer")
+     "R" '(rename-buffer :wk "rename buffer")
+     "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
+     "z" '(bury-buffer :wk "bury buffer"))
+    ;;;; files
+    (+config/leader-files
+     "D" 'dired
+     "d" 'dired-jump
+     "f" '(find-file :wk "find file")
+     "F" '(find-file-other-frame :wk "find file other frame")
+     "k" 'delete-frame
+     "r" 'recentf
+     "S" '(write-file :wk "save file")
+     "s" '(save-buffer :wk "save buffer")
+     "w" '(find-file-other-window :wk "find file other window"))
+    ;;;; find
+    (+config/leader-find
+     "g" 'grep
+     "r" '(rgrep :wk "recursive grep"))
+    ;;;; help
+    (+config/leader-key
+     "h" (general-simulate-key "C-h"
+                               :state '(normal visual)
+                               :name general-SPC-h-simulates-C-h
+                               :docstring "Simulates C-h in normal and visual mode."
+                               :which-key "Help"))
+    ;;;; go
+    (+config/leader-go
+     "'" '(:ignore t :wk "avy")
+     "''" 'avy-resume
+     "'c" 'evil-avy-goto-char
+     "'l" 'evil-avy-goto-line
+     "'w" 'evil-avy-goto-word-or-subword-1)
+    ;;;; insert
+    (+config/leader-insert
+     "u" '(insert-char :wk "insert character"))
+    ;;;; mark
+    (+config/leader-mark
+     "m" '(bookmark-set :wk "set bookmark")
+     "b" '(bookmark-jump :wk "jump to bookmark")
+     "B" '(bookmark-jump-other-window :wk "jump to bookmark other window")
+     "C-c b" '(bookmark-jump-other-frame :wk "jump to bookmark other frame")
+     ;; "c" '(consult-bookmark :wk "consult bookmark") ;; require `consult' package
+     "l" '(bookmark-bmenu-list :wk "list bookmarks")
+     "L" '(bookmark-load :wk "load bookmark")
+     "d" '(bookmark-delete :wk "delete bookmark")
+     "D" '(bookmark-delete-all :wk "delete all bookmarks")
+     "s" '(bookmark-save :wk "save bookmark")
+     "r" '(bookmark-rename :wk "rename bookmark"))
+    ;;;; open
+    (+config/leader-open
+     "i" '((lambda () (interactive) (find-file user-init-file)) :wk "open Emacs configuration file"))
+    ;;;; register
+    (+config/leader-register
+     ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
+     "+" '(increment-register :wk "augment content of register")
+     "C-@" '(point-to-register :wk "store current point to register")
+     "C-SPC" '(point-to-register :wk "store current point to register")
+     "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
+     "SPC" '(point-to-register :wk "store current point to register")
+     "c" '(clear-rectangle :wk "blank out region-rectangle")
+     "d" '(delete-rectangle :wk "delete region-rectangle")
+     "f" '(frameset-to-register :wk "store frameset to register")
+     "g" '(insert-register :wk "insert register")
+     "i" '(insert-register :wk "insert register")
+     "j" '(jump-to-register :wk "jump to register")
+     "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
+     "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
+     "m" '(bookmark-set :wk "set bookmark")
+     "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
+     "n" '(number-to-register :wk "store a number in a register")
+     "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
+     "o" '(open-rectangle :wk "blank out region-rectangle")
+     "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
+     "s" '(copy-to-register :wk "copy region to register")
+     "t" '(string-rectangle :wk "replace rectangle with string")
+     "x" '(copy-to-register :wk "copy region to register")
+     "w" '(window-configuration-to-register :wk "store window configuration to register")
+     "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
+    ;;;; window
+    (+config/leader-window
+     "C-o" '(delete-other-windows :wk "delete other windows")
+     "[" '(evil-window-left :wk "left window")
+     "]" '(evil-window-right :wk "right window")
+     "+" '(enlarge-window :wk "enlarge window")
+     "-" '(shrink-window :wk "shrink window")
+     "}" '(enlarge-window-horizontally :wk "enlarge window horizontally")
+     "{" '(shrink-window-horizontally :wk "shrink window horizontally")
+     "+" 'evil-window-increase-height
+     "-" 'evil-window-decrease-height
+     ":" 'evil-ex
+     "<" 'evil-window-decrease-width
+     "=" 'balance-windows
+     ">" 'evil-window-increase-height
+     "_" 'evil-window-set-height
+     "b" 'evil-window-bottom-right
+     "c" 'evil-window-delete
+     "d" '(delete-window :wk "delete window")
+     "h" 'evil-window-left
+     "f" '(ffap-other-window :wk "ffap other window")
+     "j" 'evil-window-down
+     "k" 'evil-window-up
+     "l" 'evil-window-right
+     "n" 'evil-window-new
+     "p" 'evil-window-mru
+     "q" 'evil-quit
+     "r" 'evil-window-rotate-downwards
+     "R" 'evil-window-rotate-upwards
+     "s" 'evil-window-split
+     "T" '(tear-off-window :wk "tear off window")
+     "t" 'evil-window-top-left
+     "u" 'winner-undo
+     "v" 'evil-window-vsplit
+     "w" '(other-window :wk "other window")
+     "W" 'evil-window-prev
+     "x" 'evil-window-exchange
+     "|" 'evil-window-set-width
+     "<left>" 'evil-window-left
+     "<right>" 'evil-window-right
+     "<down>" 'evil-window-down
+     "<up>" 'evil-win-up)
+    ;;;; quit
+    (+config/leader-quit
+     "q" '(save-buffers-kill-terminal :wk "quit and save")
+     "R" '(restart-emacs :wk "restart Emacs"))
+    )
+
+  (provide 'config-keybindings)
+  ;;; config-keybindings.el ends here
+#+end_src
+* UI
+:PROPERTIES:
+:header-args: :tangle ./modules/config-ui.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+  ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package which-key
+    :ensure
+    :custom
+    (which-key-lighter "")
+    (which-key-sort-order #'which-key-key-order-alpha)
+    (which-key-sort-uppercase-first nil)
+    (which-key-add-column-padding 1)
+    (which-key-max-display-columns nil)
+    (which-key-min-display-lines 6)
+    (which-key-compute-remaps t)
+    (which-key-side-window-slot -10)
+    (which-key-separator " → ")
+    (which-key-allow-evil-operators t)
+    (which-key-use-C-h-commands t)
+    (which-key-show-remaining-keys t)
+    (which-key-show-prefix 'bottom)
+    :config
+    (which-key-mode)
+    (which-key-setup-side-window-bottom)
+    (which-key-setup-minibuffer)
+    (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
+
+  ;;;; theme
+  (use-package all-the-icons
+    :ensure
+    :if (display-graphic-p))
+
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    (load-theme 'doom-nord t)
+
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    ;; (doom-themes-neotree-config)
+    ;; or for treemacs users
+    (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+    (doom-themes-treemacs-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+
+  (use-package doom-modeline
+    :ensure
+    :hook (after-init . doom-modeline-mode))
+
+  ;; use-package with package.el:
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
+
+  (use-package tab-bar
+    :init
+    (setq tab-bar-show 1
+          tab-bar-close-button-show nil
+          tab-bar-tab-hints t
+          tab-bar-new-button-show nil
+          tab-bar-separator " "
+          tab-bar-auto-width nil
+          tab-bar-position t))
+
+  (use-package frame
+    :init
+    (blink-cursor-mode 1)
+    :config
+    (cond
+     ((find-font (font-spec :family "OverpassM Nerd Font Mono"))
+      (set-frame-font "OverpassM Nerd Font Mono 10" nil t))
+     ((find-font (font-spec :family "Ubuntu Mono"))
+      (set-frame-font "Ubuntu Mono 10" nil t))
+     ((find-font (font-spec :family "Fira Code Retina"))
+      (set-frame-font "Fira Code Retina 10" nil t))
+     ((find-font (font-spec :family "Source Code Pro"))
+      (set-frame-font "Source Code Pro 10" nil t))
+     ((find-font (font-spec :family "DejaVu Sans Mono"))
+      (set-frame-font "DejaVu Sans Mono 10" nil t))))
+
+  (use-package window
+    :config
+    (setq split-width-threshold 160))
+
+  (use-package display-line-numbers
+    :init
+    (setq display-line-numbers-type t)
+    :hook (prog-mode . display-line-numbers-mode)
+    :custom
+    (display-line-numbers-grow-only t))
+
+  (use-package help-at-pt
+    :custom
+    (help-at-pt-display-when-idle t))
+
+  (use-package hideshow
+    :diminish hs-minor-mode
+    :hook (prog-mode . hs-minor-mode))
+
+  (use-package uniquify
+    :ensure nil
+    :config
+    (setq uniquify-buffer-name-style 'forward
+          uniquify-separator " • "
+          uniquify-after-kill-buffer-p t
+          uniquify-ignore-buffers-re "^\\*"))
+
+  (use-package speedbar
+    :custom
+    (speedbar-use-images nil)
+    (speedbar-update-flag t)
+    (speedbar-frame-parameters '((name . "speedbar")
+                                 (title . "speedbar")
+                                 (minibuffer . nil)
+                                 (border-width . 2)
+                                 (menu-bar-lines . 0)
+                                 (tool-bar-lines . 0)
+                                 (unsplittable . t)
+                                 (left-fringe . 10)))
+    :config
+    (speedbar-add-supported-extension
+     (list
+  ;;;; General Lisp Languages
+      ".cl"
+      ".li?sp"
+  ;;;; Lua/Fennel (Lisp that transpiles to lua)
+      ".lua"
+      ".fnl"
+      ".fennel"
+  ;;;; JVM languages (Java, Kotlin, Clojure)
+      ".kt"
+      ".mvn"
+      ".gradle"
+      ".properties"
+      ".cljs?"
+  ;;;; shellscript
+      ".sh"
+      ".bash"
+  ;;;; Web Languages and Markup/Styling
+      ".php"
+      ".ts"
+      ".html?"
+      ".css"
+      ".less"
+      ".scss"
+      ".sass"
+  ;;;; Makefile
+      "makefile"
+      "MAKEFILE"
+      "Makefile"
+  ;;;; Data formats
+      ".json"
+      ".yaml"
+      ".toml"
+  ;;;; Notes and Markup
+      ".md"
+      ".markdown"
+      ".org"
+      ".txt"
+      "README")))
+
+  (use-package winner
+    :init
+    (winner-mode 1))
+
+  (use-package tab-bar
+    :init
+    (setq tab-bar-show 1
+          tab-bar-close-button-show nil
+          tab-bar-tab-hints t
+          tab-bar-new-button-show nil
+          tab-bar-separator " "
+          tab-bar-auto-width nil
+          tab-bar-position t))
+
+  (use-package time
+    :hook (after-init . display-time-mode)
+    :config
+    (when (file-directory-p (expand-file-name ".mail" (getenv "HOME")))
+      (setq display-time-mail-directory (expand-file-name ".mail" (getenv "HOME"))))
+    :custom
+    (display-time-24hr-format t)
+    (display-time-day-and-date t))
+
+  (use-package paren
+    :config
+    (show-paren-mode 1)
+    :custom
+    (show-paren-style 'mixed))
+
+  (use-package hl-line
+    :config
+    (global-hl-line-mode 1))
+
+  (use-package font-core
+    :init
+    (global-font-lock-mode t))
+
+  (use-package menu-bar
+    :init
+    (menu-bar-mode -1))
+
+  (use-package tool-bar
+    :init
+    (tool-bar-mode -1))
+
+  (use-package scroll-bar
+    :init
+    (scroll-bar-mode -1))
+
+  (use-package xt-mouse
+    :config
+    (xterm-mouse-mode 1))
+
+  (use-package avy
+    :after evil
+    :ensure ;; when `use-package-always-ensure' is nil
+    :bind
+    (([remap goto-char] . evil-avy-goto-char)
+     ([remap goto-line] . evil-avy-goto-line)
+     ("M-g l" . evil-avy-goto-line))
+    :config
+    ;; (evil-define-key 'normal 'global (kbd "<localleader>gc") 'evil-avy-goto-char)
+    ;; (evil-define-key 'normal 'global (kbd "<localleader>gl") 'evil-avy-goto-line-below)
+    ;; (evil-define-key 'normal 'global (kbd "<localleader>gL") 'evil-avy-goto-line-above)
+    )
+
+  (use-package tabify
+    :ensure nil
+    :config
+    (setq tabify-regexp "^\t* [ \t]+"))
+
+  (provide 'config-ui)
+  ;;; config-ui.el ends here
+#+end_src
+* Builtin
+:PROPERTIES:
+:header-args: :tangle ./modules/config-builtin.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+;;; config-builtin --- `Emacs' builtin package configuration -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+(use-package bytecomp
+  :custom
+  (byte-compile-warnings nil))
+
+(use-package emacs
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p
+        tab-always-indent 'complete)
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t)
+  :custom
+  (read-buffer-completion-ignore-case t)
+  (use-short-answers t)
+  (window-resize-pixelwise t)
+  (frame-resize-pixelwise t)
+  (ring-bell-function #'ignore)
+  (scroll-preserve-screen-position t)
+  (scroll-conservatively 101)
+  (fast-but-imprecise-scrolling t)
+  (truncate-partial-width-windows nil)
+  (fill-column 80)
+  (enable-recursive-minibuffers t)
+  (use-file-dialog nil)
+  (create-lockfiles nil)
+  (delete-by-moving-to-trash t)
+  (inhibit-startup-screen t)
+  :config
+  (setq completion-ignore-case t
+        load-prefer-newer t
+        auto-window-vscroll nil
+        inhibit-compacting-font-caches t
+        redisplay-skip-fontification-on-input t)
+  (set-default 'indicate-empty-lines t))
+
+(use-package saveplace
+  :init
+  (save-place-mode 1)
+  :custom
+  (save-place-file (expand-file-name "places" user-emacs-directory)))
+
+(use-package autorevert
+  :init
+  (global-auto-revert-mode 1)
+  :custom
+  (global-auto-revert-non-file-buffers t)
+  (auto-revert-verbose nil)
+  (auto-revert-stop-on-user-input nil))
+
+(use-package savehist
+  :init
+  (savehist-mode 1)
+  :custom
+  (savehist-file (expand-file-name "history" user-emacs-directory))
+  (savehist-coding-system 'utf-8)
+  (savehist-additional-variables
+   '(evil-jumps-history
+     kill-ring
+     register-alist
+     mark-ring
+     global-mark-ring
+     search-ring
+     regexp-search-ring)))
+
+;;; prog-mode
+(use-package prog-mode
+  :hook ((prog-mode . prettify-symbols-mode)
+         (prog-mode . visual-line-mode)
+         ;; (prog-mode . (lambda () (electric-pair-mode 1)))
+         )
+  :config
+  (setq prettify-symbols-alist
+        '(("|>" . "▷")
+          ("<|" . "◁")
+          ("->>" . "↠  ")
+          ("->" . "→ ")
+          ("<-" . "← ")
+          ("=>" . "⇒"))))
+
+(use-package select
+  :custom
+  (select-enable-clipboard t))
+
+(use-package jka-cmpr-hook
+  :custom
+  (auto-compression-mode t))
+
+(use-package recentf
+  :bind ("C-c f" . recentf)
+  :custom
+  (recentf-max-saved-items 250)
+  (recentf-max-menu-items 300)
+  (recentf-exclude
+   `("/elpa/" ;; ignore all files in elpa directory
+     "recentf" ;; remove the recentf load file
+     ".*?autoloads.el$"
+     "treemacs-persist"
+     "company-statistics-cache.el" ;; ignore company cache file
+     "/intero/" ;; ignore script files generated by intero
+     "/journal/" ;; ignore daily journal files
+     ".gitignore" ;; ignore `.gitignore' files in projects
+     "/tmp/" ;; ignore temporary files
+     "NEWS" ;; don't include the NEWS file for recentf
+     "bookmarks"  "bmk-bmenu" ;; ignore bookmarks file in .emacs.d
+     "loaddefs.el"
+     "^/\\(?:ssh\\|su\\|sudo\\)?:" ;; ignore tramp/ssh files
+     (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")))))))
+
+(use-package eldoc
+  :hook (prog-mode . eldoc-mode))
+
+(use-package bookmark
+  :custom
+  (bookmark-save-flag 1)
+  (bookmark-default-file (expand-file-name ".bookmark" user-emacs-directory)))
+
+(use-package executable
+  :hook
+  (after-save . executable-make-buffer-file-executable-if-script-p))
+
+(use-package files
+  :config
+  (defun full-auto-save ()
+    (interactive)
+    (save-excursion
+      (dolist (buf (buffer-list))
+        (set-buffer buf)
+        (if (and (buffer-file-name) (buffer-modified-p))
+            (basic-save-buffer)))))
+  (add-hook 'auto-save-hook 'full-auto-save)
+  (nconc
+   auto-mode-alist
+   '(("/LICENSE\\'" . text-mode)
+     ("\\.log\\'" . text-mode)
+     ("rc\\'" . conf-mode)
+     ("\\.\\(?:hex\\|nes\\)\\'" . hexl-mode)))
+  :custom
+  (confirm-kill-emacs #'yes-or-no-p)
+  (revert-without-query (list "."))
+  (find-file-visit-truename t)
+  (version-control t)
+  (backup-by-copying t)
+  (delete-old-versions t)
+  (kept-new-versions 6)
+  (kept-old-versions 2)
+  (auto-save-include-big-deletions t)
+  (auto-save-list-file-prefix (expand-file-name ".autosave/" user-emacs-directory))
+  (backup-directory-alist `(("." . ,(expand-file-name ".backup" user-emacs-directory))))
+  (auto-mode-case-fold nil)
+  (require-final-newline t))
+
+(use-package tramp
+  :custom
+  (tramp-backup-directory-alist backup-directory-alist)
+  (tramp-auto-save-directory (expand-file-name ".tramp-autosave/" user-emacs-directory)))
+
+(use-package abbrev
+  :ensure nil)
+
+(use-package ffap
+  :custom
+  (ffap-machine-p-known 'reject))
+
+(use-package epg-config
+  :custom
+  (epg-pinentry-mode 'loopback))
+
+(use-package make-mode
+  :config
+  (add-hook 'makefile-mode-hook 'indent-tabs-mode))
+
+(use-package ispell
+  :custom
+  (ispell-program-name "hunspell")
+  (ispell-dictionary "english")
+  (ispell-really-hunspell t)
+  :config
+  (with-eval-after-load 'ispell
+    (when (executable-find ispell-program-name)
+      (add-hook 'text-mode-hook #'flyspell-mode)
+      (add-hook 'prog-mode-hook #'flyspell-prog-mode)))
+  (add-to-list 'ispell-skip-region-alist
+               '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:"))
+  (add-to-list 'ispell-skip-region-alist
+               '("#\\+BEGIN_SRC" . "#\\+END_SRC"))
+  (add-to-list 'ispell-skip-region-alist
+               '("#\\+begin_src" . "#\\+end_src"))
+  (add-to-list 'ispell-skip-region-alist
+               '("#\\+begin_example" . "#\\+end_example"))
+  (add-to-list 'ispell-skip-region-alist
+               '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
+  (let ((hunspell-en_us-path (expand-file-name "/usr/share/hunspell/en_US-large.aff" (getenv "HOME")))
+        (hunspell-en_GB-path (expand-file-name "/usr/share/hunspell/en_GB-large.aff" (getenv "HOME")))
+        (hunspell-id_ID-path (expand-file-name "/usr/share/hunspell/id_ID.aff" (getenv "HOME"))))
+    (when (file-exists-p hunspell-en_us-path)
+      (add-to-list 'ispell-hunspell-dict-paths-alist
+                   `("american" ,hunspell-en_us-path)))
+    (when (file-exists-p hunspell-en_GB-path)
+      (add-to-list 'ispell-hunspell-dict-paths-alist
+                   `("english" ,hunspell-en_GB-path)))
+    (when (file-exists-p hunspell-id_ID-path)
+      (add-to-list 'ispell-hunspell-dict-paths-alist
+                   `("id_ID" ,hunspell-id_ID-path)))))
+
+(use-package whitespace
+  :diminish (global-whitespace-mode whitespace-mode)
+  :hook (((prog-mode text-mode conf-mode) . whitespace-mode)
+         (before-save . whitespace-cleanup))
+  :custom
+  (whitespace-style '(face empty trailing tab-mark
+                           indentation::space))
+  (whitespace-action '(warn-if-read-only))
+  :config
+  (global-whitespace-mode))
+
+(use-package jka-cmpr-hook
+  :ensure nil
+  :config
+  (auto-compression-mode t))
+
+(use-package subword
+  :diminish
+  :init
+  (global-subword-mode 1))
+
+(use-package ediff
+  :config
+  (setq ediff-diff-options "-w"
+        ediff-split-window-function 'split-window-horizontally
+        ediff-window-setup-function 'ediff-setup-windows-plain))
+
+(use-package delsel
+  :init
+  (delete-selection-mode))
+
+(use-package text-mode
+  :ensure nil
+  :config
+  (setq-default sentence-end-double-space nil))
+
+(use-package flyspell
+  :diminish
+  :custom
+  (flyspell-issue-welcome-flag nil)
+  (flyspell-issue-message-flag nil)
+  :hook (((org-mode message-mode TeX-mode rst-mode mu4e-composer-mode git-commit-mode text-mode)
+          . flyspell-mode)
+         (prog-mode . flyspell-prog-mode)))
+
+(use-package flymake
+  :diminish
+  :hook (prog-mode . flymake-mode))
+
+(use-package imenu
+  :custom
+  (imenu-auto-rescan t))
+
+(use-package simple
+  :diminish (visual-line-mode)
+  :hook ((makefile-mode . indent-tabs-mode)
+         (text-mode . visual-line-mode))
+  :init
+  (transient-mark-mode t)
+  :custom
+  (shift-select-mode nil)
+  (kill-do-not-save-duplicates t)
+  (shift-select-mode nil)
+  (set-mark-command-repeat-pop t)
+  (indent-tabs-mode nil)
+  (column-number-mode t)
+  (idle-update-delay 1.0)
+  :config
+  (with-eval-after-load 'evil
+    (evil-set-initial-state #'message-mode 'insert)))
+
+(use-package elec-pair
+  :init
+  (electric-pair-mode -1))
+
+(provide 'config-builtin)
+;;; config-builtin.el ends here
+#+end_src
+* Completion
+:PROPERTIES:
+:header-args: :tangle ./modules/config-completion.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+  ;;; config-completion --- completion configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  ;; Enable vertico
+  (use-package vertico
+    :ensure
+    :init
+    (vertico-mode)
+    ;; Different scroll margin
+    ;; (setq vertico-scroll-margin 0)
+    ;; Show more candidates
+    ;; (setq vertico-count 20)
+    ;; Grow and shrink the Vertico minibuffer
+    ;; (setq vertico-resize t)
+    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+    (setq vertico-cycle t)
+    :config
+    (keymap-set vertico-map "RET" #'vertico-directory-enter)
+    (keymap-set vertico-map "DEL" #'vertico-directory-delete-char)
+    (keymap-set vertico-map "M-DEL" #'vertico-directory-delete-word)
+    (add-hook 'rfn-eshadow-update-overlay-hook #'vertico-directory-tidy)
+    (vertico-mouse-mode 1)
+    (add-to-list 'savehist-additional-variables 'vertico-repeat-history)
+    (keymap-global-set "M-R" #'vertico-repeat)
+    (keymap-set vertico-map "M-P" #'vertico-repeat-previous)
+    (keymap-set vertico-map "M-N" #'vertico-repeat-next)
+    (keymap-set vertico-map "S-<prior>" #'vertico-repeat-previous)
+    (keymap-set vertico-map "S-<next>" #'vertico-repeat-next)
+    (add-hook 'minibuffer-setup-hook #'vertico-repeat-save)
+    (keymap-set vertico-map "M-q" #'vertico-quick-insert)
+    (keymap-set vertico-map "C-q" #'vertico-quick-exit))
+
+  (use-package minibuffer
+    :ensure nil
+    :custom
+    (read-file-name-completion-ignore-case t)
+    (completion-cycle-threshold 3)
+    (completion-detailed t))
+
+  (use-package xref
+    :custom
+    (xref-show-definitions-function 'xref-show-definitions-completing-read))
+
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    :ensure
+    :bind (:map minibuffer-local-map
+                ("M-A" . marginalia-cycle))
+    :init
+    (marginalia-mode))
+
+  (use-package nerd-icons-completion
+    :ensure
+    :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
+    :config
+    (nerd-icons-completion-mode))
+
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless partial-completion basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion)))))
+
+  (use-package consult
+    :ensure
+    ;; Replace bindings. Lazily loaded due by `use-package'.
+    :bind (;; C-c bindings in `mode-specific-map'
+           ("C-c M-x" . consult-mode-command)
+           ("C-c h" . consult-history)
+           ("C-c k" . consult-kmacro)
+           ("C-c m" . consult-man)
+           ("C-c i" . consult-info)
+           ([remap Info-search] . consult-info)
+           ;; C-x bindings in `ctl-x-map'
+           ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
+           ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
+           ("C-x 4 b" . consult-buffer-other-window) ;; orig. switch-to-buffer-other-window
+           ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
+           ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
+           ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
+           ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+           ;; Custom M-# bindings for fast register access
+           ("M-#" . consult-register-load)
+           ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
+           ("C-M-#" . consult-register)
+           ;; Other custom bindings
+           ("M-y" . consult-yank-pop)                ;; orig. yank-pop
+           ;; M-g bindings in `goto-map'
+           ("M-g e" . consult-compile-error)
+           ("M-g f" . consult-flymake)               ;; Alternative: consult-flycheck
+           ("M-g g" . consult-goto-line)             ;; orig. goto-line
+           ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+           ("M-g o" . consult-outline)               ;; Alternative: consult-org-heading
+           ("M-g m" . consult-mark)
+           ("M-g k" . consult-global-mark)
+           ("M-g i" . consult-imenu)
+           ("M-g I" . consult-imenu-multi)
+           ;; M-s bindings in `search-map'
+           ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+           ("M-s c" . consult-locate)
+           ("M-s g" . consult-grep)
+           ("M-s G" . consult-git-grep)
+           ("M-s r" . consult-ripgrep)
+           ("M-s l" . consult-line)
+           ("M-s L" . consult-line-multi)
+           ("M-s k" . consult-keep-lines)
+           ("M-s u" . consult-focus-lines)
+           ;; Isearch integration
+           ("M-s e" . consult-isearch-history)
+           :map isearch-mode-map
+           ("M-e" . consult-isearch-history)         ;; orig. isearch-edit-string
+           ("M-s e" . consult-isearch-history)       ;; orig. isearch-edit-string
+           ("M-s l" . consult-line)                  ;; needed by consult-line to detect isearch
+           ("M-s L" . consult-line-multi)            ;; needed by consult-line to detect isearch
+           ;; Minibuffer history
+           :map minibuffer-local-map
+           ("M-s" . consult-history)                 ;; orig. next-matching-history-element
+           ("M-r" . consult-history))                ;; orig. previous-matching-history-element
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+    ;; The :init configuration is always executed (Not lazy)
+    :init
+    ;; Optionally configure the register formatting. This improves the register
+    ;; preview for `consult-register', `consult-register-load',
+    ;; `consult-register-store' and the Emacs built-ins.
+    (setq register-preview-delay 0.5
+          register-preview-function #'consult-register-format)
+    ;; Optionally tweak the register preview window.
+    ;; This adds thin lines, sorting and hides the mode line of the window.
+    (advice-add #'register-preview :override #'consult-register-window)
+    ;; Use Consult to select xref locations with preview
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
+    ;; Configure other variables and modes in the :config section,
+    ;; after lazily loading the package.
+    :config
+    ;; Optionally configure preview. The default value
+    ;; is 'any, such that any key triggers the preview.
+    ;; (setq consult-preview-key 'any)
+    ;; (setq consult-preview-key "M-.")
+    ;; (setq consult-preview-key '("S-<down>" "S-<up>"))
+    ;; For some commands and buffer sources it is useful to configure the
+    ;; :preview-key on a per-command basis using the `consult-customize' macro.
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-bookmark consult--source-file-register
+     consult--source-recent-file consult--source-project-recent-file
+     ;; :preview-key "M-."
+     :preview-key '(:debounce 0.4 any))
+    ;; Optionally configure the narrowing key.
+    ;; Both < and C-+ work reasonably well.
+    (setq consult-narrow-key "<") ;; "C-+"
+    ;; Optionally make narrowing help available in the minibuffer.
+    ;; You may want to use `embark-prefix-help-command' or which-key instead.
+    ;; (define-key consult-narrow-map (vconcat consult-narrow-key "?") #'consult-narrow-help)
+
+    ;; By default `consult-project-function' uses `project-root' from project.el.
+    ;; Optionally configure a different project root function.
+    ;;;; 1. project.el (the default)
+    ;; (setq consult-project-function #'consult--default-project--function)
+    ;;;; 2. vc.el (vc-root-dir)
+    ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
+    ;;;; 3. locate-dominating-file
+    ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
+    ;;;; 4. projectile.el (projectile-project-root)
+    ;; (autoload 'projectile-project-root "projectile")
+    ;; (setq consult-project-function (lambda (_) (projectile-project-root)))
+    ;;;; 5. No project support
+    ;; (setq consult-project-function nil)
+    )
+
+  (use-package corfu
+    :ensure t
+    ;; Optional customizations
+    :hook ((eshell-mode . (lambda ()
+                            (setq-local corfu-auto nil)
+                            (corfu-mode))))
+    :custom
+    (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
+    (corfu-auto t)                 ;; Enable auto completion
+    ;; (corfu-separator ?\s)          ;; Orderless field separator
+    ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+    (corfu-quit-no-match 'separator)      ;; Never quit, even if there is no match
+    ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+    ;; (corfu-preview-current nil)    ;; Disable current candidate preview
+    (corfu-preselect 'prompt)      ;; Preselect the prompt
+    ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+    ;; (corfu-scroll-margin 5)        ;; Use scroll margin
+
+    ;; Enable Corfu only for certain modes.
+    ;; :hook ((prog-mode . corfu-mode)
+    ;;        (shell-mode . corfu-mode)
+    ;;        (eshell-mode . corfu-mode))
+
+    ;; Recommended: Enable Corfu globally.  This is recommended since Dabbrev can
+    ;; be used globally (M-/).  See also the customization variable
+    ;; `global-corfu-modes' to exclude certain modes.
+    :init
+    (global-corfu-mode)
+    :bind
+    (:map corfu-map
+          ("TAB" . corfu-next)
+          ([tab] . corfu-next)
+          ("S-TAB" . corfu-previous)
+          ([backtab] . corfu-previous)))
+
+  (use-package nerd-icons-corfu
+    :ensure
+    :config
+    (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
+    (setq nerd-icons-corfu-mapping
+          '((array :style "cod" :icon "symbol_array" :face font-lock-type-face)
+            (boolean :style "cod" :icon "symbol_boolean" :face font-lock-builtin-face)
+            ;; ...
+            (t :style "cod" :icon "code" :face font-lock-warning-face))))
+
+  ;; Add extensions
+  (use-package cape
+    :ensure
+    ;; Bind dedicated completion commands
+    ;; Alternative prefix keys: C-c p, M-p, M-+, ...
+    :bind (("C-c p p" . completion-at-point) ;; capf
+           ("C-c p t" . complete-tag)        ;; etags
+           ("C-c p d" . cape-dabbrev)        ;; or dabbrev-completion
+           ("C-c p h" . cape-history)
+           ("C-c p f" . cape-file)
+           ("C-c p k" . cape-keyword)
+           ("C-c p s" . cape-elisp-symbol)
+           ("C-c p e" . cape-elisp-block)
+           ("C-c p a" . cape-abbrev)
+           ("C-c p l" . cape-line)
+           ("C-c p w" . cape-dict)
+           ("C-c p :" . cape-emoji)
+           ("C-c p \\" . cape-tex)
+           ("C-c p _" . cape-tex)
+           ("C-c p ^" . cape-tex)
+           ("C-c p &" . cape-sgml)
+           ("C-c p r" . cape-rfc1345))
+    :init
+    ;; Add to the global default value of `completion-at-point-functions' which is
+    ;; used by `completion-at-point'.  The order of the functions matters, the
+    ;; first function returning a result wins.  Note that the list of buffer-local
+    ;; completion functions takes precedence over the global list.
+    ;; (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+    ;;(add-to-list 'completion-at-point-functions #'cape-history)
+    ;;(add-to-list 'completion-at-point-functions #'cape-keyword)
+    ;;(add-to-list 'completion-at-point-functions #'cape-tex)
+    ;;(add-to-list 'completion-at-point-functions #'cape-sgml)
+    ;;(add-to-list 'completion-at-point-functions #'cape-rfc1345)
+    ;;(add-to-list 'completion-at-point-functions #'cape-abbrev)
+    ;;(add-to-list 'completion-at-point-functions #'cape-dict)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
+    ;;(add-to-list 'completion-at-point-functions #'cape-line)
+    )
+
+  (provide 'config-completion)
+  ;;; config-completion.el ends here
+    ;;; config-builtin.el ends here
+#+end_src
+* Shell
+:PROPERTIES:
+:header-args: :tangle ./modules/config-shell.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+  ;;; config-shell --- `Emacs' various shell configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package esh-autosuggest
+    :hook (eshell-mode . esh-autosuggest-mode)
+    ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
+    ;; line below instead:
+    ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
+    :ensure t)
+
+  (provide 'config-shell)
+  ;;; config-shell.el ends here
+#+end_src
+* Editing
+:PROPERTIES:
+:header-args: :tangle ./modules/config-editing.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+  ;;; config-editing --- Editor configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code
+
+  ;;; smartparens
+  (use-package smartparens
+    :ensure
+    :config
+    (show-smartparens-global-mode 1)
+    (smartparens-global-mode 1)
+    ;; Fix usage of ' in Lisp modes
+    ;; THANKS: https://github.com/Fuco1/smartparens/issues/286#issuecomment-32324743
+    ;; (eval) is used as a hack to quiet Flycheck errors about (sp-with-modes)
+    (eval
+     '(sp-with-modes sp-lisp-modes
+                     ;; disable ', it's the quote character!
+                     (sp-local-pair "'" nil :actions nil)
+                     ;; also only use the pseudo-quote inside strings where it serve as
+                     ;; hyperlink.
+                     (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
+                     (sp-local-pair "`" nil
+                                    :skip-match (lambda (ms mb me)
+                                                  (cond
+                                                   ((equal ms "'")
+                                                    (or (sp--org-skip-markup ms mb me)
+                                                        (not (sp-point-in-string-or-comment))))
+                                                   (t (not (sp-point-in-string-or-comment)))))))))
+
+  (provide 'config-editing)
+  ;;; config-editing.el ends here
+#+end_src
+* Project
+:PROPERTIES:
+:header-args: :tangle ./modules/config-project.el :mkdirp t
+:END:
+#+begin_src emacs-lisp +n
+  ;;; config-project --- project configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package magit
+    :ensure
+    :demand t
+    :config
+    (evil-set-initial-state #'git-commit-mode 'insert)
+    (with-eval-after-load 'general
+      (+config/leader-go
+       "g" 'magit-status))
+    :custom
+    (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+    (magit-diff-refine-hunk 'all)
+    (magit-log-arguments '("-n100" "--graph" "--decorate")))
+
+  (use-package projectile
+    :ensure t
+    :demand t
+    :bind (([remap evil-jump-to-tag] . projectile-find-tag)
+           ([remap find-tag] . projectile-find-tag))
+    :hook (dired-before-readin . projectile-track-known-projects-find-file-hook)
+    :custom
+    (projectile-cache-file (expand-file-name ".projects" user-emacs-directory))
+    (projectile-auto-discover nil)
+    (projectile-enable-caching (not noninteractive))
+    (projectile-globally-ignored-files '("DS_Store" "TAGS"))
+    (projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o"))
+    (projectile-kill-buffers-filter 'kill-only-files)
+    (projectile-known-projects-file (expand-file-name ".projectile_projects.eld" user-emacs-directory))
+    (projectile-ignored-projects '("~/"))
+    (projectile-project-root-files-bottom-up
+     (append '(".projectile" ".project" ".git")
+             (when (executable-find "hg")
+               '(".hg"))
+             (when (executable-find "bzr")
+               '(".bzr"))))
+    (projectile-project-root-files-top-down-recurring '("Makefile"))
+    (compilation-buffer-name-function #'projectile-compilation-buffer-name)
+    (compilation-save-buffers-predicate #'projectile-current-project-buffer-p)
+    (projectile-git-submodule-command nil)
+    (projectile-indexing-method 'hybrid)
+    :config
+    (projectile-mode +1)
+    (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
+    (with-eval-after-load 'general
+      (+config/leader-key
+       "SPC" 'projectile-find-file
+       "p" '(:keymap projectile-command-map :package projectile :wk "projectile"))))
+
+  (use-package ripgrep
+    :ensure
+    :init
+    (with-eval-after-load 'evil-collection
+      (evil-collection-ripgrep-setup)))
+
+  (use-package diff-hl
+    :ensure
+    :hook (find-file . diff-hl-mode)
+    :hook (vc-dir-mode . diff-hl-dir-mode)
+    :hook (dired-mode . diff-hl-dired-mode)
+    :hook (diff-hl-mode . diff-hl-flydiff-mode)
+    :hook (diff-hl-mode . diff-hl-show-hunk-mouse-mode)
+    :hook (magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
+    :hook (magit-post-refresh-hook . diff-hl-magit-post-refresh)
+    :init
+    (global-diff-hl-mode)
+    :custom
+    (vc-git-diff-switches '("--histogram")
+                          diff-hl-flydiff-delay 0.5
+                          diff-hl-show-staged-changes nil)
+    :config
+    (when (featurep 'flycheck)
+      (setq flycheck-indication-mode 'right-fringe)))
+
+  (use-package perspective
+    :ensure
+    :config
+    (setq persp-initial-frame-name "Main"
+          persp-suppress-no-prefix-key-warning t)
+    (if (featurep 'no-littering)
+        (setq persp-state-default-file (expand-file-name ".perspective-state" no-littering-var-directory))
+      (setq persp-state-default-file (expand-file-name ".perspective-state" user-emacs-directory)))
+    (global-set-key [remap switch-to-buffer] #'persp-switch-to-buffer*)
+    (when (featurep 'consult)
+      (require 'consult)
+      (unless (boundp 'persp-consult-source)
+        (defvar persp-consult-source
+          (list :name     "Perspective"
+                :narrow   ?s
+                :category 'buffer
+                :state    #'consult--buffer-state
+                :history  'buffer-name-history
+                :default  t
+                :items
+                #'(lambda () (consult--buffer-query :sort 'visibility
+                                                    :predicate '(lambda (buf) (persp-is-current-buffer buf t))
+                                                    :as #'buffer-name)))))
+      (consult-customize consult--source-buffer :hidden t :default nil)
+      (add-to-list 'consult-buffer-sources persp-consult-source))
+    (with-eval-after-load 'general
+      (general-def
+       :keymaps 'perspective-map
+       "P" 'projectile-persp-switch-project)
+      (+config/leader-key
+       "TAB" '(:keymap perspective-map
+                       :package perspective
+                       :which-key "perspective")
+       "TAB TAB" '(persp-switch-last :wk "switch to last perspective")
+       "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer")))
+    :init
+    (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
+    (unless (equal persp-mode t)
+      (persp-mode 1))
+    :bind (([remap switch-to-buffer] . persp-switch-to-buffer*)
+           ([remap kill-buffer] . persp-kill-buffer*))
+    :hook (kill-emacs . persp-state-save))
+
+  (use-package persp-projectile
+    :ensure t
+    :after perspective
+    :commands projectile-persp-switch-project)
+
+  (use-package git-link
+    :demand
+    :ensure
+    :commands (git-link git-link-commit git-link-homepage)
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-go
+       "G" '(:ignore t :wk "git")
+       "Gl" 'git-link
+       "Gh" 'git-link-homepage
+       "Gc" 'git-link-commit)))
+
+  (use-package git-messenger
+    :ensure
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-go
+       "Gm" 'git-messenger:popup-message))
+    :custom
+    ;; Enable magit-show-commit instead of pop-to-buffer
+    (git-messenger:use-magit-popup t)
+    (git-messenger:show-detail t))
+
+  (use-package git-timemachine
+    :ensure
+    :after magit
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-go
+       "Gt" 'git-timemachine-toggle)))
+
+  ;;;; TODO: add keybindings for `evil-mode'
+  (use-package magit-todos
+    :ensure
+    :after magit
+    :hook (magit-mode . magit-todos-mode)
+    :custom
+    (magit-todos-group-by
+     '(magit-todos-item-first-path-component magit-todos-item-keyword magit-todos-item-filename)))
+
+  (use-package forge
+    :after magit
+    :defer t
+    :bind ((:map forge-issue-section-map
+                 ("C-c C-v" . forge-browse-topic))
+           (:map forge-pullreq-section-map
+                 ("C-c C-v" . forge-browse-topic)))
+    :custom
+    (forge-add-default-bindings nil))
+
+  (use-package org-project-capture
+    :bind (("C-c n p" . org-project-capture-project-todo-completing-read))
+    :ensure t
+    :config
+    (progn
+      (setq org-project-capture-backend
+            (make-instance 'org-project-capture-projectile-backend))  ; Replace with your backend of choice
+      (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
+      (org-project-capture-single-file)))
+
+  (provide 'config-project)
+  ;;; config-project.el ends here
+#+end_src
