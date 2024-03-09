@@ -35,6 +35,7 @@
   (require 'config-shell nil t)
   (require 'config-editing nil t)
   (require 'config-project nil t)
+  (require '')
 #+end_src
 
 ** footer
@@ -1343,6 +1344,7 @@
   (use-package smartparens
     :ensure
     :config
+    (require 'smartparens-config)
     (show-smartparens-global-mode 1)
     (smartparens-global-mode 1)
     ;; Fix usage of ' in Lisp modes
