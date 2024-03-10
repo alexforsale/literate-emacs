@@ -1,3 +1,12 @@
 [submodule "site-lisp/consult-bibtex"]
 	path = site-lisp/consult-bibtex
 	url = https://github.com/mohkale/consult-bibtex.git
+[submodule "site-lisp/sly-stepper"]
+	path = site-lisp/sly-stepper
+	url = https://github.com/joaotavora/sly-stepper.git
+[submodule "site-lisp/sly-quicklisp"]
+	path = site-lisp/sly-quicklisp
+	url = https://github.com/joaotavora/sly-quicklisp.git
+[submodule "site-lisp/sly-macrostep"]
+	path = site-lisp/sly-macrostep
+	url = https://github.com/joaotavora/sly-macrostep.git

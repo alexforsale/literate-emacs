@@ -40,6 +40,7 @@
   (require 'config-treemacs nil t)
   (require 'config-flycheck nil t)
   (require 'config-mail nil t)
+  (require 'config-lisp nil t)
 #+end_src
 
 ** footer
@@ -526,9 +527,9 @@
 :header-args: :tangle ./modules/config-ui.el :mkdirp t
 :END:
 #+begin_src emacs-lisp +n
-  ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
-  ;;; Commentary:
-  ;;; Code:
+    ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
+    ;;; Commentary:
+    ;;; Code:
   (use-package which-key
     :ensure
     :custom
@@ -551,7 +552,7 @@
     (which-key-setup-minibuffer)
     (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
 
-  ;;;; theme
+    ;;;; theme
   (use-package all-the-icons
     :ensure
     :if (display-graphic-p))
@@ -652,23 +653,23 @@
     :config
     (speedbar-add-supported-extension
      (list
-  ;;;; General Lisp Languages
+    ;;;; General Lisp Languages
       ".cl"
       ".li?sp"
-  ;;;; Lua/Fennel (Lisp that transpiles to lua)
+    ;;;; Lua/Fennel (Lisp that transpiles to lua)
       ".lua"
       ".fnl"
       ".fennel"
-  ;;;; JVM languages (Java, Kotlin, Clojure)
+    ;;;; JVM languages (Java, Kotlin, Clojure)
       ".kt"
       ".mvn"
       ".gradle"
       ".properties"
       ".cljs?"
-  ;;;; shellscript
+    ;;;; shellscript
       ".sh"
       ".bash"
-  ;;;; Web Languages and Markup/Styling
+    ;;;; Web Languages and Markup/Styling
       ".php"
       ".ts"
       ".html?"
@@ -676,15 +677,15 @@
       ".less"
       ".scss"
       ".sass"
-  ;;;; Makefile
+    ;;;; Makefile
       "makefile"
       "MAKEFILE"
       "Makefile"
-  ;;;; Data formats
+    ;;;; Data formats
       ".json"
       ".yaml"
       ".toml"
-  ;;;; Notes and Markup
+    ;;;; Notes and Markup
       ".md"
       ".markdown"
       ".org"
@@ -762,8 +763,20 @@
     :config
     (setq tabify-regexp "^\t* [ \t]+"))
 
+  (use-package rainbow-mode
+    :ensure
+    :hook (prog-mode . rainbow-mode))
+
+  (use-package rainbow-identifiers
+    :ensure
+    :hook (prog-mode . rainbow-identifiers-mode))
+
+  (use-package rainbow-delimiters
+    :ensure
+    :hook (prog-mode . rainbow-delimiters-mode))
+
   (provide 'config-ui)
-  ;;; config-ui.el ends here
+    ;;; config-ui.el ends here
 #+end_src
 * Builtin
 :PROPERTIES:
@@ -1491,7 +1504,7 @@
     (evil-set-initial-state #'git-commit-mode 'insert)
     (with-eval-after-load 'general
       (+config/leader-go
-       "g" 'magit-status))
+        "g" 'magit-status))
     :custom
     (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     (magit-diff-refine-hunk 'all)
@@ -1528,8 +1541,8 @@
     (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
     (with-eval-after-load 'general
       (+config/leader-key
-       "SPC" 'projectile-find-file
-       "p" '(:keymap projectile-command-map :package projectile :wk "projectile"))))
+        "SPC" 'projectile-find-file
+        "p" '(:keymap projectile-command-map :package projectile :wk "projectile"))))
 
   (use-package ripgrep
     :ensure
@@ -1583,14 +1596,14 @@
       (add-to-list 'consult-buffer-sources persp-consult-source))
     (with-eval-after-load 'general
       (general-def
-       :keymaps 'perspective-map
-       "P" 'projectile-persp-switch-project)
+        :keymaps 'perspective-map
+        "P" 'projectile-persp-switch-project)
       (+config/leader-key
-       "TAB" '(:keymap perspective-map
-                       :package perspective
-                       :which-key "perspective")
-       "TAB TAB" '(persp-switch-last :wk "switch to last perspective")
-       "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer")))
+        "TAB" '(:keymap perspective-map
+                        :package perspective
+                        :which-key "perspective")
+        "TAB TAB" '(persp-switch-last :wk "switch to last perspective")
+        "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer")))
     :init
     (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
     (unless (equal persp-mode t)
@@ -1611,17 +1624,17 @@
     :config
     (with-eval-after-load 'general
       (+config/leader-go
-       "G" '(:ignore t :wk "git")
-       "Gl" 'git-link
-       "Gh" 'git-link-homepage
-       "Gc" 'git-link-commit)))
+        "G" '(:ignore t :wk "git")
+        "Gl" 'git-link
+        "Gh" 'git-link-homepage
+        "Gc" 'git-link-commit)))
 
   (use-package git-messenger
     :ensure
     :config
     (with-eval-after-load 'general
       (+config/leader-go
-       "Gm" 'git-messenger:popup-message))
+        "Gm" 'git-messenger:popup-message))
     :custom
     ;; Enable magit-show-commit instead of pop-to-buffer
     (git-messenger:use-magit-popup t)
@@ -1633,7 +1646,7 @@
     :config
     (with-eval-after-load 'general
       (+config/leader-go
-       "Gt" 'git-timemachine-toggle)))
+        "Gt" 'git-timemachine-toggle)))
 
   ;;;; TODO: add keybindings for `evil-mode'
   (use-package magit-todos
@@ -1663,6 +1676,97 @@
             (make-instance 'org-project-capture-projectile-backend))  ; Replace with your backend of choice
       (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
       (org-project-capture-single-file)))
+
+  (use-package lsp-mode
+    :ensure
+    :diminish (lsp-lens-mode lsp-mode)
+    :commands lsp lsp-deferred
+    :init
+    (setq lsp-keymap-prefix "C-c C-l")
+    (defun my/orderless-dispatch-flex-first (_pattern index _total)
+      (and (eq index 0) 'orderless-flex))
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless)))
+    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+    (when (featurep 'cape)
+      (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+    :hook
+    (lsp-mode . lsp-enable-which-key-integration)
+    (lsp-completion-mode . my/lsp-mode-setup-completion)
+    :config
+    (setq lsp-toml-command
+          (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
+              (expand-file-name ".cargo/bin/taplo" "~")
+            "taplo")
+          lsp-rust-rls-server-command "rls"
+          lsp-eldoc-render-all t
+          lsp-enable-snippet nil
+          lsp-enable-indentation nil
+          lsp-prefer-flymake nil
+          lsp-keep-workspace-alive nil
+          lsp-modeline-code-actions-segments '(count icon name))
+    :custom
+    (lsp-completion-provider :none)
+    (when (featurep 'exwm)
+      (advice-add #'corfu--make-frame :around
+                  (defun +corfu--make-frame-a (oldfun &rest args)
+                    (cl-letf (((symbol-function #'frame-parent)
+                               (lambda (frame)
+                                 (or (frame-parameter frame 'parent-frame)
+                                     exwm-workspace--current))))
+                      (apply oldfun args))
+                    (when exwm--connection
+                      (set-frame-parameter corfu--frame 'parent-frame nil))))
+
+      (advice-add #'corfu--popup-redirect-focus :override
+                  (defun +corfu--popup-redirect-focus-a ()
+                    (redirect-frame-focus corfu--frame
+                                          (or (frame-parent corfu--frame)
+                                              exwm-workspace--current)))))
+    (defun my/ignore-elisp-keywords (cand)
+      (or (not (keywordp cand))
+          (eq (char-after (car completion-in-region--data)) ?:)))
+    (defun my/setup-elisp ()
+      (setq-local completion-at-point-functions
+                  `(,(cape-super-capf
+                      (cape-capf-predicate
+                       #'elisp-completion-at-point
+                       #'my/ignore-elisp-keywords)
+                      #'cape-dabbrev)
+                    cape-file)
+                  cape-dabbrev-min-length 5))
+    (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp))
+
+  (use-package lsp-ui
+    :ensure
+    :demand t
+    :hook (lsp-mode . lsp-ui-mode)
+    :init
+    (setq lsp-ui-sideline-enable t
+          lsp-ui-sideline-update-mode 'line
+          lsp-ui-sideline-show-code-actions t
+          lsp-ui-sideline-show-hover t
+          lsp-ui-doc-enable t
+          lsp-ui-doc-include-signature t
+          lsp-ui-doc-show-with-cursor t
+          lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
+          lsp-ui-doc-position 'at-point
+          lsp-ui-imenu-enable t
+          lsp-ui-sideline-ignore-duplicate t
+          lsp-ui-peek-enable t)
+    :config
+    (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+    (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
+    (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t))
+
+  (use-package consult-lsp
+    :ensure
+    :after consult lsp
+    :bind
+    (:map lsp-mode-map
+          ([remap xref-find-apropos] . consult-lsp-symbols)))
 
   (provide 'config-project)
   ;;; config-project.el ends here
@@ -3011,4 +3115,171 @@
 
   (provide 'config-mail)
   ;;; config-mail.el ends here
+#+end_src
+* Lisp
+:PROPERTIES:
+:header-args: :tangle ./modules/config-lisp.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-lisp --- Various lisp configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (require 'eldoc)
+
+  (when (locate-library "aggressive-indent")
+    (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
+    (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+    (add-hook 'scheme-mode-hook #'aggressive-indent-mode))
+
+  ;;;; emacs-lisp
+  (use-package elisp-mode
+    :diminish emacs-lisp-mode
+    :diminish elisp-mode
+    :diminish outline-minor-mode
+    :diminish lisp-data-mode
+    :mode ("\\.Cask\\'" . emacs-lisp-mode)
+    :ensure nil
+    :hook (emacs-lisp-mode . (lambda ()
+                               (outline-minor-mode)
+                               (rainbow-delimiters-mode))))
+
+  (use-package ielm
+    :ensure nil
+    :hook (ielm-mode . (turn-on-smartparens-mode))
+    :config
+    (setq ielm-font-lock-keywords
+          (append '(("\\(^\\*\\*\\*[^*]+\\*\\*\\*\\)\\(.*$\\)"
+                     (1 font-lock-comment-face)
+                     (2 font-lock-constant-face)))
+                  (when (require 'highlight-numbers nil t)
+                    (highlight-numbers--get-regexp-for-mode 'emacs-lisp-mode))
+                  (cl-loop for (matcher . match-highlights)
+                           in (append lisp-el-font-lock-keywords-2
+                                      lisp-cl-font-lock-keywords-2)
+                           collect
+                           `((lambda (limit)
+                               (when ,(if (symbolp matcher)
+                                          `(,matcher limit)
+                                        `(re-search-forward ,matcher limit t))
+                                 ;; Only highlight matches after the prompt
+                                 (> (match-beginning 0) (car comint-last-prompt))
+                                 ;; Make sure we're not in a comment or string
+                                 (let ((state (syntax-ppss)))
+                                   (not (or (nth 3 state)
+                                            (nth 4 state))))))
+                             ,@match-highlights)))))
+
+  (use-package elisp-demos
+    :ensure
+    :init
+    (advice-add #'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
+    (advice-add #'helpful-update :after #'elisp-demos-advice-helpful-update))
+
+  (use-package macrostep
+    :ensure
+    :bind (:map emacs-lisp-mode-map
+                ("C-c e" . macrostep-expand)))
+
+  (use-package eros
+    :ensure
+    :config
+    (eros-mode 1))
+
+  (use-package buttercup
+    :ensure
+    :defer t
+    :config
+    (with-eval-after-load 'evil
+      (add-hook 'buttercup-minor-mode-hook #'evil-normalize-keymaps)))
+
+  ;;;; common-lisp
+  (when (file-directory-p (expand-file-name "site-lisp/sly-stepper" user-emacs-directory))
+    (add-to-list 'load-path (expand-file-name "site-lisp/sly-stepper" user-emacs-directory)))
+  (when (file-directory-p (expand-file-name "site-lisp/sly-quicklisp" user-emacs-directory))
+    (add-to-list 'load-path (expand-file-name "site-lisp/sly-quicklisp" user-emacs-directory)))
+  (when (file-directory-p (expand-file-name "site-lisp/sly-macrostep" user-emacs-directory))
+    (add-to-list 'load-path (expand-file-name "site-lisp/sly-macrostep" user-emacs-directory)))
+
+  (defvar inferior-lisp-program "sbcl")
+  (when (executable-find "ros")
+    (setq inferior-lisp-program "ros -Q run"))
+
+  (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
+
+  (use-package sly
+    :ensure
+    :commands sly-autoloads
+    :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
+           (lisp-mode . sly-editing-mode)))
+
+  (use-package sly-stepper
+    :ensure nil
+    :after sly
+    :config
+    (require 'sly-stepper-autoloads))
+
+  (use-package sly-quicklisp
+    :ensure nil
+    :after sly
+    :config
+    (require 'sly-quicklisp-autoloads))
+
+  (use-package sly-macrostep
+    :ensure nil
+    :after sly
+    :config
+    (require 'sly-macrostep-autoloads))
+
+  (use-package sly-asdf
+    :ensure
+    :after sly
+    :config
+    (add-to-list 'sly-contribs 'sly-asdf 'append))
+
+  ;;;; clojure
+  (use-package cider
+    :ensure)
+
+  (use-package clj-refactor
+    :ensure
+    :hook (clojure-mode . +config/clojure-mode-hook)
+    :config
+    (defun +config/clojure-mode-hook ()
+      (clj-refactor-mode 1)
+      ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+      (cljr-add-keybindings-with-prefix "C-c r")))
+
+  ;;;; scheme
+  (use-package geiser
+    :ensure
+    :diminish geiser-autodoc-mode
+    ;; :hook (geiser-repl-mode . turn-on-smartparens-strict-mode)
+    :init
+    (setq geiser-autodoc-identifier-format "%s → %s"
+          geiser-repl-per-project-p t
+          geiser-repl-history-filename (concat user-emacs-directory "geiser-history")))
+
+  (use-package geiser-guile
+    :ensure
+    :config
+    (let ((nonguix-path (expand-file-name "Projects/guix/nonguix"
+                                          (getenv "HOME")))
+          (personal-path (expand-file-name "Projects/guix/devel/src"
+                                           (getenv "HOME"))))
+      (when (file-directory-p nonguix-path)
+        (add-to-list 'geiser-guile-load-path nonguix-path))
+      (when (file-directory-p personal-path)
+        (add-to-list 'geiser-guile-load-path personal-path))))
+
+  (use-package macrostep-geiser
+    :ensure
+    :after geiser-mode geiser-repl
+    :hook ((geiser-mode geiser-repl-mode) . macrostep-geiser-setup)
+    :bind (:map geiser-mode-map
+                ("C-c e" . macrostep-expand)))
+
+  (provide 'config-lisp)
+  ;;; config-lisp.el ends here
+
 #+end_src
