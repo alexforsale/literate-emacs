@@ -1358,11 +1358,11 @@
 :header-args: :tangle ./modules/config-editing.el :mkdirp t
 :END:
 #+begin_src emacs-lisp +n
-  ;;; config-editing --- Editor configuration -*- lexical-binding: t -*-
-  ;;; Commentary:
-  ;;; Code
+    ;;; config-editing --- Editor configuration -*- lexical-binding: t -*-
+    ;;; Commentary:
+    ;;; Code
 
-  ;;; smartparens
+    ;;; smartparens
   (use-package smartparens
     :ensure
     :demand t
@@ -1375,21 +1375,23 @@
     ;; (eval) is used as a hack to quiet Flycheck errors about (sp-with-modes)
     (eval
      '(sp-with-modes sp-lisp-modes
-                     ;; disable ', it's the quote character!
-                     (sp-local-pair "'" nil :actions nil)
-                     ;; also only use the pseudo-quote inside strings where it serve as
-                     ;; hyperlink.
-                     (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
-                     (sp-local-pair "`" nil
-                                    :skip-match (lambda (ms mb me)
-                                                  (cond
-                                                   ((equal ms "'")
-                                                    (or (sp--org-skip-markup ms mb me)
-                                                        (not (sp-point-in-string-or-comment))))
-                                                   (t (not (sp-point-in-string-or-comment)))))))))
+        ;; disable ', it's the quote character!
+        (sp-local-pair "'" nil :actions nil)
+        ;; also only use the pseudo-quote inside strings where it serve as
+        ;; hyperlink.
+        (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
+        (sp-local-pair "`" nil
+                       :skip-match (lambda (ms mb me)
+                                     (cond
+                                      ((equal ms "'")
+                                       (or (sp--org-skip-markup ms mb me)
+                                           (not (sp-point-in-string-or-comment))))
+                                      (t (not (sp-point-in-string-or-comment))))))))
+    (sp-with-modes '(html-mode sgml-mode nxml-mode web-mode)
+      (sp-local-pair "<" ">")))
 
-  (provide 'config-editing)
-  ;;; config-editing.el ends here
+    (provide 'config-editing)
+    ;;; config-editing.el ends here
 #+end_src
 * Project
 :PROPERTIES:
@@ -1717,6 +1719,11 @@
        ("STRT" ("wait") ("killed") ("hold"))
        ("DONE" ("wait") ("killed") ("hold")))))
 
+  (use-package org-src
+    :hook (org-src-mode . (lambda () (outline-minor-mode -1)))
+    :custom
+    (org-src-preserve-indentation nil))
+
   (use-package org-faces
     :custom
     (org-fontify-quote-and-verse-blocks t))
@@ -2015,7 +2022,7 @@
     ;; fix https://github.com/weirdNox/org-noter/pull/93/commits/f8349ae7575e599f375de1be6be2d0d5de4e6cbf
     (defun org-noter-set-start-location (&optional arg)
       "When opening a session with this document, go to the current location.
-  With a prefix ARG, remove start location."
+      With a prefix ARG, remove start location."
       (interactive "P")
       (org-noter--with-valid-session
        (let ((inhibit-read-only t)
@@ -2093,22 +2100,22 @@
                       `(("b" "(b)log post" plain
                          (file +config/create-new-blog-post)
                          "\
-  ,#+options: ':nil -:nil ^:{} num:nil toc:nil
-  ,#+author: %n
-  ,#+creator: Emacs %(eval emacs-version) (Org mode %(eval org-version) + ox-hugo)
-  ,#+hugo_section: posts
-  ,#+hugo_base_dir: ../../
-  ,#+date: %t
-  ,#+title: %^{title}
-  ,#+description: %^{description}
-  ,#+hugo_draft: true
-  ,#+hugo_tags: %^{tags}
-  ,#+hugo_categories: %^{categories}
-  ,#+hugo_auto_set_lastmod: t
-  ,#+startup: inlineimages
+      ,#+options: ':nil -:nil ^:{} num:nil toc:nil
+      ,#+author: %n
+      ,#+creator: Emacs %(eval emacs-version) (Org mode %(eval org-version) + ox-hugo)
+      ,#+hugo_section: posts
+      ,#+hugo_base_dir: ../../
+      ,#+date: %t
+      ,#+title: %^{title}
+      ,#+description: %^{description}
+      ,#+hugo_draft: true
+      ,#+hugo_tags: %^{tags}
+      ,#+hugo_categories: %^{categories}
+      ,#+hugo_auto_set_lastmod: t
+      ,#+startup: inlineimages
 
-  ,* %?
-  " :unnarrowed t :jump-to-captured t)))
+      ,* %?
+      " :unnarrowed t :jump-to-captured t)))
 
   (use-package transient
     :config
@@ -2175,41 +2182,41 @@
             `(("o" "others" plain "%?"
                :target
                (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-  ,#+title: ${title}
-  ,#+author: %n
-  ,#+description: %^{description}
-  ,#+date: %T
-  ,#+hugo_base_dir: ..
-  ,#+hugo_section: posts
-  ,#+hugo_categories: others
-  ,#+hugo_tags: %^{tag}
-  ")
+      ,#+title: ${title}
+      ,#+author: %n
+      ,#+description: %^{description}
+      ,#+date: %T
+      ,#+hugo_base_dir: ..
+      ,#+hugo_section: posts
+      ,#+hugo_categories: others
+      ,#+hugo_tags: %^{tag}
+      ")
                :unnarrowed t)
               ("t" "tech" plain "%?"
                :target
                (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-  ,#+title: ${title}
-  ,#+author: %n
-  ,#+description: %^{description}
-  ,#+date: %T
-  ,#+hugo_base_dir: ..
-  ,#+hugo_section: posts
-  ,#+hugo_categories: tech
-  ,#+hugo_tags: %^{tag}
-  ")
+      ,#+title: ${title}
+      ,#+author: %n
+      ,#+description: %^{description}
+      ,#+date: %T
+      ,#+hugo_base_dir: ..
+      ,#+hugo_section: posts
+      ,#+hugo_categories: tech
+      ,#+hugo_tags: %^{tag}
+      ")
                :unnarrowed t)
               ("p" "programming" plain "%?"
                :target
                (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-  ,#+title: ${title}
-  ,#+author: %n
-  ,#+description: %^{description}
-  ,#+date: %T
-  ,#+hugo_base_dir: ..
-  ,#+hugo_section: posts
-  ,#+hugo_categories: programming
-  ,#+hugo_tags: %^{tag}
-  ")
+      ,#+title: ${title}
+      ,#+author: %n
+      ,#+description: %^{description}
+      ,#+date: %T
+      ,#+hugo_base_dir: ..
+      ,#+hugo_section: posts
+      ,#+hugo_categories: programming
+      ,#+hugo_tags: %^{tag}
+      ")
                :unnarrowed t)
               )
             ))
@@ -2219,29 +2226,29 @@
     (setq org-roam-capture-ref-templates
           `(("r" "ref" plain "%?" :target
              (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-  ,#+title: ${title}
-  ,#+author: %n
-  ,#+description: %^{description}
-  ,#+date: %T
-  ,#+hugo_base_dir: ..
-  ,#+hugo_section: posts
-  ,#+hugo_categories: reference
-  ,#+hugo_tags: %^{tag}
-  ") :unnarrowed t)))
+      ,#+title: ${title}
+      ,#+author: %n
+      ,#+description: %^{description}
+      ,#+date: %T
+      ,#+hugo_base_dir: ..
+      ,#+hugo_section: posts
+      ,#+hugo_categories: reference
+      ,#+hugo_tags: %^{tag}
+      ") :unnarrowed t)))
     (require 'org-roam-dailies)
     (setq org-roam-dailies-directory "daily/"
           org-roam-dailies-capture-templates
           '(("d" "default" entry "* %?" :target
              (file+head "%<%Y-%m-%d>.org" "
-  ,#+title: %<%Y-%m-%d>
-  ,#+author: %n
-  ,#+description: %^{description}
-  ,#+date: %T
-  ,#+hugo_base_dir: ../..
-  ,#+hugo_section: posts
-  ,#+hugo_categories: daily
-  ,#+hugo_tags: %^{tag}
-  "))))
+      ,#+title: %<%Y-%m-%d>
+      ,#+author: %n
+      ,#+description: %^{description}
+      ,#+date: %T
+      ,#+hugo_base_dir: ../..
+      ,#+hugo_section: posts
+      ,#+hugo_categories: daily
+      ,#+hugo_tags: %^{tag}
+      "))))
     (require 'org-roam-export)
     (org-roam-setup))
 
