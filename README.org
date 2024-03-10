@@ -301,6 +301,7 @@
 * Keybindings
 :PROPERTIES:
 :header-args: :tangle ./modules/config-keybindings.el :mkdirp t
+:ID:       3b19d30f-9f31-4328-9a90-cccb19f23fac
 :END:
 #+begin_src emacs-lisp +n
   ;;; config-keybindings --- Keybindings -*- lexical-binding: t -*-
@@ -315,38 +316,38 @@
     :config
     (general-override-mode)
     (general-create-definer +config/leader-key
-                            :keymaps 'override
-                            :states  '(insert emacs normal hybrid motion visual operator)
-                            :prefix "SPC"
-                            :non-normal-prefix "s-SPC")
+      :keymaps 'override
+      :states  '(insert emacs normal hybrid motion visual operator)
+      :prefix "SPC"
+      :non-normal-prefix "s-SPC")
     (general-create-definer +config/local-leader
-                            :keymaps 'override
-                            :states '(emacs normal hybrid motion visual operator)
-                            :prefix "m"
-                            :non-normal-prefix "s-m"
-                            "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
+      :keymaps 'override
+      :states '(emacs normal hybrid motion visual operator)
+      :prefix "m"
+      :non-normal-prefix "s-m"
+      "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
     ;; useful macro
     (defmacro +config/leader-menu! (name infix-key &rest body)
       "Create a definer NAME `+config/leader-NAME' wrapping `+config/leader-key'.
-  Create prefix map: `+config/leader-NAME-map'. Prefix bindings in BODY with INFIX-KEY."
+        Create prefix map: `+config/leader-NAME-map'. Prefix bindings in BODY with INFIX-KEY."
       (declare (indent 2))
       `(progn
          (general-create-definer ,(intern (concat "+config/leader-" name))
-                                 :wrapping +config/leader-key
-                                 :prefix-map (quote ,(intern (concat "+config/leader-" name "-map")))
-                                 :infix ,infix-key
-                                 :wk-full-keys nil
-                                 "" '(:ignore t :which-key ,name))
+           :wrapping +config/leader-key
+           :prefix-map (quote ,(intern (concat "+config/leader-" name "-map")))
+           :infix ,infix-key
+           :wk-full-keys nil
+           "" '(:ignore t :which-key ,name))
          (,(intern (concat "+config/leader-" name))
           ,@body)))
     ;; keybindings
     (+config/leader-key
-     ";" 'pp-eval-expression
-     ":" 'execute-extended-command
-     "." '(find-file :wk "find file")
-     "^" '(subword-capitalize :wk "Capitalize subword")
-     "u" 'universal-argument)
-    ;;; First level menu
+      ";" 'pp-eval-expression
+      ":" 'execute-extended-command
+      "." '(find-file :wk "find file")
+      "^" '(subword-capitalize :wk "Capitalize subword")
+      "u" 'universal-argument)
+          ;;; First level menu
     (+config/leader-menu! "buffer" "b")
     (+config/leader-menu! "files" "f")
     (+config/leader-menu! "find" "gf")
@@ -362,151 +363,156 @@
     (+config/leader-menu! "tab" "t TAB")
     (+config/leader-menu! "vterm" "tv")
     (+config/leader-menu! "window" "w")
-    ;;; keybindings
-    ;;;; buffer
+          ;;; keybindings
+          ;;;; buffer
     (+config/leader-buffer
-     "[" '(previous-buffer :wk "previous buffer")
-     "]" '(next-buffer :wk "next buffer")
-     "TAB" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
-     "b" '(switch-to-buffer :wk "switch to buffer")
-     "s" '(basic-save-buffer :wk "save buffer")
-     "c" '(clone-indirect-buffer :wk "clone buffer")
-     "C" '(clone-indirect-buffer-other-window :wk "clone buffer other window")
-     "d" '(kill-current-buffer :wk "kill current buffer")
-     "i" 'ibuffer
-     "k" '(kill-buffer :wk "kill buffer")
-     "l" '(evil-switch-to-windows-last-buffer :wk "Switch to last open buffer")
-     "m" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :wk "switch to messages buffer")
-     "n" '(next-buffer :wk "next buffer")
-     "N" '(evil-buffer-new :wk "New unnamed buffer")
-     "p" '(previous-buffer :wk "previous buffer")
-     "o" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
-     "r" '(revert-buffer-quick :wk "revert buffer")
-     "R" '(rename-buffer :wk "rename buffer")
-     "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
-     "z" '(bury-buffer :wk "bury buffer"))
-    ;;;; files
+      "[" '(previous-buffer :wk "previous buffer")
+      "]" '(next-buffer :wk "next buffer")
+      "TAB" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+      "b" '(switch-to-buffer :wk "switch to buffer")
+      "s" '(basic-save-buffer :wk "save buffer")
+      "c" '(clone-indirect-buffer :wk "clone buffer")
+      "C" '(clone-indirect-buffer-other-window :wk "clone buffer other window")
+      "d" '(kill-current-buffer :wk "kill current buffer")
+      "i" 'ibuffer
+      "k" '(kill-buffer :wk "kill buffer")
+      "l" '(evil-switch-to-windows-last-buffer :wk "Switch to last open buffer")
+      "m" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :wk "switch to messages buffer")
+      "n" '(next-buffer :wk "next buffer")
+      "N" '(evil-buffer-new :wk "New unnamed buffer")
+      "p" '(previous-buffer :wk "previous buffer")
+      "o" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+      "r" '(revert-buffer-quick :wk "revert buffer")
+      "R" '(rename-buffer :wk "rename buffer")
+      "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
+      "z" '(bury-buffer :wk "bury buffer"))
+          ;;;; files
     (+config/leader-files
-     "D" 'dired
-     "d" 'dired-jump
-     "f" '(find-file :wk "find file")
-     "F" '(find-file-other-frame :wk "find file other frame")
-     "k" 'delete-frame
-     "r" 'recentf
-     "S" '(write-file :wk "save file")
-     "s" '(save-buffer :wk "save buffer")
-     "w" '(find-file-other-window :wk "find file other window"))
-    ;;;; find
+      "D" 'dired
+      "d" 'dired-jump
+      "f" '(find-file :wk "find file")
+      "F" '(find-file-other-frame :wk "find file other frame")
+      "k" 'delete-frame
+      "r" 'recentf
+      "S" '(write-file :wk "save file")
+      "s" '(save-buffer :wk "save buffer")
+      "w" '(find-file-other-window :wk "find file other window"))
+          ;;;; find
     (+config/leader-find
-     "g" 'grep
-     "r" '(rgrep :wk "recursive grep"))
-    ;;;; help
+      "g" 'grep
+      "r" '(rgrep :wk "recursive grep"))
+          ;;;; help
     (+config/leader-key
-     "h" (general-simulate-key "C-h"
-                               :state '(normal visual)
-                               :name general-SPC-h-simulates-C-h
-                               :docstring "Simulates C-h in normal and visual mode."
-                               :which-key "Help"))
-    ;;;; go
+      "h" (general-simulate-key "C-h"
+            :state '(normal visual)
+            :name general-SPC-h-simulates-C-h
+            :docstring "Simulates C-h in normal and visual mode."
+            :which-key "Help"))
+          ;;;; go
     (+config/leader-go
-     "'" '(:ignore t :wk "avy")
-     "''" 'avy-resume
-     "'c" 'evil-avy-goto-char
-     "'l" 'evil-avy-goto-line
-     "'w" 'evil-avy-goto-word-or-subword-1)
-    ;;;; insert
+      "'" '(:ignore t :wk "avy")
+      "''" 'avy-resume
+      "'c" 'evil-avy-goto-char
+      "'l" 'evil-avy-goto-line
+      "'w" 'evil-avy-goto-word-or-subword-1)
+          ;;;; insert
     (+config/leader-insert
-     "u" '(insert-char :wk "insert character"))
-    ;;;; mark
+      "u" '(insert-char :wk "insert character"))
+          ;;;; mark
     (+config/leader-mark
-     "m" '(bookmark-set :wk "set bookmark")
-     "b" '(bookmark-jump :wk "jump to bookmark")
-     "B" '(bookmark-jump-other-window :wk "jump to bookmark other window")
-     "C-c b" '(bookmark-jump-other-frame :wk "jump to bookmark other frame")
-     ;; "c" '(consult-bookmark :wk "consult bookmark") ;; require `consult' package
-     "l" '(bookmark-bmenu-list :wk "list bookmarks")
-     "L" '(bookmark-load :wk "load bookmark")
-     "d" '(bookmark-delete :wk "delete bookmark")
-     "D" '(bookmark-delete-all :wk "delete all bookmarks")
-     "s" '(bookmark-save :wk "save bookmark")
-     "r" '(bookmark-rename :wk "rename bookmark"))
-    ;;;; open
+      "m" '(bookmark-set :wk "set bookmark")
+      "b" '(bookmark-jump :wk "jump to bookmark")
+      "B" '(bookmark-jump-other-window :wk "jump to bookmark other window")
+      "C-c b" '(bookmark-jump-other-frame :wk "jump to bookmark other frame")
+      ;; "c" '(consult-bookmark :wk "consult bookmark") ;; require `consult' package
+      "l" '(bookmark-bmenu-list :wk "list bookmarks")
+      "L" '(bookmark-load :wk "load bookmark")
+      "d" '(bookmark-delete :wk "delete bookmark")
+      "D" '(bookmark-delete-all :wk "delete all bookmarks")
+      "s" '(bookmark-save :wk "save bookmark")
+      "r" '(bookmark-rename :wk "rename bookmark"))
+          ;;;; open
     (+config/leader-open
-     "i" '((lambda () (interactive) (find-file user-init-file)) :wk "open Emacs configuration file"))
-    ;;;; register
+      "i" '((lambda () (interactive) (find-file user-init-file)) :wk "open Emacs configuration file"))
+          ;;;; register
     (+config/leader-register
-     ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
-     "+" '(increment-register :wk "augment content of register")
-     "C-@" '(point-to-register :wk "store current point to register")
-     "C-SPC" '(point-to-register :wk "store current point to register")
-     "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
-     "SPC" '(point-to-register :wk "store current point to register")
-     "c" '(clear-rectangle :wk "blank out region-rectangle")
-     "d" '(delete-rectangle :wk "delete region-rectangle")
-     "f" '(frameset-to-register :wk "store frameset to register")
-     "g" '(insert-register :wk "insert register")
-     "i" '(insert-register :wk "insert register")
-     "j" '(jump-to-register :wk "jump to register")
-     "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
-     "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
-     "m" '(bookmark-set :wk "set bookmark")
-     "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
-     "n" '(number-to-register :wk "store a number in a register")
-     "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
-     "o" '(open-rectangle :wk "blank out region-rectangle")
-     "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
-     "s" '(copy-to-register :wk "copy region to register")
-     "t" '(string-rectangle :wk "replace rectangle with string")
-     "x" '(copy-to-register :wk "copy region to register")
-     "w" '(window-configuration-to-register :wk "store window configuration to register")
-     "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
-    ;;;; window
+      ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
+      "+" '(increment-register :wk "augment content of register")
+      "C-@" '(point-to-register :wk "store current point to register")
+      "C-SPC" '(point-to-register :wk "store current point to register")
+      "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
+      "SPC" '(point-to-register :wk "store current point to register")
+      "c" '(clear-rectangle :wk "blank out region-rectangle")
+      "d" '(delete-rectangle :wk "delete region-rectangle")
+      "f" '(frameset-to-register :wk "store frameset to register")
+      "g" '(insert-register :wk "insert register")
+      "i" '(insert-register :wk "insert register")
+      "j" '(jump-to-register :wk "jump to register")
+      "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
+      "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
+      "m" '(bookmark-set :wk "set bookmark")
+      "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
+      "n" '(number-to-register :wk "store a number in a register")
+      "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
+      "o" '(open-rectangle :wk "blank out region-rectangle")
+      "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
+      "s" '(copy-to-register :wk "copy region to register")
+      "t" '(string-rectangle :wk "replace rectangle with string")
+      "x" '(copy-to-register :wk "copy region to register")
+      "w" '(window-configuration-to-register :wk "store window configuration to register")
+      "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
+          ;;;; window
     (+config/leader-window
-     "C-o" '(delete-other-windows :wk "delete other windows")
-     "[" '(evil-window-left :wk "left window")
-     "]" '(evil-window-right :wk "right window")
-     "+" '(enlarge-window :wk "enlarge window")
-     "-" '(shrink-window :wk "shrink window")
-     "}" '(enlarge-window-horizontally :wk "enlarge window horizontally")
-     "{" '(shrink-window-horizontally :wk "shrink window horizontally")
-     "+" 'evil-window-increase-height
-     "-" 'evil-window-decrease-height
-     ":" 'evil-ex
-     "<" 'evil-window-decrease-width
-     "=" 'balance-windows
-     ">" 'evil-window-increase-height
-     "_" 'evil-window-set-height
-     "b" 'evil-window-bottom-right
-     "c" 'evil-window-delete
-     "d" '(delete-window :wk "delete window")
-     "h" 'evil-window-left
-     "f" '(ffap-other-window :wk "ffap other window")
-     "j" 'evil-window-down
-     "k" 'evil-window-up
-     "l" 'evil-window-right
-     "n" 'evil-window-new
-     "p" 'evil-window-mru
-     "q" 'evil-quit
-     "r" 'evil-window-rotate-downwards
-     "R" 'evil-window-rotate-upwards
-     "s" 'evil-window-split
-     "T" '(tear-off-window :wk "tear off window")
-     "t" 'evil-window-top-left
-     "u" 'winner-undo
-     "v" 'evil-window-vsplit
-     "w" '(other-window :wk "other window")
-     "W" 'evil-window-prev
-     "x" 'evil-window-exchange
-     "|" 'evil-window-set-width
-     "<left>" 'evil-window-left
-     "<right>" 'evil-window-right
-     "<down>" 'evil-window-down
-     "<up>" 'evil-win-up)
-    ;;;; quit
+      "C-o" '(delete-other-windows :wk "delete other windows")
+      "[" '(evil-window-left :wk "left window")
+      "]" '(evil-window-right :wk "right window")
+      "+" '(enlarge-window :wk "enlarge window")
+      "-" '(shrink-window :wk "shrink window")
+      "}" '(enlarge-window-horizontally :wk "enlarge window horizontally")
+      "{" '(shrink-window-horizontally :wk "shrink window horizontally")
+      "+" 'evil-window-increase-height
+      "-" 'evil-window-decrease-height
+      ":" 'evil-ex
+      "<" 'evil-window-decrease-width
+      "=" 'balance-windows
+      ">" 'evil-window-increase-height
+      "_" 'evil-window-set-height
+      "b" 'evil-window-bottom-right
+      "c" 'evil-window-delete
+      "d" '(delete-window :wk "delete window")
+      "h" 'evil-window-left
+      "f" '(ffap-other-window :wk "ffap other window")
+      "j" 'evil-window-down
+      "k" 'evil-window-up
+      "l" 'evil-window-right
+      "n" 'evil-window-new
+      "p" 'evil-window-mru
+      "q" 'evil-quit
+      "r" 'evil-window-rotate-downwards
+      "R" 'evil-window-rotate-upwards
+      "s" 'evil-window-split
+      "T" '(tear-off-window :wk "tear off window")
+      "t" 'evil-window-top-left
+      "u" 'winner-undo
+      "v" 'evil-window-vsplit
+      "w" '(other-window :wk "other window")
+      "W" 'evil-window-prev
+      "x" 'evil-window-exchange
+      "|" 'evil-window-set-width
+      "<left>" 'evil-window-left
+      "<right>" 'evil-window-right
+      "<down>" 'evil-window-down
+      "<up>" 'evil-win-up)
+          ;;;; quit
     (+config/leader-quit
-     "q" '(save-buffers-kill-terminal :wk "quit and save")
-     "R" '(restart-emacs :wk "restart Emacs"))
+      "q" '(save-buffers-kill-terminal :wk "quit and save")
+      "R" '(restart-emacs :wk "restart Emacs"))
     )
+
+  (general-def
+    "C-c c" 'org-capture
+    "C-c a" 'org-agenda
+    "C-c l" 'org-store-link)
 
   (provide 'config-keybindings)
   ;;; config-keybindings.el ends here
