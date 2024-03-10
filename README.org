@@ -173,6 +173,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   ;;; Code:
 #+end_src
 ** The main package
+Mostly copied from /doom/ or the official documentation[fn:1].
 #+begin_src emacs-lisp -n
   (use-package evil
     :ensure t
@@ -210,6 +211,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     )
 #+end_src
 ** =evil-collection=
+For parts of /Emacs/ not covered by Evil[fn:2].
 #+begin_src emacs-lisp -n
   (use-package evil-collection
     :ensure t
@@ -243,6 +245,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (evil-collection-emms-browser-setup)))
 #+end_src
 ** =evil-terminal-cursor-changer=
+Changing the cursor shape in terminal[fn:3].
 #+begin_src emacs-lisp -n
   (unless (display-graphic-p)
     (use-package evil-terminal-cursor-changer
@@ -251,6 +254,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (evil-terminal-cursor-changer-activate)))
 #+end_src
 ** =evil-args=
+Motions and text objects for delimited arguments in Evil[fn:4].
 #+begin_src emacs-lisp -n
   (use-package evil-args
     :after evil
@@ -268,6 +272,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (setq-local evil-args-delimiters '(" "))))
 #+end_src
 ** =evil-easymotion=
+⏩ A port of vim easymotion to Emacs' evil-mode[fn:5].
 #+begin_src emacs-lisp -n
   (use-package evil-easymotion
     :after evil
@@ -295,6 +300,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (evilem-make-motion evilem-motion-backward-WORD-end #'evil-backward-WORD-end :scope 'visible))
 #+end_src
 ** =evil-surround=
+This package emulates [[https://github.com/tpope/vim-surround/][surround.vim]][fn:6].
 #+begin_src emacs-lisp -n
   (use-package evil-surround
     :after evil
@@ -306,6 +312,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config (global-evil-surround-mode 1))
 #+end_src
 ** =evil-embrace=
+Evil integration of[[https://github.com/cute-jumper/embrace.el/][embrace.el]][fn:7].
 #+begin_src emacs-lisp -n
   (use-package evil-embrace
     :after evil evil-surround
@@ -322,6 +329,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (setq evil-embrace-show-help-p nil))
 #+end_src
 ** =evil-traces=
+Some evil-ex command previews[fn:8].
 #+begin_src emacs-lisp -n
   (use-package evil-traces
     :ensure t
@@ -330,6 +338,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (evil-traces-mode))
 #+end_src
 ** =evil-visualstar=
+ Start a * or # search from the visual selection[fn:9].
 #+begin_src emacs-lisp -n
   (use-package evil-visualstar
     :after evil
@@ -343,6 +352,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
                       "#" #'evil-visualstar/begin-search-backward))
 #+end_src
 ** =exato=
+🔖 EXATO: Evil XML Attributes Text Object[fn:10].
 #+begin_src emacs-lisp -n
   (use-package exato
     :ensure t
@@ -351,6 +361,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :commands evil-outer-xml-attr evil-inner-xml-attr)
 #+end_src
 ** =evil-multiedit=
+Multiple cursors for evil-mode, based on iedit[fn:11].
 #+begin_src emacs-lisp -n
   (use-package evil-multiedit
     :after evil
@@ -378,6 +389,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   ;;; Code:
 #+end_src
 ** =general.el=
+More convenient key definitions in emacs[fn:12].
 #+begin_src emacs-lisp -n
     (use-package general
       :ensure t
@@ -611,6 +623,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   ;;; Code:
 #+end_src
 ** =which-key=
+ Emacs package that displays available keybindings in popup[fn:13]. This is one of the top /Emacs/ packages that I must have in my configuration.
 #+begin_src emacs-lisp -n
   (use-package which-key
     :ensure
@@ -635,12 +648,14 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
 #+end_src
 ** =all-the-icons=
+A utility package to collect various Icon Fonts and propertize them within Emacs[fn:14].
 #+begin_src emacs-lisp -n
   (use-package all-the-icons
     :ensure
     :if (display-graphic-p))
 #+end_src
 ** =doom-themes=
+ A megapack of themes for GNU Emacs[fn:15].
 #+begin_src emacs-lisp -n
   (use-package doom-themes
     :ensure t
@@ -661,12 +676,14 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (doom-themes-org-config))
 #+end_src
 ** =doom-modeline=
+A fancy and fast mode-line inspired by minimalism design[fn:16].
 #+begin_src emacs-lisp -n
   (use-package doom-modeline
     :ensure
     :hook (after-init . doom-modeline-mode))
 #+end_src
 ** =dashboard=
+An extensible emacs dashboard[fn:17].
 #+begin_src emacs-lisp -n
   ;; use-package with package.el:
   (use-package dashboard
@@ -686,6 +703,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
           ))
 #+end_src
 ** =tab-bar=                                                       :builtin:
+Although I used /Perspective/ more, there are some cases where it's easier with tabs.
 #+begin_src emacs-lisp -n
   (use-package tab-bar
     :init
@@ -697,7 +715,6 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
           tab-bar-auto-width nil
           tab-bar-position t))
 #+end_src
-** =frame=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package frame
     :init
@@ -887,6 +904,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (setq tabify-regexp "^\t* [ \t]+"))
 #+end_src
 ** =rainbow-mode=, =rainbow-identifiers=, and =rainbow-delimiters=
+Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package rainbow-mode
     :ensure
@@ -901,6 +919,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 ** =nerd-fonts=
+[[https://github.com/twlz0ne/nerd-fonts.el/][This package]] still not available at /Melpa/, so I have to clone it as a submodule.
 #+begin_src emacs-lisp -n
   (when (file-directory-p (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory))
     (add-to-list 'load-path (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory)))
@@ -1719,6 +1738,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   ;;; Code
 #+end_src
 ** =smartparens=
+I still have a mixed feeling for this package, but it still easier to configure than the builtin /electric-pair-mode/.
 #+begin_src emacs-lisp -n
     ;;; smartparens
   (use-package smartparens
@@ -2919,6 +2939,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   ;;; Code:
 #+end_src
 ** =nov=
+Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package nov
     :ensure)
@@ -3227,6 +3248,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   ;;; config-dired.el ends here
 #+end_src
 * Treemacs
+I sometimes need /treemacs/ when working on a large directory of files.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-treemacs.el :mkdirp t
 :END:
@@ -3395,18 +3417,6 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :hook
     (message-setup . mml-secure-sign-pgpmime)
     :config
-    (add-to-list 'auto-mode-alist
-                 '("kristian.alexander@zumstar.co.id" . notmuch-message-mode))
-    (add-to-list 'auto-mode-alist
-                 '("kristian.alexander@zumstar.co.id" . notmuch-message-mode))
-    (add-to-list 'auto-mode-alist
-                 '("alexforsale@yahoo.com" . notmuch-message-mode))
-    (add-to-list 'auto-mode-alist
-                 '("christian.alexander@ymail.com" . notmuch-message-mode))
-    (add-to-list 'auto-mode-alist
-                 '("christian.alexander@windowslive.com" . notmuch-message-mode))
-    (add-to-list 'auto-mode-alist
-                 '("alexarians@gmail.com" . notmuch-message-mode))
     (global-set-key (kbd "<XF86Mail>") 'notmuch)
     (setq notmuch-fcc-dirs nil
           notmuch-search-result-format
@@ -3524,6 +3534,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   ;;; config-mail.el ends here
 #+end_src
 * Programming
+These are the /programming languages/ that I interacts the most, I'm not a programmer, but I've been using GNU/Linux for a while now.
 ** Flycheck
 :PROPERTIES:
 :header-args: :tangle ./modules/config-flycheck.el :mkdirp t
@@ -4948,3 +4959,31 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   (provide 'config-ansible)
   ;;; config-ansible.el ends here
 #+end_src
+
+* Footnotes
+
+[fn:17] https://github.com/emacs-dashboard/emacs-dashboard
+[fn:16] https://github.com/seagle0128/doom-modeline
+
+[fn:15] https://github.com/doomemacs/themes
+[fn:14] https://github.com/domtronn/all-the-icons.el
+
+[fn:13] https://github.com/justbur/emacs-which-key
+[fn:12] https://github.com/noctuid/general.el
+
+[fn:11] https://github.com/hlissner/evil-multiedit
+[fn:10] https://github.com/ninrod/exato
+
+[fn:9] https://github.com/bling/evil-visualstar
+[fn:8] https://github.com/mamapanda/evil-traces
+
+[fn:7] https://github.com/cute-jumper/evil-embrace.el
+[fn:6] https://github.com/emacs-evil/evil-surround
+
+[fn:5] https://github.com/PythonNut/evil-easymotion
+[fn:4] https://github.com/wcsmith/evil-args
+
+[fn:3] https://github.com/7696122/evil-terminal-cursor-changer
+[fn:2] https://github.com/emacs-evil/evil-collection
+
+[fn:1] https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el
