@@ -62,6 +62,7 @@ Every top level heading in this file should be tangled to a separate file, this 
   (require 'config-rust nil t)
   (require 'config-ansible nil t)
   (require 'config-perl nil t)
+  (require 'config-haskell nil t)
 #+end_src
 Since the =load-path= for the modules directory is defined in ~./modules/config-variables.el~, the first =require= line also state the location.
 ** footer                                                         :noexport:
@@ -4981,6 +4982,36 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (provide 'config-perl)
   ;;; config-perl.el ends here
+#+end_src
+** Haskell
+:PROPERTIES:
+:header-args: :tangle ./modules/config-haskell.el :mkdirp t
+:END:
+*** header                                                       :noexport:
+#+begin_src emacs-lisp +n
+  ;;; config-haskell --- haskell configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+#+end_src
+*** =haskell-mode=
+#+begin_src emacs-lisp -n
+  (use-package haskell-mode
+    :ensure t
+    :init
+    (setq flymake-allowed-file-name-masks nil)
+    :custom
+    (haskell-process-load-or-reload-prompt t)
+    (haskell-process-auto-import-loaded-modules t)
+    (haskell-process-log t)
+    (haskell-tags-on-save t))
+
+  (use-package lsp-haskell
+    :ensure t)
+#+end_src
+*** footer                                                       :noexport:
+#+begin_src emacs-lisp -n
+  (provide 'config-haskell)
+  ;;; config-haskell.el ends here
 #+end_src
 * Footnotes
 
