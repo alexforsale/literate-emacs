@@ -36,6 +36,7 @@
   (require 'config-project nil t)
   (require 'config-org nil t)
   (require 'config-tools nil t)
+  (require 'config-dired nil t)
 #+end_src
 
 ** footer
@@ -850,7 +851,7 @@
        search-ring
        regexp-search-ring)))
 
-    ;;; prog-mode
+        ;;; prog-mode
   (use-package prog-mode
     :hook ((prog-mode . prettify-symbols-mode)
            (prog-mode . visual-line-mode)
@@ -895,7 +896,9 @@
        (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")))))))
 
   (use-package eldoc
-    :hook (prog-mode . eldoc-mode))
+    :hook ((prog-mode . eldoc-mode)
+           (emacs-lisp-mode . eldoc-mode)
+           (lisp-interaction-mode . eldoc-mode)))
 
   (use-package bookmark
     :custom
@@ -2529,4 +2532,86 @@
 
   (provide 'config-tools)
   ;;; config-tools.el ends here
+#+end_src
+* dired
+:PROPERTIES:
+:header-args: :tangle ./modules/config-dired.el :mkdirp t
+:END:
+#+begin_src emacs-lisp
+  ;;; config-dired --- `dired' configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  (use-package dired
+    :commands dired-jump
+    :init
+    (setq dired-dwim-target t ; guess a default target directory
+          dired-hide-details-hide-symlink-targets nil ; don't hide symbolic link targets
+          dired-auto-revert-buffer #'dired-buffer-stale-p ; revert stale only
+          dired-recursive-copies 'always ; always copy recursively
+          dired-recursive-deletes 'top ; ask only for top-level
+          dired-create-destination-dirs 'ask
+          dired-clean-confirm-killing-deleted-buffers nil))
+
+  (use-package image-dired
+    :config
+    (setq image-dired-thumb-size 150))
+
+  (use-package dired-x
+    :hook (dired-mode . dired-omit-mode)
+    :config
+    (setq dired-omit-files
+          (concat dired-omit-files
+                  "\\|^\\.DS_Store\\'"
+                  "\\|^\\.project\\(?:ile\\)?\\'"
+                  "\\|^\\.\\(?:svn\\|git\\)\\'"
+                  "\\|^\\.ccls-cache\\'"
+                  "\\|\\(?:\\.js\\)?\\.meta\\'"
+                  "\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'"))
+    ;; Disable the prompt about whether I want to kill the Dired buffer for a
+    ;; deleted directory. Of course I do!
+    (setq dired-clean-confirm-killing-deleted-buffers nil)
+    (let ((cmd "xdg-open"))
+      (setq dired-guess-shell-alist-user
+            `(("\\.\\(?:docx\\|pdf\\|djvu\\|eps\\)\\'" ,cmd)
+              ("\\.\\(?:jpe?g\\|png\\|gif\\|xpm\\)\\'" ,cmd)
+              ("\\.\\(?:xcf\\)\\'" ,cmd)
+              ("\\.csv\\'" ,cmd)
+              ("\\.tex\\'" ,cmd)
+              ("\\.\\(?:mp4\\|mkv\\|avi\\|flv\\|rm\\|rmvb\\|ogv\\)\\(?:\\.part\\)?\\'" ,cmd)
+              ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
+              ("\\.html?\\'" ,cmd)
+              ("\\.md\\'" ,cmd)))))
+
+  (use-package fd-dired
+    :ensure
+    :if (executable-find "fd")
+    :defer t
+    :init
+    (global-set-key [remap find-dired] #'fd-dired))
+
+  (use-package dired-git-info
+    :ensure
+    ;; :hook
+    ;; (dired-after-readin . dired-git-info-auto-enable)
+    :config
+    ;; (setq +dired--git-info-p (bound-and-true-p dired-git-info-mode))
+    ;; (when +dired--git-info-p
+    ;;   (dired-git-info-mode -1))
+    (setq dgi-auto-hide-details-p nil))
+
+  (use-package dired-aux
+    :config
+    (setq dired-create-destination-dirs 'ask
+          dired-vc-rename-file t))
+
+  (use-package dired-rsync
+    :ensure)
+
+  (use-package diredfl
+    :ensure
+    :hook (dired-mode . diredfl-global-mode))
+
+  (provide 'config-dired)
+  ;;; config-dired.el ends here
 #+end_src
