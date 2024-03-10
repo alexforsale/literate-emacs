@@ -1625,6 +1625,25 @@ Making /Emacs/ more colourful.
   ;;; Commentary:
   ;;; Code:
 #+end_src
+** =eshell=                                                        :builtin:
+#+begin_src emacs-lisp -n
+  (use-package eshell
+    :ensure nil
+    :custom
+    (eshell-history-size 10000)
+    (eshell-hist-ignore-dups t)
+    (eshell-buffer-maximum-lines 10000)
+    (eshell-scroll-to-bottom-on-input t)
+    (eshell-destroy-buffer-when-process-dies t)
+    (eshell-prompt-regexp "^[^\)]*[\)] "))
+#+end_src
+** =eshell-syntax-highlighting=
+#+begin_src emacs-lisp -n
+  (use-package eshell-syntax-highlighting
+    :ensure
+    :config
+    (eshell-syntax-highlighting-global-mode +1))
+#+end_src
 ** =esh-autosuggest=
 #+begin_src emacs-lisp -n
   (use-package esh-autosuggest
@@ -3639,7 +3658,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
                                (outline-minor-mode)
                                (rainbow-delimiters-mode))))
 #+end_src
-*** =ielm=                                                          :builtin:
+**** =ielm=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package ielm
     :ensure nil
@@ -3667,7 +3686,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
                                             (nth 4 state))))))
                              ,@match-highlights)))))
 #+end_src
-*** =elisp-demos=
+**** =elisp-demos=
 #+begin_src emacs-lisp -n
   (use-package elisp-demos
     :ensure
@@ -3675,21 +3694,14 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (advice-add #'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
     (advice-add #'helpful-update :after #'elisp-demos-advice-helpful-update))
 #+end_src
-*** =macrostep=
-#+begin_src emacs-lisp -n
-  (use-package macrostep
-    :ensure
-    :bind (:map emacs-lisp-mode-map
-                ("C-c e" . macrostep-expand)))
-#+end_src
-*** =eros=
+**** =eros=
 #+begin_src emacs-lisp -n
   (use-package eros
     :ensure
     :config
     (eros-mode 1))
 #+end_src
-*** =buttercup=
+**** =buttercup=
 #+begin_src emacs-lisp -n
   (use-package buttercup
     :ensure
@@ -3697,6 +3709,13 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :config
     (with-eval-after-load 'evil
       (add-hook 'buttercup-minor-mode-hook #'evil-normalize-keymaps)))
+#+end_src
+*** =macrostep=
+#+begin_src emacs-lisp -n
+  (use-package macrostep
+    :ensure
+    :bind (:map emacs-lisp-mode-map
+                ("C-c e" . macrostep-expand)))
 #+end_src
 *** =common-lisp=
 #+begin_src emacs-lisp -n
@@ -3753,6 +3772,21 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :after sly
     :config
     (add-to-list 'sly-contribs 'sly-asdf 'append))
+#+end_src
+**** =lispy=
+#+begin_src emacs-lisp -n
+  (use-package lispy
+    :ensure
+    :hook ((emacs-lisp-mode . lispy-mode)
+           (lisp-mode . lispy-mode)
+           (scheme-mode . lispy-mode)
+           (geiser-mode . lispy-mode)))
+#+end_src
+**** =lispyville=
+#+begin_src emacs-lisp -n
+  (use-package lispyville
+    :ensure
+    :hook (lispy-mode . lispyville-mode))
 #+end_src
 *** clojure
 **** =cider=
