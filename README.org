@@ -527,256 +527,261 @@
 :header-args: :tangle ./modules/config-ui.el :mkdirp t
 :END:
 #+begin_src emacs-lisp +n
-    ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
-    ;;; Commentary:
-    ;;; Code:
-  (use-package which-key
-    :ensure
-    :custom
-    (which-key-lighter "")
-    (which-key-sort-order #'which-key-key-order-alpha)
-    (which-key-sort-uppercase-first nil)
-    (which-key-add-column-padding 1)
-    (which-key-max-display-columns nil)
-    (which-key-min-display-lines 6)
-    (which-key-compute-remaps t)
-    (which-key-side-window-slot -10)
-    (which-key-separator " → ")
-    (which-key-allow-evil-operators t)
-    (which-key-use-C-h-commands t)
-    (which-key-show-remaining-keys t)
-    (which-key-show-prefix 'bottom)
-    :config
-    (which-key-mode)
-    (which-key-setup-side-window-bottom)
-    (which-key-setup-minibuffer)
-    (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
+      ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
+      ;;; Commentary:
+      ;;; Code:
+    (use-package which-key
+      :ensure
+      :custom
+      (which-key-lighter "")
+      (which-key-sort-order #'which-key-key-order-alpha)
+      (which-key-sort-uppercase-first nil)
+      (which-key-add-column-padding 1)
+      (which-key-max-display-columns nil)
+      (which-key-min-display-lines 6)
+      (which-key-compute-remaps t)
+      (which-key-side-window-slot -10)
+      (which-key-separator " → ")
+      (which-key-allow-evil-operators t)
+      (which-key-use-C-h-commands t)
+      (which-key-show-remaining-keys t)
+      (which-key-show-prefix 'bottom)
+      :config
+      (which-key-mode)
+      (which-key-setup-side-window-bottom)
+      (which-key-setup-minibuffer)
+      (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
 
-    ;;;; theme
-  (use-package all-the-icons
-    :ensure
-    :if (display-graphic-p))
+      ;;;; theme
+    (use-package all-the-icons
+      :ensure
+      :if (display-graphic-p))
 
-  (use-package doom-themes
-    :ensure t
-    :config
-    ;; Global settings (defaults)
-    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-          doom-themes-enable-italic t) ; if nil, italics is universally disabled
-    (load-theme 'doom-nord t)
+    (use-package doom-themes
+      :ensure t
+      :config
+      ;; Global settings (defaults)
+      (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+            doom-themes-enable-italic t) ; if nil, italics is universally disabled
+      (load-theme 'doom-nord t)
 
-    ;; Enable flashing mode-line on errors
-    (doom-themes-visual-bell-config)
-    ;; Enable custom neotree theme (all-the-icons must be installed!)
-    ;; (doom-themes-neotree-config)
-    ;; or for treemacs users
-    (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-    (doom-themes-treemacs-config)
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config))
+      ;; Enable flashing mode-line on errors
+      (doom-themes-visual-bell-config)
+      ;; Enable custom neotree theme (all-the-icons must be installed!)
+      ;; (doom-themes-neotree-config)
+      ;; or for treemacs users
+      (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+      (doom-themes-treemacs-config)
+      ;; Corrects (and improves) org-mode's native fontification.
+      (doom-themes-org-config))
 
-  (use-package doom-modeline
-    :ensure
-    :hook (after-init . doom-modeline-mode))
+    (use-package doom-modeline
+      :ensure
+      :hook (after-init . doom-modeline-mode))
 
-  ;; use-package with package.el:
-  (use-package dashboard
-    :ensure t
-    :config
-    (dashboard-setup-startup-hook)
-    (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
+    ;; use-package with package.el:
+    (use-package dashboard
+      :ensure t
+      :config
+      (dashboard-setup-startup-hook)
+      (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
 
-  (use-package tab-bar
-    :init
-    (setq tab-bar-show 1
-          tab-bar-close-button-show nil
-          tab-bar-tab-hints t
-          tab-bar-new-button-show nil
-          tab-bar-separator " "
-          tab-bar-auto-width nil
-          tab-bar-position t))
+    (use-package tab-bar
+      :init
+      (setq tab-bar-show 1
+            tab-bar-close-button-show nil
+            tab-bar-tab-hints t
+            tab-bar-new-button-show nil
+            tab-bar-separator " "
+            tab-bar-auto-width nil
+            tab-bar-position t))
 
-  (use-package frame
-    :init
-    (blink-cursor-mode 1)
-    :config
-    (cond
-     ((find-font (font-spec :family "OverpassM Nerd Font Mono"))
-      (set-frame-font "OverpassM Nerd Font Mono 10" nil t))
-     ((find-font (font-spec :family "Ubuntu Mono"))
-      (set-frame-font "Ubuntu Mono 10" nil t))
-     ((find-font (font-spec :family "Fira Code Retina"))
-      (set-frame-font "Fira Code Retina 10" nil t))
-     ((find-font (font-spec :family "Source Code Pro"))
-      (set-frame-font "Source Code Pro 10" nil t))
-     ((find-font (font-spec :family "DejaVu Sans Mono"))
-      (set-frame-font "DejaVu Sans Mono 10" nil t))))
+    (use-package frame
+      :init
+      (blink-cursor-mode 1)
+      :config
+      (cond
+       ((find-font (font-spec :family "OverpassM Nerd Font Mono"))
+        (set-frame-font "OverpassM Nerd Font Mono 10" nil t))
+       ((find-font (font-spec :family "Ubuntu Mono"))
+        (set-frame-font "Ubuntu Mono 10" nil t))
+       ((find-font (font-spec :family "Fira Code Retina"))
+        (set-frame-font "Fira Code Retina 10" nil t))
+       ((find-font (font-spec :family "Source Code Pro"))
+        (set-frame-font "Source Code Pro 10" nil t))
+       ((find-font (font-spec :family "DejaVu Sans Mono"))
+        (set-frame-font "DejaVu Sans Mono 10" nil t))))
 
-  (use-package window
-    :config
-    (setq split-width-threshold 160))
+    (use-package window
+      :config
+      (setq split-width-threshold 160))
 
-  (use-package display-line-numbers
-    :init
-    (setq display-line-numbers-type t)
-    :hook (prog-mode . display-line-numbers-mode)
-    :custom
-    (display-line-numbers-grow-only t))
+    (use-package display-line-numbers
+      :init
+      (setq display-line-numbers-type t)
+      :hook (prog-mode . display-line-numbers-mode)
+      :custom
+      (display-line-numbers-grow-only t))
 
-  (use-package help-at-pt
-    :custom
-    (help-at-pt-display-when-idle t))
+    (use-package help-at-pt
+      :custom
+      (help-at-pt-display-when-idle t))
 
-  (use-package hideshow
-    :hook (prog-mode . hs-minor-mode))
+    (use-package hideshow
+      :hook (prog-mode . hs-minor-mode))
 
-  (use-package uniquify
-    :ensure nil
-    :config
-    (setq uniquify-buffer-name-style 'forward
-          uniquify-separator " • "
-          uniquify-after-kill-buffer-p t
-          uniquify-ignore-buffers-re "^\\*"))
+    (use-package uniquify
+      :ensure nil
+      :config
+      (setq uniquify-buffer-name-style 'forward
+            uniquify-separator " • "
+            uniquify-after-kill-buffer-p t
+            uniquify-ignore-buffers-re "^\\*"))
 
-  (use-package speedbar
-    :custom
-    (speedbar-use-images nil)
-    (speedbar-update-flag t)
-    (speedbar-frame-parameters '((name . "speedbar")
-                                 (title . "speedbar")
-                                 (minibuffer . nil)
-                                 (border-width . 2)
-                                 (menu-bar-lines . 0)
-                                 (tool-bar-lines . 0)
-                                 (unsplittable . t)
-                                 (left-fringe . 10)))
-    :config
-    (speedbar-add-supported-extension
-     (list
-    ;;;; General Lisp Languages
-      ".cl"
-      ".li?sp"
-    ;;;; Lua/Fennel (Lisp that transpiles to lua)
-      ".lua"
-      ".fnl"
-      ".fennel"
-    ;;;; JVM languages (Java, Kotlin, Clojure)
-      ".kt"
-      ".mvn"
-      ".gradle"
-      ".properties"
-      ".cljs?"
-    ;;;; shellscript
-      ".sh"
-      ".bash"
-    ;;;; Web Languages and Markup/Styling
-      ".php"
-      ".ts"
-      ".html?"
-      ".css"
-      ".less"
-      ".scss"
-      ".sass"
-    ;;;; Makefile
-      "makefile"
-      "MAKEFILE"
-      "Makefile"
-    ;;;; Data formats
-      ".json"
-      ".yaml"
-      ".toml"
-    ;;;; Notes and Markup
-      ".md"
-      ".markdown"
-      ".org"
-      ".txt"
-      "README")))
+    (use-package speedbar
+      :custom
+      (speedbar-use-images nil)
+      (speedbar-update-flag t)
+      (speedbar-frame-parameters '((name . "speedbar")
+                                   (title . "speedbar")
+                                   (minibuffer . nil)
+                                   (border-width . 2)
+                                   (menu-bar-lines . 0)
+                                   (tool-bar-lines . 0)
+                                   (unsplittable . t)
+                                   (left-fringe . 10)))
+      :config
+      (speedbar-add-supported-extension
+       (list
+      ;;;; General Lisp Languages
+        ".cl"
+        ".li?sp"
+      ;;;; Lua/Fennel (Lisp that transpiles to lua)
+        ".lua"
+        ".fnl"
+        ".fennel"
+      ;;;; JVM languages (Java, Kotlin, Clojure)
+        ".kt"
+        ".mvn"
+        ".gradle"
+        ".properties"
+        ".cljs?"
+      ;;;; shellscript
+        ".sh"
+        ".bash"
+      ;;;; Web Languages and Markup/Styling
+        ".php"
+        ".ts"
+        ".html?"
+        ".css"
+        ".less"
+        ".scss"
+        ".sass"
+      ;;;; Makefile
+        "makefile"
+        "MAKEFILE"
+        "Makefile"
+      ;;;; Data formats
+        ".json"
+        ".yaml"
+        ".toml"
+      ;;;; Notes and Markup
+        ".md"
+        ".markdown"
+        ".org"
+        ".txt"
+        "README")))
 
-  (use-package winner
-    :init
-    (winner-mode 1))
+    (use-package winner
+      :init
+      (winner-mode 1))
 
-  (use-package tab-bar
-    :init
-    (setq tab-bar-show 1
-          tab-bar-close-button-show nil
-          tab-bar-tab-hints t
-          tab-bar-new-button-show nil
-          tab-bar-separator " "
-          tab-bar-auto-width nil
-          tab-bar-position t))
+    (use-package tab-bar
+      :init
+      (setq tab-bar-show 1
+            tab-bar-close-button-show nil
+            tab-bar-tab-hints t
+            tab-bar-new-button-show nil
+            tab-bar-separator " "
+            tab-bar-auto-width nil
+            tab-bar-position t))
 
-  (use-package time
-    :hook (after-init . display-time-mode)
-    :config
-    (when (file-directory-p (expand-file-name ".mail" (getenv "HOME")))
-      (setq display-time-mail-directory (expand-file-name ".mail" (getenv "HOME"))))
-    :custom
-    (display-time-24hr-format t)
-    (display-time-day-and-date t))
+    (use-package time
+      :hook (after-init . display-time-mode)
+      :config
+      (when (file-directory-p (expand-file-name ".mail" (getenv "HOME")))
+        (setq display-time-mail-directory (expand-file-name ".mail" (getenv "HOME"))))
+      :custom
+      (display-time-24hr-format t)
+      (display-time-day-and-date t))
 
-  (use-package paren
-    :config
-    (show-paren-mode 1)
-    :custom
-    (show-paren-style 'mixed))
+    (use-package paren
+      :config
+      (show-paren-mode 1)
+      :custom
+      (show-paren-style 'mixed))
 
-  (use-package hl-line
-    :config
-    (global-hl-line-mode 1))
+    (use-package hl-line
+      :config
+      (global-hl-line-mode 1))
 
-  (use-package font-core
-    :init
-    (global-font-lock-mode t))
+    (use-package font-core
+      :init
+      (global-font-lock-mode t))
 
-  (use-package menu-bar
-    :init
-    (menu-bar-mode -1))
+    (use-package menu-bar
+      :init
+      (menu-bar-mode -1))
 
-  (use-package tool-bar
-    :init
-    (tool-bar-mode -1))
+    (use-package tool-bar
+      :init
+      (tool-bar-mode -1))
 
-  (use-package scroll-bar
-    :init
-    (scroll-bar-mode -1))
+    (use-package scroll-bar
+      :init
+      (scroll-bar-mode -1))
 
-  (use-package xt-mouse
-    :config
-    (xterm-mouse-mode 1))
+    (use-package xt-mouse
+      :config
+      (xterm-mouse-mode 1))
 
-  (use-package avy
-    :after evil
-    :ensure ;; when `use-package-always-ensure' is nil
-    :bind
-    (([remap goto-char] . evil-avy-goto-char)
-     ([remap goto-line] . evil-avy-goto-line)
-     ("M-g l" . evil-avy-goto-line))
-    :config
-    ;; (evil-define-key 'normal 'global (kbd "<localleader>gc") 'evil-avy-goto-char)
-    ;; (evil-define-key 'normal 'global (kbd "<localleader>gl") 'evil-avy-goto-line-below)
-    ;; (evil-define-key 'normal 'global (kbd "<localleader>gL") 'evil-avy-goto-line-above)
-    )
+    (use-package avy
+      :after evil
+      :ensure ;; when `use-package-always-ensure' is nil
+      :bind
+      (([remap goto-char] . evil-avy-goto-char)
+       ([remap goto-line] . evil-avy-goto-line)
+       ("M-g l" . evil-avy-goto-line))
+      :config
+      ;; (evil-define-key 'normal 'global (kbd "<localleader>gc") 'evil-avy-goto-char)
+      ;; (evil-define-key 'normal 'global (kbd "<localleader>gl") 'evil-avy-goto-line-below)
+      ;; (evil-define-key 'normal 'global (kbd "<localleader>gL") 'evil-avy-goto-line-above)
+      )
 
-  (use-package tabify
-    :ensure nil
-    :config
-    (setq tabify-regexp "^\t* [ \t]+"))
+    (use-package tabify
+      :ensure nil
+      :config
+      (setq tabify-regexp "^\t* [ \t]+"))
 
-  (use-package rainbow-mode
-    :ensure
-    :hook (prog-mode . rainbow-mode))
+    (use-package rainbow-mode
+      :ensure
+      :hook (prog-mode . rainbow-mode))
 
-  (use-package rainbow-identifiers
-    :ensure
-    :hook (prog-mode . rainbow-identifiers-mode))
+    (use-package rainbow-identifiers
+      :ensure
+      :hook (prog-mode . rainbow-identifiers-mode))
 
-  (use-package rainbow-delimiters
-    :ensure
-    :hook (prog-mode . rainbow-delimiters-mode))
+    (use-package rainbow-delimiters
+      :ensure
+      :hook (prog-mode . rainbow-delimiters-mode))
 
-  (provide 'config-ui)
-    ;;; config-ui.el ends here
+    (when (file-directory-p (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory))
+    (add-to-list 'load-path (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory)))
+
+  (use-package nerd-fonts)
+
+    (provide 'config-ui)
+      ;;; config-ui.el ends here
 #+end_src
 * Builtin
 :PROPERTIES:
