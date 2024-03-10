@@ -2180,6 +2180,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
     (modify-syntax-entry ?* "$" org-mode-syntax-table)
     (add-to-list 'org-modules 'org-tempo t)
     (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+    (add-to-list 'org-structure-template-alist '("co" . "src conf"))
     (add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
     (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
     (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
