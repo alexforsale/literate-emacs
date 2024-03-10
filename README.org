@@ -13,6 +13,9 @@
 #+creator: Emacs 29.2 (Org mode 9.6.15)
 #+cite_export:
 #+startup: indent fold
+#+export_file_name: index.html
+#+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
 * Literate /Emacs/ Configuration
 :PROPERTIES:
 :header-args: :tangle ./config.el
