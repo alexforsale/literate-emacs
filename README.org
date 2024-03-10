@@ -3507,9 +3507,9 @@
 :END:
 
 #+begin_src emacs-lisp
-    ;;; config-web.el --- html configuration             -*- lexical-binding: t; -*-
-    ;;; Commentary:
-    ;;; Code:
+  ;;; config-web.el --- html configuration             -*- lexical-binding: t; -*-
+  ;;; Commentary:
+  ;;; Code:
 
   (defun +config/django-web-mode ()
     "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
@@ -3650,6 +3650,249 @@
     :config
     (with-eval-after-load 'skewer-mode
       (add-hook 'css-mode-hook 'skewer-css-mode)))
+
+  (defvar +javascript-npm-conf (make-hash-table :test 'equal))
+
+  ;;;###autoload
+  (defun +javascript-npm-conf (&optional project-root refresh-p)
+    "Retrieves an alist of this project's 'package.json'. If REFRESH-P is non-nil
+  ignore the cache."
+    (let ((project-root (or project-root (doom-project-root))))
+      (or (and (not refresh-p)
+               (gethash project-root +javascript-npm-conf))
+          (let ((package-file (expand-file-name "package.json" project-root)))
+            (when-let (json (and (file-exists-p package-file)
+                                 (require 'json)
+                                 (json-read-file package-file)))
+              (puthash project-root json +javascript-npm-conf))))))
+
+  ;;;###autoload
+  (defun +javascript-npm-dep-p (packages &optional project-root refresh-p)
+    (when-let (data (and (bound-and-true-p +javascript-npm-mode)
+                         (+javascript-npm-conf project-root refresh-p)))
+      (let ((deps (append (cdr (assq 'dependencies data))
+                          (cdr (assq 'devDependencies data)))))
+        (cond ((listp packages)
+               (funcall (if (eq (car packages) 'and)
+                            #'cl-every
+                          #'cl-some)
+                        (lambda (pkg) (assq pkg deps))
+                        (if (listp packages) packages (list packages))))
+              ((symbolp packages)
+               (assq packages deps))
+              (t (error "Expected a package symbol or list, got %s" packages))))))
+
+  ;;;###autoload
+  (defun +javascript-add-npm-path-h ()
+    "Add node_modules/.bin to `exec-path'."
+    (when-let ((search-directory (or (doom-project-root) default-directory))
+               (node-modules-parent (locate-dominating-file search-directory "node_modules/"))
+               (node-modules-dir (expand-file-name "node_modules/.bin/" node-modules-parent)))
+      (make-local-variable 'exec-path)
+      (add-to-list 'exec-path node-modules-dir)
+      (doom-log ":lang:javascript: add %s to $PATH" (expand-file-name "node_modules/" node-modules-parent))))
+
+
+  ;;
+  ;; Commands
+
+  ;;;###autoload
+  (defun +javascript/open-repl ()
+    "Open a Javascript REPL. Meaning either `skewer-repl', if any of the
+  skewer-*-mode's are enabled, or `nodejs-repl' otherwise."
+    (interactive)
+    (call-interactively
+     (if (and (featurep 'skewer-mode)
+              (or (bound-and-true-p skewer-mode)
+                  (bound-and-true-p skewer-css-mode)
+                  (bound-and-true-p skewer-html-mode)))
+         #'skewer-repl
+       #'nodejs-repl))
+    (current-buffer))
+
+  ;;;###autoload
+  (defun +javascript/skewer-this-buffer ()
+    "Toggle a globalized skewer-mode, attaching an external browser (once),
+  initiating an internal httpd server (once) and enabling the appropriate
+  skewer-mode for the current buffer.
+
+  Run this for any buffer you want to skewer."
+    (interactive)
+    (when (bound-and-true-p impatient-mode)
+      (error "Skewer-mode isn't compatible with impatient mode"))
+    (require 'skewer-mode)
+    (unless (process-status "httpd")
+      (run-skewer))
+    (pcase major-mode
+      ((or 'css-mode 'scss-mode 'less-css-mode)
+       (unless (bound-and-true-p skewer-css-mode)
+         (skewer-css-mode +1)))
+      ((or 'web-mode 'html-mode)
+       (unless (bound-and-true-p skewer-html-mode)
+         (skewer-html-mode +1)))
+      ('js2-mode
+       (unless (bound-and-true-p skewer-mode)
+         (skewer-mode +1)))
+      (_ (error "Invalid mode %s" major-mode))))
+
+  ;;;###autoload
+  (defun +javascript/skewer-cleanup ()
+    "Disable skewer-mode globally and disable the httpd server."
+    (interactive)
+    (when (process-status "httpd")
+      (httpd-stop))
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (if (bound-and-true-p skewer-mode)
+            (skewer-mode -1))
+        (if (bound-and-true-p skewer-css-mode)
+            (skewer-css-mode -1))
+        (if (bound-and-true-p skewer-html-mode)
+            (skewer-html-mode -1)))))
+
+
+  ;;
+  ;; Hooks
+
+  ;;;###autoload
+  (defun +javascript-cleanup-tide-processes-h ()
+    "Clean up dangling tsserver processes if there are no more buffers with
+  `tide-mode' active that belong to that server's project."
+    (when tide-mode
+      (unless (cl-loop with project-name = (tide-project-name)
+                       for buf in (delq (current-buffer) (buffer-list))
+                       if (and (buffer-local-value 'tide-mode buf)
+                               (with-current-buffer buf
+                                 (string= (tide-project-name) project-name)))
+                       return buf)
+        (kill-process (tide-current-server)))))
+
+
+  ;;
+  ;; Advice
+
+  ;;;###autoload
+  (defun +javascript-tide-project-root-a ()
+    "Resolve to `doom-project-root' if `tide-project-root' fails."
+    (or tide-project-root
+        (or (locate-dominating-file default-directory "tsconfig.json")
+            (locate-dominating-file default-directory "jsconfig.json"))))
+
+  (with-eval-after-load 'projectile
+    (add-to-list 'projectile-globally-ignored-directories "^node_modules$")
+    (add-to-list 'projectile-globally-ignored-directories "^flow-typed$"))
+
+  (use-package js2-mode
+    :diminish
+    :hook ((js2-mode) . lsp-deferred)
+    :hook (js2-mode . rainbow-delimiters-mode)
+    :hook (js2-mode . js2-imenu-extras-mode)
+    :config
+    (with-eval-after-load 'skewer-mode
+      (add-hook 'js2-mode 'skewer-mode)))
+
+  (use-package xref-js2
+    :ensure
+    :if (executable-find "ag") ; silver-searcher
+    :config
+    (add-hook 'js2-mode-hook (lambda ()
+                               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+
+  (use-package js2-refactor
+    :ensure
+    :demand t
+    :diminish
+    :hook (js2-mode . js2-refactor-mode)
+    :init
+    (js2r-add-keybindings-with-prefix "C-c C-r")
+    :config
+    (setq js2-skip-preprocessor-directives t))
+
+  (use-package rjsx-mode
+    :ensure
+    :diminish
+    :mode "\\.[mc]?js\\'"
+    :mode "\\.es6\\'"
+    :mode "\\.pac\\'"
+    :hook (rjsx-mode . rainbow-delimiters-mode)
+    :hook (rjsx-mode . rainbow-mode)
+    :bind (([remap comment-dwim ] . rjsx-comment-dwim))
+    :init
+    (with-eval-after-load 'compilation
+      (add-to-list 'compilation-error-regexp-alist 'node)
+      (add-to-list 'compilation-error-regexp-alist-alist '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+                          2 3 4)))
+    :config
+    (with-eval-after-load 'compilation
+      (add-to-list 'compilation-error-regexp-alist 'node)
+      (add-to-list 'compilation-error-regexp-alist-alist
+                   '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+                          2 3 4)))
+    (setq js-chain-indent t
+          ;; These have become standard in the JS community
+          js2-basic-offset 2
+          ;; Don't mishighlight shebang lines
+          js2-skip-preprocessor-directives t
+          ;; let flycheck handle this
+          js2-mode-show-parse-errors nil
+          js2-mode-show-strict-warnings nil
+          ;; Flycheck provides these features, so disable them: conflicting with
+          ;; the eslint settings.
+          js2-strict-missing-semi-warning nil
+          ;; maximum fontification
+          js2-highlight-level 3
+          js2-idle-timer-delay 0.15))
+
+  (use-package typescript-mode
+    :ensure
+    :hook (typescript-mode . rainbow-delimiters-mode)
+    :hook (typescript-mode . lsp-deferred)
+    :hook (typescript-tsx-mode . rainbow-delimiters-mode)
+    :hook (typescript-tsx-mode . lsp-deferred)
+    :hook (typescript-mode . (lambda () (setq comment-line-break-function #'js2-line-break
+                                         typescript-indent-level (or (and (bound-and-true-p tide-mode)
+                                                                          (plist-get (tide-tsfmt-options) :indentSize))
+                                                                     typescript-indent-level)
+                                         emmet-expand-jsx-className? t)))
+    :init
+    (add-to-list 'auto-mode-alist
+                 (cons "\\.tsx\\'" #'typescript-mode))
+    (with-eval-after-load 'flycheck
+      (flycheck-add-mode 'javascript-eslint 'web-mode)
+      (flycheck-add-mode 'javascript-eslint 'typescript-mode)
+      (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
+      (flycheck-add-mode 'typescript-tslint 'typescript-tsx-mode))
+    (defun +javascript-disable-tide-checkers-h ()
+      (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)
+      (add-to-list 'flycheck-disabled-checkers 'tsx-tide)
+      (add-to-list 'flycheck-disabled-checkers 'jsx-tide))
+    (add-hook 'typescript-tsx-mode-hook #'+javascript-disable-tide-checkers-h)
+    :config
+    (when (fboundp 'web-mode)
+      (define-derived-mode typescript-tsx-mode web-mode "TypeScript-TSX"))
+    (autoload 'js2-line-break "js2-mode" nil t))
+
+  (use-package tide
+    :ensure
+    :hook (tide-mode . tide-hl-identifier-mode)
+    :config
+    (setq tide-completion-detailed t
+          tide-always-show-documentation t
+          tide-server-max-response-length 524288
+          tide-completion-setup-company-backend nil)
+    (add-hook 'tide-mode-hook (lambda () (add-hook 'kill-buffer-hook #'+javascript-cleanup-tide-processes-h nil 'local))))
+
+  (use-package npm-mode
+    :ensure)
+
+  (use-package skewer-mode
+    :ensure)
+
+  (use-package nodejs-repl
+    :ensure)
+
+  (with-eval-after-load 'js
+    (setq js-indent-level 2))
 
   (provide 'config-web)
   ;;; config-web.el ends here
