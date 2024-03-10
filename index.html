@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-03-10 Sun 08:22 -->
+<!-- 2024-03-10 Sun 08:26 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>README</title>
@@ -23,75 +23,63 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org1e05867">Literate <i>Emacs</i> Configuration</a>
+<li><a href="#org648ca5e">Literate <i>Emacs</i> Configuration</a>
 <ul>
-<li><a href="#org7e6f2c0">header</a></li>
-<li><a href="#org5a27348">Modules loading</a></li>
-<li><a href="#org5bce90b">footer</a></li>
+<li><a href="#org91e663b">Modules loading</a></li>
+<li><a href="#org1f65ecc">footer</a></li>
 </ul>
 </li>
-<li><a href="#org2f6dfa5">Early-init file</a></li>
-<li><a href="#org48ff8cc">variables and functions</a>
+<li><a href="#org15a9bcb">Early-init file</a></li>
+<li><a href="#org3c493fe">variables and functions</a>
 <ul>
 <li>
 <ul>
-<li><a href="#org6a338c8">header</a></li>
-<li><a href="#org1ed048d"><code>+config/user-modules-directory</code></a></li>
-<li><a href="#org68a3d2a">footer</a></li>
+<li><a href="#org5edf20e">header</a></li>
+<li><a href="#org652c310"><code>+config/user-modules-directory</code></a></li>
+<li><a href="#org0787319">footer</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgcd4086e">Evil</a></li>
-<li><a href="#org7662aa9">Keybindings</a></li>
-<li><a href="#org26febd3">UI</a></li>
-<li><a href="#org3ea982e">Builtin</a></li>
-<li><a href="#orgaa56182">Completion</a></li>
-<li><a href="#org672ba91">Shell</a></li>
-<li><a href="#org604a5c2">Editing</a></li>
-<li><a href="#org7865758">Project</a></li>
-<li><a href="#org17b05ae">Org-mode</a></li>
-<li><a href="#org3c17f74">Tools</a></li>
-<li><a href="#orgf8c3094">dired</a></li>
-<li><a href="#orgd981a43">Treemacs</a></li>
-<li><a href="#org6aacc26">Flycheck</a></li>
-<li><a href="#orgebe4af3">Mail</a></li>
-<li><a href="#org43832ab">Lisp</a></li>
-<li><a href="#org059bdd6">C and C++</a></li>
-<li><a href="#org1a45f06">XML</a></li>
-<li><a href="#org867ccee">YAML</a></li>
-<li><a href="#org66441d5">TOML</a></li>
-<li><a href="#orgd4980b1">Lua</a></li>
-<li><a href="#org12db4fd">Jinja2</a></li>
-<li><a href="#orgfae9678">json</a></li>
-<li><a href="#org1bdc4fd">Web mode</a></li>
-<li><a href="#orga972563">Latex</a></li>
-<li><a href="#org50dc4e0">Markdown</a></li>
-<li><a href="#orgb03f80e">Python</a></li>
-<li><a href="#org46df628">Rust</a></li>
-<li><a href="#org5b3aacc">Ansible</a></li>
+<li><a href="#orgce5c48e">Evil</a></li>
+<li><a href="#org5af3e5a">Keybindings</a></li>
+<li><a href="#orge79d43f">UI</a></li>
+<li><a href="#org36edb6f">Builtin</a></li>
+<li><a href="#org9ba10f6">Completion</a></li>
+<li><a href="#orgd287f2d">Shell</a></li>
+<li><a href="#orgad43a36">Editing</a></li>
+<li><a href="#org4022235">Project</a></li>
+<li><a href="#org56f7367">Org-mode</a></li>
+<li><a href="#org4114051">Tools</a></li>
+<li><a href="#orgfed30be">dired</a></li>
+<li><a href="#org432e214">Treemacs</a></li>
+<li><a href="#org014f1be">Flycheck</a></li>
+<li><a href="#org254c796">Mail</a></li>
+<li><a href="#orgbceae62">Lisp</a></li>
+<li><a href="#orge3e82a5">C and C++</a></li>
+<li><a href="#org6f44ba1">XML</a></li>
+<li><a href="#org1138720">YAML</a></li>
+<li><a href="#org6be55b9">TOML</a></li>
+<li><a href="#orgb7c0640">Lua</a></li>
+<li><a href="#org190789c">Jinja2</a></li>
+<li><a href="#org750b384">json</a></li>
+<li><a href="#orgbcd00d4">Web mode</a></li>
+<li><a href="#org750068c">Latex</a></li>
+<li><a href="#org0499789">Markdown</a></li>
+<li><a href="#orgcb16146">Python</a></li>
+<li><a href="#orgee731af">Rust</a></li>
+<li><a href="#orgb4882b7">Ansible</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org1e05867" class="outline-2">
-<h2 id="org1e05867">Literate <i>Emacs</i> Configuration</h2>
-<div class="outline-text-2" id="text-org1e05867">
+<div id="outline-container-org648ca5e" class="outline-2">
+<h2 id="org648ca5e">Literate <i>Emacs</i> Configuration</h2>
+<div class="outline-text-2" id="text-org648ca5e">
 </div>
-<div id="outline-container-org7e6f2c0" class="outline-3">
-<h3 id="org7e6f2c0">header</h3>
-<div class="outline-text-3" id="text-org7e6f2c0">
-<div class="org-src-container">
-<pre class="src src-emacs-lisp"><span class="linenr">1: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config --- Custom Configuration -*- lexical-binding: t -*-</span>
-<span class="linenr">2: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
-<span class="linenr">3: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Code:</span>
-</pre>
-</div>
-</div>
-</div>
-<div id="outline-container-org5a27348" class="outline-3">
-<h3 id="org5a27348">Modules loading</h3>
-<div class="outline-text-3" id="text-org5a27348">
+<div id="outline-container-org91e663b" class="outline-3">
+<h3 id="org91e663b">Modules loading</h3>
+<div class="outline-text-3" id="text-org91e663b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(<span style="color: #4169e1;">require</span> '<span style="color: #5f9ea0;">config-variables</span> (expand-file-name <span style="color: #bc8f8f;">"modules/config-variables.el"</span> user-emacs-directory) t)
 <span class="linenr"> 2: </span>(<span style="color: #4169e1;">require</span> '<span style="color: #5f9ea0;">config-evil</span> nil t)
@@ -127,9 +115,9 @@
 </div>
 </div>
 
-<div id="outline-container-org5bce90b" class="outline-3">
-<h3 id="org5bce90b">footer</h3>
-<div class="outline-text-3" id="text-org5bce90b">
+<div id="outline-container-org1f65ecc" class="outline-3">
+<h3 id="org1f65ecc">footer</h3>
+<div class="outline-text-3" id="text-org1f65ecc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">provide</span> '<span style="color: #5f9ea0;">config</span>)
 <span class="linenr">2: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config.el ends.here</span>
@@ -139,9 +127,9 @@
 </div>
 </div>
 
-<div id="outline-container-org2f6dfa5" class="outline-2">
-<h2 id="org2f6dfa5">Early-init file</h2>
-<div class="outline-text-2" id="text-org2f6dfa5">
+<div id="outline-container-org15a9bcb" class="outline-2">
+<h2 id="org15a9bcb">Early-init file</h2>
+<div class="outline-text-2" id="text-org15a9bcb">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">early-init --- `</span><span style="color: #5f9ea0;">Emacs</span><span style="color: #b22222;">' Initialization file -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -162,13 +150,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org48ff8cc" class="outline-2">
-<h2 id="org48ff8cc">variables and functions</h2>
-<div class="outline-text-2" id="text-org48ff8cc">
+<div id="outline-container-org3c493fe" class="outline-2">
+<h2 id="org3c493fe">variables and functions</h2>
+<div class="outline-text-2" id="text-org3c493fe">
 </div>
-<div id="outline-container-org6a338c8" class="outline-4">
-<h4 id="org6a338c8">header</h4>
-<div class="outline-text-4" id="text-org6a338c8">
+<div id="outline-container-org5edf20e" class="outline-4">
+<h4 id="org5edf20e">header</h4>
+<div class="outline-text-4" id="text-org5edf20e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">3: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-variables --- Custom variables -*- lexical-binding: t -*-</span>
 <span class="linenr">4: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -177,9 +165,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1ed048d" class="outline-4">
-<h4 id="org1ed048d"><code>+config/user-modules-directory</code></h4>
-<div class="outline-text-4" id="text-org1ed048d">
+<div id="outline-container-org652c310" class="outline-4">
+<h4 id="org652c310"><code>+config/user-modules-directory</code></h4>
+<div class="outline-text-4" id="text-org652c310">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp">(<span style="color: #4169e1;">defvar</span> <span style="color: #b8860b;">+config/user-modules-directory</span> (expand-file-name <span style="color: #bc8f8f;">"modules/"</span> user-emacs-directory)
   <span style="color: #bc8f8f;">"User modules directory."</span>)
@@ -224,9 +212,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org68a3d2a" class="outline-4">
-<h4 id="org68a3d2a">footer</h4>
-<div class="outline-text-4" id="text-org68a3d2a">
+<div id="outline-container-org0787319" class="outline-4">
+<h4 id="org0787319">footer</h4>
+<div class="outline-text-4" id="text-org0787319">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">provide</span> '<span style="color: #5f9ea0;">config-variables</span>)
 <span class="linenr">2: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-variables.el ends.here</span>
@@ -235,9 +223,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgcd4086e" class="outline-2">
-<h2 id="orgcd4086e">Evil</h2>
-<div class="outline-text-2" id="text-orgcd4086e">
+<div id="outline-container-orgce5c48e" class="outline-2">
+<h2 id="orgce5c48e">Evil</h2>
+<div class="outline-text-2" id="text-orgce5c48e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">  3: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-evil --- `</span><span style="color: #5f9ea0;">evil-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span class="linenr">  4: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -416,9 +404,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7662aa9" class="outline-2">
-<h2 id="org7662aa9">Keybindings</h2>
-<div class="outline-text-2" id="text-org7662aa9">
+<div id="outline-container-org5af3e5a" class="outline-2">
+<h2 id="org5af3e5a">Keybindings</h2>
+<div class="outline-text-2" id="text-org5af3e5a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">176: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-keybindings --- Keybindings -*- lexical-binding: t -*-</span>
 <span class="linenr">177: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -641,9 +629,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org26febd3" class="outline-2">
-<h2 id="org26febd3">UI</h2>
-<div class="outline-text-2" id="text-org26febd3">
+<div id="outline-container-orge79d43f" class="outline-2">
+<h2 id="orge79d43f">UI</h2>
+<div class="outline-text-2" id="text-orge79d43f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">393: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-</span>
 <span class="linenr">394: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -915,9 +903,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org3ea982e" class="outline-2">
-<h2 id="org3ea982e">Builtin</h2>
-<div class="outline-text-2" id="text-org3ea982e">
+<div id="outline-container-org36edb6f" class="outline-2">
+<h2 id="org36edb6f">Builtin</h2>
+<div class="outline-text-2" id="text-org36edb6f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">659: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-builtin --- `</span><span style="color: #5f9ea0;">Emacs</span><span style="color: #b22222;">' builtin package configuration -*- lexical-binding: t -*-</span>
 <span class="linenr">660: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -1222,9 +1210,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgaa56182" class="outline-2">
-<h2 id="orgaa56182">Completion</h2>
-<div class="outline-text-2" id="text-orgaa56182">
+<div id="outline-container-org9ba10f6" class="outline-2">
+<h2 id="org9ba10f6">Completion</h2>
+<div class="outline-text-2" id="text-org9ba10f6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 958: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-completion --- completion configuration file -*- lexical-binding: t -*-</span>
 <span class="linenr"> 959: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -1524,9 +1512,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org672ba91" class="outline-2">
-<h2 id="org672ba91">Shell</h2>
-<div class="outline-text-2" id="text-org672ba91">
+<div id="outline-container-orgd287f2d" class="outline-2">
+<h2 id="orgd287f2d">Shell</h2>
+<div class="outline-text-2" id="text-orgd287f2d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1252: </span>  <span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-shell --- `</span><span style="color: #5f9ea0;">Emacs</span><span style="color: #b22222;">' various shell configuration file -*- lexical-binding: t -*-</span>
 <span class="linenr">1253: </span>  <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -1621,9 +1609,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org604a5c2" class="outline-2">
-<h2 id="org604a5c2">Editing</h2>
-<div class="outline-text-2" id="text-org604a5c2">
+<div id="outline-container-orgad43a36" class="outline-2">
+<h2 id="orgad43a36">Editing</h2>
+<div class="outline-text-2" id="text-orgad43a36">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1341: </span>  <span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-editing --- Editor configuration -*- lexical-binding: t -*-</span>
 <span class="linenr">1342: </span>  <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -1663,9 +1651,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7865758" class="outline-2">
-<h2 id="org7865758">Project</h2>
-<div class="outline-text-2" id="text-org7865758">
+<div id="outline-container-org4022235" class="outline-2">
+<h2 id="org4022235">Project</h2>
+<div class="outline-text-2" id="text-org4022235">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1375: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-project --- project configuration file -*- lexical-binding: t -*-</span>
 <span class="linenr">1376: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -1947,9 +1935,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org17b05ae" class="outline-2">
-<h2 id="org17b05ae">Org-mode</h2>
-<div class="outline-text-2" id="text-org17b05ae">
+<div id="outline-container-org56f7367" class="outline-2">
+<h2 id="org56f7367">Org-mode</h2>
+<div class="outline-text-2" id="text-org56f7367">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-org --- Org-mode configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -2716,9 +2704,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org3c17f74" class="outline-2">
-<h2 id="org3c17f74">Tools</h2>
-<div class="outline-text-2" id="text-org3c17f74">
+<div id="outline-container-org4114051" class="outline-2">
+<h2 id="org4114051">Tools</h2>
+<div class="outline-text-2" id="text-org4114051">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-tools --- `</span><span style="color: #5f9ea0;">Emacs</span><span style="color: #b22222;">' various tools -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -2896,9 +2884,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf8c3094" class="outline-2">
-<h2 id="orgf8c3094">dired</h2>
-<div class="outline-text-2" id="text-orgf8c3094">
+<div id="outline-container-orgfed30be" class="outline-2">
+<h2 id="orgfed30be">dired</h2>
+<div class="outline-text-2" id="text-orgfed30be">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-dired --- `</span><span style="color: #5f9ea0;">dired</span><span style="color: #b22222;">' configuration file -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -2980,9 +2968,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd981a43" class="outline-2">
-<h2 id="orgd981a43">Treemacs</h2>
-<div class="outline-text-2" id="text-orgd981a43">
+<div id="outline-container-org432e214" class="outline-2">
+<h2 id="org432e214">Treemacs</h2>
+<div class="outline-text-2" id="text-org432e214">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-treemacs --- treemacs configuration file -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3112,9 +3100,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org6aacc26" class="outline-2">
-<h2 id="org6aacc26">Flycheck</h2>
-<div class="outline-text-2" id="text-org6aacc26">
+<div id="outline-container-org014f1be" class="outline-2">
+<h2 id="org014f1be">Flycheck</h2>
+<div class="outline-text-2" id="text-org014f1be">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-flycheck --- flycheck -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3172,9 +3160,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgebe4af3" class="outline-2">
-<h2 id="orgebe4af3">Mail</h2>
-<div class="outline-text-2" id="text-orgebe4af3">
+<div id="outline-container-org254c796" class="outline-2">
+<h2 id="org254c796">Mail</h2>
+<div class="outline-text-2" id="text-org254c796">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-mail --- mail configuration file -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3302,9 +3290,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org43832ab" class="outline-2">
-<h2 id="org43832ab">Lisp</h2>
-<div class="outline-text-2" id="text-org43832ab">
+<div id="outline-container-orgbceae62" class="outline-2">
+<h2 id="orgbceae62">Lisp</h2>
+<div class="outline-text-2" id="text-orgbceae62">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-lisp --- Various lisp configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3470,9 +3458,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org059bdd6" class="outline-2">
-<h2 id="org059bdd6">C and C++</h2>
-<div class="outline-text-2" id="text-org059bdd6">
+<div id="outline-container-orge3e82a5" class="outline-2">
+<h2 id="orge3e82a5">C and C++</h2>
+<div class="outline-text-2" id="text-orge3e82a5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-cc `</span><span style="color: #5f9ea0;">cc-mode</span><span style="color: #b22222;">' configuratition -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3496,9 +3484,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1a45f06" class="outline-2">
-<h2 id="org1a45f06">XML</h2>
-<div class="outline-text-2" id="text-org1a45f06">
+<div id="outline-container-org6f44ba1" class="outline-2">
+<h2 id="org6f44ba1">XML</h2>
+<div class="outline-text-2" id="text-org6f44ba1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-xml --- `</span><span style="color: #5f9ea0;">xml-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3520,9 +3508,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org867ccee" class="outline-2">
-<h2 id="org867ccee">YAML</h2>
-<div class="outline-text-2" id="text-org867ccee">
+<div id="outline-container-org1138720" class="outline-2">
+<h2 id="org1138720">YAML</h2>
+<div class="outline-text-2" id="text-org1138720">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-yaml --- `</span><span style="color: #5f9ea0;">yaml-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3550,9 +3538,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org66441d5" class="outline-2">
-<h2 id="org66441d5">TOML</h2>
-<div class="outline-text-2" id="text-org66441d5">
+<div id="outline-container-org6be55b9" class="outline-2">
+<h2 id="org6be55b9">TOML</h2>
+<div class="outline-text-2" id="text-org6be55b9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-toml --- `</span><span style="color: #5f9ea0;">toml-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3577,9 +3565,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd4980b1" class="outline-2">
-<h2 id="orgd4980b1">Lua</h2>
-<div class="outline-text-2" id="text-orgd4980b1">
+<div id="outline-container-orgb7c0640" class="outline-2">
+<h2 id="orgb7c0640">Lua</h2>
+<div class="outline-text-2" id="text-orgb7c0640">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-lua --- `</span><span style="color: #5f9ea0;">lua-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3599,9 +3587,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org12db4fd" class="outline-2">
-<h2 id="org12db4fd">Jinja2</h2>
-<div class="outline-text-2" id="text-org12db4fd">
+<div id="outline-container-org190789c" class="outline-2">
+<h2 id="org190789c">Jinja2</h2>
+<div class="outline-text-2" id="text-org190789c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-jinja2 --- `</span><span style="color: #5f9ea0;">jinja2-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3625,9 +3613,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgfae9678" class="outline-2">
-<h2 id="orgfae9678">json</h2>
-<div class="outline-text-2" id="text-orgfae9678">
+<div id="outline-container-org750b384" class="outline-2">
+<h2 id="org750b384">json</h2>
+<div class="outline-text-2" id="text-org750b384">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-json --- `</span><span style="color: #5f9ea0;">json-mode</span><span style="color: #b22222;">' configuration file -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -3643,9 +3631,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1bdc4fd" class="outline-2">
-<h2 id="org1bdc4fd">Web mode</h2>
-<div class="outline-text-2" id="text-org1bdc4fd">
+<div id="outline-container-orgbcd00d4" class="outline-2">
+<h2 id="orgbcd00d4">Web mode</h2>
+<div class="outline-text-2" id="text-orgbcd00d4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-web.el --- html configuration             -*- lexical-binding: t; -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -4046,9 +4034,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga972563" class="outline-2">
-<h2 id="orga972563">Latex</h2>
-<div class="outline-text-2" id="text-orga972563">
+<div id="outline-container-org750068c" class="outline-2">
+<h2 id="org750068c">Latex</h2>
+<div class="outline-text-2" id="text-org750068c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-latex.el --- latex configuration          -*- lexical-binding: t; -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -4155,9 +4143,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org50dc4e0" class="outline-2">
-<h2 id="org50dc4e0">Markdown</h2>
-<div class="outline-text-2" id="text-org50dc4e0">
+<div id="outline-container-org0499789" class="outline-2">
+<h2 id="org0499789">Markdown</h2>
+<div class="outline-text-2" id="text-org0499789">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-markdown --- `</span><span style="color: #5f9ea0;">markdown-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -4304,9 +4292,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb03f80e" class="outline-2">
-<h2 id="orgb03f80e">Python</h2>
-<div class="outline-text-2" id="text-orgb03f80e">
+<div id="outline-container-orgcb16146" class="outline-2">
+<h2 id="orgcb16146">Python</h2>
+<div class="outline-text-2" id="text-orgcb16146">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-python --- `</span><span style="color: #5f9ea0;">python-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -4424,9 +4412,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org46df628" class="outline-2">
-<h2 id="org46df628">Rust</h2>
-<div class="outline-text-2" id="text-org46df628">
+<div id="outline-container-orgee731af" class="outline-2">
+<h2 id="orgee731af">Rust</h2>
+<div class="outline-text-2" id="text-orgee731af">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-rust --- rust-mode configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -4483,9 +4471,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5b3aacc" class="outline-2">
-<h2 id="org5b3aacc">Ansible</h2>
-<div class="outline-text-2" id="text-org5b3aacc">
+<div id="outline-container-orgb4882b7" class="outline-2">
+<h2 id="orgb4882b7">Ansible</h2>
+<div class="outline-text-2" id="text-orgb4882b7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-ansible --- ansible configuration -*- lexical-binding: t -*-</span>
 <span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -4520,7 +4508,7 @@
 <div id="postamble" class="status">
 <p class="date">Date: 2024-03-10 Sun 00:00</p>
 <p class="author">Author: Kristian Alexander P</p>
-<p class="date">Created: 2024-03-10 Sun 08:22</p>
+<p class="date">Created: 2024-03-10 Sun 08:26</p>
 </div>
 </body>
 </html>
