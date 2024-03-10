@@ -545,9 +545,10 @@
 :header-args: :tangle ./modules/config-ui.el :mkdirp t
 :END:
 #+begin_src emacs-lisp +n
-      ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
-      ;;; Commentary:
-      ;;; Code:
+  ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
     (use-package which-key
       :ensure
       :custom
@@ -602,7 +603,16 @@
       :ensure t
       :config
       (dashboard-setup-startup-hook)
-      (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))))
+      (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))
+            dashboard-banner-logo-title (format "Welcome, %s" user-full-name)
+            dashboard-items '((recentf . 5)
+                              (bookmarks . 5)
+                              (projects . 5)
+                              (agenda . 5)
+                              (registers . 5))
+            dashboard-projects-switch-function 'projectile-persp-switch-project
+            dashboard-week-agenda t
+            dashboard-filter-agenda-entry 'dashboard-no-filter-agenda))
 
     (use-package tab-bar
       :init
@@ -798,8 +808,8 @@
 
   (use-package nerd-fonts)
 
-    (provide 'config-ui)
-      ;;; config-ui.el ends here
+  (provide 'config-ui)
+  ;;; config-ui.el ends here
 #+end_src
 * Builtin
 :PROPERTIES:
@@ -3787,7 +3797,6 @@
     :hook ((js2-mode) . lsp-deferred)
     :hook (js2-mode . rainbow-delimiters-mode)
     :hook (js2-mode . js2-imenu-extras-mode)
-    :hook (js2-mode . (lambda () (flycheck-select-checker 'javascript-jslint)))
     :hook (js2-mode . (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
     :config
     (with-eval-after-load 'skewer-mode
