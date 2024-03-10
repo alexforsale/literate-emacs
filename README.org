@@ -19,6 +19,16 @@
 #+HTML_HEAD: <style> p{max-width:800px;}</style>
 #+HTML_HEAD: <style> li{max-width:800px;}</style
 
+#+begin_html:
+<a href="https://raw.githubusercontent.com/alexforsale/literate-emacs/main/LICENSE.md">
+<img alt="GPLv3" src="https://img.shields.io/github/license/alexforsale/literate-emacs" />
+</a>
+
+<a href="https://github.com/alexforsale/literate-emacs/actions/workflows/publish.yml">
+<img alt="Build status" src="https://github.com/alexforsale/literate-emacs/actions/workflows/publish.yml/badge.svg" />
+</a>
+#+end_html
+
 * Literate /Emacs/ Configuration
 :PROPERTIES:
 :header-args: :tangle ./config.el
