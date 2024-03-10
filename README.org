@@ -3605,7 +3605,6 @@
 
   (use-package emmet-mode
     :ensure
-    :diminish
     :hook (css-mode web-mode html-mode haml-mode nxml-mode rjsx-mode reason-mode)
     :config
     (when (require 'yasnippet nil t)
@@ -3614,7 +3613,8 @@
 
   (use-package skewer-mode
     :ensure
-    :hook (web-mode . skewer-html-mode))
+    :hook ((web-mode . skewer-html-mode)
+           (js2-mode . skewer-mode)))
 
   (use-package lsp-tailwindcss
     :ensure
@@ -3783,13 +3783,22 @@
     (add-to-list 'projectile-globally-ignored-directories "^flow-typed$"))
 
   (use-package js2-mode
-    :diminish
+    :interpreter ("node" . js2-mode)
     :hook ((js2-mode) . lsp-deferred)
     :hook (js2-mode . rainbow-delimiters-mode)
     :hook (js2-mode . js2-imenu-extras-mode)
+    :hook (js2-mode . (lambda () (flycheck-select-checker 'javascript-eslint)))
+    :hook (js2-mode . (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
     :config
     (with-eval-after-load 'skewer-mode
-      (add-hook 'js2-mode 'skewer-mode)))
+      (add-hook 'js2-mode 'skewer-mode))
+    (setq-default js2-basic-indent 2
+                  js2-basic-offset 2
+                  js2-auto-indent-p t
+                  js2-cleanup-whitespace t
+                  js2-enter-indents-newline t
+                  js2-indent-on-enter-key t
+                  js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$")))
 
   (use-package xref-js2
     :ensure
@@ -3801,7 +3810,6 @@
   (use-package js2-refactor
     :ensure
     :demand t
-    :diminish
     :hook (js2-mode . js2-refactor-mode)
     :init
     (js2r-add-keybindings-with-prefix "C-c C-r")
@@ -3810,7 +3818,6 @@
 
   (use-package rjsx-mode
     :ensure
-    :diminish
     :mode "\\.[mc]?js\\'"
     :mode "\\.es6\\'"
     :mode "\\.pac\\'"
