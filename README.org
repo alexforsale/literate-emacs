@@ -61,6 +61,7 @@ Every top level heading in this file should be tangled to a separate file, this 
   (require 'config-python nil t)
   (require 'config-rust nil t)
   (require 'config-ansible nil t)
+  (require 'config-perl nil t)
 #+end_src
 Since the =load-path= for the modules directory is defined in ~./modules/config-variables.el~, the first =require= line also state the location.
 ** footer                                                         :noexport:
@@ -654,6 +655,7 @@ A utility package to collect various Icon Fonts and propertize them within Emacs
     :ensure
     :if (display-graphic-p))
 #+end_src
+This needs a manual intervention from the user to install the fonts (by running the =all-the-icons-install-fonts= command).
 ** =doom-themes=
  A megapack of themes for GNU Emacs[fn:15].
 #+begin_src emacs-lisp -n
@@ -4959,7 +4961,27 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
   (provide 'config-ansible)
   ;;; config-ansible.el ends here
 #+end_src
-
+** Perl
+:PROPERTIES:
+:header-args: :tangle ./modules/config-perl.el :mkdirp t
+:END:
+*** header                                                       :noexport:
+#+begin_src emacs-lisp +n
+  ;;; config-perl --- perl configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+#+end_src
+*** =cperl-mode=
+#+begin_src emacs-lisp -n
+  (use-package cperl-mode
+    :ensure
+    :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
+#+end_src
+*** footer                                                       :noexport:
+#+begin_src emacs-lisp -n
+  (provide 'config-perl)
+  ;;; config-perl.el ends here
+#+end_src
 * Footnotes
 
 [fn:17] https://github.com/emacs-dashboard/emacs-dashboard
