@@ -17,6 +17,9 @@
 #+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 * Literate /Emacs/ Configuration
+This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mode]] which allows me to create an actual configuration file (by /[[https://orgmode.org/manual/Extracting-Source-Code.html][tangling]]/ this one =org= file), automatically export it into /HTML/ (and also publish it to my [[https://alexforsale.github.io/literate-emacs/][github page]] using /[[https://github.com/features/actions][github-action]]/), and also makes it easier to maintain.
+
+Since this file in /Emacs/ is considered to be a library, it should follow the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Headers.html][convention]]. But this is not needed in the /HTML/ exported file, so every heading with the name =header= or =footer= will be tagged with the =noexport= tag.
 :PROPERTIES:
 :header-args: :tangle ./config.el
 :END:
@@ -27,6 +30,7 @@
   ;;; Code:
 #+end_src
 ** Modules loading
+Every top level heading in this file should be tangled to a separate file, this section will be tangled as ~./config.el~.
 #+begin_src emacs-lisp -n
   (require 'config-variables (expand-file-name "modules/config-variables.el" user-emacs-directory) t)
   (require 'config-evil nil t)
@@ -58,7 +62,7 @@
   (require 'config-rust nil t)
   (require 'config-ansible nil t)
 #+end_src
-
+Since the =load-path= for the modules directory is defined in ~./modules/config-variables.el~, the first =require= line also state the location.
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config)
@@ -69,7 +73,7 @@
 :PROPERTIES:
 :header-args: :tangle ./early-init.el
 :END:
-
+Customizations defined in this file (~./early-init.el~) takes effect earlier than the normal init file. Usually before the package systems and GUI is initialized.
 ** header                                                         :noexport:
 #+begin_src emacs-lisp +n
   ;;; early-init --- `Emacs' Initialization file -*- lexical-binding: t -*-
@@ -78,6 +82,7 @@
 #+end_src
 
 ** Set initial frame
+Here I disable the menu-bar, tool-bar and vertical scroll bar.
 #+begin_src emacs-lisp -n
   (push '(menu-bar-lines . 0) default-frame-alist)
   (push '(tool-bar-lines . 0) default-frame-alist)
@@ -85,6 +90,7 @@
 #+end_src
 
 ** Define the location of =custom-file=
+The =custom-file= is used to save customization settings for future use.
 #+begin_src emacs-lisp -n
   (customize-set-variable 'custom-file (expand-file-name "custom.el" user-emacs-directory))
   (when (file-exists-p custom-file)
@@ -107,6 +113,7 @@
   ;;; Code:
 #+end_src
 *** =+config/user-modules-directory=
+This variable is needed in order for /Emacs/ to locate this configuration files.
 #+begin_src emacs-lisp -n
   (defvar +config/user-modules-directory (expand-file-name "modules/" user-emacs-directory)
     "User modules directory.")
@@ -117,6 +124,7 @@
     (add-to-list 'load-path +config/user-modules-directory))
 #+end_src
 *** =merge-list-to-list= function
+This function is just a wrapper to easily merge lists.
 #+begin_src emacs-lisp -n
   ;;; From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048
   (defun merge-list-to-list (dst src)
@@ -125,6 +133,7 @@
          (append (eval dst) src)))
 #+end_src
 *** Setup =package=
+Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/.
 #+begin_src emacs-lisp -n
   (require 'package)
   ;; Add `melpa` to `package-archives`.
@@ -153,6 +162,7 @@
   ;;; config-variables.el ends.here
 #+end_src
 * Evil
+It's not like I hate the standard /Emacs/ keychord, I actually used it for a while, and most of the /shells/ default to /Emacs/ key. But I have to admit, using /vim/ keys allows me to type faster.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-evil.el :mkdirp t
 :END:
@@ -675,7 +685,7 @@
           dashboard-filter-agenda-entry 'dashboard-no-filter-agenda
           ))
 #+end_src
-** =tab-bar=
+** =tab-bar=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package tab-bar
     :init
@@ -687,7 +697,7 @@
           tab-bar-auto-width nil
           tab-bar-position t))
 #+end_src
-** =frame=
+** =frame=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package frame
     :init
@@ -705,13 +715,13 @@
      ((find-font (font-spec :family "DejaVu Sans Mono"))
       (set-frame-font "DejaVu Sans Mono 10" nil t))))
 #+end_src
-** =window=
+** =window=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package window
     :config
     (setq split-width-threshold 160))
 #+end_src
-** =display-line-number=
+** =display-line-number=                                           :builtin:
 #+begin_src emacs-lisp -n
   (use-package display-line-numbers
     :init
@@ -720,18 +730,18 @@
     :custom
     (display-line-numbers-grow-only t))
 #+end_src
-** =help-at-pt=
+** =help-at-pt=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package help-at-pt
     :custom
     (help-at-pt-display-when-idle t))
 #+end_src
-** =hidehow=
+** =hidehow=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package hideshow
     :hook (prog-mode . hs-minor-mode))
 #+end_src
-** =uniquify=
+** =uniquify=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package uniquify
     :ensure nil
@@ -741,7 +751,7 @@
           uniquify-after-kill-buffer-p t
           uniquify-ignore-buffers-re "^\\*"))
 #+end_src
-** =speedbar=
+** =speedbar=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package speedbar
     :custom
@@ -797,13 +807,13 @@
       ".txt"
       "README")))
 #+end_src
-** =winner=
+** =winner=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package winner
     :init
     (winner-mode 1))
 #+end_src
-** =time=
+** =time=                                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package time
     :hook (after-init . display-time-mode)
@@ -814,7 +824,7 @@
     (display-time-24hr-format t)
     (display-time-day-and-date t))
 #+end_src
-** =paren=
+** =paren=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package paren
     :config
@@ -822,19 +832,19 @@
     :custom
     (show-paren-style 'mixed))
 #+end_src
-** =hl-line=
+** =hl-line=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package hl-line
     :config
     (global-hl-line-mode 1))
 #+end_src
-** =font-core=
+** =font-core=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package font-core
     :init
     (global-font-lock-mode t))
 #+end_src
-** =menu-bar=, =tool-bar=, and =scroll-bar=
+** =menu-bar=, =tool-bar=, and =scroll-bar=                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package menu-bar
     :init
@@ -848,13 +858,13 @@
     :init
     (scroll-bar-mode -1))
 #+end_src
-** =xt-mouse=
+** =xt-mouse=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package xt-mouse
     :config
     (xterm-mouse-mode 1))
 #+end_src
-** =avy=
+** =avy=                                                           :builtin:
 #+begin_src emacs-lisp -n
   (use-package avy
     :after evil
@@ -869,7 +879,7 @@
     ;; (evil-define-key 'normal 'global (kbd "<localleader>gL") 'evil-avy-goto-line-above)
     )
 #+end_src
-** =tabify=
+** =tabify=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package tabify
     :ensure nil
@@ -912,13 +922,13 @@
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** byte compilation
+** byte compilation                                                :builtin:
 #+begin_src emacs-lisp -n
   (use-package bytecomp
     :custom
     (byte-compile-warnings nil))
 #+end_src
-** Base configuration
+** Base configuration                                              :builtin:
 #+begin_src emacs-lisp -n
   (use-package emacs
     :init
@@ -968,7 +978,7 @@
     (set-default 'indicate-empty-lines t)
     (setq-default x-stretch-cursor t))
 #+end_src
-** =saveplace=
+** =saveplace=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package saveplace
     :init
@@ -976,7 +986,7 @@
     :custom
     (save-place-file (expand-file-name "places" user-emacs-directory)))
 #+end_src
-** =autorevert=
+** =autorevert=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package autorevert
     :init
@@ -986,7 +996,7 @@
     (auto-revert-verbose nil)
     (auto-revert-stop-on-user-input nil))
 #+end_src
-** =savehist=
+** =savehist=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package savehist
     :init
@@ -1003,7 +1013,7 @@
        search-ring
        regexp-search-ring)))
 #+end_src
-** =prog-mode=
+** =prog-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package prog-mode
     :hook ((prog-mode . prettify-symbols-mode)
@@ -1019,19 +1029,19 @@
             ("<-" . "← ")
             ("=>" . "⇒"))))
 #+end_src
-** =select=
+** =select=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package select
     :custom
     (select-enable-clipboard t))
 #+end_src
-** Compression mode
+** Compression mode                                                :builtin:
 #+begin_src emacs-lisp -n
   (use-package jka-cmpr-hook
     :custom
     (auto-compression-mode t))
 #+end_src
-** =recentf=
+** =recentf=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package recentf
     :bind ("C-c f" . recentf)
@@ -1054,27 +1064,27 @@
        "^/\\(?:ssh\\|su\\|sudo\\)?:" ;; ignore tramp/ssh files
        (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")))))))
 #+end_src
-** =eldoc=
+** =eldoc=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package eldoc
     :hook ((prog-mode . eldoc-mode)
            (emacs-lisp-mode . eldoc-mode)
            (lisp-interaction-mode . eldoc-mode)))
 #+end_src
-** =bookmark=
+** =bookmark=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package bookmark
     :custom
     (bookmark-save-flag 1)
     (bookmark-default-file (expand-file-name ".bookmark" user-emacs-directory)))
 #+end_src
-** =executable=
+** =executable=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package executable
     :hook
     (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
-** =files=
+** =files=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package files
     :config
@@ -1107,37 +1117,37 @@
     (auto-mode-case-fold nil)
     (require-final-newline t))
 #+end_src
-** =tramp=
+** =tramp=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package tramp
     :custom
     (tramp-backup-directory-alist backup-directory-alist)
     (tramp-auto-save-directory (expand-file-name ".tramp-autosave/" user-emacs-directory)))
 #+end_src
-** =abbrev=
+** =abbrev=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package abbrev
     :ensure nil)
 #+end_src
-** =ffap=
+** =ffap=                                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package ffap
     :custom
     (ffap-machine-p-known 'reject))
 #+end_src
-** =epg-config=
+** =epg-config=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package epg-config
     :custom
     (epg-pinentry-mode 'loopback))
 #+end_src
-** =make-mode=
+** =make-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package make-mode
     :config
     (add-hook 'makefile-mode-hook 'indent-tabs-mode))
 #+end_src
-** =ispell=
+** =ispell=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package ispell
     :custom
@@ -1172,7 +1182,7 @@
         (add-to-list 'ispell-hunspell-dict-paths-alist
                      `("id_ID" ,hunspell-id_ID-path)))))
 #+end_src
-** =whitespace=
+** =whitespace=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package whitespace
     :hook (((prog-mode text-mode conf-mode) . whitespace-mode)
@@ -1184,13 +1194,13 @@
     :config
     (global-whitespace-mode))
 #+end_src
-** =subword=
+** =subword=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package subword
     :init
     (global-subword-mode 1))
 #+end_src
-** =ediff=
+** =ediff=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package ediff
     :config
@@ -1198,20 +1208,20 @@
           ediff-split-window-function 'split-window-horizontally
           ediff-window-setup-function 'ediff-setup-windows-plain))
 #+end_src
-** =delsel=
+** =delsel=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package delsel
     :init
     (delete-selection-mode))
 #+end_src
-** =text-mode=
+** =text-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package text-mode
     :ensure nil
     :config
     (setq-default sentence-end-double-space nil))
 #+end_src
-** =flyspell=
+** =flyspell=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package flyspell
     :custom
@@ -1221,18 +1231,18 @@
             . flyspell-mode)
            (prog-mode . flyspell-prog-mode)))
 #+end_src
-** =flymake=
+** =flymake=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package flymake
     :hook (prog-mode . flymake-mode))
 #+end_src
-** =imenu=
+** =imenu=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package imenu
     :custom
     (imenu-auto-rescan t))
 #+end_src
-** =simple=
+** =simple=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package simple
     :hook ((makefile-mode . indent-tabs-mode)
@@ -1252,7 +1262,7 @@
     (with-eval-after-load 'evil
       (evil-set-initial-state #'message-mode 'insert)))
 #+end_src
-** =elec-pair=
+** =elec-pair=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package elec-pair
     :init
@@ -1602,7 +1612,7 @@
     ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
     :ensure t)
 #+end_src
-** =sh-script=
+** =sh-script=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package sh-script
     :mode ("\\.bats\\'" . sh-mode)
@@ -2073,7 +2083,7 @@
   (when (file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
     (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
 #+end_src
-** =org-mode= main package
+** =org-mode= main package                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package org
     :commands org-tempo
@@ -2199,26 +2209,26 @@
        ("STRT" ("wait") ("killed") ("hold"))
        ("DONE" ("wait") ("killed") ("hold")))))
 #+end_src
-** =org-src=
+** =org-src=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-src
     :hook (org-src-mode . (lambda () (outline-minor-mode -1)))
     :custom
     (org-src-preserve-indentation nil))
 #+end_src
-** =org-faces=
+** =org-faces=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-faces
     :custom
     (org-fontify-quote-and-verse-blocks t))
 #+end_src
-** =org-compat=
+** =org-compat=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-compat
     :custom
     (org-imenu-depth 6))
 #+end_src
-** =org-archive=
+** =org-archive=                                                   :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-archive
     :after org
@@ -2229,7 +2239,7 @@
     (org-archive-reversed-order t)
     (org-archive-location (concat (expand-file-name "archives.org" org-directory) "::datetree/* Finished Tasks")))
 #+end_src
-** =org-capture=
+** =org-capture=                                                   :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-capture
     :after org
@@ -2242,7 +2252,7 @@
             ("l" "Links" entry
              (file+headline ,(expand-file-name "links.org" org-directory) "Links")))))
 #+end_src
-** =org-refile=
+** =org-refile=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-refile
     :after org
@@ -2256,7 +2266,7 @@
     (org-refile-use-outline-path 'file)
     (org-outline-path-complete-in-steps nil))
 #+end_src
-** =org-num=
+** =org-num=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-num
     :after org
@@ -2264,14 +2274,14 @@
     (org-num-face '(:inherit org-special-keyword :underline nil :weight bold))
     (org-num-skip-tags '("noexport" "nonum")))
 #+end_src
-** =org-fold=
+** =org-fold=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-fold
     :after org org-contrib
     :custom
     (org-catch-invisible-edits 'smart))
 #+end_src
-** =org-id=
+** =org-id=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-id
     :after org
@@ -2292,7 +2302,7 @@
     (with-eval-after-load 'org
       (add-to-list 'org-tags-exclude-from-inheritance "crypt")))
 #+end_src
-** =org-attach=
+** =org-attach=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-attach
     :after org
@@ -2311,7 +2321,7 @@
     :custom
     (org-attach-auto-tag nil))
 #+end_src
-** =org-clock=
+** =org-clock=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-clock
     :after org
@@ -2327,7 +2337,7 @@
     :config
     (org-clock-persistence-insinuate))
 #+end_src
-** =org-agenda=
+** =org-agenda=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-agenda
     :after org
@@ -2425,7 +2435,7 @@
                      ((org-agenda-block-separator nil)
                       (org-agenda-overriding-header "\nStuck Projects\n"))))))))
 #+end_src
-** =org-timer=
+** =org-timer=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-timer
     :config
@@ -2902,23 +2912,23 @@
 :PROPERTIES:
 :header-args: :tangle ./modules/config-tools.el :mkdirp t
 :END:
-* header                                                           :noexport:
+** header                                                          :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-tools --- `Emacs' various tools -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-* =nov=
+** =nov=
 #+begin_src emacs-lisp -n
   (use-package nov
     :ensure)
 #+end_src
-* =djvu=
+** =djvu=
 #+begin_src emacs-lisp -n
   (use-package djvu
     :ensure)
 #+end_src
-* =pdf-tools=
+** =pdf-tools=
 #+begin_src emacs-lisp -n
   (use-package pdf-tools
     :ensure
@@ -2940,7 +2950,7 @@
     (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
     (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
 #+end_src
-* =khalel=
+** =khalel=
 #+begin_src emacs-lisp -n
   (use-package khalel
     :ensure
@@ -2952,14 +2962,14 @@
           khalel-import-org-file-confirm-overwrite nil)
     (khalel-add-capture-template))
 #+end_src
-* =direnv=
+** =direnv=
 #+begin_src emacs-lisp -n
   (use-package direnv
     :ensure
     :config
     (direnv-mode))
 #+end_src
-* =pass=
+** =pass=
 #+begin_src emacs-lisp -n
   (use-package password-store
     :ensure
@@ -2978,7 +2988,7 @@
     :init
     (auth-source-pass-enable))
 #+end_src
-* =ement=
+** =ement=
 #+begin_src emacs-lisp -n
   (use-package ement
     :ensure
@@ -2986,14 +2996,14 @@
     (setf use-default-font-for-symbols nil)
     (set-fontset-font t 'unicode "Noto Emoji" nil 'append))
 #+end_src
-* pinentry
+** pinentry
 #+begin_src emacs-lisp -n
   (use-package pinentry
     :ensure
     :config
     (pinentry-start))
 #+end_src
-* =rg=
+** =rg=
 #+begin_src emacs-lisp -n
   (use-package rg
     :if (executable-find "rg")
@@ -3006,14 +3016,14 @@
     (with-eval-after-load 'evil-collection
       (evil-collection-ripgrep-setup)))
 #+end_src
-* =wgrep=
+** =wgrep=
 #+begin_src emacs-lisp -n
   (use-package wgrep
     :ensure
     :commands wgrep-change-to-wgrep-mode
     :config (setq wgrep-auto-save-buffer t))
 #+end_src
-* =elfeed=
+** =elfeed=
 #+begin_src emacs-lisp -n
   (use-package elfeed
     :ensure
@@ -3023,7 +3033,7 @@
           elfeed-show-entry-switch #'pop-to-buffer
           shr-max-image-proportion 0.8))
 #+end_src
-* =elfeed-org=
+** =elfeed-org=
 #+begin_src emacs-lisp -n
   (use-package elfeed-org
     :ensure
@@ -3033,7 +3043,7 @@
     :init
     (elfeed-org))
 #+end_src
-* =emms=
+** =emms=                                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package emms
     :defer t
@@ -3042,14 +3052,14 @@
     (emms-default-players)
     (emms-mpris-enable))
 #+end_src
-* =ws-butler=
+** =ws-butler=
 #+begin_src emacs-lisp -n
   (use-package ws-butler
     :ensure
     :config
     (setq ws-butler-convert-leading-tabs-or-spaces t))
 #+end_src
-* =editorconfig=
+** =editorconfig=
 #+begin_src emacs-lisp -n
   (use-package editorconfig
     :ensure
@@ -3060,14 +3070,14 @@
       (setq editorconfig-trim-whitespaces-mode
             'ws-butler-mode)))
 #+end_src
-* =pdfgrep=
+** =pdfgrep=
 #+begin_src emacs-lisp -n
   (use-package pdfgrep
     :ensure
     :after pdf-tools
     :config (pdfgrep-mode))
 #+end_src
-* =selected=
+** =selected=
 #+begin_src emacs-lisp -n
   (use-package selected
     :ensure
@@ -3076,7 +3086,7 @@
     :init
     (selected-global-mode))
 #+end_src
-* =yasnippet=
+** =yasnippet=
 #+begin_src emacs-lisp -n
   (use-package yasnippet
     :ensure
@@ -3105,12 +3115,12 @@
     :ensure
     :after yasnippet)
 #+end_src
-* =lorem-ipsum=
+** =lorem-ipsum=
 #+begin_src emacs-lisp -n
   (use-package lorem-ipsum
     :ensure)
 #+end_src
-* footer                                                           :noexport:
+** footer                                                          :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-tools)
   ;;; config-tools.el ends here
@@ -3125,7 +3135,7 @@
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =dired=
+** =dired=                                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package dired
     :commands dired-jump
@@ -3138,13 +3148,13 @@
           dired-create-destination-dirs 'ask
           dired-clean-confirm-killing-deleted-buffers nil))
 #+end_src
-** =image-dired=
+** =image-dired=                                                   :builtin:
 #+begin_src emacs-lisp -n
   (use-package image-dired
     :config
     (setq image-dired-thumb-size 150))
 #+end_src
-** =dired-x=
+** =dired-x=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package dired-x
     :hook (dired-mode . dired-omit-mode)
@@ -3193,7 +3203,7 @@
     ;;   (dired-git-info-mode -1))
     (setq dgi-auto-hide-details-p nil))
 #+end_src
-** =dired-aux=
+** =dired-aux=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package dired-aux
     :config
@@ -3564,14 +3574,14 @@
     :config
     (notmuch-maildir-inject-section))
 #+end_src
-** =message=
+** =message=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package message
     :custom
     (message-directory (expand-file-name ".mail" (getenv "HOME")))
     (message-sendmail-envelope-from 'header))
 #+end_src
-** =sendmail=
+** =sendmail=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package sendmail
     :custom
@@ -3595,7 +3605,7 @@
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =elisp-mode=
+** =elisp-mode=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (when (locate-library "aggressive-indent")
     (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
@@ -3614,7 +3624,7 @@
                                (outline-minor-mode)
                                (rainbow-delimiters-mode))))
 #+end_src
-** =ielm=
+** =ielm=                                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package ielm
     :ensure nil
@@ -3798,7 +3808,7 @@
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =cc-mode=
+** =cc-mode=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package cc-mode
     :mode ("\\.mm\\'" . objc-mode)
@@ -3828,7 +3838,7 @@
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =nxml-mode=
+** =nxml-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package nxml-mode
     :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
@@ -3973,7 +3983,7 @@
   ;;; Configuration for json.
   ;;; Code:
 #+end_src
-** =json-mode=
+** =json-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package json-mode
     :hook
@@ -4137,7 +4147,7 @@
     :config
     (setq com-css-sort-sort-type 'alphabetic-sort))
 #+end_src
-** =css-mode=
+** =css-mode=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package css-mode
     :hook ((css-mode
@@ -4427,7 +4437,7 @@
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =auctex=
+** =auctex=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package auctex
     :mode (("\\.tex\\'" . latex-mode)
@@ -4445,7 +4455,7 @@
             TeX-PDF-mode t)
       (setq-default TeX-master nil)))
 #+end_src
-** =preview=
+** =preview=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package preview
     :ensure nil
@@ -4456,7 +4466,7 @@
       (setq-default preview-scale 1.4
                     preview-scale-function '(lambda () (* (/ 10.0 (preview-document-pt)) preview-scale)))))
 #+end_src
-** =reftex=
+** =reftex=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package reftex
     :ensure nil
@@ -4702,7 +4712,7 @@
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =python=
+** =python=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package python
     :mode ("[./]flake8\\'" . conf-mode)
@@ -4778,7 +4788,7 @@
     :config
     (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
 #+end_src
-** =inferior-python-mode=
+** =inferior-python-mode=                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package inferior-python-mode
     :hook (inferior-python-mode . hide-mode-line-mode))
