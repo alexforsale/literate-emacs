@@ -1564,9 +1564,9 @@
 :header-args: :tangle ./modules/config-org.el :mkdirp t
 :END:
 #+begin_src emacs-lisp
-    ;;; config-org --- Org-mode configuration -*- lexical-binding: t -*-
-    ;;; Commentary:
-    ;;; Code:
+  ;;; config-org --- Org-mode configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
 
   (when (file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
     (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
@@ -1693,6 +1693,201 @@
        ("PROG" ("wait") ("killed") ("hold"))
        ("STRT" ("wait") ("killed") ("hold"))
        ("DONE" ("wait") ("killed") ("hold")))))
+
+  (use-package org-faces
+    :custom
+    (org-fontify-quote-and-verse-blocks t))
+
+  (use-package org-compat
+    :custom
+    (org-imenu-depth 6))
+
+  (use-package org-archive
+    :after org
+    :custom
+    (org-archive-tag "archive")
+    (org-archive-subtree-save-file-p t)
+    (org-archive-mark-done t)
+    (org-archive-reversed-order t)
+    (org-archive-location (concat (expand-file-name "archives.org" org-directory) "::datetree/* Finished Tasks")))
+
+  (use-package org-capture
+    :after org
+    :config
+    (org-capture-put :kill-buffer t)
+    (setq org-capture-templates ;; this is the default from `doom'.
+          `(("i" "Inbox - Goes Here first!" entry
+             (file+headline ,(expand-file-name "inbox.org" org-directory) "Inbox")
+             "** %?\n%i\n%a" :prepend t)
+            ("l" "Links" entry
+             (file+headline ,(expand-file-name "links.org" org-directory) "Links")))))
+
+  (use-package org-refile
+    :after org
+    :hook (org-after-refile-insert . save-buffer)
+    :custom
+    (org-refile-targets
+     `((,(expand-file-name "archives.org" org-directory) :maxlevel . 1)
+       (,(expand-file-name "notes.org" org-directory) :maxlevel . 1)
+       (,(expand-file-name "projects.org" org-directory) :maxlevel . 1)
+       (,(expand-file-name "todo.org" org-directory) :maxlevel . 1)))
+    (org-refile-use-outline-path 'file)
+    (org-outline-path-complete-in-steps nil))
+
+  (use-package org-num
+    :after org
+    :custom
+    (org-num-face '(:inherit org-special-keyword :underline nil :weight bold))
+    (org-num-skip-tags '("noexport" "nonum")))
+
+  (use-package org-fold
+    :after org org-contrib
+    :custom
+    (org-catch-invisible-edits 'smart))
+
+  (use-package org-id
+    :after org
+    :custom
+    (org-id-locations-file-relative t)
+    (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
+
+  (use-package org-crypt ; built-in
+    :after org
+    :commands org-encrypt-entries org-encrypt-entry org-decrypt-entries org-decrypt-entry
+    ;;:hook (org-reveal-start . org-decrypt-entry)
+    :preface
+    ;; org-crypt falls back to CRYPTKEY property then `epa-file-encrypt-to', which
+    ;; is a better default than the empty string `org-crypt-key' defaults to.
+    (defvar org-crypt-key nil)
+    (with-eval-after-load 'org
+      (add-to-list 'org-tags-exclude-from-inheritance "crypt")))
+
+  (use-package org-attach
+    :after org
+    :commands (org-attach-new
+               org-attach-open
+               org-attach-open-in-emacs
+               org-attach-reveal-in-emacs
+               org-attach-url
+               org-attach-set-directory
+               org-attach-sync)
+    :config
+    (unless org-attach-id-dir
+      (setq-default org-attach-id-dir (expand-file-name ".attach/" org-directory)))
+    (with-eval-after-load 'projectile
+      (add-to-list 'projectile-globally-ignored-directories org-attach-id-dir))
+    :custom
+    (org-attach-auto-tag nil))
+
+  (use-package org-clock
+    :after org
+    :commands org-clock-save
+    :hook (kill-emacs . org-clock-save)
+    :custom
+    (org-persist 'history)
+    (org-clock-in-resume t)
+    (org-clock-out-remove-zero-time-clocks t)
+    (org-clock-history-length 20)
+    (org-show-notification-handler "notify-send")
+    (org-agenda-skip-scheduled-if-deadline-is-shown t)
+    :config
+    (org-clock-persistence-insinuate))
+
+  (use-package org-agenda
+    :after org
+    :custom
+    (org-agenda-files (list (concat org-directory "/")))
+    (org-agenda-file-regexp "\\`[^.].*\\.org\\|[0-9]+$\\'")
+    (org-agenda-include-inactive-timestamps t)
+    (org-agenda-window-setup 'only-window)
+    (org-stuck-projects '("+{project*}-killed-Archives/-DONE-KILL-DELEGATED"
+                          ("TODO" "NEXT" "IDEA" "PROG")
+                          nil ""))
+    :config
+    (with-eval-after-load 'evil
+      (evil-set-initial-state #'org-agenda-mode 'normal))
+    (setq org-agenda-custom-commands
+          `(("a" "All Agenda"
+             ((tags-todo "+followup"
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nNeeds Followup\n")))
+              (tags-todo "+reading"
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nReading List\n")))
+              (agenda ""
+                      ((org-agenda-span 1)
+                       (org-agenda-block-separator nil)
+                       (org-deadline-warning-days 0)
+                       (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                       (org-agenda-start-on-weekday 1)
+                       (org-scheduled-past-days 0)
+                       (org-agenda-overriding-header "\nToday\n")))
+              (agenda ""
+                      ((org-agenda-block-separator nil)
+                       (org-agenda-start-day "+1d")
+                       (org-agenda-overriding-header "\nAll Agendas\n")))))
+            ("w" . "Work")
+            ("wa" "All Work Agenda"
+             ((tags-todo "+followup"
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nNeeds Followup\n")))
+              (tags-todo "+reading"
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nReading List\n")))
+              (agenda ""
+                      ((org-agenda-span 1)
+                       (org-agenda-block-separator nil)
+                       (org-deadline-warning-days 0)
+                       (org-scheduled-past-days 0)
+                       (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                       (org-agenda-format-date "%A %-e %B %Y")
+                       (org-agenda-start-on-weekday 1)
+                       (org-agenda-overriding-header "\nToday's Work\n")))
+              (agenda ""
+                      ((org-agenda-start-on-weekday nil)
+                       (org-agenda-start-day "+1d")
+                       (org-agenda-span 3)
+                       (org-deadline-warning-days 0)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                       (org-agenda-overriding-header "\nNext three days\n")))
+              (agenda ""
+                      ((org-agenda-time-grid nil)
+                       (org-agenda-start-day "+4d")
+                       (org-agenda-span 14)
+                       (org-agenda-show-all-dates nil)
+                       (org-deadline-warning-days 0)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-entry-types '(:deadline))
+                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                       (org-agenda-overriding-header "\nUpcoming deadlines\n"))))
+             ((org-agenda-tag-filter-preset '("+work" "-personal"))))
+            ("h" . "Personal")
+            ("ha" "Personal Agenda"
+             ((tags-todo "+followup"
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nNeeds Followup\n")))
+              (tags-todo "+reading"
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nReading List\n")))
+              (agenda ""
+                      ((org-agenda-block-separator nil)
+                       (org-agenda-overriding-header "\nPersonal Agenda\n")))
+              (alltodo ""))
+             ((org-agenda-tag-filter-preset '("+personal" "-work"))))
+            ("p" . "Projects")
+            ("pa" "All Projects"
+             ((tags-todo "+{project*}+TODO=\"PROJ\""
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nAll Projects\n")))))
+            ("pp" "Personal Projects"
+             ((tags-todo "+{project*}+personal+TODO=\"PROJ\""
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-overriding-header "\nPersonal Projects\n")))))
+            ("ps" "Stuck Projects"
+             ((stuck ""
+                     ((org-agenda-block-separator nil)
+                      (org-agenda-overriding-header "\nStuck Projects\n"))))))))
 
   (provide 'config-org)
   ;;; config-org.el ends here
