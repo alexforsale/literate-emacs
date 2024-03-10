@@ -1346,9 +1346,9 @@
 :header-args: :tangle ./modules/config-shell.el :mkdirp t
 :END:
 #+begin_src emacs-lisp +n
-  ;;; config-shell --- `Emacs' various shell configuration file -*- lexical-binding: t -*-
-  ;;; Commentary:
-  ;;; Code:
+    ;;; config-shell --- `Emacs' various shell configuration file -*- lexical-binding: t -*-
+    ;;; Commentary:
+    ;;; Code:
   (use-package esh-autosuggest
     :hook (eshell-mode . esh-autosuggest-mode)
     ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
@@ -1356,8 +1356,85 @@
     ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
     :ensure t)
 
+  (use-package sh-script
+    :mode ("\\.bats\\'" . sh-mode)
+    :mode ("\\.\\(?:zunit\\|env\\)\\'" . sh-mode)
+    :mode ("/bspwmrc\\'" . sh-mode)
+    :hook (sh-mode-local-vars . lsp-deferred)
+    :hook (sh-mode-local-vars . tree-sitter-mode)
+    :config
+    (with-eval-after-load 'lsp
+      (add-hook 'sh-mode-hook #'lsp-deferred)
+      (add-hook 'shell-mode-hook #'lsp-deferred)
+      (add-hook 'sh-mode-local-vars-hook #'lsp-deferred))
+    (with-eval-after-load 'rainbow-delimiters
+      (add-hook 'sh-mode #'rainbow-delimiters-mode))
+    ;; recognize function names with dashes in them
+    (setq sh-indent-after-continuation 'always)
+    (add-to-list 'sh-imenu-generic-expression
+                 '(sh (nil "^\\s-*function\\s-+\\([[:alpha:]_-][[:alnum:]_-]*\\)\\s-*\\(?:()\\)?" 1)
+                      (nil "^\\s-*\\([[:alpha:]_-][[:alnum:]_-]*\\)\\s-*()" 1)))
+    (with-eval-after-load 'smartparens
+      (sp-local-pair 'sh-mode "`" "`" :unless '(sp-point-before-word-p sp-point-before-same-p))))
+
+  (use-package vterm
+    :ensure
+    :demand t
+    :commands vterm-mode
+    :config
+    (add-hook 'vterm-mode-hook
+              (lambda ()
+                (setq-local global-hl-line-mode nil)
+                (setq-local hscroll-margin 0)))
+    (setq vterm-kill-buffer-on-exit t))
+
+  (use-package multi-vterm
+    :ensure
+    :after vterm)
+
+  (use-package vterm-toggle
+    :ensure
+    :after vterm
+    :commands vterm-toggle
+    :bind
+    (:map vterm-mode-map
+          ("C-<return>" . vterm-toggle-insert-cd))
+    :config
+    (setq vterm-toggle-fullscreen-p nil)
+    (add-to-list 'display-buffer-alist
+                 '((lambda (buffer-or-name _)
+                     (let ((buffer (get-buffer buffer-or-name)))
+                       (with-current-buffer buffer
+                         (or (equal major-mode 'vterm-mode)
+                             (string-prefix-p vterm-buffer-name (buffer-name buffer))))))
+                   (display-buffer-reuse-window display-buffer-at-bottom)
+                   ;;(display-buffer-reuse-window display-buffer-in-direction)
+                   ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                   ;;(direction . bottom)
+                   (dedicated . t) ;dedicated is supported in emacs27
+                   (reusable-frames . visible)
+                   (window-height . 0.4))))
+
+  (use-package fish-mode
+    :ensure
+    :if (executable-find "fish")
+    :defer t)
+
+  (use-package fish-completion
+    :ensure
+    :after fish-mode
+    :config
+    (setq fish-completion-fallback-on-bash-p t))
+
+  (use-package bash-completion
+    :ensure
+    :config
+    (bash-completion-setup)
+    :hook
+    (shell-dynamic-complete-function bash-completion-dynamic-complete))
+
   (provide 'config-shell)
-  ;;; config-shell.el ends here
+    ;;; config-shell.el ends here
 #+end_src
 * Editing
 :PROPERTIES:
