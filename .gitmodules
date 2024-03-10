@@ -10,3 +10,9 @@
 [submodule "site-lisp/sly-macrostep"]
 	path = site-lisp/sly-macrostep
 	url = https://github.com/joaotavora/sly-macrostep.git
+[submodule "site-lisp/nerd-fonts"]
+	path = site-lisp/nerd-fonts
+	url = https://github.com/twlz0ne/nerd-fonts.el.git
+[submodule "site-lisp/tempel-collection"]
+	path = site-lisp/tempel-collection
+	url = https://github.com/alexforsale/tempel-collection

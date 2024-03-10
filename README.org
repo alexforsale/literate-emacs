@@ -41,6 +41,19 @@
   (require 'config-flycheck nil t)
   (require 'config-mail nil t)
   (require 'config-lisp nil t)
+  (require 'config-cc nil t)
+  (require 'config-xml nil t)
+  (require 'config-yaml nil t)
+  (require 'config-toml nil t)
+  (require 'config-lua nil t)
+  (require 'config-jinja2 nil t)
+  (require 'config-json nil t)
+  (require 'config-web nil t)
+  (require 'config-latex nil t)
+  (require 'config-markdown nil t)
+  (require 'config-python nil t)
+  (require 'config-rust nil t)
+  (require 'config-ansible nil t)
 #+end_src
 
 ** footer
@@ -513,6 +526,11 @@
       "q" '(save-buffers-kill-terminal :wk "quit and save")
       "R" '(restart-emacs :wk "restart Emacs"))
     )
+
+  (with-eval-after-load 'notmuch
+    (+config/leader-key
+      "M-m" '(:ignore t :wk "Mail")
+      "M-m m" 'notmuch))
 
   (general-def
     "C-c c" 'org-capture
@@ -1354,6 +1372,32 @@
     (add-to-list 'completion-at-point-functions #'cape-elisp-symbol)
     ;;(add-to-list 'completion-at-point-functions #'cape-line)
     )
+
+  (use-package tempel
+    :ensure
+    :custom
+    (tempel-trigger-prefix "<")
+    :bind (("M-+" . tempel-complete)
+           ("M-*" . tempel-insert))
+    :init
+      (defun tempel-setup-capf ()
+      ;; Add the Tempel Capf to `completion-at-point-functions'.
+      ;; `tempel-expand' only triggers on exact matches. Alternatively use
+      ;; `tempel-complete' if you want to see all matches, but then you
+      ;; should also configure `tempel-trigger-prefix', such that Tempel
+      ;; does not trigger too often when you don't expect it. NOTE: We add
+      ;; `tempel-expand' *before* the main programming mode Capf, such
+      ;; that it will be tried first.
+      (setq-local completion-at-point-functions
+                  (cons #'tempel-expand
+                        completion-at-point-functions)))
+
+    (add-hook 'conf-mode-hook 'tempel-setup-capf)
+    (add-hook 'prog-mode-hook 'tempel-setup-capf)
+    (add-hook 'text-mode-hook 'tempel-setup-capf)
+    (add-hook 'prog-mode-hook #'tempel-abbrev-mode))
+
+  (use-package tempel-collection)
 
   (provide 'config-completion)
   ;;; config-completion.el ends here
@@ -3287,4 +3331,788 @@
   (provide 'config-lisp)
   ;;; config-lisp.el ends here
 
+#+end_src
+* C and C++
+:PROPERTIES:
+:header-args: :tangle ./modules/config-cc.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-cc `cc-mode' configuratition -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package cc-mode
+    :mode ("\\.mm\\'" . objc-mode)
+    :mode ("\\.h\\'" . +cc-c-c++-objc-mode)
+    :hook (c-mode-common . rainbow-delimiters-mode)
+    ;; :hook (c++-mode-local-vars . c++-ts-mode)
+    ;; :hook (c-mode-common . c-ts-base-mode)
+    ;; :hook (cmake-mode-local-vars . cmake-ts-mode)
+    :config
+    (setq c-basic-offset tab-width
+          c-backspace-function #'delete-backward-char)
+    (with-eval-after-load 'ffap
+      (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
+
+  (provide 'config-cc)
+  ;;; config-cc-mode.el ends here
+#+end_src
+* XML
+:PROPERTIES:
+:header-args: :tangle ./modules/config-xml.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-xml --- `xml-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  (use-package nxml-mode
+    :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
+    :mode "\\.xs\\(?:d\\|lt\\)\\'"   ; xslt, xsd
+    :mode "\\.rss\\'"
+    :hook
+    (xml-mode . lsp-deferred)
+    :config
+    (setq nxml-slash-auto-complete-flag t
+          nxml-auto-insert-xml-declaration-flag t))
+
+  (provide 'config-xml)
+  ;;; config-xml.el ends here
+#+end_src
+* YAML
+:PROPERTIES:
+:header-args: :tangle ./modules/config-yaml.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+;;; config-yaml --- `yaml-mode' configuration -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+(use-package yaml-mode
+  :ensure
+  :config
+  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+  (setq tab-width 2)
+  ;; (when (treesit-available-p)
+  ;;   (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode)))
+  :hook
+  ((yaml-mode . (lambda ()
+                   (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+   (yaml-mode . (lambda ()
+                  (run-hooks 'prog-mode-hook)))
+   (yaml-mode . lsp-deferred)
+   ))
+
+(provide 'config-yaml)
+;;; config-yaml.el ends here
+#+end_src
+* TOML
+:PROPERTIES:
+:header-args: :tangle ./modules/config-toml.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-toml --- `toml-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  (use-package toml-mode
+    :ensure
+    :mode
+    ("\\.toml\\'" . toml-mode)
+    :hook
+    (toml-mode . lsp-deferred)
+    :config
+    ;; (when (treesit-available-p)
+    ;; 	(add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
+    (with-eval-after-load 'lsp-mode
+      (setq lsp-toml-command (executable-find "taplo")))
+    (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
+
+  (provide 'config-toml)
+  ;;; config-toml.el ends here
+#+end_src
+* Lua
+:PROPERTIES:
+:header-args: :tangle ./modules/config-lua.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-lua --- `lua-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  (use-package lua-mode
+    :ensure
+    :hook (lua-mode . lsp-deferred)
+    :config
+    (with-eval-after-load 'lsp-mode
+      (setq lsp-lua-hint-enable t
+            lsp-lua-hint-set-type t)))
+
+  (provide 'config-lua)
+  ;;; config-lua.el end
+#+end_src
+* Jinja2
+:PROPERTIES:
+:header-args: :tangle ./modules/config-jinja2.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-jinja2 --- `jinja2-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  (use-package jinja2-mode
+    :ensure
+    :config
+    ;; The default behavior is to reindent the whole buffer on save. This is
+    ;; disruptive and imposing. There are indentation commands available; the user
+    ;; can decide when they want their code reindented.
+    (setq jinja2-enable-indent-on-save nil)
+    (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+    (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+    :hook
+    (jinja2-mode . lsp-deferred))
+
+  (provide 'config-jinja2)
+  ;;; config-jinja2.el ends here
+#+end_src
+* json
+:PROPERTIES:
+:header-args: :tangle ./modules/config-json.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-json --- `json-mode' configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Configuration for json.
+  ;;; Code:
+  (use-package json-mode
+    :hook
+    (json-mode . lsp-deferred))
+
+  (provide 'config-json)
+  ;;; config-json.el ends here
+#+end_src
+* Web mode
+:PROPERTIES:
+:header-args: :tangle ./modules/config-web.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+    ;;; config-web.el --- html configuration             -*- lexical-binding: t; -*-
+    ;;; Commentary:
+    ;;; Code:
+
+  (defun +config/django-web-mode ()
+    "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
+    (if (projectile-project-p)
+        (if (file-exists-p (concat (projectile-project-root) "manage.py"))
+            (web-mode-set-engine "django"))))
+
+  (defun +config/web-mode-fix-js-comment ()
+    "Fix comment handling in `web-mode' for JavaScript (from `doom')."
+    (when (member web-mode-content-type '("javascript" "jsx"))
+      ;; For some reason the default is to insert HTML comments even
+      ;; in JavaScript.
+      (setq-local comment-start "//")
+      (setq-local comment-end "")
+      ;; Needed since otherwise the default value generated by
+      ;; `comment-normalize-vars' will key off the syntax and think
+      ;; that a single "/" starts a comment, which completely borks
+      ;; auto-fill.
+      (setq-local comment-start-skip "// *")))
+
+  (use-package web-mode
+    :ensure
+    :mode "\\.[px]?html?\\'"
+    :mode "\\.\\(?:tpl\\|blade\\)\\(?:\\.php\\)?\\'"
+    :mode "\\.erb\\'"
+    :mode "\\.[lh]?eex\\'"
+    :mode "\\.jsp\\'"
+    :mode "\\.as[cp]x\\'"
+    :mode "\\.ejs\\'"
+    :mode "\\.hbs\\'"
+    :mode "\\.mustache\\'"
+    :mode "\\.svelte\\'"
+    :mode "\\.twig\\'"
+    :mode "\\.jinja2?\\'"
+    :mode "\\.eco\\'"
+    :mode "wp-content/themes/.+/.+\\.php\\'"
+    :mode "templates/.+\\.php\\'"
+    :init
+    ;; If the user has installed `vue-mode' then, by appending this to
+    ;; `auto-mode-alist' rather than prepending it, its autoload will have
+    ;; priority over this one.
+    (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode) 'append)
+    :mode "\\.vue\\'"
+    :config
+    (setq web-mode-markup-indent-offset 2
+          web-mode-enable-auto-closing t
+          web-mode-auto-close-style 1
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2
+          web-mode-enable-auto-pairing nil
+          web-mode-enable-block-face t
+          web-mode-enable-comment-interpolation t
+          web-mode-enable-heredoc-fontification t
+          web-mode-enable-css-colorization t
+          web-mode-enable-part-face t
+          web-mode-enable-current-element-highlight t
+          web-mode-enable-current-column-highlight t
+          web-mode-style-padding 1
+          web-mode-script-padding 1
+          web-mode-block-padding 0
+          web-mode-comment-style 2
+          web-mode-enable-curly-brace-indentation t
+          web-mode-enable-auto-quoting nil
+          web-mode-engines-alist
+          '(("php" . "\\.phtml\\'")
+            ("blade" . "\\.blade\\'")
+            ("elixir" . "\\.eex\\'")
+            ("phoenix" . "\\.[lh]eex\\'")))
+    ;; web-mode-extra-auto-pairs
+    ;; '(("erb" . (("beg" "end")))
+    ;;   ("php" . (("beg" "end")))))
+    (with-eval-after-load 'smartparens
+      (sp-local-pair 'web-mode "<" nil :actions :rem)
+      (sp-local-pair 'web-mode "{%" " %}")
+      (sp-local-pair 'web-mode "{{" " }}")
+      (sp-local-pair 'web-mode "<!--" " -->")
+      )
+    (defun +config/web-mode-hook ()
+      "Hooks for Web mode."
+      (local-set-key (kbd "RET") 'newline-and-indent))
+    ;; Use // instead of /* as the default comment delimited in JS
+    (with-eval-after-load 'web-mode
+      (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
+            "//"))
+    :hook ((html-mode
+            web-mode
+            html-mode-local-vars-hook
+            web-mode-local-vars-hook
+            nxml-mode-local-vars-hook) . lsp-deferred)
+    :hook ((html-mode-local-vars-hook
+            mhtml-mode-local-vars-hook) . tree-sitter)
+    :hook (web-mode . +config/django-web-mode))
+
+  (use-package emmet-mode
+    :ensure
+    :diminish
+    :hook (css-mode web-mode html-mode haml-mode nxml-mode rjsx-mode reason-mode)
+    :config
+    (when (require 'yasnippet nil t)
+      (add-hook 'emmet-mode-hook #'yas-minor-mode-on))
+    (setq emmet-move-cursor-between-quotes t))
+
+  (use-package skewer-mode
+    :ensure
+    :hook (web-mode . skewer-html-mode))
+
+  (use-package lsp-tailwindcss
+    :ensure
+    :init
+    (setq lsp-tailwindcss-add-on-mode t))
+
+  (use-package sass-mode
+    :ensure
+    :hook (scss-mode . rainbow-mode)
+    :hook (scss-mode-local-vars . lsp-deferred))
+
+  (use-package css-eldoc
+    :ensure
+    :commands turn-on-css-eldoc
+    ;;add a hook if you want always to see the selector options in the minibuffer
+    :config
+    (add-hook 'css-mode-hook 'turn-on-css-eldoc)
+    (add-hook 'scss-mode-hook 'turn-on-css-eldoc))
+
+  (use-package com-css-sort
+    :ensure
+    :commands (com-css-sort com-css-sort-attributes-block com-css-sort-attributes-document)
+    :config
+    (setq com-css-sort-sort-type 'alphabetic-sort))
+
+  (use-package css-mode
+    :hook ((css-mode
+            stylus-mode) . rainbow-mode)
+    :hook ((css-mode-local-vars
+            less-css-mode-local-vars) . lsp-deferred)
+    :hook (css-mode-local-vars . tree-sitter)
+    :hook (css-mode . lsp-deferred)
+    :config
+    (with-eval-after-load 'skewer-mode
+      (add-hook 'css-mode-hook 'skewer-css-mode)))
+
+  (provide 'config-web)
+  ;;; config-web.el ends here
+#+end_src
+* Latex
+:PROPERTIES:
+:header-args: :tangle ./modules/config-latex.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-latex.el --- latex configuration          -*- lexical-binding: t; -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  (use-package auctex
+    :mode (("\\.tex\\'" . latex-mode)
+           ("\\.latex\\'" . latex-mode))
+    :commands (latex-mode LaTeX-mode plain-tex-mode)
+    :init
+    (progn
+      (add-hook 'LaTeX-mode-hook #'LaTeX-preview-setup)
+      (add-hook 'LaTeX-mode-hook #'flyspell-mode)
+      (add-hook 'LaTeX-mode-hook #'turn-on-reftex)
+      (setq-default TeX-engine 'xetex)
+      (setq TeX-auto-save nil
+            TeX-parse-self nil
+            TeX-save-query nil
+            TeX-PDF-mode t)
+      (setq-default TeX-master nil)))
+
+  (use-package preview
+    :ensure nil
+    :after auctex
+    :commands LaTeX-preview-setup
+    :init
+    (progn
+      (setq-default preview-scale 1.4
+                    preview-scale-function '(lambda () (* (/ 10.0 (preview-document-pt)) preview-scale)))))
+
+  (use-package reftex
+    :ensure nil
+    :commands turn-on-reftex
+    :init
+    (setq reftex-plug-into-AUCTeX t))
+
+  (use-package bibtex
+    :ensure nil
+    :defer t
+    :mode ("\\.bib" . bibtex-mode)
+    :init
+    (progn
+      (setq bibtex-align-at-equal-sign t)
+      (add-hook 'bibtex-mode-hook (lambda () (set-fill-column 120)))))
+
+  ;; Auto-fill for LaTeX
+  (defun lem-latex-auto-fill ()
+    "Turn on auto-fill for LaTeX mode."
+    (turn-on-auto-fill)
+    (set-fill-column 80)
+    (setq default-justification 'left))
+  (add-hook 'LaTeX-mode-hook #'lem-latex-auto-fill)
+
+  ;; Compilation command
+  (add-hook 'LaTeX-mode-hook (lambda () (setq compile-command "latexmk -pdflatex=xelatex -f -pdf %f")))
+
+  ;; Prevent ispell from verifying some LaTeX commands
+  ;; http://stat.genopole.cnrs.fr/dw/~jchiquet/fr/latex/emacslatex
+  (defvar lem-ispell-tex-skip-alists
+    '("cite" "nocite"
+      "includegraphics"
+      "author" "affil"
+      "ref" "eqref" "pageref"
+      "label"))
+  (setq ispell-tex-skip-alists
+        (list
+         (append (car ispell-tex-skip-alists)
+                 (mapcar #'(lambda (cmd) (list (concat "\\\\" cmd) 'ispell-tex-arg-end)) lem-ispell-tex-skip-alists))
+         (cadr ispell-tex-skip-alists)))
+
+  ;; Indentation with align-current in LaTeX environments
+  (defvar lem-LaTeX-align-environments '("tabular" "tabular*"))
+  (add-hook 'LaTeX-mode-hook
+            (lambda ()
+              (require 'align)
+              (setq LaTeX-indent-environment-list
+                    ;; For each item in the list...
+                    (mapcar (lambda (item)
+                              ;; The car is an environment
+                              (let ((env (car item)))
+                                ;; If this environment is in our list...
+                                (if (member env lem-LaTeX-align-environments)
+                                    ;; ...then replace this item with a correct one
+                                    (list env 'align-current)
+                                  ;; else leave it alone
+                                  item)))
+                            LaTeX-indent-environment-list))))
+
+  ;; Use dvipdfmx to convert DVI files to PDF in AUCTeX
+  (eval-after-load 'tex
+    '(add-to-list 'TeX-command-list
+                  '("DVI to PDF" "dvipdfmx %d" TeX-run-command t t) t))
+
+  ;; SyncTeX (http://www.emacswiki.org/emacs/AUCTeX#toc19)
+  (defun synctex/un-urlify (fname-or-url)
+    "A trivial function that replaces a prefix of file:/// with just /."
+    (if (string= (substring fname-or-url 0 8) "file:///")
+        (substring fname-or-url 7)
+      fname-or-url))
+
+  (provide 'config-latex)
+  ;;; config-latex.el ends here
+#+end_src
+* Markdown
+:PROPERTIES:
+:header-args: :tangle ./modules/config-markdown.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-markdown --- `markdown-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+
+  ;; autoloads (from doom)
+  ;;; Compilation handlers
+
+  ;;;###autoload
+  (cond
+   ((and (boundp 'transient-mark-mode) (boundp 'mark-active))
+    (defun markdown-use-region-p ()
+      "Compatibility wrapper to provide `use-region-p'."
+      (and transient-mark-mode mark-active))))
+
+  ;;;###autoload
+  (defun +markdown-compile (beg end output-buffer)
+    "Compile markdown into html.
+
+  Runs `+markdown-compile-functions' until the first function to return non-nil,
+  otherwise throws an error."
+    (or (run-hook-with-args-until-success '+markdown-compile-functions
+                                          beg end output-buffer)
+        (user-error "No markdown program could be found. Install marked, pandoc, markdown or multimarkdown.")))
+
+  ;;;###autoload
+  (defun +markdown-compile-marked (beg end output-buffer)
+    "Compiles markdown with the marked program, if available.
+  Returns its exit code."
+    (when (executable-find "marked")
+      (apply #'call-process-region
+             beg end "marked" nil output-buffer nil
+             (when (eq major-mode 'gfm-mode)
+               (list "--gfm" "--tables" "--breaks")))))
+
+  ;;;###autoload
+  (defun +markdown-compile-pandoc (beg end output-buffer)
+    "Compiles markdown with the pandoc program, if available.
+  Returns its exit code."
+    (when (executable-find "pandoc")
+      (call-process-region beg end "pandoc" nil output-buffer nil
+                           "-f" "markdown"
+                           "-t" "html"
+                           "--mathjax"
+                           "--highlight-style=pygments")))
+
+  ;;;###autoload
+  (defun +markdown-compile-multimarkdown (beg end output-buffer)
+    "Compiles markdown with the multimarkdown program, if available. Returns its
+  exit code."
+    (when (executable-find "multimarkdown")
+      (call-process-region beg end "multimarkdown" nil output-buffer)))
+
+  ;;;###autoload
+  (defun +markdown-compile-markdown (beg end output-buffer)
+    "Compiles markdown using the Markdown.pl script (or markdown executable), if
+  available. Returns its exit code."
+    (when-let (exe (or (executable-find "Markdown.pl")
+                       (executable-find "markdown")))
+      (call-process-region beg end exe nil output-buffer nil)))
+
+  (defvar +markdown-compile-functions
+    '(+markdown-compile-marked
+      +markdown-compile-pandoc
+      +markdown-compile-markdown
+      +markdown-compile-multimarkdown)
+    "A list of commands to try when attempting to build a markdown file with
+  `markdown-open' or `markdown-preview', stopping at the first one to return non-nil.
+
+  Each function takes three argument. The beginning position of the region to
+  capture, the end position, and the output buffer.")
+
+  ;;;###autoload
+  (defun +markdown/insert-del ()
+    "Surround region in github strike-through delimiters."
+    (interactive)
+    (let ((regexp "\\(^\\|[^\\]\\)\\(\\(~\\{2\\}\\)\\([^ \n	\\]\\|[^ \n	]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)")
+          (delim "~~"))
+      (if (markdown-use-region-p)
+          ;; Active region
+          (cl-destructuring-bind (beg . end)
+              (markdown-unwrap-things-in-region
+               (region-beginning) (region-end)
+               regexp 2 4)
+            (markdown-wrap-or-insert delim delim nil beg end))
+        ;; Bold markup removal, bold word at point, or empty markup insertion
+        (if (thing-at-point-looking-at regexp)
+            (markdown-unwrap-thing-at-point nil 2 4)
+          (markdown-wrap-or-insert delim delim 'word nil nil)))))
+
+  (use-package markdown-mode
+    :ensure
+    :mode ("README\\.md\\'" . gfm-mode)
+    :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode)
+    :hook (markdown-mode . lsp-deferred)
+    :diminish gfm-mode
+    :init
+    (require 'lsp-marksman)
+    (cond
+     ((executable-find "xdg-open")
+      (setq markdown-open-command "xdg-open")))
+    (cond ((executable-find "markdown")
+           (setq markdown-command "markdown"))
+          ((executable-find "multimarkdown")
+           (setq markdown-command "multimarkdown"))
+          ((executable-find "marked")
+           (setq markdown-command "marked")))
+    (setq markdown-enable-math t
+          markdown-enable-wiki-links t
+          markdown-italic-underscore t
+          markdown-asymmetric-header t
+          markdown-gfm-additional-languages '("sh")
+          markdown-make-gfm-checkboxes-buttons t
+          markdown-fontify-whole-heading-line t
+          markdown-nested-imenu-heading-index (not (ignore-errors (native-comp-available-p)))
+          markdown-command #'+markdown-compile
+          markdown-content-type "application/xhtml+xml"
+          markdown-css-paths
+          '("https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css"
+            "https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/github.min.css")
+          markdown-xhtml-header-content
+          (concat "<meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no'>"
+                  "<style> body { box-sizing: border-box; max-width: 740px; width: 100%; margin: 40px auto; padding: 0 10px; } </style>"
+                  "<script id='MathJax-script' async src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'></script>"
+                  "<script src='https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/highlight.min.js'></script>"
+                  "<script>document.addEventListener('DOMContentLoaded', () => { document.body.classList.add('markdown-body'); document.querySelectorAll('pre[lang] > code').forEach((code) => { code.classList.add(code.parentElement.lang); }); document.querySelectorAll('pre > code').forEach((code) => { hljs.highlightBlock(code); }); });</script>"))
+    (with-eval-after-load 'org-src
+      (add-to-list 'org-src-lang-modes '("md" . markdown)))
+    :config
+    (with-eval-after-load 'smartparens
+      (sp-local-pair 'markdown-mode "-" "-" :actions '(wrap))
+      (sp-local-pair '(markdown-mode gfm-mode) "`" "`"
+                     :unless '(:add sp-point-before-word-p sp-point-before-same-p)))
+    (with-eval-after-load 'rustic-mode
+      (add-to-list 'markdown-code-lang-modes '("rust" . rustic-mode))))
+
+  (use-package edit-indirect
+    :ensure
+    :after markdown-mode)
+
+  (provide 'config-markdown)
+  ;;; config-markdown.el ends here
+#+end_src
+* Python
+:PROPERTIES:
+:header-args: :tangle ./modules/config-python.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-python --- `python-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package python
+    :mode ("[./]flake8\\'" . conf-mode)
+    :mode ("/Pipfile\\'" . conf-mode)
+    :hook ((python-mode . lsp-deferred)
+           (python-mode . lsp-ui-mode)
+           (python-mode . lsp-ui-doc-mode)
+           ;; (python-mode . guess-style-guess-tab-mode)
+           (python-mode-local-vars . (lambda ()
+                                       (lsp-deferred)
+                                       (tree-sitter))))
+    :config
+    (if (executable-find "ipython")
+        (setq python-interpreter (executable-find "ipython"))
+      (setq python-interpreter (executable-find "python3")))
+    (when (featurep 'projectile)
+      (add-to-list 'projectile-globally-ignored-directories "^\\.venv$"))
+    (let ((directories `("/usr/bin/" "/usr/local/bin/" "/opt/bin" ,(expand-file-name ".local/bin/" (getenv "HOME")))))
+      (dolist (directory directories) (when (file-directory-p directory)(add-to-list 'python-shell-exec-path directory))))
+    (setq python-indent-guess-indent-offset nil
+          python-shell-completion-native-enable nil
+          python-shell-exec-path `(("/usr/bin/" "/usr/local/bin" ,(expand-file-name ".local/bin/" (getenv "HOME"))))
+          python-indent-guess-indent-offset-verbose nil)
+    (when (featurep 'lsp-mode)
+      (setq lsp-pylsp-plugins-rope-completion-enabled t ; needs python-rope package
+            lsp-pylsp-plugins-mccabe-enabled t ; needs python-mccabe package
+            lsp-ruff-lsp-python-path (executable-find "python3")
+
+            )
+      (when (executable-find "black")
+        (setq lsp-pylsp-plugins-black-enabled t))
+      (when (executable-find "autopep8")
+        (setq lsp-pylsp-plugins-autopep8-enabled t))
+      (when (executable-find "flake8")
+        (setq lsp-pylsp-plugins-flake8-enabled t))
+      (when (executable-find "pycodestyle")
+        (setq lsp-pylsp-plugins-pycodestyle-enabled t))
+      (when (executable-find "pydocstyle")
+        (setq lsp-pylsp-plugins-pydocstyle-enabled t))
+      (when (executable-find "pylint")
+        (setq lsp-pylsp-plugins-pylint-enabled t))
+      (when (executable-find "pyflakes")
+        (setq lsp-pylsp-plugins-pyflakes-enabled t))
+      (when (executable-find "yapf")
+        (setq lsp-pylsp-plugins-yapf-enabled t)))
+    (when (featurep 'flycheck)
+      (setq flycheck-python-mypy-executable (executable-find "mypy")
+            flycheck-python-flake8-executable (executable-find "flake8")
+            flycheck-python-pylint-executable (executable-find "pylint")
+            flycheck-python-pyright-executable (executable-find "pyright"))))
+
+  (use-package pydoc
+    :ensure)
+
+  (use-package ob-ipython
+    :ensure
+    :defer t
+    :init
+    (setq ob-ipython-resources-dir ".ob-ipython-resrc")
+    (with-eval-after-load 'org-src
+      (add-to-list 'org-src-lang-modes '("ipython" . python)))
+    (with-eval-after-load 'ob-async
+      (add-to-list 'ob-async-no-async-languages-alist "ipython")))
+
+  (use-package pip-requirements
+    :ensure
+    :defer t
+    :config
+    (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
+
+  (use-package inferior-python-mode
+    :hook (inferior-python-mode . hide-mode-line-mode))
+
+  (use-package lsp-pyright
+    :ensure
+    :after lsp-mode
+    :hook (python-mode . (lambda ()
+                           (lsp-deferred)
+                           (lsp-ui-mode)
+                           (lsp-ui-doc-mode)))
+    :config
+    (setq lsp-pyright-python-executable-cmd
+          (if (executable-find "python3")
+              (executable-find "python3")
+            "python")))
+
+  (use-package python-docstring
+    :ensure
+    :diminish
+    :hook (python-mode . python-docstring-mode))
+
+  (use-package pipenv
+    :ensure
+    :diminish
+    :after python
+    :commands pipenv-project-p
+    :hook (python-mode . pipenv-mode)
+    :init
+    (setq pipenv-projectile-after-switch-function
+          #'pipenv-projectile-after-switch-extended
+          pipenv-executable (executable-find "pipenv")))
+
+  (use-package flycheck-pycheckers
+    :ensure
+    :config
+    (with-eval-after-load 'flycheck
+      (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup)))
+
+  (provide 'config-python)
+  ;;; config-python.el ends here
+#+end_src
+* Rust
+:PROPERTIES:
+:header-args: :tangle ./modules/config-rust.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-rust --- rust-mode configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  ;;;###autoload
+  (defun +rust-cargo-project-p ()
+    "Return t if this is a cargo project."
+    (locate-dominating-file buffer-file-name "Cargo.toml"))
+
+  ;;
+  ;;; Custom Cargo commands
+
+  (autoload 'rustic-run-cargo-command "rustic-cargo")
+  ;;;###autoload
+  (defun +rust/cargo-audit ()
+    "Run 'cargo audit' for the current project."
+    (interactive)
+    (rustic-run-cargo-command "cargo audit"))
+
+  (with-eval-after-load 'projectile
+    (add-to-list 'projectile-project-root-files "Cargo.toml"))
+
+  (use-package rust-mode)
+  (use-package rustic
+    :ensure
+    :mode ("\\.rs$" . rustic-mode)
+    :init
+    (with-eval-after-load 'rustic-flycheck
+      (remove-hook 'rustic-mode-hook #'flycheck-mode)
+      (remove-hook 'rustic-mode-hook #'flymake-mode-off)
+      (remove-hook 'flycheck-mode-hook #'rustic-flycheck-setup))
+    (with-eval-after-load 'org-src
+      (defalias 'org-babel-execute:rust #'org-babel-execute:rustic))
+    :config
+    (add-hook 'rustic-mode-hook #'rainbow-delimiters-mode)
+    (setq rustic-indent-method-chain t
+          rustic-lsp-client 'lsp-mode)
+    (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
+    (add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
+    ;; (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append)
+    (with-eval-after-load 'lsp
+      (setq lsp-rust-analyzer-display-parameter-hints t)))
+
+  (use-package flycheck-rust
+    :ensure
+    :after flycheck
+    :config
+    (with-eval-after-load 'rustic
+      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+
+  (provide 'config-rust)
+  ;;; config-rust.el ends here
+#+end_src
+* Ansible
+:PROPERTIES:
+:header-args: :tangle ./modules/config-ansible.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-ansible --- ansible configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package ansible
+    :ensure
+    :if (executable-find "ansible")
+    :ensure
+    :commands ansible-auto-decrypt-encrypt
+    :hook (ansible . 'ansible-auto-decrypt-encrypt)
+    :init
+    (put 'ansible-vault-password-file 'safe-local-variable #'stringp)
+    :config
+    (setq ansible-section-face 'font-lock-variable-name-face
+          ansible-task-label-face 'font-lock-doc-face))
+
+  (use-package ansible-doc
+    :after ansible
+    :ensure
+    :hook (yaml-mode . ansible-doc-mode)
+    :config
+    (when (featurep 'evil)
+      (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
+
+  (provide 'config-ansible)
+  ;;; config-ansible.el ends here
 #+end_src
