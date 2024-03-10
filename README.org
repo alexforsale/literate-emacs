@@ -19,16 +19,6 @@
 #+HTML_HEAD: <style> p{max-width:800px;}</style>
 #+HTML_HEAD: <style> li{max-width:800px;}</style
 
-#+begin_html:
-<a href="https://raw.githubusercontent.com/alexforsale/literate-emacs/main/LICENSE.md">
-<img alt="GPLv3" src="https://img.shields.io/github/license/alexforsale/literate-emacs" />
-</a>
-
-<a href="https://github.com/alexforsale/literate-emacs/actions/workflows/publish.yml">
-<img alt="Build status" src="https://github.com/alexforsale/literate-emacs/actions/workflows/publish.yml/badge.svg" />
-</a>
-#+end_html
-
 * Literate /Emacs/ Configuration
 :PROPERTIES:
 :header-args: :tangle ./config.el
@@ -83,6 +73,16 @@ Since the =load-path= for the modules directory is defined in ~./modules/config-
   (provide 'config)
   ;;; config.el ends.here
 #+end_src
+** badges                                                         :noexport:
+#+begin_html:
+<a href="https://raw.githubusercontent.com/alexforsale/literate-emacs/main/LICENSE.md">
+<img alt="GPLv3" src="https://img.shields.io/github/license/alexforsale/literate-emacs" />
+</a>
+
+<a href="https://github.com/alexforsale/literate-emacs/actions/workflows/publish.yml">
+<img alt="Build status" src="https://github.com/alexforsale/literate-emacs/actions/workflows/publish.yml/badge.svg" />
+</a>
+#+end_html
 
 * Early-init file
 :PROPERTIES:
