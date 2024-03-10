@@ -35,6 +35,7 @@
   (require 'config-editing nil t)
   (require 'config-project nil t)
   (require 'config-org nil t)
+  (require 'config-tools nil t)
 #+end_src
 
 ** footer
@@ -1953,29 +1954,6 @@
     (add-hook 'deft-mode-hook #'evil-normalize-keymaps)
     (evil-set-initial-state #'deft-mode 'insert))
 
-  (use-package nov
-    :ensure)
-
-  (use-package pdf-tools
-    :ensure
-    :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
-    :hook ((pdf-tools-enabled . (lambda ()
-                                  (display-line-numbers-mode -1))))
-    :custom
-    (pdf-view-use-scaling t)
-    (pdf-view-use-imagemagick nil)
-    (pdf-annot-activate-created-annotations t)
-    (pdf-view-resize-factor 1.1)
-    :config
-    (pdf-tools-install)
-    (setq-default pdf-view-display-size 'fit-page)
-    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-    (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
-    (add-hook 'pdf-view-mode-hook #'pdf-history-minor-mode)
-    (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
-    (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
-    (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
-
   (use-package org-pdftools
     :ensure
     :hook (org-mode . org-pdftools-setup-link)
@@ -2240,7 +2218,6 @@
   (use-package org-roam-ui
     :ensure
     :after org-roam
-    :hook (org-mode . (lambda () (unless org-roam-ui-mode(org-roam-ui-mode 'toggle))))
     :config
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
@@ -2336,4 +2313,183 @@
 
   (provide 'config-org)
   ;;; config-org.el ends here
+#+end_src
+* Tools
+:PROPERTIES:
+:header-args: :tangle ./modules/config-tools.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-tools --- `Emacs' various tools -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package nov
+    :ensure)
+
+  (use-package djvu
+    :ensure)
+
+  (use-package pdf-tools
+    :ensure
+    :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
+    :hook ((pdf-tools-enabled . (lambda ()
+                                  (display-line-numbers-mode -1))))
+    :custom
+    (pdf-view-use-scaling t)
+    (pdf-view-use-imagemagick nil)
+    (pdf-annot-activate-created-annotations t)
+    (pdf-view-resize-factor 1.1)
+    :config
+    (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-page)
+    (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
+    (add-hook 'pdf-view-mode-hook (lambda () (cua-mode 0)))
+    (add-hook 'pdf-view-mode-hook #'pdf-history-minor-mode)
+    (define-key pdf-view-mode-map (kbd "h") 'pdf-annot-add-highlight-markup-annotation)
+    (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
+    (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
+
+  (use-package khalel
+    :ensure
+    :if (executable-find "khal")
+    :config
+    (setq khalel-khal-command (executable-find "khal")
+          khalel-vdirsyncer-command (executable-find "vdirsyncer")
+          khalel-import-org-file (expand-file-name "calendar.org" org-directory)
+          khalel-import-org-file-confirm-overwrite nil)
+    (khalel-add-capture-template))
+
+  (use-package djvu
+    :ensure)
+
+  (use-package direnv
+    :ensure
+    :config
+    (direnv-mode))
+
+  (use-package password-store
+    :ensure
+    :config
+    (setq password-store-password-length 12))
+
+  (use-package password-store-otp
+    :ensure
+    :after password-store)
+
+  (use-package pass
+    :ensure)
+
+  (use-package auth-source-pass
+    :demand t
+    :init
+    (auth-source-pass-enable))
+
+  (use-package ement
+    :ensure
+    :config
+    (setf use-default-font-for-symbols nil)
+    (set-fontset-font t 'unicode "Noto Emoji" nil 'append))
+
+  (use-package pinentry
+    :ensure
+    :config
+    (pinentry-start))
+
+  (use-package rg
+    :if (executable-find "rg")
+    :ensure
+    :defer t)
+
+  (use-package ripgrep
+    :ensure
+    :init
+    (with-eval-after-load 'evil-collection
+      (evil-collection-ripgrep-setup)))
+
+  (use-package wgrep
+    :ensure
+    :commands wgrep-change-to-wgrep-mode
+    :config (setq wgrep-auto-save-buffer t))
+
+  (use-package elfeed
+    :ensure
+    :commands elfeed
+    :config
+    (setq elfeed-search-filter "@2-week-ago "
+          elfeed-show-entry-switch #'pop-to-buffer
+          shr-max-image-proportion 0.8))
+
+  (use-package elfeed-org
+    :ensure
+    :after org elfeed
+    :preface
+    (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory)))
+    :init
+    (elfeed-org))
+
+  (use-package emms
+    :defer t
+    :config
+    (emms-all)
+    (emms-default-players)
+    (emms-mpris-enable))
+
+  (use-package ws-butler
+    :ensure
+    :config
+    (setq ws-butler-convert-leading-tabs-or-spaces t))
+
+  (use-package editorconfig
+    :ensure
+    :diminish
+    :config
+    (editorconfig-mode 1)
+    (with-eval-after-load 'ws-butler
+      (setq editorconfig-trim-whitespaces-mode
+            'ws-butler-mode)))
+
+  (use-package pdfgrep
+    :ensure
+    :after pdf-tools
+    :config (pdfgrep-mode))
+
+  (use-package selected
+    :ensure
+    :diminish selected-minor-mode
+    :commands selected-minor-mode
+    :init
+    (selected-global-mode))
+
+  (use-package yasnippet
+    :ensure
+    :diminish yas-minor-mode
+    :commands (yas-minor-mode-on
+               yas-expand
+               yas-expand-snippet
+               yas-lookup-snippet
+               yas-insert-snippet
+               yas-new-snippet
+               yas-visit-snippet-file
+               yas-activate-extra-mode
+               yas-deactivate-extra-mode
+               yas-maybe-expand-abbrev-key-filter)
+    :init
+    (defvar yas-verbosity 2)
+    :hook (prog-mode . yas-minor-mode)
+    :config
+    (when (file-directory-p (expand-file-name "snippets" user-emacs-directory))
+      (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory))))
+
+  (use-package yasnippet-snippets
+    :ensure)
+
+  (use-package auto-yasnippet
+    :ensure
+    :after yasnippet)
+
+  (use-package lorem-ipsum
+    :ensure)
+
+  (provide 'config-tools)
+  ;;; config-tools.el ends here
 #+end_src
