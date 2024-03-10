@@ -3377,78 +3377,6 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   (provide 'config-treemacs)
   ;;; config-treemacs.el ends here
 #+end_src
-* Flycheck
-:PROPERTIES:
-:header-args: :tangle ./modules/config-flycheck.el :mkdirp t
-:END:
-** header                                                         :noexport:
-#+begin_src emacs-lisp -n
-  ;;; config-flycheck --- flycheck -*- lexical-binding: t -*-
-  ;;; Commentary:
-  ;;; Code:
-#+end_src
-** =flycheck= package
-#+begin_src emacs-lisp -n
-  ;;;###autoload
-  (defun +syntax-init-popups-h ()
-    "Activate `flycheck-posframe-mode' if available and in GUI Emacs.
-  Activate `flycheck-popup-tip-mode' otherwise.
-  Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
-    (unless (and (bound-and-true-p lsp-ui-mode)
-                 lsp-ui-sideline-enable)
-      (if (and (fboundp 'flycheck-posframe-mode)
-               (display-graphic-p))
-          (flycheck-posframe-mode +1)
-        (flycheck-popup-tip-mode +1))))
-
-  (use-package flycheck
-    :ensure
-    :diminish
-    :commands flycheck-list-errors flycheck-buffer
-    :hook (prog-mode . global-flycheck-mode)
-    :config
-    (delq 'new-line flycheck-check-syntax-automatically)
-    (setq flycheck-emacs-lisp-load-path 'inherit
-          flycheck-idle-change-delay 1.0
-          flycheck-buffer-switch-check-intermediate-buffers t
-          flycheck-display-errors-delay 0.25)
-    (evil-add-command-properties #'flycheck-next-error :repeat t :jump t)
-    (evil-add-command-properties #'flycheck-previous-error :repeat t :jump t))
-#+end_src
-** =consult-flycheck=
-#+begin_src emacs-lisp -n
-  (use-package consult-flycheck
-    :ensure
-    :after consult flycheck)
-#+end_src
-** =flycheck-posframe=
-#+begin_src emacs-lisp -n
-  (use-package flycheck-posframe
-    :if (display-graphic-p)
-    :ensure)
-#+end_src
-** =flycheck-popup-tip=
-#+begin_src emacs-lisp -n
-  (use-package flycheck-popup-tip
-    :ensure
-    :commands flycheck-popup-tip-show-popup flycheck-popup-tip-delete-popup
-    :hook (flycheck-mode . +syntax-init-popups-h)
-    :hook ((evil-insert-state-entry
-            evil-replace-state-entry) . flycheck-popup-tip-delete-popup)
-    :config
-    (setq flycheck-popup-tip-error-prefix "X "))
-#+end_src
-** =flycheck-color-mode-line=
-#+begin_src emacs-lisp -n
-  (use-package flycheck-color-mode-line
-    :ensure
-    :hook (flycheck-mode . flycheck-color-mode-line-mode))
-#+end_src
-** footer                                                         :noexport:
-#+begin_src emacs-lisp -n
-  (provide 'config-flycheck)
-  ;;; config-flycheck.el ends here
-#+end_src
 * Mail
 :PROPERTIES:
 :header-args: :tangle ./modules/config-mail.el :mkdirp t
@@ -3595,17 +3523,90 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   (provide 'config-mail)
   ;;; config-mail.el ends here
 #+end_src
-* Lisp
+* Programming
+** Flycheck
+:PROPERTIES:
+:header-args: :tangle ./modules/config-flycheck.el :mkdirp t
+:END:
+*** header                                                         :noexport:
+#+begin_src emacs-lisp -n
+  ;;; config-flycheck --- flycheck -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+#+end_src
+*** =flycheck= package
+#+begin_src emacs-lisp -n
+  ;;;###autoload
+  (defun +syntax-init-popups-h ()
+    "Activate `flycheck-posframe-mode' if available and in GUI Emacs.
+  Activate `flycheck-popup-tip-mode' otherwise.
+  Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
+    (unless (and (bound-and-true-p lsp-ui-mode)
+                 lsp-ui-sideline-enable)
+      (if (and (fboundp 'flycheck-posframe-mode)
+               (display-graphic-p))
+          (flycheck-posframe-mode +1)
+        (flycheck-popup-tip-mode +1))))
+
+  (use-package flycheck
+    :ensure
+    :diminish
+    :commands flycheck-list-errors flycheck-buffer
+    :hook (prog-mode . global-flycheck-mode)
+    :config
+    (delq 'new-line flycheck-check-syntax-automatically)
+    (setq flycheck-emacs-lisp-load-path 'inherit
+          flycheck-idle-change-delay 1.0
+          flycheck-buffer-switch-check-intermediate-buffers t
+          flycheck-display-errors-delay 0.25)
+    (evil-add-command-properties #'flycheck-next-error :repeat t :jump t)
+    (evil-add-command-properties #'flycheck-previous-error :repeat t :jump t))
+#+end_src
+*** =consult-flycheck=
+#+begin_src emacs-lisp -n
+  (use-package consult-flycheck
+    :ensure
+    :after consult flycheck)
+#+end_src
+*** =flycheck-posframe=
+#+begin_src emacs-lisp -n
+  (use-package flycheck-posframe
+    :if (display-graphic-p)
+    :ensure)
+#+end_src
+*** =flycheck-popup-tip=
+#+begin_src emacs-lisp -n
+  (use-package flycheck-popup-tip
+    :ensure
+    :commands flycheck-popup-tip-show-popup flycheck-popup-tip-delete-popup
+    :hook (flycheck-mode . +syntax-init-popups-h)
+    :hook ((evil-insert-state-entry
+            evil-replace-state-entry) . flycheck-popup-tip-delete-popup)
+    :config
+    (setq flycheck-popup-tip-error-prefix "X "))
+#+end_src
+*** =flycheck-color-mode-line=
+#+begin_src emacs-lisp -n
+  (use-package flycheck-color-mode-line
+    :ensure
+    :hook (flycheck-mode . flycheck-color-mode-line-mode))
+#+end_src
+*** footer                                                         :noexport:
+#+begin_src emacs-lisp -n
+  (provide 'config-flycheck)
+  ;;; config-flycheck.el ends here
+#+end_src
+** Lisp
 :PROPERTIES:
 :header-args: :tangle ./modules/config-lisp.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-lisp --- Various lisp configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =elisp-mode=                                                    :builtin:
+*** =elisp-mode=                                                    :builtin:
 #+begin_src emacs-lisp -n
   (when (locate-library "aggressive-indent")
     (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
@@ -3624,7 +3625,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
                                (outline-minor-mode)
                                (rainbow-delimiters-mode))))
 #+end_src
-** =ielm=                                                          :builtin:
+*** =ielm=                                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package ielm
     :ensure nil
@@ -3652,7 +3653,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
                                             (nth 4 state))))))
                              ,@match-highlights)))))
 #+end_src
-** =elisp-demos=
+*** =elisp-demos=
 #+begin_src emacs-lisp -n
   (use-package elisp-demos
     :ensure
@@ -3660,21 +3661,21 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (advice-add #'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
     (advice-add #'helpful-update :after #'elisp-demos-advice-helpful-update))
 #+end_src
-** =macrostep=
+*** =macrostep=
 #+begin_src emacs-lisp -n
   (use-package macrostep
     :ensure
     :bind (:map emacs-lisp-mode-map
                 ("C-c e" . macrostep-expand)))
 #+end_src
-** =eros=
+*** =eros=
 #+begin_src emacs-lisp -n
   (use-package eros
     :ensure
     :config
     (eros-mode 1))
 #+end_src
-** =buttercup=
+*** =buttercup=
 #+begin_src emacs-lisp -n
   (use-package buttercup
     :ensure
@@ -3683,7 +3684,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'evil
       (add-hook 'buttercup-minor-mode-hook #'evil-normalize-keymaps)))
 #+end_src
-** =common-lisp=
+*** =common-lisp=
 #+begin_src emacs-lisp -n
   ;;;; common-lisp
   (when (file-directory-p (expand-file-name "site-lisp/sly-stepper" user-emacs-directory))
@@ -3699,7 +3700,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
 
   (add-hook 'lisp-mode-hook #'rainbow-delimiters-mode)
 #+end_src
-*** =sly=
+**** =sly=
 #+begin_src emacs-lisp -n
   (use-package sly
     :ensure
@@ -3707,7 +3708,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
            (lisp-mode . sly-editing-mode)))
 #+end_src
-*** =sly-stepper=
+**** =sly-stepper=
 #+begin_src emacs-lisp -n
   (use-package sly-stepper
     :ensure nil
@@ -3715,7 +3716,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config
     (require 'sly-stepper-autoloads))
 #+end_src
-*** =sly-quicklisp=
+**** =sly-quicklisp=
 #+begin_src emacs-lisp -n
   (use-package sly-quicklisp
     :ensure nil
@@ -3723,7 +3724,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config
     (require 'sly-quicklisp-autoloads))
 #+end_src
-*** =sly-macrostep=
+**** =sly-macrostep=
 #+begin_src emacs-lisp -n
   (use-package sly-macrostep
     :ensure nil
@@ -3731,7 +3732,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config
     (require 'sly-macrostep-autoloads))
 #+end_src
-*** =sly-asdf=
+**** =sly-asdf=
 #+begin_src emacs-lisp -n
   (use-package sly-asdf
     :ensure
@@ -3739,14 +3740,14 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config
     (add-to-list 'sly-contribs 'sly-asdf 'append))
 #+end_src
-** clojure
-*** =cider=
+*** clojure
+**** =cider=
 #+begin_src emacs-lisp -n
   ;;;; clojure
   (use-package cider
     :ensure)
 #+end_src
-*** =clj-refactor=
+**** =clj-refactor=
 #+begin_src emacs-lisp -n
   (use-package clj-refactor
     :ensure
@@ -3757,8 +3758,8 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       ;; This choice of keybinding leaves cider-macroexpand-1 unbound
       (cljr-add-keybindings-with-prefix "C-c r")))
 #+end_src
-** Scheme
-*** =geiser=
+*** Scheme
+**** =geiser=
 #+begin_src emacs-lisp -n
   ;;;; scheme
   (use-package geiser
@@ -3770,7 +3771,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
           geiser-repl-per-project-p t
           geiser-repl-history-filename (concat user-emacs-directory "geiser-history")))
 #+end_src
-*** =geiser-guile=
+**** =geiser-guile=
 #+begin_src emacs-lisp -n
   (use-package geiser-guile
     :ensure
@@ -3784,7 +3785,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (when (file-directory-p personal-path)
         (add-to-list 'geiser-guile-load-path personal-path))))
 #+end_src
-*** =macrostep-geiser=
+**** =macrostep-geiser=
 #+begin_src emacs-lisp -n
   (use-package macrostep-geiser
     :ensure
@@ -3793,22 +3794,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :bind (:map geiser-mode-map
                 ("C-c e" . macrostep-expand)))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-lisp)
   ;;; config-lisp.el ends here
 #+end_src
-* C and C++
+** C and C++
 :PROPERTIES:
 :header-args: :tangle ./modules/config-cc.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-cc `cc-mode' configuratition -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =cc-mode=                                                       :builtin:
+*** =cc-mode=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package cc-mode
     :mode ("\\.mm\\'" . objc-mode)
@@ -3823,22 +3824,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'ffap
       (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-cc)
   ;;; config-cc-mode.el ends here
 #+end_src
-* XML
+** XML
 :PROPERTIES:
 :header-args: :tangle ./modules/config-xml.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-xml --- `xml-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =nxml-mode=                                                     :builtin:
+*** =nxml-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package nxml-mode
     :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
@@ -3850,22 +3851,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (setq nxml-slash-auto-complete-flag t
           nxml-auto-insert-xml-declaration-flag t))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-xml)
   ;;; config-xml.el ends here
 #+end_src
-* YAML
+** YAML
 :PROPERTIES:
 :header-args: :tangle ./modules/config-yaml.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
 ;;; config-yaml --- `yaml-mode' configuration -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 #+end_src
-** =yaml-mode=
+*** =yaml-mode=
 #+begin_src emacs-lisp -n
 (use-package yaml-mode
   :ensure
@@ -3883,22 +3884,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
    (yaml-mode . lsp-deferred)
    ))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
 (provide 'config-yaml)
 ;;; config-yaml.el ends here
 #+end_src
-* TOML
+** TOML
 :PROPERTIES:
 :header-args: :tangle ./modules/config-toml.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-toml --- `toml-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =toml-mode=
+*** =toml-mode=
 #+begin_src emacs-lisp -n
   (use-package toml-mode
     :ensure
@@ -3913,22 +3914,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (setq lsp-toml-command (executable-find "taplo")))
     (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-toml)
   ;;; config-toml.el ends here
 #+end_src
-* Lua
+** Lua
 :PROPERTIES:
 :header-args: :tangle ./modules/config-lua.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-lua --- `lua-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =lua-mode=
+*** =lua-mode=
 #+begin_src emacs-lisp -n
   (use-package lua-mode
     :ensure
@@ -3938,22 +3939,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (setq lsp-lua-hint-enable t
             lsp-lua-hint-set-type t)))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-lua)
   ;;; config-lua.el end
 #+end_src
-* Jinja2
+** Jinja2
 :PROPERTIES:
 :header-args: :tangle ./modules/config-jinja2.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-jinja2 --- `jinja2-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =jinja2-mode=
+*** =jinja2-mode=
 #+begin_src emacs-lisp -n
   (use-package jinja2-mode
     :ensure
@@ -3967,44 +3968,44 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :hook
     (jinja2-mode . lsp-deferred))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-jinja2)
   ;;; config-jinja2.el ends here
 #+end_src
-* json
+** json
 :PROPERTIES:
 :header-args: :tangle ./modules/config-json.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-json --- `json-mode' configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Configuration for json.
   ;;; Code:
 #+end_src
-** =json-mode=                                                     :builtin:
+*** =json-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package json-mode
     :hook
     (json-mode . lsp-deferred))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-json)
   ;;; config-json.el ends here
 #+end_src
-* Web mode
+** Web mode
 :PROPERTIES:
 :header-args: :tangle ./modules/config-web.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-web.el --- html configuration             -*- lexical-binding: t; -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =web-mode=
+*** =web-mode=
 #+begin_src emacs-lisp -n
   (defun +config/django-web-mode ()
     "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
@@ -4098,7 +4099,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
             mhtml-mode-local-vars-hook) . tree-sitter)
     :hook (web-mode . +config/django-web-mode))
 #+end_src
-** =emmet-mode=
+*** =emmet-mode=
 #+begin_src emacs-lisp -n
   (use-package emmet-mode
     :ensure
@@ -4108,28 +4109,28 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (add-hook 'emmet-mode-hook #'yas-minor-mode-on))
     (setq emmet-move-cursor-between-quotes t))
 #+end_src
-** =skewer-mode=
+*** =skewer-mode=
 #+begin_src emacs-lisp -n
   (use-package skewer-mode
     :ensure
     :hook ((web-mode . skewer-html-mode)
            (js2-mode . skewer-mode)))
 #+end_src
-** =lsp-tailwindcss=
+*** =lsp-tailwindcss=
 #+begin_src emacs-lisp -n
   (use-package lsp-tailwindcss
     :ensure
     :init
     (setq lsp-tailwindcss-add-on-mode t))
 #+end_src
-** =sass-mode=
+*** =sass-mode=
 #+begin_src emacs-lisp -n
   (use-package sass-mode
     :ensure
     :hook (scss-mode . rainbow-mode)
     :hook (scss-mode-local-vars . lsp-deferred))
 #+end_src
-** =css-eldoc=
+*** =css-eldoc=
 #+begin_src emacs-lisp -n
   (use-package css-eldoc
     :ensure
@@ -4139,7 +4140,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (add-hook 'css-mode-hook 'turn-on-css-eldoc)
     (add-hook 'scss-mode-hook 'turn-on-css-eldoc))
 #+end_src
-** =com-css-sort=
+*** =com-css-sort=
 #+begin_src emacs-lisp -n
   (use-package com-css-sort
     :ensure
@@ -4147,7 +4148,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config
     (setq com-css-sort-sort-type 'alphabetic-sort))
 #+end_src
-** =css-mode=                                                      :builtin:
+*** =css-mode=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package css-mode
     :hook ((css-mode
@@ -4160,7 +4161,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'skewer-mode
       (add-hook 'css-mode-hook 'skewer-css-mode)))
 #+end_src
-** =javascript=
+*** =javascript=
 #+begin_src emacs-lisp -n
   (defvar +javascript-npm-conf (make-hash-table :test 'equal))
 
@@ -4291,7 +4292,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (add-to-list 'projectile-globally-ignored-directories "^node_modules$")
     (add-to-list 'projectile-globally-ignored-directories "^flow-typed$"))
 #+end_src
-** =js2-mode=
+*** =js2-mode=
 #+begin_src emacs-lisp -n
   (use-package js2-mode
     :interpreter ("node" . js2-mode)
@@ -4310,7 +4311,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
                   js2-indent-on-enter-key t
                   js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$")))
 #+end_src
-** =xref-js2=
+*** =xref-js2=
 #+begin_src emacs-lisp -n
   (use-package xref-js2
     :ensure
@@ -4319,7 +4320,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (add-hook 'js2-mode-hook (lambda ()
                                (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 #+end_src
-** =js2-refactor=
+*** =js2-refactor=
 #+begin_src emacs-lisp -n
   (use-package js2-refactor
     :ensure
@@ -4330,7 +4331,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config
     (setq js2-skip-preprocessor-directives t))
 #+end_src
-** =rjsx-mode=
+*** =rjsx-mode=
 #+begin_src emacs-lisp -n
   (use-package rjsx-mode
     :ensure
@@ -4366,7 +4367,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
           js2-highlight-level 3
           js2-idle-timer-delay 0.15))
 #+end_src
-** =typescript-mode=
+*** =typescript-mode=
 #+begin_src emacs-lisp -n
   (use-package typescript-mode
     :ensure
@@ -4397,7 +4398,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (define-derived-mode typescript-tsx-mode web-mode "TypeScript-TSX"))
     (autoload 'js2-line-break "js2-mode" nil t))
 #+end_src
-** =tide=
+*** =tide=
 #+begin_src emacs-lisp -n
   (use-package tide
     :ensure
@@ -4409,12 +4410,12 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
           tide-completion-setup-company-backend nil)
     (add-hook 'tide-mode-hook (lambda () (add-hook 'kill-buffer-hook #'+javascript-cleanup-tide-processes-h nil 'local))))
 #+end_src
-** =npm-mode=
+*** =npm-mode=
 #+begin_src emacs-lisp -n
   (use-package npm-mode
     :ensure)
 #+end_src
-** =nodejs-repl=
+*** =nodejs-repl=
 #+begin_src emacs-lisp -n
   (use-package nodejs-repl
     :ensure)
@@ -4422,22 +4423,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
   (with-eval-after-load 'js
     (setq js-indent-level 2))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-web)
   ;;; config-web.el ends here
 #+end_src
-* Latex
+** Latex
 :PROPERTIES:
 :header-args: :tangle ./modules/config-latex.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-latex.el --- latex configuration          -*- lexical-binding: t; -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =auctex=                                                        :builtin:
+*** =auctex=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package auctex
     :mode (("\\.tex\\'" . latex-mode)
@@ -4455,7 +4456,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
             TeX-PDF-mode t)
       (setq-default TeX-master nil)))
 #+end_src
-** =preview=                                                       :builtin:
+*** =preview=                                                       :builtin:
 #+begin_src emacs-lisp -n
   (use-package preview
     :ensure nil
@@ -4466,7 +4467,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
       (setq-default preview-scale 1.4
                     preview-scale-function '(lambda () (* (/ 10.0 (preview-document-pt)) preview-scale)))))
 #+end_src
-** =reftex=                                                        :builtin:
+*** =reftex=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package reftex
     :ensure nil
@@ -4474,7 +4475,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :init
     (setq reftex-plug-into-AUCTeX t))
 #+end_src
-** =bibtex=
+*** =bibtex=
 #+begin_src emacs-lisp -n
   (use-package bibtex
     :config
@@ -4486,7 +4487,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
           bibtex-autokey-titlewords-stretch 1
           bibtex-autokey-titleword-length 5))
 #+end_src
-** =LaTex=
+*** =LaTex=
 #+begin_src emacs-lisp -n
   ;; Auto-fill for LaTeX
   (defun lem-latex-auto-fill ()
@@ -4543,22 +4544,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
         (substring fname-or-url 7)
       fname-or-url))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-latex)
   ;;; config-latex.el ends here
 #+end_src
-* Markdown
+** Markdown
 :PROPERTIES:
 :header-args: :tangle ./modules/config-markdown.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-markdown --- `markdown-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =markdown-mode=
+*** =markdown-mode=
 #+begin_src emacs-lisp -n
   ;; autoloads (from doom)
   ;;; Compilation handlers
@@ -4691,28 +4692,28 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'rustic-mode
       (add-to-list 'markdown-code-lang-modes '("rust" . rustic-mode))))
 #+end_src
-** =edit-indirect=
+*** =edit-indirect=
 #+begin_src emacs-lisp -n
   (use-package edit-indirect
     :ensure
     :after markdown-mode)
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-markdown)
   ;;; config-markdown.el ends here
 #+end_src
-* Python
+** Python
 :PROPERTIES:
 :header-args: :tangle ./modules/config-python.el :mkdirp t
 :END:
-** header
+*** header
 #+begin_src emacs-lisp -n
   ;;; config-python --- `python-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =python=                                                        :builtin:
+*** =python=                                                        :builtin:
 #+begin_src emacs-lisp -n
   (use-package python
     :mode ("[./]flake8\\'" . conf-mode)
@@ -4763,12 +4764,12 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
             flycheck-python-pylint-executable (executable-find "pylint")
             flycheck-python-pyright-executable (executable-find "pyright"))))
 #+end_src
-** =pydoc=
+*** =pydoc=
 #+begin_src emacs-lisp -n
   (use-package pydoc
     :ensure)
 #+end_src
-** =ob-ipython=
+*** =ob-ipython=
 #+begin_src emacs-lisp -n
   (use-package ob-ipython
     :ensure
@@ -4780,7 +4781,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'ob-async
       (add-to-list 'ob-async-no-async-languages-alist "ipython")))
 #+end_src
-** =pip-requirements=
+*** =pip-requirements=
 #+begin_src emacs-lisp -n
   (use-package pip-requirements
     :ensure
@@ -4788,12 +4789,12 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     :config
     (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
 #+end_src
-** =inferior-python-mode=                                          :builtin:
+*** =inferior-python-mode=                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package inferior-python-mode
     :hook (inferior-python-mode . hide-mode-line-mode))
 #+end_src
-** =lsp-pyright=
+*** =lsp-pyright=
 #+begin_src emacs-lisp -n
   (use-package lsp-pyright
     :ensure
@@ -4808,14 +4809,14 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
               (executable-find "python3")
             "python")))
 #+end_src
-** =python-docstring=
+*** =python-docstring=
 #+begin_src emacs-lisp -n
   (use-package python-docstring
     :ensure
     :diminish
     :hook (python-mode . python-docstring-mode))
 #+end_src
-** =pipenv=
+*** =pipenv=
 #+begin_src emacs-lisp -n
   (use-package pipenv
     :ensure
@@ -4828,7 +4829,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
           #'pipenv-projectile-after-switch-extended
           pipenv-executable (executable-find "pipenv")))
 #+end_src
-** =flycheck-pycheckers=
+*** =flycheck-pycheckers=
 #+begin_src emacs-lisp -n
   (use-package flycheck-pycheckers
     :ensure
@@ -4836,22 +4837,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'flycheck
       (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup)))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-python)
   ;;; config-python.el ends here
 #+end_src
-* Rust
+** Rust
 :PROPERTIES:
 :header-args: :tangle ./modules/config-rust.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-rust --- rust-mode configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =rust-mode=
+*** =rust-mode=
 #+begin_src emacs-lisp -n
   ;;;###autoload
   (defun +rust-cargo-project-p ()
@@ -4872,7 +4873,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
 
   (use-package rust-mode)
 #+end_src
-** =rustic=
+*** =rustic=
 #+begin_src emacs-lisp -n
   (use-package rustic
     :ensure
@@ -4894,7 +4895,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'lsp
       (setq lsp-rust-analyzer-display-parameter-hints t)))
 #+end_src
-** =flycheck-rust=
+*** =flycheck-rust=
 #+begin_src emacs-lisp -n
   (use-package flycheck-rust
     :ensure
@@ -4903,22 +4904,22 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (with-eval-after-load 'rustic
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-rust)
   ;;; config-rust.el ends here
 #+end_src
-* Ansible
+** Ansible
 :PROPERTIES:
 :header-args: :tangle ./modules/config-ansible.el :mkdirp t
 :END:
-** header                                                         :noexport:
+*** header                                                        :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-ansible --- ansible configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =ansible= package
+*** =ansible= package
 #+begin_src emacs-lisp -n
   (use-package ansible
     :ensure
@@ -4932,7 +4933,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (setq ansible-section-face 'font-lock-variable-name-face
           ansible-task-label-face 'font-lock-doc-face))
 #+end_src
-** =ansible-doc=
+*** =ansible-doc=
 #+begin_src emacs-lisp -n
   (use-package ansible-doc
     :after ansible
@@ -4942,7 +4943,7 @@ It's not like I hate the standard /Emacs/ keychord, I actually used it for a whi
     (when (featurep 'evil)
       (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
 #+end_src
-** footer                                                         :noexport:
+*** footer                                                        :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-ansible)
   ;;; config-ansible.el ends here
