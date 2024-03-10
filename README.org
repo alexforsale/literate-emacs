@@ -20,7 +20,7 @@
 :PROPERTIES:
 :header-args: :tangle ./config.el
 :END:
-** header
+** header                                                         :noexport:
 #+begin_src emacs-lisp +n
   ;;; config --- Custom Configuration -*- lexical-binding: t -*-
   ;;; Commentary:
