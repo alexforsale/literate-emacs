@@ -38,6 +38,8 @@
   (require 'config-tools nil t)
   (require 'config-dired nil t)
   (require 'config-treemacs nil t)
+  (require 'config-flycheck nil t)
+  (require 'config-mail nil t)
 #+end_src
 
 ** footer
@@ -2745,4 +2747,191 @@
 
   (provide 'config-treemacs)
   ;;; config-treemacs.el ends here
+#+end_src
+* Flycheck
+:PROPERTIES:
+:header-args: :tangle ./modules/config-flycheck.el :mkdirp t
+:END:
+
+#+begin_src emacs-lisp
+  ;;; config-flycheck --- flycheck -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  ;;;###autoload
+  (defun +syntax-init-popups-h ()
+    "Activate `flycheck-posframe-mode' if available and in GUI Emacs.
+  Activate `flycheck-popup-tip-mode' otherwise.
+  Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
+    (unless (and (bound-and-true-p lsp-ui-mode)
+                 lsp-ui-sideline-enable)
+      (if (and (fboundp 'flycheck-posframe-mode)
+               (display-graphic-p))
+          (flycheck-posframe-mode +1)
+        (flycheck-popup-tip-mode +1))))
+
+  (use-package flycheck
+    :ensure
+    :diminish
+    :commands flycheck-list-errors flycheck-buffer
+    :hook (prog-mode . global-flycheck-mode)
+    :config
+    (delq 'new-line flycheck-check-syntax-automatically)
+    (setq flycheck-emacs-lisp-load-path 'inherit
+          flycheck-idle-change-delay 1.0
+          flycheck-buffer-switch-check-intermediate-buffers t
+          flycheck-display-errors-delay 0.25)
+    (evil-add-command-properties #'flycheck-next-error :repeat t :jump t)
+    (evil-add-command-properties #'flycheck-previous-error :repeat t :jump t))
+
+  (use-package consult-flycheck
+    :ensure
+    :after consult flycheck)
+
+  (use-package flycheck-posframe
+    :if (display-graphic-p)
+    :ensure)
+
+  (use-package flycheck-popup-tip
+    :ensure
+    :commands flycheck-popup-tip-show-popup flycheck-popup-tip-delete-popup
+    :hook (flycheck-mode . +syntax-init-popups-h)
+    :hook ((evil-insert-state-entry
+            evil-replace-state-entry) . flycheck-popup-tip-delete-popup)
+    :config
+    (setq flycheck-popup-tip-error-prefix "X "))
+
+  (use-package flycheck-color-mode-line
+    :ensure
+    :hook (flycheck-mode . flycheck-color-mode-line-mode))
+
+  (provide 'config-flycheck)
+  ;;; config-flycheck.el ends here
+#+end_src
+* Mail
+:PROPERTIES:
+:header-args: :tangle ./modules/config-mail.el :mkdirp t
+:END:
+#+begin_src emacs-lisp
+  ;;; config-mail --- mail configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+  (use-package notmuch
+    :ensure
+    :if (executable-find "notmuch")
+    :hook
+    (message-setup . mml-secure-sign-pgpmime)
+    :config
+    (add-to-list 'auto-mode-alist
+                 '("kristian.alexander@zumstar.co.id" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist
+                 '("kristian.alexander@zumstar.co.id" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist
+                 '("alexforsale@yahoo.com" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist
+                 '("christian.alexander@ymail.com" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist
+                 '("christian.alexander@windowslive.com" . notmuch-message-mode))
+    (add-to-list 'auto-mode-alist
+                 '("alexarians@gmail.com" . notmuch-message-mode))
+    (global-set-key (kbd "<XF86Mail>") 'notmuch)
+    (setq notmuch-fcc-dirs nil
+          notmuch-search-result-format
+          '(("date" . "%12s ")
+            ("count" . "%-7s ")
+            ("authors" . "%-30s ")
+            ("subject" . "%-72s ")
+            ("tags" . "(%s)"))
+          notmuch-tag-formats
+          '(("unread"
+             (propertize tag 'face 'notmuch-tag-unread))
+            ("flagged"
+             (propertize tag 'face 'notmuch-tag-flagged)
+             (notmuch-tag-format-image-data tag
+                                            (notmuch-tag-star-icon))))
+          notmuch-tagging-keys
+          '(("a" notmuch-archive-tags "Archive")
+            ("u" notmuch-show-mark-read-tags "Mark read")
+            ("f" ("+flagged") "Flag")
+            ("s" ("+spam" "-inbox") "Mark as spam")
+            ("d" ("+deleted" "-inbox") "Delete"))
+          notmuch-saved-searches
+          '((:name "flagged" :query "tag:flagged" :key "f")
+            (:name "sent" :query "tag:sent" :key "s")
+            (:name "drafts"  :query "tag:draft" :key "d")
+            (:name "all mail" :query "*" :key "a")
+            (:name "unread" :query "tag:unread" :key "u")
+            (:name "zum" :query "tag:zum" :key "z")
+            (:name "mkn" :query "tag:mkn" :key "c")
+            (:name "gmail" :query "tag:gmail" :key "g")
+            (:name "hotmail" :query "tag:hotmail" :key "h")
+            (:name "yahoo" :query "tag:yahoo" :key "h")
+            (:name "ymail" :query "tag:ymail" :key "m")
+            (:name "Today"
+                   :query "date:today AND NOT tag:spam AND NOT tag:bulk"
+                   :key "T"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "This Week"
+                   :query "date:weeks AND NOT tag:spam AND NOT tag:bulk"
+                   :key "W"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "This Month"
+                   :query "date:months AND NOT tag:spam AND NOT tag:bulk"
+                   :key "M"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "flagged"
+                   :query "tag:flagged AND NOT tag:spam AND NOT tag:bulk"
+                   :key "f"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "spam" :query "tag:spam"))
+          notmuch-archive-tags '("-inbox" "-unread"))
+    (setq-default notmuch-search-oldest-first nil)
+    (if (executable-find "gpg2")
+        (setq notmuch-crypto-gpg-program "gpg2")
+      (setq notmuch-crypto-gpg-program "gpg"))
+    (setq notmuch-crypto-process-mime t
+          mml-secure-openpgp-sign-with-sender t)
+    (define-key notmuch-show-mode-map "S"
+                (lambda ()
+                  "Mark message as spam"
+                  (interactive)
+                  (notmuch-show-tag (list +spam -new)))))
+
+  (use-package notmuch-indicator
+    :ensure
+    :config
+    (setq notmuch-indicator-args
+          '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
+    (notmuch-indicator-mode))
+
+  (use-package consult-notmuch
+    :ensure
+    :config
+    (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
+
+  (use-package ol-notmuch
+    :ensure)
+
+  (use-package notmuch-maildir
+    :ensure
+    :config
+    (notmuch-maildir-inject-section))
+
+  (use-package message
+    :custom
+    (message-directory (expand-file-name ".mail" (getenv "HOME")))
+    (message-sendmail-envelope-from 'header))
+
+  (use-package sendmail
+    :custom
+    (mail-specify-envelope-from t)
+    (mail-envelope-from 'header)
+    (send-mail-function 'sendmail-send-it)
+    (sendmail-program (executable-find "msmtp")))
+
+  (provide 'config-mail)
+  ;;; config-mail.el ends here
 #+end_src
