@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2024-03-10 Sun 09:48 -->
+<!-- 2024-03-10 Sun 09:49 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>alexforsale's literate Emacs configuration</title>
@@ -23,382 +23,382 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org5884959">Literate <i>Emacs</i> Configuration</a>
+<li><a href="#org3d1e23f">Literate <i>Emacs</i> Configuration</a>
 <ul>
-<li><a href="#orge6b9ce3">Modules loading</a></li>
+<li><a href="#org85ead43">Modules loading</a></li>
 </ul>
 </li>
-<li><a href="#org853a219">Early-init file</a>
+<li><a href="#orgf1a8375">Early-init file</a>
 <ul>
-<li><a href="#org0caaa59">Set initial frame</a></li>
-<li><a href="#org4fa0a00">Define the location of <code>custom-file</code></a></li>
+<li><a href="#org067c051">Set initial frame</a></li>
+<li><a href="#orgf4288d7">Define the location of <code>custom-file</code></a></li>
 </ul>
 </li>
-<li><a href="#orgddfffae">variables and functions</a></li>
-<li><a href="#org45ab278">Evil</a>
+<li><a href="#org25df6cc">variables and functions</a></li>
+<li><a href="#org67f3473">Evil</a>
 <ul>
-<li><a href="#org2b2a291">The main package</a></li>
-<li><a href="#org416fcca"><code>evil-collection</code></a></li>
-<li><a href="#orgf79f9db"><code>evil-terminal-cursor-changer</code></a></li>
-<li><a href="#org314f481"><code>evil-args</code></a></li>
-<li><a href="#orgd98874c"><code>evil-easymotion</code></a></li>
-<li><a href="#orgeb85141"><code>evil-surround</code></a></li>
-<li><a href="#orgb68f5af"><code>evil-embrace</code></a></li>
-<li><a href="#orgca50f3a"><code>evil-traces</code></a></li>
-<li><a href="#org210dc7c"><code>evil-visualstar</code></a></li>
-<li><a href="#org7a5a247"><code>exato</code></a></li>
-<li><a href="#orge789b8b"><code>evil-multiedit</code></a></li>
+<li><a href="#orgc74c59a">The main package</a></li>
+<li><a href="#org7e7ffee"><code>evil-collection</code></a></li>
+<li><a href="#org9486251"><code>evil-terminal-cursor-changer</code></a></li>
+<li><a href="#orga6a17b5"><code>evil-args</code></a></li>
+<li><a href="#orgd4e0e71"><code>evil-easymotion</code></a></li>
+<li><a href="#org54b500b"><code>evil-surround</code></a></li>
+<li><a href="#org7eb2f3d"><code>evil-embrace</code></a></li>
+<li><a href="#orgb4969a5"><code>evil-traces</code></a></li>
+<li><a href="#org9824619"><code>evil-visualstar</code></a></li>
+<li><a href="#org5418835"><code>exato</code></a></li>
+<li><a href="#orgd1afaae"><code>evil-multiedit</code></a></li>
 </ul>
 </li>
-<li><a href="#org7f997a6">Keybindings</a>
+<li><a href="#org271299c">Keybindings</a>
 <ul>
-<li><a href="#org144627c"><code>general.el</code></a></li>
-<li><a href="#orgaa81036"><code>notmuch</code></a></li>
-<li><a href="#orgc0d67e2"><code>org-mode</code></a></li>
+<li><a href="#org2ece490"><code>general.el</code></a></li>
+<li><a href="#orgb612ec3"><code>notmuch</code></a></li>
+<li><a href="#org3902c21"><code>org-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#org7377ad3">UI</a>
+<li><a href="#org3b4fe15">UI</a>
 <ul>
-<li><a href="#orgb43193a"><code>which-key</code></a></li>
-<li><a href="#org06cca84"><code>all-the-icons</code></a></li>
-<li><a href="#org0b5b89a"><code>doom-themes</code></a></li>
-<li><a href="#orgf0ee9b2"><code>doom-modeline</code></a></li>
-<li><a href="#org980849f"><code>dashboard</code></a></li>
-<li><a href="#orge24275a"><code>tab-bar</code></a></li>
-<li><a href="#orgf952e12"><code>frame</code></a></li>
-<li><a href="#org5e68ddf"><code>window</code></a></li>
-<li><a href="#org52df2b9"><code>display-line-number</code></a></li>
-<li><a href="#org13a7499"><code>help-at-pt</code></a></li>
-<li><a href="#orga0b2b3f"><code>hidehow</code></a></li>
-<li><a href="#orga831604"><code>uniquify</code></a></li>
-<li><a href="#org9f56548"><code>speedbar</code></a></li>
-<li><a href="#org62e4df8"><code>winner</code></a></li>
-<li><a href="#org38f3ca9"><code>time</code></a></li>
-<li><a href="#org31787ab"><code>paren</code></a></li>
-<li><a href="#org019098c"><code>hl-line</code></a></li>
-<li><a href="#orge15fd10"><code>font-core</code></a></li>
-<li><a href="#orgd6b4820"><code>menu-bar</code>, <code>tool-bar</code>, and <code>scroll-bar</code></a></li>
-<li><a href="#orgbaf325d"><code>xt-mouse</code></a></li>
-<li><a href="#org26fcf52"><code>avy</code></a></li>
-<li><a href="#org50272b1"><code>tabify</code></a></li>
-<li><a href="#org557ebda"><code>rainbow-mode</code>, <code>rainbow-identifiers</code>, and <code>rainbow-delimiters</code></a></li>
-<li><a href="#orgfa04f09"><code>nerd-fonts</code></a></li>
+<li><a href="#org9c51bb7"><code>which-key</code></a></li>
+<li><a href="#org13e2bc1"><code>all-the-icons</code></a></li>
+<li><a href="#org7f03dcb"><code>doom-themes</code></a></li>
+<li><a href="#orgbab48ec"><code>doom-modeline</code></a></li>
+<li><a href="#org8c30388"><code>dashboard</code></a></li>
+<li><a href="#org8dec3bc"><code>tab-bar</code></a></li>
+<li><a href="#orgbda73b3"><code>frame</code></a></li>
+<li><a href="#org1886e27"><code>window</code></a></li>
+<li><a href="#orgf61d1e3"><code>display-line-number</code></a></li>
+<li><a href="#orgc341755"><code>help-at-pt</code></a></li>
+<li><a href="#orgf5073c0"><code>hidehow</code></a></li>
+<li><a href="#orgd4c9642"><code>uniquify</code></a></li>
+<li><a href="#orgd19e392"><code>speedbar</code></a></li>
+<li><a href="#orgc2992cf"><code>winner</code></a></li>
+<li><a href="#orgde3246f"><code>time</code></a></li>
+<li><a href="#orga44b776"><code>paren</code></a></li>
+<li><a href="#orgc4c0dd1"><code>hl-line</code></a></li>
+<li><a href="#org097118c"><code>font-core</code></a></li>
+<li><a href="#org3ce56e9"><code>menu-bar</code>, <code>tool-bar</code>, and <code>scroll-bar</code></a></li>
+<li><a href="#org3bbdf5d"><code>xt-mouse</code></a></li>
+<li><a href="#orgebd52f1"><code>avy</code></a></li>
+<li><a href="#org9a54c3c"><code>tabify</code></a></li>
+<li><a href="#org9ec0191"><code>rainbow-mode</code>, <code>rainbow-identifiers</code>, and <code>rainbow-delimiters</code></a></li>
+<li><a href="#orgad6cdd9"><code>nerd-fonts</code></a></li>
 </ul>
 </li>
-<li><a href="#org6a69b25">Builtin</a>
+<li><a href="#org4d1e01a">Builtin</a>
 <ul>
-<li><a href="#org5775582">byte compilation</a></li>
-<li><a href="#org1c3019c">Base configuration</a></li>
-<li><a href="#org3fbaf22"><code>saveplace</code></a></li>
-<li><a href="#orgad4e3bc"><code>autorevert</code></a></li>
-<li><a href="#orga267e44"><code>savehist</code></a></li>
-<li><a href="#org9d38ce7"><code>prog-mode</code></a></li>
-<li><a href="#org0a011a1"><code>select</code></a></li>
-<li><a href="#org46a6388">Compression mode</a></li>
-<li><a href="#orga295f65"><code>recentf</code></a></li>
-<li><a href="#org39ce251"><code>eldoc</code></a></li>
-<li><a href="#org3ead357"><code>bookmark</code></a></li>
-<li><a href="#orgda3cf6e"><code>executable</code></a></li>
-<li><a href="#org8cd5eea"><code>files</code></a></li>
-<li><a href="#orgb9d03d8"><code>tramp</code></a></li>
-<li><a href="#org721e069"><code>abbrev</code></a></li>
-<li><a href="#org07b4831"><code>ffap</code></a></li>
-<li><a href="#orgc7b3428"><code>epg-config</code></a></li>
-<li><a href="#org4032d6b"><code>make-mode</code></a></li>
-<li><a href="#org9ecf622"><code>ispell</code></a></li>
-<li><a href="#org2b0f095"><code>whitespace</code></a></li>
-<li><a href="#orgbe5713b"><code>subword</code></a></li>
-<li><a href="#org8b78c41"><code>ediff</code></a></li>
-<li><a href="#org726e251"><code>delsel</code></a></li>
-<li><a href="#orgc6e0f6d"><code>text-mode</code></a></li>
-<li><a href="#orgd1d9bd0"><code>flyspell</code></a></li>
-<li><a href="#orgea56ecc"><code>flymake</code></a></li>
-<li><a href="#org8650348"><code>imenu</code></a></li>
-<li><a href="#org04f37a0"><code>simple</code></a></li>
-<li><a href="#org5fa722b"><code>elec-pair</code></a></li>
+<li><a href="#org43aab92">byte compilation</a></li>
+<li><a href="#org0fc2eab">Base configuration</a></li>
+<li><a href="#org07fed3d"><code>saveplace</code></a></li>
+<li><a href="#org360a777"><code>autorevert</code></a></li>
+<li><a href="#org43511ae"><code>savehist</code></a></li>
+<li><a href="#orged6ed79"><code>prog-mode</code></a></li>
+<li><a href="#org698a36e"><code>select</code></a></li>
+<li><a href="#org9e48201">Compression mode</a></li>
+<li><a href="#orgc4f63b3"><code>recentf</code></a></li>
+<li><a href="#orgb704901"><code>eldoc</code></a></li>
+<li><a href="#orgabb2cf9"><code>bookmark</code></a></li>
+<li><a href="#orge07c888"><code>executable</code></a></li>
+<li><a href="#orgdc49836"><code>files</code></a></li>
+<li><a href="#org93f1a4c"><code>tramp</code></a></li>
+<li><a href="#org9452c49"><code>abbrev</code></a></li>
+<li><a href="#org65d11d6"><code>ffap</code></a></li>
+<li><a href="#orgfac6748"><code>epg-config</code></a></li>
+<li><a href="#orga67f3a7"><code>make-mode</code></a></li>
+<li><a href="#org1fdff6b"><code>ispell</code></a></li>
+<li><a href="#org5e155dd"><code>whitespace</code></a></li>
+<li><a href="#org945d7f7"><code>subword</code></a></li>
+<li><a href="#org51af0a9"><code>ediff</code></a></li>
+<li><a href="#org61a62e4"><code>delsel</code></a></li>
+<li><a href="#org61e8aa6"><code>text-mode</code></a></li>
+<li><a href="#org8bb0a42"><code>flyspell</code></a></li>
+<li><a href="#org1065325"><code>flymake</code></a></li>
+<li><a href="#orgeea299c"><code>imenu</code></a></li>
+<li><a href="#orgf503778"><code>simple</code></a></li>
+<li><a href="#org2f0408d"><code>elec-pair</code></a></li>
 </ul>
 </li>
-<li><a href="#org5f5913c">Completion</a>
+<li><a href="#orgf6cbdc8">Completion</a>
 <ul>
-<li><a href="#orgbead335"><code>vertico</code></a></li>
-<li><a href="#orgce9c2d4"><code>marginalia</code></a></li>
-<li><a href="#orgec7e003"><code>nerd-icons-completion</code></a></li>
-<li><a href="#org4f4e88c"><code>orderless</code></a></li>
-<li><a href="#org4e87bef"><code>consult</code></a></li>
-<li><a href="#orgaadae02"><code>corfu</code></a></li>
-<li><a href="#org6669c91"><code>nerd-icons-corfu</code></a></li>
-<li><a href="#orgbb24813"><code>cape</code></a></li>
-<li><a href="#org7720c3c"><code>tempel</code></a></li>
+<li><a href="#org054ef3b"><code>vertico</code></a></li>
+<li><a href="#org380719b"><code>marginalia</code></a></li>
+<li><a href="#orgeaf6bd3"><code>nerd-icons-completion</code></a></li>
+<li><a href="#orgf110e96"><code>orderless</code></a></li>
+<li><a href="#orgee39a13"><code>consult</code></a></li>
+<li><a href="#org9674d9d"><code>corfu</code></a></li>
+<li><a href="#orgb834256"><code>nerd-icons-corfu</code></a></li>
+<li><a href="#org236cc7d"><code>cape</code></a></li>
+<li><a href="#org81a1c4b"><code>tempel</code></a></li>
 </ul>
 </li>
-<li><a href="#orgf88b09f">Shell</a>
+<li><a href="#org89de42c">Shell</a>
 <ul>
-<li><a href="#org67be099"><code>esh-autosuggest</code></a></li>
-<li><a href="#org211c445"><code>sh-script</code></a></li>
-<li><a href="#orga6188cc"><code>vterm</code></a></li>
-<li><a href="#orge708881"><code>multi-vterm</code></a></li>
-<li><a href="#orgc06aafc"><code>vterm-toggle</code></a></li>
-<li><a href="#org034d7cf"><code>fish-mode</code></a></li>
-<li><a href="#org9ec1f46"><code>fish-completion</code></a></li>
-<li><a href="#org5fe5d66"><code>bash-completion</code></a></li>
+<li><a href="#org7ff72d0"><code>esh-autosuggest</code></a></li>
+<li><a href="#org6c5e72c"><code>sh-script</code></a></li>
+<li><a href="#org496936b"><code>vterm</code></a></li>
+<li><a href="#orga44bb4b"><code>multi-vterm</code></a></li>
+<li><a href="#org14c34f0"><code>vterm-toggle</code></a></li>
+<li><a href="#org3eeeaa3"><code>fish-mode</code></a></li>
+<li><a href="#org920a186"><code>fish-completion</code></a></li>
+<li><a href="#orgd9793b6"><code>bash-completion</code></a></li>
 </ul>
 </li>
-<li><a href="#orgb887cf9">Editing</a>
+<li><a href="#org679fd7b">Editing</a>
 <ul>
-<li><a href="#org90267e2"><code>smartparens</code></a></li>
+<li><a href="#org12b8991"><code>smartparens</code></a></li>
 </ul>
 </li>
-<li><a href="#org550b75d">Project</a>
+<li><a href="#org692c72d">Project</a>
 <ul>
-<li><a href="#orgd0bf02b">header</a></li>
-<li><a href="#org7c6fd2b"><code>magit</code></a></li>
-<li><a href="#orgf0b5ae3"><code>projectile</code></a></li>
-<li><a href="#org49f0f29"><code>ripgrep</code></a></li>
-<li><a href="#org3fa7c70"><code>diff-hl</code></a></li>
-<li><a href="#org0bf5ef5"><code>perspective</code></a></li>
-<li><a href="#org98d4095"><code>persp-projectile</code></a></li>
-<li><a href="#org5e0a95a"><code>git-link</code></a></li>
-<li><a href="#orgbaeb511"><code>git-messenger</code></a></li>
-<li><a href="#org0c96384"><code>git-timemachine</code></a></li>
-<li><a href="#orgb5483e2"><code>magit-todos</code></a></li>
-<li><a href="#org5e1a844"><code>forge</code></a></li>
-<li><a href="#orga4eb80c"><code>org-project-capture</code></a></li>
-<li><a href="#orge338c69"><code>lsp</code></a></li>
-<li><a href="#orgb6f8bb3"><code>lsp-ui</code></a></li>
-<li><a href="#org5a4b0c6"><code>consult-lsp</code></a></li>
+<li><a href="#org3439902">header</a></li>
+<li><a href="#orgfd835fc"><code>magit</code></a></li>
+<li><a href="#org68e2e65"><code>projectile</code></a></li>
+<li><a href="#org57af952"><code>ripgrep</code></a></li>
+<li><a href="#orgde35684"><code>diff-hl</code></a></li>
+<li><a href="#org5a97c99"><code>perspective</code></a></li>
+<li><a href="#org463b369"><code>persp-projectile</code></a></li>
+<li><a href="#orgc8b9214"><code>git-link</code></a></li>
+<li><a href="#org82cc8d5"><code>git-messenger</code></a></li>
+<li><a href="#org1926e9e"><code>git-timemachine</code></a></li>
+<li><a href="#org23c1a49"><code>magit-todos</code></a></li>
+<li><a href="#orgac8adb9"><code>forge</code></a></li>
+<li><a href="#org5dc46e7"><code>org-project-capture</code></a></li>
+<li><a href="#orgaf203b9"><code>lsp</code></a></li>
+<li><a href="#org738b823"><code>lsp-ui</code></a></li>
+<li><a href="#orgb502ad2"><code>consult-lsp</code></a></li>
 </ul>
 </li>
-<li><a href="#org52bba13">Org-mode</a>
+<li><a href="#org932f92f">Org-mode</a>
 <ul>
-<li><a href="#orga6ab336">header</a></li>
-<li><a href="#orge25ee2f">Define <code>+config/org-directory</code> variable</a></li>
-<li><a href="#org785b678"><code>org-mode</code> main package</a></li>
-<li><a href="#orgcaf48fc"><code>org-src</code></a></li>
-<li><a href="#org688aedd"><code>org-faces</code></a></li>
-<li><a href="#orge4ec2bf"><code>org-compat</code></a></li>
-<li><a href="#org131c148"><code>org-archive</code></a></li>
-<li><a href="#org44dfe8e"><code>org-capture</code></a></li>
-<li><a href="#org576f1d4"><code>org-refile</code></a></li>
-<li><a href="#orga8ea89d"><code>org-num</code></a></li>
-<li><a href="#org51c6b7e"><code>org-fold</code></a></li>
-<li><a href="#orgd2bd414"><code>org-id</code></a></li>
-<li><a href="#org465959d"><code>org-attach</code></a></li>
-<li><a href="#orgd9704a7"><code>org-clock</code></a></li>
-<li><a href="#org74031de"><code>org-agenda</code></a></li>
-<li><a href="#org9b11200"><code>org-timer</code></a></li>
-<li><a href="#orgafc8e2b"><code>org-contrib</code></a></li>
-<li><a href="#org7618a1b"><code>org-superstar</code></a></li>
-<li><a href="#org76e7e1d"><code>org-fancy-priority</code></a></li>
-<li><a href="#org130bdc9"><code>toc-org</code></a></li>
-<li><a href="#orgd526df2"><code>ox-pandoc</code></a></li>
-<li><a href="#orged22e37"><code>deft</code></a></li>
-<li><a href="#org63c843a"><code>org-pdftools</code></a></li>
-<li><a href="#org4fb8b43"><code>org-noter</code></a></li>
-<li><a href="#org1d50097"><code>org-noter-pdftools</code></a></li>
-<li><a href="#org85bd4b5"><code>ox-gfm</code></a></li>
-<li><a href="#org44876d4"><code>org-download</code></a></li>
-<li><a href="#org8855283"><code>org-cliplink</code></a></li>
-<li><a href="#org843c90d"><code>hugo</code> function: start server</a></li>
-<li><a href="#org2210521"><code>hugo</code> function: create new blog post</a></li>
-<li><a href="#org1b88c52">Custom <code>capture-template</code> for <code>hugo</code> blog</a></li>
-<li><a href="#org57f4ca4"><code>transient</code></a></li>
-<li><a href="#org97c8741"><code>ox-hugo</code></a></li>
-<li><a href="#org7523a84"><code>org-roam</code></a></li>
-<li><a href="#org5c4af0e"><code>org-roam-ui</code></a></li>
-<li><a href="#orgbd0d5f7"><code>org-journal</code></a></li>
-<li><a href="#org372709e"><code>org-ref</code></a></li>
-<li><a href="#orgcd18e21"><code>consult-bibtex</code></a></li>
-<li><a href="#orgb20c7b6"><code>consult-org-roam</code></a></li>
-<li><a href="#org67778fb"><code>ox-latex</code></a></li>
+<li><a href="#orgea97a0a">header</a></li>
+<li><a href="#org87ae080">Define <code>+config/org-directory</code> variable</a></li>
+<li><a href="#orgdb20140"><code>org-mode</code> main package</a></li>
+<li><a href="#org138fa2a"><code>org-src</code></a></li>
+<li><a href="#orgd5e70ad"><code>org-faces</code></a></li>
+<li><a href="#orga12eb14"><code>org-compat</code></a></li>
+<li><a href="#org0885153"><code>org-archive</code></a></li>
+<li><a href="#org2808b12"><code>org-capture</code></a></li>
+<li><a href="#orgd0f3030"><code>org-refile</code></a></li>
+<li><a href="#org6bd84bf"><code>org-num</code></a></li>
+<li><a href="#org6dae777"><code>org-fold</code></a></li>
+<li><a href="#org54f13c9"><code>org-id</code></a></li>
+<li><a href="#orga2e80fe"><code>org-attach</code></a></li>
+<li><a href="#org17da734"><code>org-clock</code></a></li>
+<li><a href="#org4726c8b"><code>org-agenda</code></a></li>
+<li><a href="#org09e60b3"><code>org-timer</code></a></li>
+<li><a href="#orgfad230f"><code>org-contrib</code></a></li>
+<li><a href="#orgd9c81cc"><code>org-superstar</code></a></li>
+<li><a href="#orga3c3a14"><code>org-fancy-priority</code></a></li>
+<li><a href="#org162c904"><code>toc-org</code></a></li>
+<li><a href="#org46d2c21"><code>ox-pandoc</code></a></li>
+<li><a href="#org442ed2e"><code>deft</code></a></li>
+<li><a href="#orgd69c4f9"><code>org-pdftools</code></a></li>
+<li><a href="#org185fd77"><code>org-noter</code></a></li>
+<li><a href="#orgbad875a"><code>org-noter-pdftools</code></a></li>
+<li><a href="#org6ff5ba1"><code>ox-gfm</code></a></li>
+<li><a href="#org0d132ee"><code>org-download</code></a></li>
+<li><a href="#org8c5ca99"><code>org-cliplink</code></a></li>
+<li><a href="#org01b4432"><code>hugo</code> function: start server</a></li>
+<li><a href="#org5dc75ed"><code>hugo</code> function: create new blog post</a></li>
+<li><a href="#org0b7bf68">Custom <code>capture-template</code> for <code>hugo</code> blog</a></li>
+<li><a href="#orge4331e0"><code>transient</code></a></li>
+<li><a href="#org553154c"><code>ox-hugo</code></a></li>
+<li><a href="#orgc592c37"><code>org-roam</code></a></li>
+<li><a href="#orgebca7ce"><code>org-roam-ui</code></a></li>
+<li><a href="#org62c70c2"><code>org-journal</code></a></li>
+<li><a href="#org5640717"><code>org-ref</code></a></li>
+<li><a href="#org52eb430"><code>consult-bibtex</code></a></li>
+<li><a href="#orgd1e1ef6"><code>consult-org-roam</code></a></li>
+<li><a href="#org2f0a3a9"><code>ox-latex</code></a></li>
 </ul>
 </li>
-<li><a href="#orgc6d3f63">Tools</a></li>
-<li><a href="#org5811b75"><code>nov</code></a></li>
-<li><a href="#org892548e"><code>djvu</code></a></li>
-<li><a href="#org1d84125"><code>pdf-tools</code></a></li>
-<li><a href="#org8749e17"><code>khalel</code></a></li>
-<li><a href="#org273ec4b"><code>direnv</code></a></li>
-<li><a href="#orgfbf7b23"><code>pass</code></a></li>
-<li><a href="#orge9a2f8a"><code>ement</code></a></li>
-<li><a href="#org5cc2285">pinentry</a></li>
-<li><a href="#org4b60b9a"><code>rg</code></a></li>
-<li><a href="#org10ff74f"><code>wgrep</code></a></li>
-<li><a href="#org889ada0"><code>elfeed</code></a></li>
-<li><a href="#org3c6d5b9"><code>elfeed-org</code></a></li>
-<li><a href="#org4d370b2"><code>emms</code></a></li>
-<li><a href="#org7922267"><code>ws-butler</code></a></li>
-<li><a href="#org04f3a5c"><code>editorconfig</code></a></li>
-<li><a href="#org066ac5d"><code>pdfgrep</code></a></li>
-<li><a href="#orgb34d1b7"><code>selected</code></a></li>
-<li><a href="#org77b8f78"><code>yasnippet</code></a></li>
-<li><a href="#org9020c53"><code>lorem-ipsum</code></a></li>
-<li><a href="#org8defaf3">dired</a>
+<li><a href="#org6ff4a9f">Tools</a></li>
+<li><a href="#orgb131037"><code>nov</code></a></li>
+<li><a href="#org91ecca3"><code>djvu</code></a></li>
+<li><a href="#orge109b7e"><code>pdf-tools</code></a></li>
+<li><a href="#orgbe20250"><code>khalel</code></a></li>
+<li><a href="#org6ed094e"><code>direnv</code></a></li>
+<li><a href="#orga362ceb"><code>pass</code></a></li>
+<li><a href="#orgdfff684"><code>ement</code></a></li>
+<li><a href="#org5fb28d9">pinentry</a></li>
+<li><a href="#orgaacebdc"><code>rg</code></a></li>
+<li><a href="#org45aace2"><code>wgrep</code></a></li>
+<li><a href="#org5dd0e1d"><code>elfeed</code></a></li>
+<li><a href="#org27d2f6e"><code>elfeed-org</code></a></li>
+<li><a href="#org2da231e"><code>emms</code></a></li>
+<li><a href="#orge0447fa"><code>ws-butler</code></a></li>
+<li><a href="#orgf17459c"><code>editorconfig</code></a></li>
+<li><a href="#org9307fe3"><code>pdfgrep</code></a></li>
+<li><a href="#org82be589"><code>selected</code></a></li>
+<li><a href="#org376e50b"><code>yasnippet</code></a></li>
+<li><a href="#org91ea737"><code>lorem-ipsum</code></a></li>
+<li><a href="#org07c274b">dired</a>
 <ul>
-<li><a href="#org61c3dad"><code>dired</code></a></li>
-<li><a href="#org389180d"><code>image-dired</code></a></li>
-<li><a href="#orga1ce2b1"><code>dired-x</code></a></li>
-<li><a href="#orgee3dd12"><code>fd-dired</code></a></li>
-<li><a href="#org1c4b239"><code>dired-git-info</code></a></li>
-<li><a href="#orge41609d"><code>dired-aux</code></a></li>
-<li><a href="#orge845712"><code>dired-rsync</code></a></li>
-<li><a href="#orga79e5bb"><code>diredfl</code></a></li>
+<li><a href="#org7498003"><code>dired</code></a></li>
+<li><a href="#orge613cf4"><code>image-dired</code></a></li>
+<li><a href="#org050ca6a"><code>dired-x</code></a></li>
+<li><a href="#org7d4590a"><code>fd-dired</code></a></li>
+<li><a href="#org5324a26"><code>dired-git-info</code></a></li>
+<li><a href="#org2dd48b4"><code>dired-aux</code></a></li>
+<li><a href="#org5e53b74"><code>dired-rsync</code></a></li>
+<li><a href="#org6cee234"><code>diredfl</code></a></li>
 </ul>
 </li>
-<li><a href="#orgbadc711">Treemacs</a>
+<li><a href="#orgab5f492">Treemacs</a>
 <ul>
-<li><a href="#org707cba5"><code>treemacs</code> main package</a></li>
-<li><a href="#org921f1d4"><code>treemacs-projectile</code></a></li>
-<li><a href="#orgae9ba1a"><code>treemacs-icons-dired</code></a></li>
-<li><a href="#orgf5945d2"><code>treemacs-magit</code></a></li>
-<li><a href="#org4b2cd5c"><code>treemacs-evil</code></a></li>
-<li><a href="#org77066b6"><code>lsp-treemacs</code></a></li>
-<li><a href="#org5367192"><code>treemacs-perspective</code></a></li>
-<li><a href="#org0ba3a6d"><code>treemacs-tab-bar</code></a></li>
-<li><a href="#org832da66"><code>treemacs-nerd-icons</code></a></li>
+<li><a href="#orgd3fe8f8"><code>treemacs</code> main package</a></li>
+<li><a href="#org9bad21c"><code>treemacs-projectile</code></a></li>
+<li><a href="#org96417a9"><code>treemacs-icons-dired</code></a></li>
+<li><a href="#org201e7cf"><code>treemacs-magit</code></a></li>
+<li><a href="#orgd4da1c8"><code>treemacs-evil</code></a></li>
+<li><a href="#org46acc8e"><code>lsp-treemacs</code></a></li>
+<li><a href="#org9f9a1af"><code>treemacs-perspective</code></a></li>
+<li><a href="#org495120f"><code>treemacs-tab-bar</code></a></li>
+<li><a href="#org755f675"><code>treemacs-nerd-icons</code></a></li>
 </ul>
 </li>
-<li><a href="#orgbbd8708">Flycheck</a>
+<li><a href="#orgae7413e">Flycheck</a>
 <ul>
-<li><a href="#orgb2c23ce"><code>flycheck</code> package</a></li>
-<li><a href="#orgc849bdf"><code>consult-flycheck</code></a></li>
-<li><a href="#orgc968ff6"><code>flycheck-posframe</code></a></li>
-<li><a href="#orgfe7ec41"><code>flycheck-popup-tip</code></a></li>
-<li><a href="#org6f9ef18"><code>flycheck-color-mode-line</code></a></li>
+<li><a href="#org2b3bb9c"><code>flycheck</code> package</a></li>
+<li><a href="#org4a417ab"><code>consult-flycheck</code></a></li>
+<li><a href="#org145fef0"><code>flycheck-posframe</code></a></li>
+<li><a href="#org5f3047a"><code>flycheck-popup-tip</code></a></li>
+<li><a href="#org4344250"><code>flycheck-color-mode-line</code></a></li>
 </ul>
 </li>
-<li><a href="#orge51bfe7">Mail</a>
+<li><a href="#org8fe72a0">Mail</a>
 <ul>
-<li><a href="#org82b8026"><code>notmuch</code> main package</a></li>
-<li><a href="#org8390a27"><code>notmuch-indicator</code></a></li>
-<li><a href="#orgf2cf694"><code>consult-notmuch</code></a></li>
-<li><a href="#orgf70bb6e"><code>ol-notmuch</code></a></li>
-<li><a href="#orgfb9a9d6"><code>notmuch-maildir</code></a></li>
-<li><a href="#org81455aa"><code>message</code></a></li>
-<li><a href="#org7d5f552"><code>sendmail</code></a></li>
+<li><a href="#orgf2f1028"><code>notmuch</code> main package</a></li>
+<li><a href="#org3706a4e"><code>notmuch-indicator</code></a></li>
+<li><a href="#org35f5200"><code>consult-notmuch</code></a></li>
+<li><a href="#org8796421"><code>ol-notmuch</code></a></li>
+<li><a href="#orge01d844"><code>notmuch-maildir</code></a></li>
+<li><a href="#org97d95ba"><code>message</code></a></li>
+<li><a href="#org2c31b0f"><code>sendmail</code></a></li>
 </ul>
 </li>
-<li><a href="#org0fd30ae">Lisp</a>
+<li><a href="#org67fed5c">Lisp</a>
 <ul>
-<li><a href="#org1fcac40"><code>elisp-mode</code></a></li>
-<li><a href="#org1539cf4"><code>ielm</code></a></li>
-<li><a href="#orge3adca9"><code>elisp-demos</code></a></li>
-<li><a href="#org9254af7"><code>macrostep</code></a></li>
-<li><a href="#orgdd3bc53"><code>eros</code></a></li>
-<li><a href="#org30b3d1a"><code>buttercup</code></a></li>
-<li><a href="#org84250c5"><code>common-lisp</code></a></li>
-<li><a href="#org1e230d0">clojure</a></li>
-<li><a href="#org235ced6">Scheme</a></li>
+<li><a href="#org604786d"><code>elisp-mode</code></a></li>
+<li><a href="#orgb3a802f"><code>ielm</code></a></li>
+<li><a href="#org62eab4a"><code>elisp-demos</code></a></li>
+<li><a href="#org0fe767b"><code>macrostep</code></a></li>
+<li><a href="#org001a792"><code>eros</code></a></li>
+<li><a href="#orga6b725c"><code>buttercup</code></a></li>
+<li><a href="#org18fda15"><code>common-lisp</code></a></li>
+<li><a href="#org91b7c3f">clojure</a></li>
+<li><a href="#orgb75f1fb">Scheme</a></li>
 </ul>
 </li>
-<li><a href="#orgeeaeddb">C and C++</a>
+<li><a href="#org3237bd9">C and C++</a>
 <ul>
-<li><a href="#org8564b52"><code>cc-mode</code></a></li>
+<li><a href="#org4d6e6fd"><code>cc-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#org8466956">XML</a>
+<li><a href="#org78cb1b6">XML</a>
 <ul>
-<li><a href="#org37eab8e"><code>nxml-mode</code></a></li>
+<li><a href="#orgc02c532"><code>nxml-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#org1ad795a">YAML</a>
+<li><a href="#org7f8e2fe">YAML</a>
 <ul>
-<li><a href="#orgef7bd66"><code>yaml-mode</code></a></li>
+<li><a href="#orgdfe83c8"><code>yaml-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#orgf9df970">TOML</a>
+<li><a href="#org932c715">TOML</a>
 <ul>
-<li><a href="#orgfd16f83"><code>toml-mode</code></a></li>
+<li><a href="#org34db3f1"><code>toml-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#org8a4258c">Lua</a>
+<li><a href="#org13668e8">Lua</a>
 <ul>
-<li><a href="#orgd691432"><code>lua-mode</code></a></li>
+<li><a href="#org28baf3d"><code>lua-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#orgf516b1c">Jinja2</a>
+<li><a href="#orgc532652">Jinja2</a>
 <ul>
-<li><a href="#org3545b2b"><code>jinja2-mode</code></a></li>
+<li><a href="#org5e8914f"><code>jinja2-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#org760f33e">json</a>
+<li><a href="#org7dcdaac">json</a>
 <ul>
-<li><a href="#org2fbfa15"><code>json-mode</code></a></li>
+<li><a href="#org8206c3d"><code>json-mode</code></a></li>
 </ul>
 </li>
-<li><a href="#org12fe178">Web mode</a>
+<li><a href="#orge05e71d">Web mode</a>
 <ul>
-<li><a href="#org19bcaa1"><code>web-mode</code></a></li>
-<li><a href="#org9a3ea6e"><code>emmet-mode</code></a></li>
-<li><a href="#org4fa4744"><code>skewer-mode</code></a></li>
-<li><a href="#orgf28f888"><code>lsp-tailwindcss</code></a></li>
-<li><a href="#org342e913"><code>sass-mode</code></a></li>
-<li><a href="#org782de21"><code>css-eldoc</code></a></li>
-<li><a href="#org4bb940e"><code>com-css-sort</code></a></li>
-<li><a href="#orgd86b4cb"><code>css-mode</code></a></li>
-<li><a href="#org7db8c11"><code>javascript</code></a></li>
-<li><a href="#org8c1e1c0"><code>js2-mode</code></a></li>
-<li><a href="#org8771f7f"><code>xref-js2</code></a></li>
-<li><a href="#org6b7f4a5"><code>js2-refactor</code></a></li>
-<li><a href="#orgabbd7a7"><code>rjsx-mode</code></a></li>
-<li><a href="#org0f98006"><code>typescript-mode</code></a></li>
-<li><a href="#org138cedb"><code>tide</code></a></li>
-<li><a href="#orgb05adf5"><code>npm-mode</code></a></li>
-<li><a href="#orgc46b43b"><code>nodejs-repl</code></a></li>
+<li><a href="#orgd6dea36"><code>web-mode</code></a></li>
+<li><a href="#orgf44aab6"><code>emmet-mode</code></a></li>
+<li><a href="#orgfa94a44"><code>skewer-mode</code></a></li>
+<li><a href="#orge4fbf19"><code>lsp-tailwindcss</code></a></li>
+<li><a href="#org536feab"><code>sass-mode</code></a></li>
+<li><a href="#org2d32521"><code>css-eldoc</code></a></li>
+<li><a href="#org7d8cc3b"><code>com-css-sort</code></a></li>
+<li><a href="#org2a88197"><code>css-mode</code></a></li>
+<li><a href="#org59901d0"><code>javascript</code></a></li>
+<li><a href="#orge0ef857"><code>js2-mode</code></a></li>
+<li><a href="#org4d09df8"><code>xref-js2</code></a></li>
+<li><a href="#org99b6619"><code>js2-refactor</code></a></li>
+<li><a href="#orgbc0e709"><code>rjsx-mode</code></a></li>
+<li><a href="#org22e41f1"><code>typescript-mode</code></a></li>
+<li><a href="#org4a0fa8a"><code>tide</code></a></li>
+<li><a href="#org7b39f64"><code>npm-mode</code></a></li>
+<li><a href="#org1c6dbad"><code>nodejs-repl</code></a></li>
 </ul>
 </li>
-<li><a href="#orga597057">Latex</a>
+<li><a href="#org74fd803">Latex</a>
 <ul>
-<li><a href="#org605f07e"><code>auctex</code></a></li>
-<li><a href="#orga3c8f3c"><code>preview</code></a></li>
-<li><a href="#orgf310a12"><code>reftex</code></a></li>
-<li><a href="#orge776f32"><code>bibtex</code></a></li>
-<li><a href="#org39c8cf9"><code>LaTex</code></a></li>
+<li><a href="#orge69fba5"><code>auctex</code></a></li>
+<li><a href="#orgebef1f3"><code>preview</code></a></li>
+<li><a href="#orgd14994a"><code>reftex</code></a></li>
+<li><a href="#org500d4d8"><code>bibtex</code></a></li>
+<li><a href="#orgb421007"><code>LaTex</code></a></li>
 </ul>
 </li>
-<li><a href="#org1111dbb">Markdown</a>
+<li><a href="#org0b6b20b">Markdown</a>
 <ul>
-<li><a href="#org101eb36"><code>markdown-mode</code></a></li>
-<li><a href="#orgde468e8"><code>edit-indirect</code></a></li>
+<li><a href="#orgd2038ff"><code>markdown-mode</code></a></li>
+<li><a href="#org5298b80"><code>edit-indirect</code></a></li>
 </ul>
 </li>
-<li><a href="#orgbc3a144">Python</a>
+<li><a href="#org0f89837">Python</a>
 <ul>
-<li><a href="#org1eea072">header</a></li>
-<li><a href="#org41f6666"><code>python</code></a></li>
-<li><a href="#orgb680294"><code>pydoc</code></a></li>
-<li><a href="#org130c3b6"><code>ob-ipython</code></a></li>
-<li><a href="#org1ad9f17"><code>pip-requirements</code></a></li>
-<li><a href="#orge560b90"><code>inferior-python-mode</code></a></li>
-<li><a href="#orgf37ea4a"><code>lsp-pyright</code></a></li>
-<li><a href="#org4060230"><code>python-docstring</code></a></li>
-<li><a href="#org11fc407"><code>pipenv</code></a></li>
-<li><a href="#orgcb5d6ac"><code>flycheck-pycheckers</code></a></li>
+<li><a href="#org87f464c">header</a></li>
+<li><a href="#orgce8066e"><code>python</code></a></li>
+<li><a href="#orgc4f86e4"><code>pydoc</code></a></li>
+<li><a href="#orgae622b4"><code>ob-ipython</code></a></li>
+<li><a href="#org2943739"><code>pip-requirements</code></a></li>
+<li><a href="#orgea03b76"><code>inferior-python-mode</code></a></li>
+<li><a href="#org1424893"><code>lsp-pyright</code></a></li>
+<li><a href="#orgd44381d"><code>python-docstring</code></a></li>
+<li><a href="#org7453547"><code>pipenv</code></a></li>
+<li><a href="#org5ee3853"><code>flycheck-pycheckers</code></a></li>
 </ul>
 </li>
-<li><a href="#org2bf9ace">Rust</a>
+<li><a href="#org58c2dd0">Rust</a>
 <ul>
-<li><a href="#org644872b"><code>rust-mode</code></a></li>
-<li><a href="#orgc2c2367"><code>rustic</code></a></li>
-<li><a href="#orgd32ecd0"><code>flycheck-rust</code></a></li>
+<li><a href="#orgfef488c"><code>rust-mode</code></a></li>
+<li><a href="#org6cf29bc"><code>rustic</code></a></li>
+<li><a href="#org66d69ef"><code>flycheck-rust</code></a></li>
 </ul>
 </li>
-<li><a href="#org41d39dc">Ansible</a>
+<li><a href="#org6ab5cb1">Ansible</a>
 <ul>
-<li><a href="#org1180df6"><code>ansible</code> package</a></li>
-<li><a href="#orgfb6a29d"><code>ansible-doc</code></a></li>
+<li><a href="#orgc813f9d"><code>ansible</code> package</a></li>
+<li><a href="#org2c5ae6f"><code>ansible-doc</code></a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org5884959" class="outline-2">
-<h2 id="org5884959">Literate <i>Emacs</i> Configuration</h2>
-<div class="outline-text-2" id="text-org5884959">
+<div id="outline-container-org3d1e23f" class="outline-2">
+<h2 id="org3d1e23f">Literate <i>Emacs</i> Configuration</h2>
+<div class="outline-text-2" id="text-org3d1e23f">
 </div>
-<div id="outline-container-orge6b9ce3" class="outline-3">
-<h3 id="orge6b9ce3">Modules loading</h3>
-<div class="outline-text-3" id="text-orge6b9ce3">
+<div id="outline-container-org85ead43" class="outline-3">
+<h3 id="org85ead43">Modules loading</h3>
+<div class="outline-text-3" id="text-org85ead43">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(<span style="color: #4169e1;">require</span> '<span style="color: #5f9ea0;">config-variables</span> (expand-file-name <span style="color: #bc8f8f;">"modules/config-variables.el"</span> user-emacs-directory) t)
 <span class="linenr"> 2: </span>(<span style="color: #4169e1;">require</span> '<span style="color: #5f9ea0;">config-evil</span> nil t)
@@ -435,14 +435,14 @@
 </div>
 </div>
 
-<div id="outline-container-org853a219" class="outline-2">
-<h2 id="org853a219">Early-init file</h2>
-<div class="outline-text-2" id="text-org853a219">
+<div id="outline-container-orgf1a8375" class="outline-2">
+<h2 id="orgf1a8375">Early-init file</h2>
+<div class="outline-text-2" id="text-orgf1a8375">
 </div>
 
-<div id="outline-container-org0caaa59" class="outline-3">
-<h3 id="org0caaa59">Set initial frame</h3>
-<div class="outline-text-3" id="text-org0caaa59">
+<div id="outline-container-org067c051" class="outline-3">
+<h3 id="org067c051">Set initial frame</h3>
+<div class="outline-text-3" id="text-org067c051">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">push</span> '(menu-bar-lines . 0) default-frame-alist)
 <span class="linenr">2: </span>(<span style="color: #4169e1;">push</span> '(tool-bar-lines . 0) default-frame-alist)
@@ -452,9 +452,9 @@
 </div>
 </div>
 
-<div id="outline-container-org4fa0a00" class="outline-3">
-<h3 id="org4fa0a00">Define the location of <code>custom-file</code></h3>
-<div class="outline-text-3" id="text-org4fa0a00">
+<div id="outline-container-orgf4288d7" class="outline-3">
+<h3 id="orgf4288d7">Define the location of <code>custom-file</code></h3>
+<div class="outline-text-3" id="text-orgf4288d7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(customize-set-variable 'custom-file (expand-file-name <span style="color: #bc8f8f;">"custom.el"</span> user-emacs-directory))
 <span class="linenr">2: </span>(<span style="color: #4169e1;">when</span> (file-exists-p custom-file)
@@ -464,13 +464,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgddfffae" class="outline-2">
-<h2 id="orgddfffae">variables and functions</h2>
-<div class="outline-text-2" id="text-orgddfffae">
+<div id="outline-container-org25df6cc" class="outline-2">
+<h2 id="org25df6cc">variables and functions</h2>
+<div class="outline-text-2" id="text-org25df6cc">
 </div>
 <ul class="org-ul">
-<li><a id="org0b16bb1"></a><code>+config/user-modules-directory</code><br />
-<div class="outline-text-4" id="text-org0b16bb1">
+<li><a id="org180e8fe"></a><code>+config/user-modules-directory</code><br />
+<div class="outline-text-4" id="text-org180e8fe">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">defvar</span> <span style="color: #b8860b;">+config/user-modules-directory</span> (expand-file-name <span style="color: #bc8f8f;">"modules/"</span> user-emacs-directory)
 <span class="linenr">2: </span>  <span style="color: #bc8f8f;">"User modules directory."</span>)
@@ -484,8 +484,8 @@
 </div>
 </div>
 </li>
-<li><a id="org0b0b47e"></a><code>merge-list-to-list</code> function<br />
-<div class="outline-text-4" id="text-org0b0b47e">
+<li><a id="org509aec5"></a><code>merge-list-to-list</code> function<br />
+<div class="outline-text-4" id="text-org509aec5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048</span>
 <span class="linenr">2: </span>(<span style="color: #4169e1;">defun</span> <span style="color: #0000ff;">merge-list-to-list</span> (dst src)
@@ -496,8 +496,8 @@
 </div>
 </div>
 </li>
-<li><a id="orgfef3fb8"></a>Setup <code>package</code><br />
-<div class="outline-text-4" id="text-orgfef3fb8">
+<li><a id="orgb337afc"></a>Setup <code>package</code><br />
+<div class="outline-text-4" id="text-orgb337afc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(<span style="color: #4169e1;">require</span> '<span style="color: #5f9ea0;">package</span>)
 <span class="linenr"> 2: </span><span style="color: #b22222;">;; </span><span style="color: #b22222;">Add `melpa` to `package-archives`.</span>
@@ -521,13 +521,13 @@
 </li>
 </ul>
 </div>
-<div id="outline-container-org45ab278" class="outline-2">
-<h2 id="org45ab278">Evil</h2>
-<div class="outline-text-2" id="text-org45ab278">
+<div id="outline-container-org67f3473" class="outline-2">
+<h2 id="org67f3473">Evil</h2>
+<div class="outline-text-2" id="text-org67f3473">
 </div>
-<div id="outline-container-org2b2a291" class="outline-3">
-<h3 id="org2b2a291">The main package</h3>
-<div class="outline-text-3" id="text-org2b2a291">
+<div id="outline-container-orgc74c59a" class="outline-3">
+<h3 id="orgc74c59a">The main package</h3>
+<div class="outline-text-3" id="text-orgc74c59a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package evil
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -567,9 +567,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org416fcca" class="outline-3">
-<h3 id="org416fcca"><code>evil-collection</code></h3>
-<div class="outline-text-3" id="text-org416fcca">
+<div id="outline-container-org7e7ffee" class="outline-3">
+<h3 id="org7e7ffee"><code>evil-collection</code></h3>
+<div class="outline-text-3" id="text-org7e7ffee">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package evil-collection
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -605,9 +605,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf79f9db" class="outline-3">
-<h3 id="orgf79f9db"><code>evil-terminal-cursor-changer</code></h3>
-<div class="outline-text-3" id="text-orgf79f9db">
+<div id="outline-container-org9486251" class="outline-3">
+<h3 id="org9486251"><code>evil-terminal-cursor-changer</code></h3>
+<div class="outline-text-3" id="text-org9486251">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">unless</span> (display-graphic-p)
 <span class="linenr">2: </span>  (use-package evil-terminal-cursor-changer
@@ -618,9 +618,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org314f481" class="outline-3">
-<h3 id="org314f481"><code>evil-args</code></h3>
-<div class="outline-text-3" id="text-org314f481">
+<div id="outline-container-orga6a17b5" class="outline-3">
+<h3 id="orga6a17b5"><code>evil-args</code></h3>
+<div class="outline-text-3" id="text-orga6a17b5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package evil-args
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> evil
@@ -640,9 +640,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd98874c" class="outline-3">
-<h3 id="orgd98874c"><code>evil-easymotion</code></h3>
-<div class="outline-text-3" id="text-orgd98874c">
+<div id="outline-container-orgd4e0e71" class="outline-3">
+<h3 id="orgd4e0e71"><code>evil-easymotion</code></h3>
+<div class="outline-text-3" id="text-orgd4e0e71">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package evil-easymotion
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> evil
@@ -672,9 +672,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgeb85141" class="outline-3">
-<h3 id="orgeb85141"><code>evil-surround</code></h3>
-<div class="outline-text-3" id="text-orgeb85141">
+<div id="outline-container-org54b500b" class="outline-3">
+<h3 id="org54b500b"><code>evil-surround</code></h3>
+<div class="outline-text-3" id="text-org54b500b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package evil-surround
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> evil
@@ -688,9 +688,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb68f5af" class="outline-3">
-<h3 id="orgb68f5af"><code>evil-embrace</code></h3>
-<div class="outline-text-3" id="text-orgb68f5af">
+<div id="outline-container-org7eb2f3d" class="outline-3">
+<h3 id="org7eb2f3d"><code>evil-embrace</code></h3>
+<div class="outline-text-3" id="text-org7eb2f3d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package evil-embrace
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> evil evil-surround
@@ -709,9 +709,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgca50f3a" class="outline-3">
-<h3 id="orgca50f3a"><code>evil-traces</code></h3>
-<div class="outline-text-3" id="text-orgca50f3a">
+<div id="outline-container-orgb4969a5" class="outline-3">
+<h3 id="orgb4969a5"><code>evil-traces</code></h3>
+<div class="outline-text-3" id="text-orgb4969a5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package evil-traces
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -722,9 +722,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org210dc7c" class="outline-3">
-<h3 id="org210dc7c"><code>evil-visualstar</code></h3>
-<div class="outline-text-3" id="text-org210dc7c">
+<div id="outline-container-org9824619" class="outline-3">
+<h3 id="org9824619"><code>evil-visualstar</code></h3>
+<div class="outline-text-3" id="text-org9824619">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package evil-visualstar
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> evil
@@ -740,9 +740,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7a5a247" class="outline-3">
-<h3 id="org7a5a247"><code>exato</code></h3>
-<div class="outline-text-3" id="text-org7a5a247">
+<div id="outline-container-org5418835" class="outline-3">
+<h3 id="org5418835"><code>exato</code></h3>
+<div class="outline-text-3" id="text-org5418835">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package exato
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -753,9 +753,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge789b8b" class="outline-3">
-<h3 id="orge789b8b"><code>evil-multiedit</code></h3>
-<div class="outline-text-3" id="text-orge789b8b">
+<div id="outline-container-orgd1afaae" class="outline-3">
+<h3 id="orgd1afaae"><code>evil-multiedit</code></h3>
+<div class="outline-text-3" id="text-orgd1afaae">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package evil-multiedit
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> evil
@@ -770,13 +770,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7f997a6" class="outline-2">
-<h2 id="org7f997a6">Keybindings</h2>
-<div class="outline-text-2" id="text-org7f997a6">
+<div id="outline-container-org271299c" class="outline-2">
+<h2 id="org271299c">Keybindings</h2>
+<div class="outline-text-2" id="text-org271299c">
 </div>
-<div id="outline-container-org144627c" class="outline-3">
-<h3 id="org144627c"><code>general.el</code></h3>
-<div class="outline-text-3" id="text-org144627c">
+<div id="outline-container-org2ece490" class="outline-3">
+<h3 id="org2ece490"><code>general.el</code></h3>
+<div class="outline-text-3" id="text-org2ece490">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">  1: </span>(use-package general
 <span class="linenr">  2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -983,9 +983,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgaa81036" class="outline-3">
-<h3 id="orgaa81036"><code>notmuch</code></h3>
-<div class="outline-text-3" id="text-orgaa81036">
+<div id="outline-container-orgb612ec3" class="outline-3">
+<h3 id="orgb612ec3"><code>notmuch</code></h3>
+<div class="outline-text-3" id="text-orgb612ec3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">with-eval-after-load</span> 'notmuch
 <span class="linenr">2: </span>  (+config/leader-key
@@ -995,9 +995,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc0d67e2" class="outline-3">
-<h3 id="orgc0d67e2"><code>org-mode</code></h3>
-<div class="outline-text-3" id="text-orgc0d67e2">
+<div id="outline-container-org3902c21" class="outline-3">
+<h3 id="org3902c21"><code>org-mode</code></h3>
+<div class="outline-text-3" id="text-org3902c21">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(general-def
 <span class="linenr">2: </span>  <span style="color: #bc8f8f;">"C-c c"</span> 'org-capture
@@ -1008,13 +1008,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7377ad3" class="outline-2">
-<h2 id="org7377ad3">UI</h2>
-<div class="outline-text-2" id="text-org7377ad3">
+<div id="outline-container-org3b4fe15" class="outline-2">
+<h2 id="org3b4fe15">UI</h2>
+<div class="outline-text-2" id="text-org3b4fe15">
 </div>
-<div id="outline-container-orgb43193a" class="outline-3">
-<h3 id="orgb43193a"><code>which-key</code></h3>
-<div class="outline-text-3" id="text-orgb43193a">
+<div id="outline-container-org9c51bb7" class="outline-3">
+<h3 id="org9c51bb7"><code>which-key</code></h3>
+<div class="outline-text-3" id="text-org9c51bb7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package which-key
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -1041,9 +1041,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org06cca84" class="outline-3">
-<h3 id="org06cca84"><code>all-the-icons</code></h3>
-<div class="outline-text-3" id="text-org06cca84">
+<div id="outline-container-org13e2bc1" class="outline-3">
+<h3 id="org13e2bc1"><code>all-the-icons</code></h3>
+<div class="outline-text-3" id="text-org13e2bc1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package all-the-icons
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -1052,9 +1052,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org0b5b89a" class="outline-3">
-<h3 id="org0b5b89a"><code>doom-themes</code></h3>
-<div class="outline-text-3" id="text-org0b5b89a">
+<div id="outline-container-org7f03dcb" class="outline-3">
+<h3 id="org7f03dcb"><code>doom-themes</code></h3>
+<div class="outline-text-3" id="text-org7f03dcb">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package doom-themes
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -1077,9 +1077,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf0ee9b2" class="outline-3">
-<h3 id="orgf0ee9b2"><code>doom-modeline</code></h3>
-<div class="outline-text-3" id="text-orgf0ee9b2">
+<div id="outline-container-orgbab48ec" class="outline-3">
+<h3 id="orgbab48ec"><code>doom-modeline</code></h3>
+<div class="outline-text-3" id="text-orgbab48ec">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package doom-modeline
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -1088,9 +1088,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org980849f" class="outline-3">
-<h3 id="org980849f"><code>dashboard</code></h3>
-<div class="outline-text-3" id="text-org980849f">
+<div id="outline-container-org8c30388" class="outline-3">
+<h3 id="org8c30388"><code>dashboard</code></h3>
+<div class="outline-text-3" id="text-org8c30388">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span><span style="color: #b22222;">;; </span><span style="color: #b22222;">use-package with package.el:</span>
 <span class="linenr"> 2: </span>(use-package dashboard
@@ -1112,9 +1112,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge24275a" class="outline-3">
-<h3 id="orge24275a"><code>tab-bar</code></h3>
-<div class="outline-text-3" id="text-orge24275a">
+<div id="outline-container-org8dec3bc" class="outline-3">
+<h3 id="org8dec3bc"><code>tab-bar</code></h3>
+<div class="outline-text-3" id="text-org8dec3bc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package tab-bar
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1129,9 +1129,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf952e12" class="outline-3">
-<h3 id="orgf952e12"><code>frame</code></h3>
-<div class="outline-text-3" id="text-orgf952e12">
+<div id="outline-container-orgbda73b3" class="outline-3">
+<h3 id="orgbda73b3"><code>frame</code></h3>
+<div class="outline-text-3" id="text-orgbda73b3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package frame
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:init</span>
@@ -1152,9 +1152,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5e68ddf" class="outline-3">
-<h3 id="org5e68ddf"><code>window</code></h3>
-<div class="outline-text-3" id="text-org5e68ddf">
+<div id="outline-container-org1886e27" class="outline-3">
+<h3 id="org1886e27"><code>window</code></h3>
+<div class="outline-text-3" id="text-org1886e27">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package window
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -1163,9 +1163,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org52df2b9" class="outline-3">
-<h3 id="org52df2b9"><code>display-line-number</code></h3>
-<div class="outline-text-3" id="text-org52df2b9">
+<div id="outline-container-orgf61d1e3" class="outline-3">
+<h3 id="orgf61d1e3"><code>display-line-number</code></h3>
+<div class="outline-text-3" id="text-orgf61d1e3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package display-line-numbers
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1177,9 +1177,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org13a7499" class="outline-3">
-<h3 id="org13a7499"><code>help-at-pt</code></h3>
-<div class="outline-text-3" id="text-org13a7499">
+<div id="outline-container-orgc341755" class="outline-3">
+<h3 id="orgc341755"><code>help-at-pt</code></h3>
+<div class="outline-text-3" id="text-orgc341755">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package help-at-pt
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1188,9 +1188,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga0b2b3f" class="outline-3">
-<h3 id="orga0b2b3f"><code>hidehow</code></h3>
-<div class="outline-text-3" id="text-orga0b2b3f">
+<div id="outline-container-orgf5073c0" class="outline-3">
+<h3 id="orgf5073c0"><code>hidehow</code></h3>
+<div class="outline-text-3" id="text-orgf5073c0">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package hideshow
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> (prog-mode . hs-minor-mode))
@@ -1198,9 +1198,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga831604" class="outline-3">
-<h3 id="orga831604"><code>uniquify</code></h3>
-<div class="outline-text-3" id="text-orga831604">
+<div id="outline-container-orgd4c9642" class="outline-3">
+<h3 id="orgd4c9642"><code>uniquify</code></h3>
+<div class="outline-text-3" id="text-orgd4c9642">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package uniquify
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -1213,9 +1213,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9f56548" class="outline-3">
-<h3 id="org9f56548"><code>speedbar</code></h3>
-<div class="outline-text-3" id="text-org9f56548">
+<div id="outline-container-orgd19e392" class="outline-3">
+<h3 id="orgd19e392"><code>speedbar</code></h3>
+<div class="outline-text-3" id="text-orgd19e392">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package speedbar
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1274,9 +1274,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org62e4df8" class="outline-3">
-<h3 id="org62e4df8"><code>winner</code></h3>
-<div class="outline-text-3" id="text-org62e4df8">
+<div id="outline-container-orgc2992cf" class="outline-3">
+<h3 id="orgc2992cf"><code>winner</code></h3>
+<div class="outline-text-3" id="text-orgc2992cf">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package winner
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1285,9 +1285,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org38f3ca9" class="outline-3">
-<h3 id="org38f3ca9"><code>time</code></h3>
-<div class="outline-text-3" id="text-org38f3ca9">
+<div id="outline-container-orgde3246f" class="outline-3">
+<h3 id="orgde3246f"><code>time</code></h3>
+<div class="outline-text-3" id="text-orgde3246f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package time
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> (after-init . display-time-mode)
@@ -1301,9 +1301,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org31787ab" class="outline-3">
-<h3 id="org31787ab"><code>paren</code></h3>
-<div class="outline-text-3" id="text-org31787ab">
+<div id="outline-container-orga44b776" class="outline-3">
+<h3 id="orga44b776"><code>paren</code></h3>
+<div class="outline-text-3" id="text-orga44b776">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package paren
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -1314,9 +1314,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org019098c" class="outline-3">
-<h3 id="org019098c"><code>hl-line</code></h3>
-<div class="outline-text-3" id="text-org019098c">
+<div id="outline-container-orgc4c0dd1" class="outline-3">
+<h3 id="orgc4c0dd1"><code>hl-line</code></h3>
+<div class="outline-text-3" id="text-orgc4c0dd1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package hl-line
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -1325,9 +1325,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge15fd10" class="outline-3">
-<h3 id="orge15fd10"><code>font-core</code></h3>
-<div class="outline-text-3" id="text-orge15fd10">
+<div id="outline-container-org097118c" class="outline-3">
+<h3 id="org097118c"><code>font-core</code></h3>
+<div class="outline-text-3" id="text-org097118c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package font-core
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1336,9 +1336,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd6b4820" class="outline-3">
-<h3 id="orgd6b4820"><code>menu-bar</code>, <code>tool-bar</code>, and <code>scroll-bar</code></h3>
-<div class="outline-text-3" id="text-orgd6b4820">
+<div id="outline-container-org3ce56e9" class="outline-3">
+<h3 id="org3ce56e9"><code>menu-bar</code>, <code>tool-bar</code>, and <code>scroll-bar</code></h3>
+<div class="outline-text-3" id="text-org3ce56e9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package menu-bar
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:init</span>
@@ -1355,9 +1355,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbaf325d" class="outline-3">
-<h3 id="orgbaf325d"><code>xt-mouse</code></h3>
-<div class="outline-text-3" id="text-orgbaf325d">
+<div id="outline-container-org3bbdf5d" class="outline-3">
+<h3 id="org3bbdf5d"><code>xt-mouse</code></h3>
+<div class="outline-text-3" id="text-org3bbdf5d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package xt-mouse
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -1366,9 +1366,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org26fcf52" class="outline-3">
-<h3 id="org26fcf52"><code>avy</code></h3>
-<div class="outline-text-3" id="text-org26fcf52">
+<div id="outline-container-orgebd52f1" class="outline-3">
+<h3 id="orgebd52f1"><code>avy</code></h3>
+<div class="outline-text-3" id="text-orgebd52f1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package avy
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> evil
@@ -1386,9 +1386,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org50272b1" class="outline-3">
-<h3 id="org50272b1"><code>tabify</code></h3>
-<div class="outline-text-3" id="text-org50272b1">
+<div id="outline-container-org9a54c3c" class="outline-3">
+<h3 id="org9a54c3c"><code>tabify</code></h3>
+<div class="outline-text-3" id="text-org9a54c3c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package tabify
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -1398,9 +1398,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org557ebda" class="outline-3">
-<h3 id="org557ebda"><code>rainbow-mode</code>, <code>rainbow-identifiers</code>, and <code>rainbow-delimiters</code></h3>
-<div class="outline-text-3" id="text-org557ebda">
+<div id="outline-container-org9ec0191" class="outline-3">
+<h3 id="org9ec0191"><code>rainbow-mode</code>, <code>rainbow-identifiers</code>, and <code>rainbow-delimiters</code></h3>
+<div class="outline-text-3" id="text-org9ec0191">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package rainbow-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -1417,9 +1417,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgfa04f09" class="outline-3">
-<h3 id="orgfa04f09"><code>nerd-fonts</code></h3>
-<div class="outline-text-3" id="text-orgfa04f09">
+<div id="outline-container-orgad6cdd9" class="outline-3">
+<h3 id="orgad6cdd9"><code>nerd-fonts</code></h3>
+<div class="outline-text-3" id="text-orgad6cdd9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">when</span> (file-directory-p (expand-file-name <span style="color: #bc8f8f;">"site-lisp/nerd-fonts"</span> user-emacs-directory))
 <span class="linenr">2: </span>  (add-to-list 'load-path (expand-file-name <span style="color: #bc8f8f;">"site-lisp/nerd-fonts"</span> user-emacs-directory)))
@@ -1430,13 +1430,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org6a69b25" class="outline-2">
-<h2 id="org6a69b25">Builtin</h2>
-<div class="outline-text-2" id="text-org6a69b25">
+<div id="outline-container-org4d1e01a" class="outline-2">
+<h2 id="org4d1e01a">Builtin</h2>
+<div class="outline-text-2" id="text-org4d1e01a">
 </div>
-<div id="outline-container-org5775582" class="outline-3">
-<h3 id="org5775582">byte compilation</h3>
-<div class="outline-text-3" id="text-org5775582">
+<div id="outline-container-org43aab92" class="outline-3">
+<h3 id="org43aab92">byte compilation</h3>
+<div class="outline-text-3" id="text-org43aab92">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package bytecomp
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1445,9 +1445,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1c3019c" class="outline-3">
-<h3 id="org1c3019c">Base configuration</h3>
-<div class="outline-text-3" id="text-org1c3019c">
+<div id="outline-container-org0fc2eab" class="outline-3">
+<h3 id="org0fc2eab">Base configuration</h3>
+<div class="outline-text-3" id="text-org0fc2eab">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package emacs
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:init</span>
@@ -1500,9 +1500,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org3fbaf22" class="outline-3">
-<h3 id="org3fbaf22"><code>saveplace</code></h3>
-<div class="outline-text-3" id="text-org3fbaf22">
+<div id="outline-container-org07fed3d" class="outline-3">
+<h3 id="org07fed3d"><code>saveplace</code></h3>
+<div class="outline-text-3" id="text-org07fed3d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package saveplace
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1513,9 +1513,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgad4e3bc" class="outline-3">
-<h3 id="orgad4e3bc"><code>autorevert</code></h3>
-<div class="outline-text-3" id="text-orgad4e3bc">
+<div id="outline-container-org360a777" class="outline-3">
+<h3 id="org360a777"><code>autorevert</code></h3>
+<div class="outline-text-3" id="text-org360a777">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package autorevert
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1528,9 +1528,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga267e44" class="outline-3">
-<h3 id="orga267e44"><code>savehist</code></h3>
-<div class="outline-text-3" id="text-orga267e44">
+<div id="outline-container-org43511ae" class="outline-3">
+<h3 id="org43511ae"><code>savehist</code></h3>
+<div class="outline-text-3" id="text-org43511ae">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package savehist
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:init</span>
@@ -1550,9 +1550,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9d38ce7" class="outline-3">
-<h3 id="org9d38ce7"><code>prog-mode</code></h3>
-<div class="outline-text-3" id="text-org9d38ce7">
+<div id="outline-container-orged6ed79" class="outline-3">
+<h3 id="orged6ed79"><code>prog-mode</code></h3>
+<div class="outline-text-3" id="text-orged6ed79">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package prog-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:hook</span> ((prog-mode . prettify-symbols-mode)
@@ -1571,9 +1571,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org0a011a1" class="outline-3">
-<h3 id="org0a011a1"><code>select</code></h3>
-<div class="outline-text-3" id="text-org0a011a1">
+<div id="outline-container-org698a36e" class="outline-3">
+<h3 id="org698a36e"><code>select</code></h3>
+<div class="outline-text-3" id="text-org698a36e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package select
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1582,9 +1582,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org46a6388" class="outline-3">
-<h3 id="org46a6388">Compression mode</h3>
-<div class="outline-text-3" id="text-org46a6388">
+<div id="outline-container-org9e48201" class="outline-3">
+<h3 id="org9e48201">Compression mode</h3>
+<div class="outline-text-3" id="text-org9e48201">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package jka-cmpr-hook
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1593,9 +1593,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga295f65" class="outline-3">
-<h3 id="orga295f65"><code>recentf</code></h3>
-<div class="outline-text-3" id="text-orga295f65">
+<div id="outline-container-orgc4f63b3" class="outline-3">
+<h3 id="orgc4f63b3"><code>recentf</code></h3>
+<div class="outline-text-3" id="text-orgc4f63b3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package recentf
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:bind</span> (<span style="color: #bc8f8f;">"C-c f"</span> . recentf)
@@ -1621,9 +1621,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org39ce251" class="outline-3">
-<h3 id="org39ce251"><code>eldoc</code></h3>
-<div class="outline-text-3" id="text-org39ce251">
+<div id="outline-container-orgb704901" class="outline-3">
+<h3 id="orgb704901"><code>eldoc</code></h3>
+<div class="outline-text-3" id="text-orgb704901">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package eldoc
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> ((prog-mode . eldoc-mode)
@@ -1633,9 +1633,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org3ead357" class="outline-3">
-<h3 id="org3ead357"><code>bookmark</code></h3>
-<div class="outline-text-3" id="text-org3ead357">
+<div id="outline-container-orgabb2cf9" class="outline-3">
+<h3 id="orgabb2cf9"><code>bookmark</code></h3>
+<div class="outline-text-3" id="text-orgabb2cf9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package bookmark
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1645,9 +1645,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgda3cf6e" class="outline-3">
-<h3 id="orgda3cf6e"><code>executable</code></h3>
-<div class="outline-text-3" id="text-orgda3cf6e">
+<div id="outline-container-orge07c888" class="outline-3">
+<h3 id="orge07c888"><code>executable</code></h3>
+<div class="outline-text-3" id="text-orge07c888">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package executable
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span>
@@ -1656,9 +1656,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8cd5eea" class="outline-3">
-<h3 id="org8cd5eea"><code>files</code></h3>
-<div class="outline-text-3" id="text-org8cd5eea">
+<div id="outline-container-orgdc49836" class="outline-3">
+<h3 id="orgdc49836"><code>files</code></h3>
+<div class="outline-text-3" id="text-orgdc49836">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package files
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:config</span>
@@ -1694,9 +1694,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb9d03d8" class="outline-3">
-<h3 id="orgb9d03d8"><code>tramp</code></h3>
-<div class="outline-text-3" id="text-orgb9d03d8">
+<div id="outline-container-org93f1a4c" class="outline-3">
+<h3 id="org93f1a4c"><code>tramp</code></h3>
+<div class="outline-text-3" id="text-org93f1a4c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package tramp
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1706,9 +1706,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org721e069" class="outline-3">
-<h3 id="org721e069"><code>abbrev</code></h3>
-<div class="outline-text-3" id="text-org721e069">
+<div id="outline-container-org9452c49" class="outline-3">
+<h3 id="org9452c49"><code>abbrev</code></h3>
+<div class="outline-text-3" id="text-org9452c49">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package abbrev
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil)
@@ -1716,9 +1716,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org07b4831" class="outline-3">
-<h3 id="org07b4831"><code>ffap</code></h3>
-<div class="outline-text-3" id="text-org07b4831">
+<div id="outline-container-org65d11d6" class="outline-3">
+<h3 id="org65d11d6"><code>ffap</code></h3>
+<div class="outline-text-3" id="text-org65d11d6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ffap
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1727,9 +1727,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc7b3428" class="outline-3">
-<h3 id="orgc7b3428"><code>epg-config</code></h3>
-<div class="outline-text-3" id="text-orgc7b3428">
+<div id="outline-container-orgfac6748" class="outline-3">
+<h3 id="orgfac6748"><code>epg-config</code></h3>
+<div class="outline-text-3" id="text-orgfac6748">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package epg-config
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1738,9 +1738,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4032d6b" class="outline-3">
-<h3 id="org4032d6b"><code>make-mode</code></h3>
-<div class="outline-text-3" id="text-org4032d6b">
+<div id="outline-container-orga67f3a7" class="outline-3">
+<h3 id="orga67f3a7"><code>make-mode</code></h3>
+<div class="outline-text-3" id="text-orga67f3a7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package make-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -1749,9 +1749,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9ecf622" class="outline-3">
-<h3 id="org9ecf622"><code>ispell</code></h3>
-<div class="outline-text-3" id="text-org9ecf622">
+<div id="outline-container-org1fdff6b" class="outline-3">
+<h3 id="org1fdff6b"><code>ispell</code></h3>
+<div class="outline-text-3" id="text-org1fdff6b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package ispell
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1789,9 +1789,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org2b0f095" class="outline-3">
-<h3 id="org2b0f095"><code>whitespace</code></h3>
-<div class="outline-text-3" id="text-org2b0f095">
+<div id="outline-container-org5e155dd" class="outline-3">
+<h3 id="org5e155dd"><code>whitespace</code></h3>
+<div class="outline-text-3" id="text-org5e155dd">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package whitespace
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> (((prog-mode text-mode conf-mode) . whitespace-mode)
@@ -1806,9 +1806,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbe5713b" class="outline-3">
-<h3 id="orgbe5713b"><code>subword</code></h3>
-<div class="outline-text-3" id="text-orgbe5713b">
+<div id="outline-container-org945d7f7" class="outline-3">
+<h3 id="org945d7f7"><code>subword</code></h3>
+<div class="outline-text-3" id="text-org945d7f7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package subword
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1817,9 +1817,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8b78c41" class="outline-3">
-<h3 id="org8b78c41"><code>ediff</code></h3>
-<div class="outline-text-3" id="text-org8b78c41">
+<div id="outline-container-org51af0a9" class="outline-3">
+<h3 id="org51af0a9"><code>ediff</code></h3>
+<div class="outline-text-3" id="text-org51af0a9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ediff
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -1830,9 +1830,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org726e251" class="outline-3">
-<h3 id="org726e251"><code>delsel</code></h3>
-<div class="outline-text-3" id="text-org726e251">
+<div id="outline-container-org61a62e4" class="outline-3">
+<h3 id="org61a62e4"><code>delsel</code></h3>
+<div class="outline-text-3" id="text-org61a62e4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package delsel
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1841,9 +1841,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc6e0f6d" class="outline-3">
-<h3 id="orgc6e0f6d"><code>text-mode</code></h3>
-<div class="outline-text-3" id="text-orgc6e0f6d">
+<div id="outline-container-org61e8aa6" class="outline-3">
+<h3 id="org61e8aa6"><code>text-mode</code></h3>
+<div class="outline-text-3" id="text-org61e8aa6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package text-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -1853,9 +1853,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd1d9bd0" class="outline-3">
-<h3 id="orgd1d9bd0"><code>flyspell</code></h3>
-<div class="outline-text-3" id="text-orgd1d9bd0">
+<div id="outline-container-org8bb0a42" class="outline-3">
+<h3 id="org8bb0a42"><code>flyspell</code></h3>
+<div class="outline-text-3" id="text-org8bb0a42">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package flyspell
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1868,9 +1868,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgea56ecc" class="outline-3">
-<h3 id="orgea56ecc"><code>flymake</code></h3>
-<div class="outline-text-3" id="text-orgea56ecc">
+<div id="outline-container-org1065325" class="outline-3">
+<h3 id="org1065325"><code>flymake</code></h3>
+<div class="outline-text-3" id="text-org1065325">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package flymake
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> (prog-mode . flymake-mode))
@@ -1878,9 +1878,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8650348" class="outline-3">
-<h3 id="org8650348"><code>imenu</code></h3>
-<div class="outline-text-3" id="text-org8650348">
+<div id="outline-container-orgeea299c" class="outline-3">
+<h3 id="orgeea299c"><code>imenu</code></h3>
+<div class="outline-text-3" id="text-orgeea299c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package imenu
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -1889,9 +1889,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org04f37a0" class="outline-3">
-<h3 id="org04f37a0"><code>simple</code></h3>
-<div class="outline-text-3" id="text-org04f37a0">
+<div id="outline-container-orgf503778" class="outline-3">
+<h3 id="orgf503778"><code>simple</code></h3>
+<div class="outline-text-3" id="text-orgf503778">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package simple
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:hook</span> ((makefile-mode . indent-tabs-mode)
@@ -1914,9 +1914,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5fa722b" class="outline-3">
-<h3 id="org5fa722b"><code>elec-pair</code></h3>
-<div class="outline-text-3" id="text-org5fa722b">
+<div id="outline-container-org2f0408d" class="outline-3">
+<h3 id="org2f0408d"><code>elec-pair</code></h3>
+<div class="outline-text-3" id="text-org2f0408d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package elec-pair
 <span class="linenr">2: </span>  <span style="color: #00008b;">:init</span>
@@ -1926,13 +1926,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5f5913c" class="outline-2">
-<h2 id="org5f5913c">Completion</h2>
-<div class="outline-text-2" id="text-org5f5913c">
+<div id="outline-container-orgf6cbdc8" class="outline-2">
+<h2 id="orgf6cbdc8">Completion</h2>
+<div class="outline-text-2" id="text-orgf6cbdc8">
 </div>
-<div id="outline-container-orgbead335" class="outline-3">
-<h3 id="orgbead335"><code>vertico</code></h3>
-<div class="outline-text-3" id="text-orgbead335">
+<div id="outline-container-org054ef3b" class="outline-3">
+<h3 id="org054ef3b"><code>vertico</code></h3>
+<div class="outline-text-3" id="text-org054ef3b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span><span style="color: #b22222;">;; </span><span style="color: #b22222;">Enable vertico</span>
 <span class="linenr"> 2: </span>(use-package vertico
@@ -1977,9 +1977,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgce9c2d4" class="outline-3">
-<h3 id="orgce9c2d4"><code>marginalia</code></h3>
-<div class="outline-text-3" id="text-orgce9c2d4">
+<div id="outline-container-org380719b" class="outline-3">
+<h3 id="org380719b"><code>marginalia</code></h3>
+<div class="outline-text-3" id="text-org380719b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span><span style="color: #b22222;">;; </span><span style="color: #b22222;">Enable rich annotations using the Marginalia package</span>
 <span class="linenr">2: </span>(use-package marginalia
@@ -1992,9 +1992,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgec7e003" class="outline-3">
-<h3 id="orgec7e003"><code>nerd-icons-completion</code></h3>
-<div class="outline-text-3" id="text-orgec7e003">
+<div id="outline-container-orgeaf6bd3" class="outline-3">
+<h3 id="orgeaf6bd3"><code>nerd-icons-completion</code></h3>
+<div class="outline-text-3" id="text-orgeaf6bd3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package nerd-icons-completion
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2005,9 +2005,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4f4e88c" class="outline-3">
-<h3 id="org4f4e88c"><code>orderless</code></h3>
-<div class="outline-text-3" id="text-org4f4e88c">
+<div id="outline-container-orgf110e96" class="outline-3">
+<h3 id="orgf110e96"><code>orderless</code></h3>
+<div class="outline-text-3" id="text-orgf110e96">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package orderless
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -2019,9 +2019,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4e87bef" class="outline-3">
-<h3 id="org4e87bef"><code>consult</code></h3>
-<div class="outline-text-3" id="text-org4e87bef">
+<div id="outline-container-orgee39a13" class="outline-3">
+<h3 id="orgee39a13"><code>consult</code></h3>
+<div class="outline-text-3" id="text-orgee39a13">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">  1: </span>(use-package consult
 <span class="linenr">  2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2137,9 +2137,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgaadae02" class="outline-3">
-<h3 id="orgaadae02"><code>corfu</code></h3>
-<div class="outline-text-3" id="text-orgaadae02">
+<div id="outline-container-org9674d9d" class="outline-3">
+<h3 id="org9674d9d"><code>corfu</code></h3>
+<div class="outline-text-3" id="text-org9674d9d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package corfu
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -2179,9 +2179,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org6669c91" class="outline-3">
-<h3 id="org6669c91"><code>nerd-icons-corfu</code></h3>
-<div class="outline-text-3" id="text-org6669c91">
+<div id="outline-container-orgb834256" class="outline-3">
+<h3 id="orgb834256"><code>nerd-icons-corfu</code></h3>
+<div class="outline-text-3" id="text-orgb834256">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package nerd-icons-corfu
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2196,9 +2196,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbb24813" class="outline-3">
-<h3 id="orgbb24813"><code>cape</code></h3>
-<div class="outline-text-3" id="text-orgbb24813">
+<div id="outline-container-org236cc7d" class="outline-3">
+<h3 id="org236cc7d"><code>cape</code></h3>
+<div class="outline-text-3" id="text-org236cc7d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span><span style="color: #b22222;">;; </span><span style="color: #b22222;">Add extensions</span>
 <span class="linenr"> 2: </span>(use-package cape
@@ -2244,9 +2244,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7720c3c" class="outline-3">
-<h3 id="org7720c3c"><code>tempel</code></h3>
-<div class="outline-text-3" id="text-org7720c3c">
+<div id="outline-container-org81a1c4b" class="outline-3">
+<h3 id="org81a1c4b"><code>tempel</code></h3>
+<div class="outline-text-3" id="text-org81a1c4b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package tempel
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2281,13 +2281,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf88b09f" class="outline-2">
-<h2 id="orgf88b09f">Shell</h2>
-<div class="outline-text-2" id="text-orgf88b09f">
+<div id="outline-container-org89de42c" class="outline-2">
+<h2 id="org89de42c">Shell</h2>
+<div class="outline-text-2" id="text-org89de42c">
 </div>
-<div id="outline-container-org67be099" class="outline-3">
-<h3 id="org67be099"><code>esh-autosuggest</code></h3>
-<div class="outline-text-3" id="text-org67be099">
+<div id="outline-container-org7ff72d0" class="outline-3">
+<h3 id="org7ff72d0"><code>esh-autosuggest</code></h3>
+<div class="outline-text-3" id="text-org7ff72d0">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package esh-autosuggest
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> (eshell-mode . esh-autosuggest-mode)
@@ -2299,9 +2299,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org211c445" class="outline-3">
-<h3 id="org211c445"><code>sh-script</code></h3>
-<div class="outline-text-3" id="text-org211c445">
+<div id="outline-container-org6c5e72c" class="outline-3">
+<h3 id="org6c5e72c"><code>sh-script</code></h3>
+<div class="outline-text-3" id="text-org6c5e72c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package sh-script
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:mode</span> (<span style="color: #bc8f8f;">"\\.bats\\'"</span> . sh-mode)
@@ -2327,9 +2327,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga6188cc" class="outline-3">
-<h3 id="orga6188cc"><code>vterm</code></h3>
-<div class="outline-text-3" id="text-orga6188cc">
+<div id="outline-container-org496936b" class="outline-3">
+<h3 id="org496936b"><code>vterm</code></h3>
+<div class="outline-text-3" id="text-org496936b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package vterm
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2345,9 +2345,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge708881" class="outline-3">
-<h3 id="orge708881"><code>multi-vterm</code></h3>
-<div class="outline-text-3" id="text-orge708881">
+<div id="outline-container-orga44bb4b" class="outline-3">
+<h3 id="orga44bb4b"><code>multi-vterm</code></h3>
+<div class="outline-text-3" id="text-orga44bb4b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package multi-vterm
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2356,9 +2356,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc06aafc" class="outline-3">
-<h3 id="orgc06aafc"><code>vterm-toggle</code></h3>
-<div class="outline-text-3" id="text-orgc06aafc">
+<div id="outline-container-org14c34f0" class="outline-3">
+<h3 id="org14c34f0"><code>vterm-toggle</code></h3>
+<div class="outline-text-3" id="text-org14c34f0">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package vterm-toggle
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2386,9 +2386,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org034d7cf" class="outline-3">
-<h3 id="org034d7cf"><code>fish-mode</code></h3>
-<div class="outline-text-3" id="text-org034d7cf">
+<div id="outline-container-org3eeeaa3" class="outline-3">
+<h3 id="org3eeeaa3"><code>fish-mode</code></h3>
+<div class="outline-text-3" id="text-org3eeeaa3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package fish-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2398,9 +2398,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9ec1f46" class="outline-3">
-<h3 id="org9ec1f46"><code>fish-completion</code></h3>
-<div class="outline-text-3" id="text-org9ec1f46">
+<div id="outline-container-org920a186" class="outline-3">
+<h3 id="org920a186"><code>fish-completion</code></h3>
+<div class="outline-text-3" id="text-org920a186">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package fish-completion
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2411,9 +2411,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5fe5d66" class="outline-3">
-<h3 id="org5fe5d66"><code>bash-completion</code></h3>
-<div class="outline-text-3" id="text-org5fe5d66">
+<div id="outline-container-orgd9793b6" class="outline-3">
+<h3 id="orgd9793b6"><code>bash-completion</code></h3>
+<div class="outline-text-3" id="text-orgd9793b6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package bash-completion
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2426,13 +2426,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb887cf9" class="outline-2">
-<h2 id="orgb887cf9">Editing</h2>
-<div class="outline-text-2" id="text-orgb887cf9">
+<div id="outline-container-org679fd7b" class="outline-2">
+<h2 id="org679fd7b">Editing</h2>
+<div class="outline-text-2" id="text-org679fd7b">
 </div>
-<div id="outline-container-org90267e2" class="outline-3">
-<h3 id="org90267e2"><code>smartparens</code></h3>
-<div class="outline-text-3" id="text-org90267e2">
+<div id="outline-container-org12b8991" class="outline-3">
+<h3 id="org12b8991"><code>smartparens</code></h3>
+<div class="outline-text-3" id="text-org12b8991">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>  <span style="color: #b22222;">;;; </span><span style="color: #b22222;">smartparens</span>
 <span class="linenr"> 2: </span>(use-package smartparens
@@ -2466,13 +2466,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org550b75d" class="outline-2">
-<h2 id="org550b75d">Project</h2>
-<div class="outline-text-2" id="text-org550b75d">
+<div id="outline-container-org692c72d" class="outline-2">
+<h2 id="org692c72d">Project</h2>
+<div class="outline-text-2" id="text-org692c72d">
 </div>
-<div id="outline-container-orgd0bf02b" class="outline-3">
-<h3 id="orgd0bf02b">header</h3>
-<div class="outline-text-3" id="text-orgd0bf02b">
+<div id="outline-container-org3439902" class="outline-3">
+<h3 id="org3439902">header</h3>
+<div class="outline-text-3" id="text-org3439902">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">28: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-project --- project configuration file -*- lexical-binding: t -*-</span>
 <span class="linenr">29: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -2481,9 +2481,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7c6fd2b" class="outline-3">
-<h3 id="org7c6fd2b"><code>magit</code></h3>
-<div class="outline-text-3" id="text-org7c6fd2b">
+<div id="outline-container-orgfd835fc" class="outline-3">
+<h3 id="orgfd835fc"><code>magit</code></h3>
+<div class="outline-text-3" id="text-orgfd835fc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package magit
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2501,9 +2501,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf0b5ae3" class="outline-3">
-<h3 id="orgf0b5ae3"><code>projectile</code></h3>
-<div class="outline-text-3" id="text-orgf0b5ae3">
+<div id="outline-container-org68e2e65" class="outline-3">
+<h3 id="org68e2e65"><code>projectile</code></h3>
+<div class="outline-text-3" id="text-org68e2e65">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package projectile
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -2542,9 +2542,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org49f0f29" class="outline-3">
-<h3 id="org49f0f29"><code>ripgrep</code></h3>
-<div class="outline-text-3" id="text-org49f0f29">
+<div id="outline-container-org57af952" class="outline-3">
+<h3 id="org57af952"><code>ripgrep</code></h3>
+<div class="outline-text-3" id="text-org57af952">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ripgrep
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2555,9 +2555,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org3fa7c70" class="outline-3">
-<h3 id="org3fa7c70"><code>diff-hl</code></h3>
-<div class="outline-text-3" id="text-org3fa7c70">
+<div id="outline-container-orgde35684" class="outline-3">
+<h3 id="orgde35684"><code>diff-hl</code></h3>
+<div class="outline-text-3" id="text-orgde35684">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package diff-hl
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2581,9 +2581,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org0bf5ef5" class="outline-3">
-<h3 id="org0bf5ef5"><code>perspective</code></h3>
-<div class="outline-text-3" id="text-org0bf5ef5">
+<div id="outline-container-org5a97c99" class="outline-3">
+<h3 id="org5a97c99"><code>perspective</code></h3>
+<div class="outline-text-3" id="text-org5a97c99">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package perspective
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2631,9 +2631,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org98d4095" class="outline-3">
-<h3 id="org98d4095"><code>persp-projectile</code></h3>
-<div class="outline-text-3" id="text-org98d4095">
+<div id="outline-container-org463b369" class="outline-3">
+<h3 id="org463b369"><code>persp-projectile</code></h3>
+<div class="outline-text-3" id="text-org463b369">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package persp-projectile
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -2643,9 +2643,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5e0a95a" class="outline-3">
-<h3 id="org5e0a95a"><code>git-link</code></h3>
-<div class="outline-text-3" id="text-org5e0a95a">
+<div id="outline-container-orgc8b9214" class="outline-3">
+<h3 id="orgc8b9214"><code>git-link</code></h3>
+<div class="outline-text-3" id="text-orgc8b9214">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package git-link
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:demand</span>
@@ -2662,9 +2662,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbaeb511" class="outline-3">
-<h3 id="orgbaeb511"><code>git-messenger</code></h3>
-<div class="outline-text-3" id="text-orgbaeb511">
+<div id="outline-container-org82cc8d5" class="outline-3">
+<h3 id="org82cc8d5"><code>git-messenger</code></h3>
+<div class="outline-text-3" id="text-org82cc8d5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package git-messenger
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2680,9 +2680,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org0c96384" class="outline-3">
-<h3 id="org0c96384"><code>git-timemachine</code></h3>
-<div class="outline-text-3" id="text-org0c96384">
+<div id="outline-container-org1926e9e" class="outline-3">
+<h3 id="org1926e9e"><code>git-timemachine</code></h3>
+<div class="outline-text-3" id="text-org1926e9e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package git-timemachine
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2695,9 +2695,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb5483e2" class="outline-3">
-<h3 id="orgb5483e2"><code>magit-todos</code></h3>
-<div class="outline-text-3" id="text-orgb5483e2">
+<div id="outline-container-org23c1a49" class="outline-3">
+<h3 id="org23c1a49"><code>magit-todos</code></h3>
+<div class="outline-text-3" id="text-org23c1a49">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package magit-todos
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2710,9 +2710,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5e1a844" class="outline-3">
-<h3 id="org5e1a844"><code>forge</code></h3>
-<div class="outline-text-3" id="text-org5e1a844">
+<div id="outline-container-orgac8adb9" class="outline-3">
+<h3 id="orgac8adb9"><code>forge</code></h3>
+<div class="outline-text-3" id="text-orgac8adb9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package forge
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> magit
@@ -2727,9 +2727,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga4eb80c" class="outline-3">
-<h3 id="orga4eb80c"><code>org-project-capture</code></h3>
-<div class="outline-text-3" id="text-orga4eb80c">
+<div id="outline-container-org5dc46e7" class="outline-3">
+<h3 id="org5dc46e7"><code>org-project-capture</code></h3>
+<div class="outline-text-3" id="text-org5dc46e7">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-project-capture
 <span class="linenr">2: </span>  <span style="color: #00008b;">:bind</span> ((<span style="color: #bc8f8f;">"C-c n p"</span> . org-project-capture-project-todo-completing-read))
@@ -2744,9 +2744,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge338c69" class="outline-3">
-<h3 id="orge338c69"><code>lsp</code></h3>
-<div class="outline-text-3" id="text-orge338c69">
+<div id="outline-container-orgaf203b9" class="outline-3">
+<h3 id="orgaf203b9"><code>lsp</code></h3>
+<div class="outline-text-3" id="text-orgaf203b9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package lsp-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2812,9 +2812,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb6f8bb3" class="outline-3">
-<h3 id="orgb6f8bb3"><code>lsp-ui</code></h3>
-<div class="outline-text-3" id="text-orgb6f8bb3">
+<div id="outline-container-org738b823" class="outline-3">
+<h3 id="org738b823"><code>lsp-ui</code></h3>
+<div class="outline-text-3" id="text-org738b823">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package lsp-ui
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2842,9 +2842,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5a4b0c6" class="outline-3">
-<h3 id="org5a4b0c6"><code>consult-lsp</code></h3>
-<div class="outline-text-3" id="text-org5a4b0c6">
+<div id="outline-container-orgb502ad2" class="outline-3">
+<h3 id="orgb502ad2"><code>consult-lsp</code></h3>
+<div class="outline-text-3" id="text-orgb502ad2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package consult-lsp
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -2857,13 +2857,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org52bba13" class="outline-2">
-<h2 id="org52bba13">Org-mode</h2>
-<div class="outline-text-2" id="text-org52bba13">
+<div id="outline-container-org932f92f" class="outline-2">
+<h2 id="org932f92f">Org-mode</h2>
+<div class="outline-text-2" id="text-org932f92f">
 </div>
-<div id="outline-container-orga6ab336" class="outline-3">
-<h3 id="orga6ab336">header</h3>
-<div class="outline-text-3" id="text-orga6ab336">
+<div id="outline-container-orgea97a0a" class="outline-3">
+<h3 id="orgea97a0a">header</h3>
+<div class="outline-text-3" id="text-orgea97a0a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-org --- Org-mode configuration -*- lexical-binding: t -*-</span>
 <span class="linenr">2: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -2872,9 +2872,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge25ee2f" class="outline-3">
-<h3 id="orge25ee2f">Define <code>+config/org-directory</code> variable</h3>
-<div class="outline-text-3" id="text-orge25ee2f">
+<div id="outline-container-org87ae080" class="outline-3">
+<h3 id="org87ae080">Define <code>+config/org-directory</code> variable</h3>
+<div class="outline-text-3" id="text-org87ae080">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">when</span> (file-directory-p (expand-file-name <span style="color: #bc8f8f;">"Sync/org"</span> (getenv <span style="color: #bc8f8f;">"HOME"</span>)))
 <span class="linenr">2: </span>  (customize-set-variable '+config/org-directory (expand-file-name <span style="color: #bc8f8f;">"Sync/org"</span> (getenv <span style="color: #bc8f8f;">"HOME"</span>))))
@@ -2882,9 +2882,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org785b678" class="outline-3">
-<h3 id="org785b678"><code>org-mode</code> main package</h3>
-<div class="outline-text-3" id="text-org785b678">
+<div id="outline-container-orgdb20140" class="outline-3">
+<h3 id="orgdb20140"><code>org-mode</code> main package</h3>
+<div class="outline-text-3" id="text-orgdb20140">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">  1: </span>(use-package org
 <span class="linenr">  2: </span>  <span style="color: #00008b;">:commands</span> org-tempo
@@ -3013,9 +3013,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgcaf48fc" class="outline-3">
-<h3 id="orgcaf48fc"><code>org-src</code></h3>
-<div class="outline-text-3" id="text-orgcaf48fc">
+<div id="outline-container-org138fa2a" class="outline-3">
+<h3 id="org138fa2a"><code>org-src</code></h3>
+<div class="outline-text-3" id="text-org138fa2a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-src
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> (org-src-mode . (<span style="color: #4169e1;">lambda</span> () (outline-minor-mode -1)))
@@ -3025,9 +3025,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org688aedd" class="outline-3">
-<h3 id="org688aedd"><code>org-faces</code></h3>
-<div class="outline-text-3" id="text-org688aedd">
+<div id="outline-container-orgd5e70ad" class="outline-3">
+<h3 id="orgd5e70ad"><code>org-faces</code></h3>
+<div class="outline-text-3" id="text-orgd5e70ad">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-faces
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -3036,9 +3036,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge4ec2bf" class="outline-3">
-<h3 id="orge4ec2bf"><code>org-compat</code></h3>
-<div class="outline-text-3" id="text-orge4ec2bf">
+<div id="outline-container-orga12eb14" class="outline-3">
+<h3 id="orga12eb14"><code>org-compat</code></h3>
+<div class="outline-text-3" id="text-orga12eb14">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-compat
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -3047,9 +3047,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org131c148" class="outline-3">
-<h3 id="org131c148"><code>org-archive</code></h3>
-<div class="outline-text-3" id="text-org131c148">
+<div id="outline-container-org0885153" class="outline-3">
+<h3 id="org0885153"><code>org-archive</code></h3>
+<div class="outline-text-3" id="text-org0885153">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-archive
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3063,9 +3063,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org44dfe8e" class="outline-3">
-<h3 id="org44dfe8e"><code>org-capture</code></h3>
-<div class="outline-text-3" id="text-org44dfe8e">
+<div id="outline-container-org2808b12" class="outline-3">
+<h3 id="org2808b12"><code>org-capture</code></h3>
+<div class="outline-text-3" id="text-org2808b12">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-capture
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3081,9 +3081,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org576f1d4" class="outline-3">
-<h3 id="org576f1d4"><code>org-refile</code></h3>
-<div class="outline-text-3" id="text-org576f1d4">
+<div id="outline-container-orgd0f3030" class="outline-3">
+<h3 id="orgd0f3030"><code>org-refile</code></h3>
+<div class="outline-text-3" id="text-orgd0f3030">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-refile
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3100,9 +3100,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga8ea89d" class="outline-3">
-<h3 id="orga8ea89d"><code>org-num</code></h3>
-<div class="outline-text-3" id="text-orga8ea89d">
+<div id="outline-container-org6bd84bf" class="outline-3">
+<h3 id="org6bd84bf"><code>org-num</code></h3>
+<div class="outline-text-3" id="text-org6bd84bf">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-num
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3113,9 +3113,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org51c6b7e" class="outline-3">
-<h3 id="org51c6b7e"><code>org-fold</code></h3>
-<div class="outline-text-3" id="text-org51c6b7e">
+<div id="outline-container-org6dae777" class="outline-3">
+<h3 id="org6dae777"><code>org-fold</code></h3>
+<div class="outline-text-3" id="text-org6dae777">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-fold
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> org org-contrib
@@ -3125,9 +3125,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd2bd414" class="outline-3">
-<h3 id="orgd2bd414"><code>org-id</code></h3>
-<div class="outline-text-3" id="text-orgd2bd414">
+<div id="outline-container-org54f13c9" class="outline-3">
+<h3 id="org54f13c9"><code>org-id</code></h3>
+<div class="outline-text-3" id="text-org54f13c9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-id
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3154,9 +3154,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org465959d" class="outline-3">
-<h3 id="org465959d"><code>org-attach</code></h3>
-<div class="outline-text-3" id="text-org465959d">
+<div id="outline-container-orga2e80fe" class="outline-3">
+<h3 id="orga2e80fe"><code>org-attach</code></h3>
+<div class="outline-text-3" id="text-orga2e80fe">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-attach
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3178,9 +3178,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd9704a7" class="outline-3">
-<h3 id="orgd9704a7"><code>org-clock</code></h3>
-<div class="outline-text-3" id="text-orgd9704a7">
+<div id="outline-container-org17da734" class="outline-3">
+<h3 id="org17da734"><code>org-clock</code></h3>
+<div class="outline-text-3" id="text-org17da734">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-clock
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3199,9 +3199,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org74031de" class="outline-3">
-<h3 id="org74031de"><code>org-agenda</code></h3>
-<div class="outline-text-3" id="text-org74031de">
+<div id="outline-container-org4726c8b" class="outline-3">
+<h3 id="org4726c8b"><code>org-agenda</code></h3>
+<div class="outline-text-3" id="text-org4726c8b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-agenda
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:after</span> org
@@ -3302,9 +3302,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9b11200" class="outline-3">
-<h3 id="org9b11200"><code>org-timer</code></h3>
-<div class="outline-text-3" id="text-org9b11200">
+<div id="outline-container-org09e60b3" class="outline-3">
+<h3 id="org09e60b3"><code>org-timer</code></h3>
+<div class="outline-text-3" id="text-org09e60b3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-timer
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -3327,9 +3327,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgafc8e2b" class="outline-3">
-<h3 id="orgafc8e2b"><code>org-contrib</code></h3>
-<div class="outline-text-3" id="text-orgafc8e2b">
+<div id="outline-container-orgfad230f" class="outline-3">
+<h3 id="orgfad230f"><code>org-contrib</code></h3>
+<div class="outline-text-3" id="text-orgfad230f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-contrib
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> t
@@ -3338,9 +3338,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7618a1b" class="outline-3">
-<h3 id="org7618a1b"><code>org-superstar</code></h3>
-<div class="outline-text-3" id="text-org7618a1b">
+<div id="outline-container-orgd9c81cc" class="outline-3">
+<h3 id="orgd9c81cc"><code>org-superstar</code></h3>
+<div class="outline-text-3" id="text-orgd9c81cc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-superstar
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3358,9 +3358,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org76e7e1d" class="outline-3">
-<h3 id="org76e7e1d"><code>org-fancy-priority</code></h3>
-<div class="outline-text-3" id="text-org76e7e1d">
+<div id="outline-container-orga3c3a14" class="outline-3">
+<h3 id="orga3c3a14"><code>org-fancy-priority</code></h3>
+<div class="outline-text-3" id="text-orga3c3a14">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-fancy-priorities <span style="color: #b22222;">; </span><span style="color: #b22222;">priority icons</span>
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3372,9 +3372,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org130bdc9" class="outline-3">
-<h3 id="org130bdc9"><code>toc-org</code></h3>
-<div class="outline-text-3" id="text-org130bdc9">
+<div id="outline-container-org162c904" class="outline-3">
+<h3 id="org162c904"><code>toc-org</code></h3>
+<div class="outline-text-3" id="text-org162c904">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package toc-org
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3385,9 +3385,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd526df2" class="outline-3">
-<h3 id="orgd526df2"><code>ox-pandoc</code></h3>
-<div class="outline-text-3" id="text-orgd526df2">
+<div id="outline-container-org46d2c21" class="outline-3">
+<h3 id="org46d2c21"><code>ox-pandoc</code></h3>
+<div class="outline-text-3" id="text-org46d2c21">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package ox-pandoc
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3404,9 +3404,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orged22e37" class="outline-3">
-<h3 id="orged22e37"><code>deft</code></h3>
-<div class="outline-text-3" id="text-orged22e37">
+<div id="outline-container-org442ed2e" class="outline-3">
+<h3 id="org442ed2e"><code>deft</code></h3>
+<div class="outline-text-3" id="text-org442ed2e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package deft
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3428,9 +3428,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org63c843a" class="outline-3">
-<h3 id="org63c843a"><code>org-pdftools</code></h3>
-<div class="outline-text-3" id="text-org63c843a">
+<div id="outline-container-orgd69c4f9" class="outline-3">
+<h3 id="orgd69c4f9"><code>org-pdftools</code></h3>
+<div class="outline-text-3" id="text-orgd69c4f9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-pdftools
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3440,9 +3440,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4fb8b43" class="outline-3">
-<h3 id="org4fb8b43"><code>org-noter</code></h3>
-<div class="outline-text-3" id="text-org4fb8b43">
+<div id="outline-container-org185fd77" class="outline-3">
+<h3 id="org185fd77"><code>org-noter</code></h3>
+<div class="outline-text-3" id="text-org185fd77">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-noter
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3456,9 +3456,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1d50097" class="outline-3">
-<h3 id="org1d50097"><code>org-noter-pdftools</code></h3>
-<div class="outline-text-3" id="text-org1d50097">
+<div id="outline-container-orgbad875a" class="outline-3">
+<h3 id="orgbad875a"><code>org-noter-pdftools</code></h3>
+<div class="outline-text-3" id="text-orgbad875a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-noter-pdftools
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3496,9 +3496,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org85bd4b5" class="outline-3">
-<h3 id="org85bd4b5"><code>ox-gfm</code></h3>
-<div class="outline-text-3" id="text-org85bd4b5">
+<div id="outline-container-org6ff5ba1" class="outline-3">
+<h3 id="org6ff5ba1"><code>ox-gfm</code></h3>
+<div class="outline-text-3" id="text-org6ff5ba1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ox-gfm
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3507,9 +3507,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org44876d4" class="outline-3">
-<h3 id="org44876d4"><code>org-download</code></h3>
-<div class="outline-text-3" id="text-org44876d4">
+<div id="outline-container-org0d132ee" class="outline-3">
+<h3 id="org0d132ee"><code>org-download</code></h3>
+<div class="outline-text-3" id="text-org0d132ee">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-download
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3540,9 +3540,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8855283" class="outline-3">
-<h3 id="org8855283"><code>org-cliplink</code></h3>
-<div class="outline-text-3" id="text-org8855283">
+<div id="outline-container-org8c5ca99" class="outline-3">
+<h3 id="org8c5ca99"><code>org-cliplink</code></h3>
+<div class="outline-text-3" id="text-org8c5ca99">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-cliplink
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3560,9 +3560,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org843c90d" class="outline-3">
-<h3 id="org843c90d"><code>hugo</code> function: start server</h3>
-<div class="outline-text-3" id="text-org843c90d">
+<div id="outline-container-org01b4432" class="outline-3">
+<h3 id="org01b4432"><code>hugo</code> function: start server</h3>
+<div class="outline-text-3" id="text-org01b4432">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">defun</span> <span style="color: #0000ff;">+config/start-hugo-server</span> (args)
 <span class="linenr">2: </span>  <span style="color: #bc8f8f;">"Start hugo server in `</span><span style="color: #5f9ea0;">+config/blog-dir</span><span style="color: #bc8f8f;">'."</span>
@@ -3576,9 +3576,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org2210521" class="outline-3">
-<h3 id="org2210521"><code>hugo</code> function: create new blog post</h3>
-<div class="outline-text-3" id="text-org2210521">
+<div id="outline-container-org5dc75ed" class="outline-3">
+<h3 id="org5dc75ed"><code>hugo</code> function: create new blog post</h3>
+<div class="outline-text-3" id="text-org5dc75ed">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">defun</span> <span style="color: #0000ff;">+config/create-new-blog-post</span> ()
 <span class="linenr">2: </span>  <span style="color: #bc8f8f;">"Create new blog post path."</span>
@@ -3589,9 +3589,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1b88c52" class="outline-3">
-<h3 id="org1b88c52">Custom <code>capture-template</code> for <code>hugo</code> blog</h3>
-<div class="outline-text-3" id="text-org1b88c52">
+<div id="outline-container-org0b7bf68" class="outline-3">
+<h3 id="org0b7bf68">Custom <code>capture-template</code> for <code>hugo</code> blog</h3>
+<div class="outline-text-3" id="text-org0b7bf68">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(merge-list-to-list 'org-capture-templates
 <span class="linenr"> 2: </span>                    `((<span style="color: #bc8f8f;">"b"</span> <span style="color: #bc8f8f;">"(b)log post"</span> plain
@@ -3617,9 +3617,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org57f4ca4" class="outline-3">
-<h3 id="org57f4ca4"><code>transient</code></h3>
-<div class="outline-text-3" id="text-org57f4ca4">
+<div id="outline-container-orge4331e0" class="outline-3">
+<h3 id="orge4331e0"><code>transient</code></h3>
+<div class="outline-text-3" id="text-orge4331e0">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package transient
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:config</span>
@@ -3659,9 +3659,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org97c8741" class="outline-3">
-<h3 id="org97c8741"><code>ox-hugo</code></h3>
-<div class="outline-text-3" id="text-org97c8741">
+<div id="outline-container-org553154c" class="outline-3">
+<h3 id="org553154c"><code>ox-hugo</code></h3>
+<div class="outline-text-3" id="text-org553154c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ox-hugo
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3670,9 +3670,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7523a84" class="outline-3">
-<h3 id="org7523a84"><code>org-roam</code></h3>
-<div class="outline-text-3" id="text-org7523a84">
+<div id="outline-container-orgc592c37" class="outline-3">
+<h3 id="orgc592c37"><code>org-roam</code></h3>
+<div class="outline-text-3" id="text-orgc592c37">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-roam
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3773,9 +3773,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5c4af0e" class="outline-3">
-<h3 id="org5c4af0e"><code>org-roam-ui</code></h3>
-<div class="outline-text-3" id="text-org5c4af0e">
+<div id="outline-container-orgebca7ce" class="outline-3">
+<h3 id="orgebca7ce"><code>org-roam-ui</code></h3>
+<div class="outline-text-3" id="text-orgebca7ce">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package org-roam-ui
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3789,9 +3789,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbd0d5f7" class="outline-3">
-<h3 id="orgbd0d5f7"><code>org-journal</code></h3>
-<div class="outline-text-3" id="text-orgbd0d5f7">
+<div id="outline-container-org62c70c2" class="outline-3">
+<h3 id="org62c70c2"><code>org-journal</code></h3>
+<div class="outline-text-3" id="text-org62c70c2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-journal
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3808,9 +3808,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org372709e" class="outline-3">
-<h3 id="org372709e"><code>org-ref</code></h3>
-<div class="outline-text-3" id="text-org372709e">
+<div id="outline-container-org5640717" class="outline-3">
+<h3 id="org5640717"><code>org-ref</code></h3>
+<div class="outline-text-3" id="text-org5640717">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package org-ref
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3837,9 +3837,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgcd18e21" class="outline-3">
-<h3 id="orgcd18e21"><code>consult-bibtex</code></h3>
-<div class="outline-text-3" id="text-orgcd18e21">
+<div id="outline-container-org52eb430" class="outline-3">
+<h3 id="org52eb430"><code>consult-bibtex</code></h3>
+<div class="outline-text-3" id="text-org52eb430">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(<span style="color: #4169e1;">when</span> (file-directory-p (expand-file-name <span style="color: #bc8f8f;">"site-lisp/consult-bibtex"</span> user-emacs-directory))
 <span class="linenr">2: </span>  (add-to-list 'load-path (expand-file-name <span style="color: #bc8f8f;">"site-lisp/consult-bibtex"</span> user-emacs-directory)))
@@ -3852,9 +3852,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb20c7b6" class="outline-3">
-<h3 id="orgb20c7b6"><code>consult-org-roam</code></h3>
-<div class="outline-text-3" id="text-orgb20c7b6">
+<div id="outline-container-orgd1e1ef6" class="outline-3">
+<h3 id="orgd1e1ef6"><code>consult-org-roam</code></h3>
+<div class="outline-text-3" id="text-orgd1e1ef6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package consult-org-roam
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3887,9 +3887,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org67778fb" class="outline-3">
-<h3 id="org67778fb"><code>ox-latex</code></h3>
-<div class="outline-text-3" id="text-org67778fb">
+<div id="outline-container-org2f0a3a9" class="outline-3">
+<h3 id="org2f0a3a9"><code>ox-latex</code></h3>
+<div class="outline-text-3" id="text-org2f0a3a9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ox-latex
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -3899,14 +3899,14 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc6d3f63" class="outline-2">
-<h2 id="orgc6d3f63">Tools</h2>
-<div class="outline-text-2" id="text-orgc6d3f63">
+<div id="outline-container-org6ff4a9f" class="outline-2">
+<h2 id="org6ff4a9f">Tools</h2>
+<div class="outline-text-2" id="text-org6ff4a9f">
 </div>
 </div>
-<div id="outline-container-org5811b75" class="outline-2">
-<h2 id="org5811b75"><code>nov</code></h2>
-<div class="outline-text-2" id="text-org5811b75">
+<div id="outline-container-orgb131037" class="outline-2">
+<h2 id="orgb131037"><code>nov</code></h2>
+<div class="outline-text-2" id="text-orgb131037">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package nov
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -3914,9 +3914,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org892548e" class="outline-2">
-<h2 id="org892548e"><code>djvu</code></h2>
-<div class="outline-text-2" id="text-org892548e">
+<div id="outline-container-org91ecca3" class="outline-2">
+<h2 id="org91ecca3"><code>djvu</code></h2>
+<div class="outline-text-2" id="text-org91ecca3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package djvu
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -3924,9 +3924,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1d84125" class="outline-2">
-<h2 id="org1d84125"><code>pdf-tools</code></h2>
-<div class="outline-text-2" id="text-org1d84125">
+<div id="outline-container-orge109b7e" class="outline-2">
+<h2 id="orge109b7e"><code>pdf-tools</code></h2>
+<div class="outline-text-2" id="text-orge109b7e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package pdf-tools
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3951,9 +3951,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8749e17" class="outline-2">
-<h2 id="org8749e17"><code>khalel</code></h2>
-<div class="outline-text-2" id="text-org8749e17">
+<div id="outline-container-orgbe20250" class="outline-2">
+<h2 id="orgbe20250"><code>khalel</code></h2>
+<div class="outline-text-2" id="text-orgbe20250">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package khalel
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3968,9 +3968,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org273ec4b" class="outline-2">
-<h2 id="org273ec4b"><code>direnv</code></h2>
-<div class="outline-text-2" id="text-org273ec4b">
+<div id="outline-container-org6ed094e" class="outline-2">
+<h2 id="org6ed094e"><code>direnv</code></h2>
+<div class="outline-text-2" id="text-org6ed094e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package direnv
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -3980,9 +3980,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgfbf7b23" class="outline-2">
-<h2 id="orgfbf7b23"><code>pass</code></h2>
-<div class="outline-text-2" id="text-orgfbf7b23">
+<div id="outline-container-orga362ceb" class="outline-2">
+<h2 id="orga362ceb"><code>pass</code></h2>
+<div class="outline-text-2" id="text-orga362ceb">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package password-store
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4004,9 +4004,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge9a2f8a" class="outline-2">
-<h2 id="orge9a2f8a"><code>ement</code></h2>
-<div class="outline-text-2" id="text-orge9a2f8a">
+<div id="outline-container-orgdfff684" class="outline-2">
+<h2 id="orgdfff684"><code>ement</code></h2>
+<div class="outline-text-2" id="text-orgdfff684">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ement
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4017,9 +4017,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5cc2285" class="outline-2">
-<h2 id="org5cc2285">pinentry</h2>
-<div class="outline-text-2" id="text-org5cc2285">
+<div id="outline-container-org5fb28d9" class="outline-2">
+<h2 id="org5fb28d9">pinentry</h2>
+<div class="outline-text-2" id="text-org5fb28d9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package pinentry
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4029,9 +4029,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4b60b9a" class="outline-2">
-<h2 id="org4b60b9a"><code>rg</code></h2>
-<div class="outline-text-2" id="text-org4b60b9a">
+<div id="outline-container-orgaacebdc" class="outline-2">
+<h2 id="orgaacebdc"><code>rg</code></h2>
+<div class="outline-text-2" id="text-orgaacebdc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package rg
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:if</span> (executable-find <span style="color: #bc8f8f;">"rg"</span>)
@@ -4047,9 +4047,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org10ff74f" class="outline-2">
-<h2 id="org10ff74f"><code>wgrep</code></h2>
-<div class="outline-text-2" id="text-org10ff74f">
+<div id="outline-container-org45aace2" class="outline-2">
+<h2 id="org45aace2"><code>wgrep</code></h2>
+<div class="outline-text-2" id="text-org45aace2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package wgrep
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4059,9 +4059,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org889ada0" class="outline-2">
-<h2 id="org889ada0"><code>elfeed</code></h2>
-<div class="outline-text-2" id="text-org889ada0">
+<div id="outline-container-org5dd0e1d" class="outline-2">
+<h2 id="org5dd0e1d"><code>elfeed</code></h2>
+<div class="outline-text-2" id="text-org5dd0e1d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package elfeed
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4074,9 +4074,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org3c6d5b9" class="outline-2">
-<h2 id="org3c6d5b9"><code>elfeed-org</code></h2>
-<div class="outline-text-2" id="text-org3c6d5b9">
+<div id="outline-container-org27d2f6e" class="outline-2">
+<h2 id="org27d2f6e"><code>elfeed-org</code></h2>
+<div class="outline-text-2" id="text-org27d2f6e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package elfeed-org
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4089,9 +4089,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4d370b2" class="outline-2">
-<h2 id="org4d370b2"><code>emms</code></h2>
-<div class="outline-text-2" id="text-org4d370b2">
+<div id="outline-container-org2da231e" class="outline-2">
+<h2 id="org2da231e"><code>emms</code></h2>
+<div class="outline-text-2" id="text-org2da231e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package emms
 <span class="linenr">2: </span>  <span style="color: #00008b;">:defer</span> t
@@ -4103,9 +4103,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7922267" class="outline-2">
-<h2 id="org7922267"><code>ws-butler</code></h2>
-<div class="outline-text-2" id="text-org7922267">
+<div id="outline-container-orge0447fa" class="outline-2">
+<h2 id="orge0447fa"><code>ws-butler</code></h2>
+<div class="outline-text-2" id="text-orge0447fa">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ws-butler
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4115,9 +4115,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org04f3a5c" class="outline-2">
-<h2 id="org04f3a5c"><code>editorconfig</code></h2>
-<div class="outline-text-2" id="text-org04f3a5c">
+<div id="outline-container-orgf17459c" class="outline-2">
+<h2 id="orgf17459c"><code>editorconfig</code></h2>
+<div class="outline-text-2" id="text-orgf17459c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package editorconfig
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4131,9 +4131,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org066ac5d" class="outline-2">
-<h2 id="org066ac5d"><code>pdfgrep</code></h2>
-<div class="outline-text-2" id="text-org066ac5d">
+<div id="outline-container-org9307fe3" class="outline-2">
+<h2 id="org9307fe3"><code>pdfgrep</code></h2>
+<div class="outline-text-2" id="text-org9307fe3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package pdfgrep
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4143,9 +4143,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb34d1b7" class="outline-2">
-<h2 id="orgb34d1b7"><code>selected</code></h2>
-<div class="outline-text-2" id="text-orgb34d1b7">
+<div id="outline-container-org82be589" class="outline-2">
+<h2 id="org82be589"><code>selected</code></h2>
+<div class="outline-text-2" id="text-org82be589">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package selected
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4157,9 +4157,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org77b8f78" class="outline-2">
-<h2 id="org77b8f78"><code>yasnippet</code></h2>
-<div class="outline-text-2" id="text-org77b8f78">
+<div id="outline-container-org376e50b" class="outline-2">
+<h2 id="org376e50b"><code>yasnippet</code></h2>
+<div class="outline-text-2" id="text-org376e50b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package yasnippet
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4191,9 +4191,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9020c53" class="outline-2">
-<h2 id="org9020c53"><code>lorem-ipsum</code></h2>
-<div class="outline-text-2" id="text-org9020c53">
+<div id="outline-container-org91ea737" class="outline-2">
+<h2 id="org91ea737"><code>lorem-ipsum</code></h2>
+<div class="outline-text-2" id="text-org91ea737">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package lorem-ipsum
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -4201,13 +4201,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8defaf3" class="outline-2">
-<h2 id="org8defaf3">dired</h2>
-<div class="outline-text-2" id="text-org8defaf3">
+<div id="outline-container-org07c274b" class="outline-2">
+<h2 id="org07c274b">dired</h2>
+<div class="outline-text-2" id="text-org07c274b">
 </div>
-<div id="outline-container-org61c3dad" class="outline-3">
-<h3 id="org61c3dad"><code>dired</code></h3>
-<div class="outline-text-3" id="text-org61c3dad">
+<div id="outline-container-org7498003" class="outline-3">
+<h3 id="org7498003"><code>dired</code></h3>
+<div class="outline-text-3" id="text-org7498003">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package dired
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:commands</span> dired-jump
@@ -4223,9 +4223,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org389180d" class="outline-3">
-<h3 id="org389180d"><code>image-dired</code></h3>
-<div class="outline-text-3" id="text-org389180d">
+<div id="outline-container-orge613cf4" class="outline-3">
+<h3 id="orge613cf4"><code>image-dired</code></h3>
+<div class="outline-text-3" id="text-orge613cf4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package image-dired
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -4234,9 +4234,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga1ce2b1" class="outline-3">
-<h3 id="orga1ce2b1"><code>dired-x</code></h3>
-<div class="outline-text-3" id="text-orga1ce2b1">
+<div id="outline-container-org050ca6a" class="outline-3">
+<h3 id="org050ca6a"><code>dired-x</code></h3>
+<div class="outline-text-3" id="text-org050ca6a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package dired-x
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:hook</span> (dired-mode . dired-omit-mode)
@@ -4267,9 +4267,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgee3dd12" class="outline-3">
-<h3 id="orgee3dd12"><code>fd-dired</code></h3>
-<div class="outline-text-3" id="text-orgee3dd12">
+<div id="outline-container-org7d4590a" class="outline-3">
+<h3 id="org7d4590a"><code>fd-dired</code></h3>
+<div class="outline-text-3" id="text-org7d4590a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package fd-dired
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4281,9 +4281,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1c4b239" class="outline-3">
-<h3 id="org1c4b239"><code>dired-git-info</code></h3>
-<div class="outline-text-3" id="text-org1c4b239">
+<div id="outline-container-org5324a26" class="outline-3">
+<h3 id="org5324a26"><code>dired-git-info</code></h3>
+<div class="outline-text-3" id="text-org5324a26">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package dired-git-info
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4298,9 +4298,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge41609d" class="outline-3">
-<h3 id="orge41609d"><code>dired-aux</code></h3>
-<div class="outline-text-3" id="text-orge41609d">
+<div id="outline-container-org2dd48b4" class="outline-3">
+<h3 id="org2dd48b4"><code>dired-aux</code></h3>
+<div class="outline-text-3" id="text-org2dd48b4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package dired-aux
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -4310,9 +4310,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge845712" class="outline-3">
-<h3 id="orge845712"><code>dired-rsync</code></h3>
-<div class="outline-text-3" id="text-orge845712">
+<div id="outline-container-org5e53b74" class="outline-3">
+<h3 id="org5e53b74"><code>dired-rsync</code></h3>
+<div class="outline-text-3" id="text-org5e53b74">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package dired-rsync
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -4320,9 +4320,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga79e5bb" class="outline-3">
-<h3 id="orga79e5bb"><code>diredfl</code></h3>
-<div class="outline-text-3" id="text-orga79e5bb">
+<div id="outline-container-org6cee234" class="outline-3">
+<h3 id="org6cee234"><code>diredfl</code></h3>
+<div class="outline-text-3" id="text-org6cee234">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package diredfl
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4332,13 +4332,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbadc711" class="outline-2">
-<h2 id="orgbadc711">Treemacs</h2>
-<div class="outline-text-2" id="text-orgbadc711">
+<div id="outline-container-orgab5f492" class="outline-2">
+<h2 id="orgab5f492">Treemacs</h2>
+<div class="outline-text-2" id="text-orgab5f492">
 </div>
-<div id="outline-container-org707cba5" class="outline-3">
-<h3 id="org707cba5"><code>treemacs</code> main package</h3>
-<div class="outline-text-3" id="text-org707cba5">
+<div id="outline-container-orgd3fe8f8" class="outline-3">
+<h3 id="orgd3fe8f8"><code>treemacs</code> main package</h3>
+<div class="outline-text-3" id="text-orgd3fe8f8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package treemacs
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4423,9 +4423,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org921f1d4" class="outline-3">
-<h3 id="org921f1d4"><code>treemacs-projectile</code></h3>
-<div class="outline-text-3" id="text-org921f1d4">
+<div id="outline-container-org9bad21c" class="outline-3">
+<h3 id="org9bad21c"><code>treemacs-projectile</code></h3>
+<div class="outline-text-3" id="text-org9bad21c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package treemacs-projectile
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4434,9 +4434,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgae9ba1a" class="outline-3">
-<h3 id="orgae9ba1a"><code>treemacs-icons-dired</code></h3>
-<div class="outline-text-3" id="text-orgae9ba1a">
+<div id="outline-container-org96417a9" class="outline-3">
+<h3 id="org96417a9"><code>treemacs-icons-dired</code></h3>
+<div class="outline-text-3" id="text-org96417a9">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package treemacs-icons-dired
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4446,9 +4446,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf5945d2" class="outline-3">
-<h3 id="orgf5945d2"><code>treemacs-magit</code></h3>
-<div class="outline-text-3" id="text-orgf5945d2">
+<div id="outline-container-org201e7cf" class="outline-3">
+<h3 id="org201e7cf"><code>treemacs-magit</code></h3>
+<div class="outline-text-3" id="text-org201e7cf">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package treemacs-magit
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4457,9 +4457,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4b2cd5c" class="outline-3">
-<h3 id="org4b2cd5c"><code>treemacs-evil</code></h3>
-<div class="outline-text-3" id="text-org4b2cd5c">
+<div id="outline-container-orgd4da1c8" class="outline-3">
+<h3 id="orgd4da1c8"><code>treemacs-evil</code></h3>
+<div class="outline-text-3" id="text-orgd4da1c8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package treemacs-evil
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4468,9 +4468,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org77066b6" class="outline-3">
-<h3 id="org77066b6"><code>lsp-treemacs</code></h3>
-<div class="outline-text-3" id="text-org77066b6">
+<div id="outline-container-org46acc8e" class="outline-3">
+<h3 id="org46acc8e"><code>lsp-treemacs</code></h3>
+<div class="outline-text-3" id="text-org46acc8e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package lsp-treemacs
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4481,9 +4481,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org5367192" class="outline-3">
-<h3 id="org5367192"><code>treemacs-perspective</code></h3>
-<div class="outline-text-3" id="text-org5367192">
+<div id="outline-container-org9f9a1af" class="outline-3">
+<h3 id="org9f9a1af"><code>treemacs-perspective</code></h3>
+<div class="outline-text-3" id="text-org9f9a1af">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package treemacs-perspective
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4494,9 +4494,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org0ba3a6d" class="outline-3">
-<h3 id="org0ba3a6d"><code>treemacs-tab-bar</code></h3>
-<div class="outline-text-3" id="text-org0ba3a6d">
+<div id="outline-container-org495120f" class="outline-3">
+<h3 id="org495120f"><code>treemacs-tab-bar</code></h3>
+<div class="outline-text-3" id="text-org495120f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package treemacs-tab-bar
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4505,9 +4505,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org832da66" class="outline-3">
-<h3 id="org832da66"><code>treemacs-nerd-icons</code></h3>
-<div class="outline-text-3" id="text-org832da66">
+<div id="outline-container-org755f675" class="outline-3">
+<h3 id="org755f675"><code>treemacs-nerd-icons</code></h3>
+<div class="outline-text-3" id="text-org755f675">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package treemacs-nerd-icons
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4518,13 +4518,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbbd8708" class="outline-2">
-<h2 id="orgbbd8708">Flycheck</h2>
-<div class="outline-text-2" id="text-orgbbd8708">
+<div id="outline-container-orgae7413e" class="outline-2">
+<h2 id="orgae7413e">Flycheck</h2>
+<div class="outline-text-2" id="text-orgae7413e">
 </div>
-<div id="outline-container-orgb2c23ce" class="outline-3">
-<h3 id="orgb2c23ce"><code>flycheck</code> package</h3>
-<div class="outline-text-3" id="text-orgb2c23ce">
+<div id="outline-container-org2b3bb9c" class="outline-3">
+<h3 id="org2b3bb9c"><code>flycheck</code> package</h3>
+<div class="outline-text-3" id="text-org2b3bb9c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span><span style="color: #b22222;">;;;</span><span style="color: #b22222;">###</span><span style="color: #ff0000; font-weight: bold;">autoload</span>
 <span class="linenr"> 2: </span>(<span style="color: #4169e1;">defun</span> <span style="color: #0000ff;">+syntax-init-popups-h</span> ()
@@ -4555,9 +4555,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc849bdf" class="outline-3">
-<h3 id="orgc849bdf"><code>consult-flycheck</code></h3>
-<div class="outline-text-3" id="text-orgc849bdf">
+<div id="outline-container-org4a417ab" class="outline-3">
+<h3 id="org4a417ab"><code>consult-flycheck</code></h3>
+<div class="outline-text-3" id="text-org4a417ab">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package consult-flycheck
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4566,9 +4566,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc968ff6" class="outline-3">
-<h3 id="orgc968ff6"><code>flycheck-posframe</code></h3>
-<div class="outline-text-3" id="text-orgc968ff6">
+<div id="outline-container-org145fef0" class="outline-3">
+<h3 id="org145fef0"><code>flycheck-posframe</code></h3>
+<div class="outline-text-3" id="text-org145fef0">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package flycheck-posframe
 <span class="linenr">2: </span>  <span style="color: #00008b;">:if</span> (display-graphic-p)
@@ -4577,9 +4577,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgfe7ec41" class="outline-3">
-<h3 id="orgfe7ec41"><code>flycheck-popup-tip</code></h3>
-<div class="outline-text-3" id="text-orgfe7ec41">
+<div id="outline-container-org5f3047a" class="outline-3">
+<h3 id="org5f3047a"><code>flycheck-popup-tip</code></h3>
+<div class="outline-text-3" id="text-org5f3047a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package flycheck-popup-tip
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4593,9 +4593,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org6f9ef18" class="outline-3">
-<h3 id="org6f9ef18"><code>flycheck-color-mode-line</code></h3>
-<div class="outline-text-3" id="text-org6f9ef18">
+<div id="outline-container-org4344250" class="outline-3">
+<h3 id="org4344250"><code>flycheck-color-mode-line</code></h3>
+<div class="outline-text-3" id="text-org4344250">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package flycheck-color-mode-line
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4605,13 +4605,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge51bfe7" class="outline-2">
-<h2 id="orge51bfe7">Mail</h2>
-<div class="outline-text-2" id="text-orge51bfe7">
+<div id="outline-container-org8fe72a0" class="outline-2">
+<h2 id="org8fe72a0">Mail</h2>
+<div class="outline-text-2" id="text-org8fe72a0">
 </div>
-<div id="outline-container-org82b8026" class="outline-3">
-<h3 id="org82b8026"><code>notmuch</code> main package</h3>
-<div class="outline-text-3" id="text-org82b8026">
+<div id="outline-container-orgf2f1028" class="outline-3">
+<h3 id="orgf2f1028"><code>notmuch</code> main package</h3>
+<div class="outline-text-3" id="text-orgf2f1028">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package notmuch
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4701,9 +4701,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8390a27" class="outline-3">
-<h3 id="org8390a27"><code>notmuch-indicator</code></h3>
-<div class="outline-text-3" id="text-org8390a27">
+<div id="outline-container-org3706a4e" class="outline-3">
+<h3 id="org3706a4e"><code>notmuch-indicator</code></h3>
+<div class="outline-text-3" id="text-org3706a4e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package notmuch-indicator
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4715,9 +4715,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf2cf694" class="outline-3">
-<h3 id="orgf2cf694"><code>consult-notmuch</code></h3>
-<div class="outline-text-3" id="text-orgf2cf694">
+<div id="outline-container-org35f5200" class="outline-3">
+<h3 id="org35f5200"><code>consult-notmuch</code></h3>
+<div class="outline-text-3" id="text-org35f5200">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package consult-notmuch
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4727,9 +4727,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf70bb6e" class="outline-3">
-<h3 id="orgf70bb6e"><code>ol-notmuch</code></h3>
-<div class="outline-text-3" id="text-orgf70bb6e">
+<div id="outline-container-org8796421" class="outline-3">
+<h3 id="org8796421"><code>ol-notmuch</code></h3>
+<div class="outline-text-3" id="text-org8796421">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ol-notmuch
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -4737,9 +4737,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgfb9a9d6" class="outline-3">
-<h3 id="orgfb9a9d6"><code>notmuch-maildir</code></h3>
-<div class="outline-text-3" id="text-orgfb9a9d6">
+<div id="outline-container-orge01d844" class="outline-3">
+<h3 id="orge01d844"><code>notmuch-maildir</code></h3>
+<div class="outline-text-3" id="text-orge01d844">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package notmuch-maildir
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4749,9 +4749,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org81455aa" class="outline-3">
-<h3 id="org81455aa"><code>message</code></h3>
-<div class="outline-text-3" id="text-org81455aa">
+<div id="outline-container-org97d95ba" class="outline-3">
+<h3 id="org97d95ba"><code>message</code></h3>
+<div class="outline-text-3" id="text-org97d95ba">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package message
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -4761,9 +4761,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7d5f552" class="outline-3">
-<h3 id="org7d5f552"><code>sendmail</code></h3>
-<div class="outline-text-3" id="text-org7d5f552">
+<div id="outline-container-org2c31b0f" class="outline-3">
+<h3 id="org2c31b0f"><code>sendmail</code></h3>
+<div class="outline-text-3" id="text-org2c31b0f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package sendmail
 <span class="linenr">2: </span>  <span style="color: #00008b;">:custom</span>
@@ -4776,13 +4776,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org0fd30ae" class="outline-2">
-<h2 id="org0fd30ae">Lisp</h2>
-<div class="outline-text-2" id="text-org0fd30ae">
+<div id="outline-container-org67fed5c" class="outline-2">
+<h2 id="org67fed5c">Lisp</h2>
+<div class="outline-text-2" id="text-org67fed5c">
 </div>
-<div id="outline-container-org1fcac40" class="outline-3">
-<h3 id="org1fcac40"><code>elisp-mode</code></h3>
-<div class="outline-text-3" id="text-org1fcac40">
+<div id="outline-container-org604786d" class="outline-3">
+<h3 id="org604786d"><code>elisp-mode</code></h3>
+<div class="outline-text-3" id="text-org604786d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(<span style="color: #4169e1;">when</span> (locate-library <span style="color: #bc8f8f;">"aggressive-indent"</span>)
 <span class="linenr"> 2: </span>  (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
@@ -4804,9 +4804,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1539cf4" class="outline-3">
-<h3 id="org1539cf4"><code>ielm</code></h3>
-<div class="outline-text-3" id="text-org1539cf4">
+<div id="outline-container-orgb3a802f" class="outline-3">
+<h3 id="orgb3a802f"><code>ielm</code></h3>
+<div class="outline-text-3" id="text-orgb3a802f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package ielm
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -4837,9 +4837,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge3adca9" class="outline-3">
-<h3 id="orge3adca9"><code>elisp-demos</code></h3>
-<div class="outline-text-3" id="text-orge3adca9">
+<div id="outline-container-org62eab4a" class="outline-3">
+<h3 id="org62eab4a"><code>elisp-demos</code></h3>
+<div class="outline-text-3" id="text-org62eab4a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package elisp-demos
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4850,9 +4850,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9254af7" class="outline-3">
-<h3 id="org9254af7"><code>macrostep</code></h3>
-<div class="outline-text-3" id="text-org9254af7">
+<div id="outline-container-org0fe767b" class="outline-3">
+<h3 id="org0fe767b"><code>macrostep</code></h3>
+<div class="outline-text-3" id="text-org0fe767b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package macrostep
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4862,9 +4862,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgdd3bc53" class="outline-3">
-<h3 id="orgdd3bc53"><code>eros</code></h3>
-<div class="outline-text-3" id="text-orgdd3bc53">
+<div id="outline-container-org001a792" class="outline-3">
+<h3 id="org001a792"><code>eros</code></h3>
+<div class="outline-text-3" id="text-org001a792">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package eros
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4874,9 +4874,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org30b3d1a" class="outline-3">
-<h3 id="org30b3d1a"><code>buttercup</code></h3>
-<div class="outline-text-3" id="text-org30b3d1a">
+<div id="outline-container-orga6b725c" class="outline-3">
+<h3 id="orga6b725c"><code>buttercup</code></h3>
+<div class="outline-text-3" id="text-orga6b725c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package buttercup
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4888,9 +4888,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org84250c5" class="outline-3">
-<h3 id="org84250c5"><code>common-lisp</code></h3>
-<div class="outline-text-3" id="text-org84250c5">
+<div id="outline-container-org18fda15" class="outline-3">
+<h3 id="org18fda15"><code>common-lisp</code></h3>
+<div class="outline-text-3" id="text-org18fda15">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span><span style="color: #b22222;">;;;; </span><span style="color: #b22222;">common-lisp</span>
 <span class="linenr"> 2: </span>(<span style="color: #4169e1;">when</span> (file-directory-p (expand-file-name <span style="color: #bc8f8f;">"site-lisp/sly-stepper"</span> user-emacs-directory))
@@ -4909,8 +4909,8 @@
 </div>
 </div>
 <ul class="org-ul">
-<li><a id="org727b104"></a><code>sly</code><br />
-<div class="outline-text-4" id="text-org727b104">
+<li><a id="org3514798"></a><code>sly</code><br />
+<div class="outline-text-4" id="text-org3514798">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package sly
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4921,8 +4921,8 @@
 </div>
 </div>
 </li>
-<li><a id="org679d060"></a><code>sly-stepper</code><br />
-<div class="outline-text-4" id="text-org679d060">
+<li><a id="org02c6500"></a><code>sly-stepper</code><br />
+<div class="outline-text-4" id="text-org02c6500">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package sly-stepper
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -4933,8 +4933,8 @@
 </div>
 </div>
 </li>
-<li><a id="org2fe6a2d"></a><code>sly-quicklisp</code><br />
-<div class="outline-text-4" id="text-org2fe6a2d">
+<li><a id="org6674e8c"></a><code>sly-quicklisp</code><br />
+<div class="outline-text-4" id="text-org6674e8c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package sly-quicklisp
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -4945,8 +4945,8 @@
 </div>
 </div>
 </li>
-<li><a id="org6bc8714"></a><code>sly-macrostep</code><br />
-<div class="outline-text-4" id="text-org6bc8714">
+<li><a id="orgf11d3aa"></a><code>sly-macrostep</code><br />
+<div class="outline-text-4" id="text-orgf11d3aa">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package sly-macrostep
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -4957,8 +4957,8 @@
 </div>
 </div>
 </li>
-<li><a id="org010a192"></a><code>sly-asdf</code><br />
-<div class="outline-text-4" id="text-org010a192">
+<li><a id="org13bb978"></a><code>sly-asdf</code><br />
+<div class="outline-text-4" id="text-org13bb978">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package sly-asdf
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -4971,13 +4971,13 @@
 </li>
 </ul>
 </div>
-<div id="outline-container-org1e230d0" class="outline-3">
-<h3 id="org1e230d0">clojure</h3>
-<div class="outline-text-3" id="text-org1e230d0">
+<div id="outline-container-org91b7c3f" class="outline-3">
+<h3 id="org91b7c3f">clojure</h3>
+<div class="outline-text-3" id="text-org91b7c3f">
 </div>
 <ul class="org-ul">
-<li><a id="org37b66d3"></a><code>cider</code><br />
-<div class="outline-text-4" id="text-org37b66d3">
+<li><a id="orge314137"></a><code>cider</code><br />
+<div class="outline-text-4" id="text-orge314137">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span><span style="color: #b22222;">;;;; </span><span style="color: #b22222;">clojure</span>
 <span class="linenr">2: </span>(use-package cider
@@ -4986,8 +4986,8 @@
 </div>
 </div>
 </li>
-<li><a id="org267e719"></a><code>clj-refactor</code><br />
-<div class="outline-text-4" id="text-org267e719">
+<li><a id="orgce4a26b"></a><code>clj-refactor</code><br />
+<div class="outline-text-4" id="text-orgce4a26b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package clj-refactor
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5003,13 +5003,13 @@
 </li>
 </ul>
 </div>
-<div id="outline-container-org235ced6" class="outline-3">
-<h3 id="org235ced6">Scheme</h3>
-<div class="outline-text-3" id="text-org235ced6">
+<div id="outline-container-orgb75f1fb" class="outline-3">
+<h3 id="orgb75f1fb">Scheme</h3>
+<div class="outline-text-3" id="text-orgb75f1fb">
 </div>
 <ul class="org-ul">
-<li><a id="orgc7b56ca"></a><code>geiser</code><br />
-<div class="outline-text-4" id="text-orgc7b56ca">
+<li><a id="org9a447ee"></a><code>geiser</code><br />
+<div class="outline-text-4" id="text-org9a447ee">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span><span style="color: #b22222;">;;;; </span><span style="color: #b22222;">scheme</span>
 <span class="linenr">2: </span>(use-package geiser
@@ -5024,8 +5024,8 @@
 </div>
 </div>
 </li>
-<li><a id="orge20432e"></a><code>geiser-guile</code><br />
-<div class="outline-text-4" id="text-orge20432e">
+<li><a id="orge20ce8c"></a><code>geiser-guile</code><br />
+<div class="outline-text-4" id="text-orge20ce8c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package geiser-guile
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5042,8 +5042,8 @@
 </div>
 </div>
 </li>
-<li><a id="org92339b7"></a><code>macrostep-geiser</code><br />
-<div class="outline-text-4" id="text-org92339b7">
+<li><a id="orga878b7b"></a><code>macrostep-geiser</code><br />
+<div class="outline-text-4" id="text-orga878b7b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package macrostep-geiser
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5058,13 +5058,13 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-orgeeaeddb" class="outline-2">
-<h2 id="orgeeaeddb">C and C++</h2>
-<div class="outline-text-2" id="text-orgeeaeddb">
+<div id="outline-container-org3237bd9" class="outline-2">
+<h2 id="org3237bd9">C and C++</h2>
+<div class="outline-text-2" id="text-org3237bd9">
 </div>
-<div id="outline-container-org8564b52" class="outline-3">
-<h3 id="org8564b52"><code>cc-mode</code></h3>
-<div class="outline-text-3" id="text-org8564b52">
+<div id="outline-container-org4d6e6fd" class="outline-3">
+<h3 id="org4d6e6fd"><code>cc-mode</code></h3>
+<div class="outline-text-3" id="text-org4d6e6fd">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package cc-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:mode</span> (<span style="color: #bc8f8f;">"\\.mm\\'"</span> . objc-mode)
@@ -5083,13 +5083,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8466956" class="outline-2">
-<h2 id="org8466956">XML</h2>
-<div class="outline-text-2" id="text-org8466956">
+<div id="outline-container-org78cb1b6" class="outline-2">
+<h2 id="org78cb1b6">XML</h2>
+<div class="outline-text-2" id="text-org78cb1b6">
 </div>
-<div id="outline-container-org37eab8e" class="outline-3">
-<h3 id="org37eab8e"><code>nxml-mode</code></h3>
-<div class="outline-text-3" id="text-org37eab8e">
+<div id="outline-container-orgc02c532" class="outline-3">
+<h3 id="orgc02c532"><code>nxml-mode</code></h3>
+<div class="outline-text-3" id="text-orgc02c532">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package nxml-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:mode</span> <span style="color: #bc8f8f;">"\\.p</span><span style="color: #bc8f8f; font-weight: bold;">\\</span><span style="color: #bc8f8f; font-weight: bold;">(?:</span><span style="color: #bc8f8f;">list</span><span style="color: #bc8f8f; font-weight: bold;">\\</span><span style="color: #bc8f8f; font-weight: bold;">|</span><span style="color: #bc8f8f;">om</span><span style="color: #bc8f8f; font-weight: bold;">\\</span><span style="color: #bc8f8f; font-weight: bold;">)</span><span style="color: #bc8f8f;">\\'"</span> <span style="color: #b22222;">; </span><span style="color: #b22222;">plist, pom</span>
@@ -5105,13 +5105,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1ad795a" class="outline-2">
-<h2 id="org1ad795a">YAML</h2>
-<div class="outline-text-2" id="text-org1ad795a">
+<div id="outline-container-org7f8e2fe" class="outline-2">
+<h2 id="org7f8e2fe">YAML</h2>
+<div class="outline-text-2" id="text-org7f8e2fe">
 </div>
-<div id="outline-container-orgef7bd66" class="outline-3">
-<h3 id="orgef7bd66"><code>yaml-mode</code></h3>
-<div class="outline-text-3" id="text-orgef7bd66">
+<div id="outline-container-orgdfe83c8" class="outline-3">
+<h3 id="orgdfe83c8"><code>yaml-mode</code></h3>
+<div class="outline-text-3" id="text-orgdfe83c8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package yaml-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5133,13 +5133,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf9df970" class="outline-2">
-<h2 id="orgf9df970">TOML</h2>
-<div class="outline-text-2" id="text-orgf9df970">
+<div id="outline-container-org932c715" class="outline-2">
+<h2 id="org932c715">TOML</h2>
+<div class="outline-text-2" id="text-org932c715">
 </div>
-<div id="outline-container-orgfd16f83" class="outline-3">
-<h3 id="orgfd16f83"><code>toml-mode</code></h3>
-<div class="outline-text-3" id="text-orgfd16f83">
+<div id="outline-container-org34db3f1" class="outline-3">
+<h3 id="org34db3f1"><code>toml-mode</code></h3>
+<div class="outline-text-3" id="text-org34db3f1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package toml-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5158,13 +5158,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8a4258c" class="outline-2">
-<h2 id="org8a4258c">Lua</h2>
-<div class="outline-text-2" id="text-org8a4258c">
+<div id="outline-container-org13668e8" class="outline-2">
+<h2 id="org13668e8">Lua</h2>
+<div class="outline-text-2" id="text-org13668e8">
 </div>
-<div id="outline-container-orgd691432" class="outline-3">
-<h3 id="orgd691432"><code>lua-mode</code></h3>
-<div class="outline-text-3" id="text-orgd691432">
+<div id="outline-container-org28baf3d" class="outline-3">
+<h3 id="org28baf3d"><code>lua-mode</code></h3>
+<div class="outline-text-3" id="text-org28baf3d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package lua-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5178,13 +5178,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf516b1c" class="outline-2">
-<h2 id="orgf516b1c">Jinja2</h2>
-<div class="outline-text-2" id="text-orgf516b1c">
+<div id="outline-container-orgc532652" class="outline-2">
+<h2 id="orgc532652">Jinja2</h2>
+<div class="outline-text-2" id="text-orgc532652">
 </div>
-<div id="outline-container-org3545b2b" class="outline-3">
-<h3 id="org3545b2b"><code>jinja2-mode</code></h3>
-<div class="outline-text-3" id="text-org3545b2b">
+<div id="outline-container-org5e8914f" class="outline-3">
+<h3 id="org5e8914f"><code>jinja2-mode</code></h3>
+<div class="outline-text-3" id="text-org5e8914f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package jinja2-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5202,13 +5202,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org760f33e" class="outline-2">
-<h2 id="org760f33e">json</h2>
-<div class="outline-text-2" id="text-org760f33e">
+<div id="outline-container-org7dcdaac" class="outline-2">
+<h2 id="org7dcdaac">json</h2>
+<div class="outline-text-2" id="text-org7dcdaac">
 </div>
-<div id="outline-container-org2fbfa15" class="outline-3">
-<h3 id="org2fbfa15"><code>json-mode</code></h3>
-<div class="outline-text-3" id="text-org2fbfa15">
+<div id="outline-container-org8206c3d" class="outline-3">
+<h3 id="org8206c3d"><code>json-mode</code></h3>
+<div class="outline-text-3" id="text-org8206c3d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package json-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span>
@@ -5218,13 +5218,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org12fe178" class="outline-2">
-<h2 id="org12fe178">Web mode</h2>
-<div class="outline-text-2" id="text-org12fe178">
+<div id="outline-container-orge05e71d" class="outline-2">
+<h2 id="orge05e71d">Web mode</h2>
+<div class="outline-text-2" id="text-orge05e71d">
 </div>
-<div id="outline-container-org19bcaa1" class="outline-3">
-<h3 id="org19bcaa1"><code>web-mode</code></h3>
-<div class="outline-text-3" id="text-org19bcaa1">
+<div id="outline-container-orgd6dea36" class="outline-3">
+<h3 id="orgd6dea36"><code>web-mode</code></h3>
+<div class="outline-text-3" id="text-orgd6dea36">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(<span style="color: #4169e1;">defun</span> <span style="color: #0000ff;">+config/django-web-mode</span> ()
 <span class="linenr"> 2: </span>  <span style="color: #bc8f8f;">"Set web-engine to django if `</span><span style="color: #5f9ea0;">manage.py</span><span style="color: #bc8f8f;">' detected in `</span><span style="color: #5f9ea0;">projectile-project-root</span><span style="color: #bc8f8f;">'."</span>
@@ -5321,9 +5321,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org9a3ea6e" class="outline-3">
-<h3 id="org9a3ea6e"><code>emmet-mode</code></h3>
-<div class="outline-text-3" id="text-org9a3ea6e">
+<div id="outline-container-orgf44aab6" class="outline-3">
+<h3 id="orgf44aab6"><code>emmet-mode</code></h3>
+<div class="outline-text-3" id="text-orgf44aab6">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package emmet-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5336,9 +5336,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4fa4744" class="outline-3">
-<h3 id="org4fa4744"><code>skewer-mode</code></h3>
-<div class="outline-text-3" id="text-org4fa4744">
+<div id="outline-container-orgfa94a44" class="outline-3">
+<h3 id="orgfa94a44"><code>skewer-mode</code></h3>
+<div class="outline-text-3" id="text-orgfa94a44">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package skewer-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5348,9 +5348,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf28f888" class="outline-3">
-<h3 id="orgf28f888"><code>lsp-tailwindcss</code></h3>
-<div class="outline-text-3" id="text-orgf28f888">
+<div id="outline-container-orge4fbf19" class="outline-3">
+<h3 id="orge4fbf19"><code>lsp-tailwindcss</code></h3>
+<div class="outline-text-3" id="text-orge4fbf19">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package lsp-tailwindcss
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5360,9 +5360,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org342e913" class="outline-3">
-<h3 id="org342e913"><code>sass-mode</code></h3>
-<div class="outline-text-3" id="text-org342e913">
+<div id="outline-container-org536feab" class="outline-3">
+<h3 id="org536feab"><code>sass-mode</code></h3>
+<div class="outline-text-3" id="text-org536feab">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package sass-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5372,9 +5372,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org782de21" class="outline-3">
-<h3 id="org782de21"><code>css-eldoc</code></h3>
-<div class="outline-text-3" id="text-org782de21">
+<div id="outline-container-org2d32521" class="outline-3">
+<h3 id="org2d32521"><code>css-eldoc</code></h3>
+<div class="outline-text-3" id="text-org2d32521">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package css-eldoc
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5387,9 +5387,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4bb940e" class="outline-3">
-<h3 id="org4bb940e"><code>com-css-sort</code></h3>
-<div class="outline-text-3" id="text-org4bb940e">
+<div id="outline-container-org7d8cc3b" class="outline-3">
+<h3 id="org7d8cc3b"><code>com-css-sort</code></h3>
+<div class="outline-text-3" id="text-org7d8cc3b">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package com-css-sort
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5400,9 +5400,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd86b4cb" class="outline-3">
-<h3 id="orgd86b4cb"><code>css-mode</code></h3>
-<div class="outline-text-3" id="text-orgd86b4cb">
+<div id="outline-container-org2a88197" class="outline-3">
+<h3 id="org2a88197"><code>css-mode</code></h3>
+<div class="outline-text-3" id="text-org2a88197">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package css-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:hook</span> ((css-mode
@@ -5418,9 +5418,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org7db8c11" class="outline-3">
-<h3 id="org7db8c11"><code>javascript</code></h3>
-<div class="outline-text-3" id="text-org7db8c11">
+<div id="outline-container-org59901d0" class="outline-3">
+<h3 id="org59901d0"><code>javascript</code></h3>
+<div class="outline-text-3" id="text-org59901d0">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">  1: </span>(<span style="color: #4169e1;">defvar</span> <span style="color: #b8860b;">+javascript-npm-conf</span> (make-hash-table <span style="color: #00008b;">:test</span> 'equal))
 <span class="linenr">  2: </span>
@@ -5554,9 +5554,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8c1e1c0" class="outline-3">
-<h3 id="org8c1e1c0"><code>js2-mode</code></h3>
-<div class="outline-text-3" id="text-org8c1e1c0">
+<div id="outline-container-orge0ef857" class="outline-3">
+<h3 id="orge0ef857"><code>js2-mode</code></h3>
+<div class="outline-text-3" id="text-orge0ef857">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package js2-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:interpreter</span> (<span style="color: #bc8f8f;">"node"</span> . js2-mode)
@@ -5578,9 +5578,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org8771f7f" class="outline-3">
-<h3 id="org8771f7f"><code>xref-js2</code></h3>
-<div class="outline-text-3" id="text-org8771f7f">
+<div id="outline-container-org4d09df8" class="outline-3">
+<h3 id="org4d09df8"><code>xref-js2</code></h3>
+<div class="outline-text-3" id="text-org4d09df8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package xref-js2
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5592,9 +5592,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org6b7f4a5" class="outline-3">
-<h3 id="org6b7f4a5"><code>js2-refactor</code></h3>
-<div class="outline-text-3" id="text-org6b7f4a5">
+<div id="outline-container-org99b6619" class="outline-3">
+<h3 id="org99b6619"><code>js2-refactor</code></h3>
+<div class="outline-text-3" id="text-org99b6619">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package js2-refactor
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5608,9 +5608,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgabbd7a7" class="outline-3">
-<h3 id="orgabbd7a7"><code>rjsx-mode</code></h3>
-<div class="outline-text-3" id="text-orgabbd7a7">
+<div id="outline-container-orgbc0e709" class="outline-3">
+<h3 id="orgbc0e709"><code>rjsx-mode</code></h3>
+<div class="outline-text-3" id="text-orgbc0e709">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package rjsx-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5649,9 +5649,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org0f98006" class="outline-3">
-<h3 id="org0f98006"><code>typescript-mode</code></h3>
-<div class="outline-text-3" id="text-org0f98006">
+<div id="outline-container-org22e41f1" class="outline-3">
+<h3 id="org22e41f1"><code>typescript-mode</code></h3>
+<div class="outline-text-3" id="text-org22e41f1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package typescript-mode
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5685,9 +5685,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org138cedb" class="outline-3">
-<h3 id="org138cedb"><code>tide</code></h3>
-<div class="outline-text-3" id="text-org138cedb">
+<div id="outline-container-org4a0fa8a" class="outline-3">
+<h3 id="org4a0fa8a"><code>tide</code></h3>
+<div class="outline-text-3" id="text-org4a0fa8a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package tide
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -5702,9 +5702,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb05adf5" class="outline-3">
-<h3 id="orgb05adf5"><code>npm-mode</code></h3>
-<div class="outline-text-3" id="text-orgb05adf5">
+<div id="outline-container-org7b39f64" class="outline-3">
+<h3 id="org7b39f64"><code>npm-mode</code></h3>
+<div class="outline-text-3" id="text-org7b39f64">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package npm-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -5712,9 +5712,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc46b43b" class="outline-3">
-<h3 id="orgc46b43b"><code>nodejs-repl</code></h3>
-<div class="outline-text-3" id="text-orgc46b43b">
+<div id="outline-container-org1c6dbad" class="outline-3">
+<h3 id="org1c6dbad"><code>nodejs-repl</code></h3>
+<div class="outline-text-3" id="text-org1c6dbad">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package nodejs-repl
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -5726,13 +5726,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga597057" class="outline-2">
-<h2 id="orga597057">Latex</h2>
-<div class="outline-text-2" id="text-orga597057">
+<div id="outline-container-org74fd803" class="outline-2">
+<h2 id="org74fd803">Latex</h2>
+<div class="outline-text-2" id="text-org74fd803">
 </div>
-<div id="outline-container-org605f07e" class="outline-3">
-<h3 id="org605f07e"><code>auctex</code></h3>
-<div class="outline-text-3" id="text-org605f07e">
+<div id="outline-container-orge69fba5" class="outline-3">
+<h3 id="orge69fba5"><code>auctex</code></h3>
+<div class="outline-text-3" id="text-orge69fba5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package auctex
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:mode</span> ((<span style="color: #bc8f8f;">"\\.tex\\'"</span> . latex-mode)
@@ -5753,9 +5753,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orga3c8f3c" class="outline-3">
-<h3 id="orga3c8f3c"><code>preview</code></h3>
-<div class="outline-text-3" id="text-orga3c8f3c">
+<div id="outline-container-orgebef1f3" class="outline-3">
+<h3 id="orgebef1f3"><code>preview</code></h3>
+<div class="outline-text-3" id="text-orgebef1f3">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package preview
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -5769,9 +5769,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf310a12" class="outline-3">
-<h3 id="orgf310a12"><code>reftex</code></h3>
-<div class="outline-text-3" id="text-orgf310a12">
+<div id="outline-container-orgd14994a" class="outline-3">
+<h3 id="orgd14994a"><code>reftex</code></h3>
+<div class="outline-text-3" id="text-orgd14994a">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package reftex
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span> nil
@@ -5782,9 +5782,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge776f32" class="outline-3">
-<h3 id="orge776f32"><code>bibtex</code></h3>
-<div class="outline-text-3" id="text-orge776f32">
+<div id="outline-container-org500d4d8" class="outline-3">
+<h3 id="org500d4d8"><code>bibtex</code></h3>
+<div class="outline-text-3" id="text-org500d4d8">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package bibtex
 <span class="linenr">2: </span>  <span style="color: #00008b;">:config</span>
@@ -5799,9 +5799,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org39c8cf9" class="outline-3">
-<h3 id="org39c8cf9"><code>LaTex</code></h3>
-<div class="outline-text-3" id="text-org39c8cf9">
+<div id="outline-container-orgb421007" class="outline-3">
+<h3 id="orgb421007"><code>LaTex</code></h3>
+<div class="outline-text-3" id="text-orgb421007">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span><span style="color: #b22222;">;; </span><span style="color: #b22222;">Auto-fill for LaTeX</span>
 <span class="linenr"> 2: </span>(<span style="color: #4169e1;">defun</span> <span style="color: #0000ff;">lem-latex-auto-fill</span> ()
@@ -5862,13 +5862,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1111dbb" class="outline-2">
-<h2 id="org1111dbb">Markdown</h2>
-<div class="outline-text-2" id="text-org1111dbb">
+<div id="outline-container-org0b6b20b" class="outline-2">
+<h2 id="org0b6b20b">Markdown</h2>
+<div class="outline-text-2" id="text-org0b6b20b">
 </div>
-<div id="outline-container-org101eb36" class="outline-3">
-<h3 id="org101eb36"><code>markdown-mode</code></h3>
-<div class="outline-text-3" id="text-org101eb36">
+<div id="outline-container-orgd2038ff" class="outline-3">
+<h3 id="orgd2038ff"><code>markdown-mode</code></h3>
+<div class="outline-text-3" id="text-orgd2038ff">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">  1: </span><span style="color: #b22222;">;; </span><span style="color: #b22222;">autoloads (from doom)</span>
 <span class="linenr">  2: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Compilation handlers</span>
@@ -6004,9 +6004,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgde468e8" class="outline-3">
-<h3 id="orgde468e8"><code>edit-indirect</code></h3>
-<div class="outline-text-3" id="text-orgde468e8">
+<div id="outline-container-org5298b80" class="outline-3">
+<h3 id="org5298b80"><code>edit-indirect</code></h3>
+<div class="outline-text-3" id="text-org5298b80">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package edit-indirect
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6016,13 +6016,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgbc3a144" class="outline-2">
-<h2 id="orgbc3a144">Python</h2>
-<div class="outline-text-2" id="text-orgbc3a144">
+<div id="outline-container-org0f89837" class="outline-2">
+<h2 id="org0f89837">Python</h2>
+<div class="outline-text-2" id="text-org0f89837">
 </div>
-<div id="outline-container-org1eea072" class="outline-3">
-<h3 id="org1eea072">header</h3>
-<div class="outline-text-3" id="text-org1eea072">
+<div id="outline-container-org87f464c" class="outline-3">
+<h3 id="org87f464c">header</h3>
+<div class="outline-text-3" id="text-org87f464c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">config-python --- `</span><span style="color: #5f9ea0;">python-mode</span><span style="color: #b22222;">' configuration -*- lexical-binding: t -*-</span>
 <span class="linenr">2: </span><span style="color: #b22222;">;;; </span><span style="color: #b22222;">Commentary:</span>
@@ -6031,9 +6031,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org41f6666" class="outline-3">
-<h3 id="org41f6666"><code>python</code></h3>
-<div class="outline-text-3" id="text-org41f6666">
+<div id="outline-container-orgce8066e" class="outline-3">
+<h3 id="orgce8066e"><code>python</code></h3>
+<div class="outline-text-3" id="text-orgce8066e">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package python
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:mode</span> (<span style="color: #bc8f8f;">"[./]flake8\\'"</span> . conf-mode)
@@ -6087,9 +6087,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgb680294" class="outline-3">
-<h3 id="orgb680294"><code>pydoc</code></h3>
-<div class="outline-text-3" id="text-orgb680294">
+<div id="outline-container-orgc4f86e4" class="outline-3">
+<h3 id="orgc4f86e4"><code>pydoc</code></h3>
+<div class="outline-text-3" id="text-orgc4f86e4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package pydoc
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>)
@@ -6097,9 +6097,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org130c3b6" class="outline-3">
-<h3 id="org130c3b6"><code>ob-ipython</code></h3>
-<div class="outline-text-3" id="text-org130c3b6">
+<div id="outline-container-orgae622b4" class="outline-3">
+<h3 id="orgae622b4"><code>ob-ipython</code></h3>
+<div class="outline-text-3" id="text-orgae622b4">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ob-ipython
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6114,9 +6114,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org1ad9f17" class="outline-3">
-<h3 id="org1ad9f17"><code>pip-requirements</code></h3>
-<div class="outline-text-3" id="text-org1ad9f17">
+<div id="outline-container-org2943739" class="outline-3">
+<h3 id="org2943739"><code>pip-requirements</code></h3>
+<div class="outline-text-3" id="text-org2943739">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package pip-requirements
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6127,9 +6127,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orge560b90" class="outline-3">
-<h3 id="orge560b90"><code>inferior-python-mode</code></h3>
-<div class="outline-text-3" id="text-orge560b90">
+<div id="outline-container-orgea03b76" class="outline-3">
+<h3 id="orgea03b76"><code>inferior-python-mode</code></h3>
+<div class="outline-text-3" id="text-orgea03b76">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package inferior-python-mode
 <span class="linenr">2: </span>  <span style="color: #00008b;">:hook</span> (inferior-python-mode . hide-mode-line-mode))
@@ -6137,9 +6137,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgf37ea4a" class="outline-3">
-<h3 id="orgf37ea4a"><code>lsp-pyright</code></h3>
-<div class="outline-text-3" id="text-orgf37ea4a">
+<div id="outline-container-org1424893" class="outline-3">
+<h3 id="org1424893"><code>lsp-pyright</code></h3>
+<div class="outline-text-3" id="text-org1424893">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package lsp-pyright
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6157,9 +6157,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org4060230" class="outline-3">
-<h3 id="org4060230"><code>python-docstring</code></h3>
-<div class="outline-text-3" id="text-org4060230">
+<div id="outline-container-orgd44381d" class="outline-3">
+<h3 id="orgd44381d"><code>python-docstring</code></h3>
+<div class="outline-text-3" id="text-orgd44381d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package python-docstring
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6169,9 +6169,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org11fc407" class="outline-3">
-<h3 id="org11fc407"><code>pipenv</code></h3>
-<div class="outline-text-3" id="text-org11fc407">
+<div id="outline-container-org7453547" class="outline-3">
+<h3 id="org7453547"><code>pipenv</code></h3>
+<div class="outline-text-3" id="text-org7453547">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package pipenv
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6187,9 +6187,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgcb5d6ac" class="outline-3">
-<h3 id="orgcb5d6ac"><code>flycheck-pycheckers</code></h3>
-<div class="outline-text-3" id="text-orgcb5d6ac">
+<div id="outline-container-org5ee3853" class="outline-3">
+<h3 id="org5ee3853"><code>flycheck-pycheckers</code></h3>
+<div class="outline-text-3" id="text-org5ee3853">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package flycheck-pycheckers
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6201,13 +6201,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org2bf9ace" class="outline-2">
-<h2 id="org2bf9ace">Rust</h2>
-<div class="outline-text-2" id="text-org2bf9ace">
+<div id="outline-container-org58c2dd0" class="outline-2">
+<h2 id="org58c2dd0">Rust</h2>
+<div class="outline-text-2" id="text-org58c2dd0">
 </div>
-<div id="outline-container-org644872b" class="outline-3">
-<h3 id="org644872b"><code>rust-mode</code></h3>
-<div class="outline-text-3" id="text-org644872b">
+<div id="outline-container-orgfef488c" class="outline-3">
+<h3 id="orgfef488c"><code>rust-mode</code></h3>
+<div class="outline-text-3" id="text-orgfef488c">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span><span style="color: #b22222;">;;;</span><span style="color: #b22222;">###</span><span style="color: #ff0000; font-weight: bold;">autoload</span>
 <span class="linenr"> 2: </span>(<span style="color: #4169e1;">defun</span> <span style="color: #0000ff;">+rust-cargo-project-p</span> ()
@@ -6231,9 +6231,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc2c2367" class="outline-3">
-<h3 id="orgc2c2367"><code>rustic</code></h3>
-<div class="outline-text-3" id="text-orgc2c2367">
+<div id="outline-container-org6cf29bc" class="outline-3">
+<h3 id="org6cf29bc"><code>rustic</code></h3>
+<div class="outline-text-3" id="text-org6cf29bc">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package rustic
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6258,9 +6258,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgd32ecd0" class="outline-3">
-<h3 id="orgd32ecd0"><code>flycheck-rust</code></h3>
-<div class="outline-text-3" id="text-orgd32ecd0">
+<div id="outline-container-org66d69ef" class="outline-3">
+<h3 id="org66d69ef"><code>flycheck-rust</code></h3>
+<div class="outline-text-3" id="text-org66d69ef">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package flycheck-rust
 <span class="linenr">2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6273,13 +6273,13 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org41d39dc" class="outline-2">
-<h2 id="org41d39dc">Ansible</h2>
-<div class="outline-text-2" id="text-org41d39dc">
+<div id="outline-container-org6ab5cb1" class="outline-2">
+<h2 id="org6ab5cb1">Ansible</h2>
+<div class="outline-text-2" id="text-org6ab5cb1">
 </div>
-<div id="outline-container-org1180df6" class="outline-3">
-<h3 id="org1180df6"><code>ansible</code> package</h3>
-<div class="outline-text-3" id="text-org1180df6">
+<div id="outline-container-orgc813f9d" class="outline-3">
+<h3 id="orgc813f9d"><code>ansible</code> package</h3>
+<div class="outline-text-3" id="text-orgc813f9d">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr"> 1: </span>(use-package ansible
 <span class="linenr"> 2: </span>  <span style="color: #00008b;">:ensure</span>
@@ -6296,9 +6296,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgfb6a29d" class="outline-3">
-<h3 id="orgfb6a29d"><code>ansible-doc</code></h3>
-<div class="outline-text-3" id="text-orgfb6a29d">
+<div id="outline-container-org2c5ae6f" class="outline-3">
+<h3 id="org2c5ae6f"><code>ansible-doc</code></h3>
+<div class="outline-text-3" id="text-org2c5ae6f">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span class="linenr">1: </span>(use-package ansible-doc
 <span class="linenr">2: </span>  <span style="color: #00008b;">:after</span> ansible
@@ -6314,9 +6314,9 @@
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: 2024-03-10 Sun 00:00</p>
+<p class="date">Date: 2024-03-10 Sun 09:00</p>
 <p class="author">Author: Kristian Alexander P</p>
-<p class="date">Created: 2024-03-10 Sun 09:48</p>
+<p class="date">Created: 2024-03-10 Sun 09:49</p>
 </div>
 </body>
 </html>
