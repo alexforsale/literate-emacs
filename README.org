@@ -155,7 +155,7 @@ Now much more simpler since =[[https://github.com/jwiegley/use-package][use-pack
    '(use-package-enable-imenu-support t)
    '(use-package-always-defer nil)
    '(use-package-verbose t)
-   '(use-package-check-before-init t))
+   '(use-package-check-before-init nil))
 #+end_src
 *** footer                                                       :noexport:
 #+begin_src emacs-lisp -n
