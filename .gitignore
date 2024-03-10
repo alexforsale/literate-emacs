@@ -33,3 +33,6 @@ modules/
 config.el
 init.el
 early-init.el
+.packages/
+content/
+public/
