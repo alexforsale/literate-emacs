@@ -604,15 +604,16 @@
       :config
       (dashboard-setup-startup-hook)
       (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))
-            dashboard-banner-logo-title (format "Welcome, %s" user-full-name)
-            dashboard-items '((recentf . 5)
+            ;;dashboard-banner-logo-title (format "Welcome, %s" user-full-name)
+            dashboard-items '((recents . 5)
                               (bookmarks . 5)
                               (projects . 5)
                               (agenda . 5)
                               (registers . 5))
             dashboard-projects-switch-function 'projectile-persp-switch-project
             dashboard-week-agenda t
-            dashboard-filter-agenda-entry 'dashboard-no-filter-agenda))
+            dashboard-filter-agenda-entry 'dashboard-no-filter-agenda
+            ))
 
     (use-package tab-bar
       :init
