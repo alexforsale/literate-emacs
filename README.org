@@ -242,7 +242,6 @@
     (setq evil-embrace-show-help-p nil))
 
   (use-package evil-traces
-    :diminish
     :ensure t
     :after evil-ex
     :config
@@ -596,7 +595,6 @@
     (help-at-pt-display-when-idle t))
 
   (use-package hideshow
-    :diminish hs-minor-mode
     :hook (prog-mode . hs-minor-mode))
 
   (use-package uniquify
@@ -964,7 +962,6 @@
                    `("id_ID" ,hunspell-id_ID-path)))))
 
 (use-package whitespace
-  :diminish (global-whitespace-mode whitespace-mode)
   :hook (((prog-mode text-mode conf-mode) . whitespace-mode)
          (before-save . whitespace-cleanup))
   :custom
@@ -980,7 +977,6 @@
   (auto-compression-mode t))
 
 (use-package subword
-  :diminish
   :init
   (global-subword-mode 1))
 
@@ -1000,7 +996,6 @@
   (setq-default sentence-end-double-space nil))
 
 (use-package flyspell
-  :diminish
   :custom
   (flyspell-issue-welcome-flag nil)
   (flyspell-issue-message-flag nil)
@@ -1009,7 +1004,6 @@
          (prog-mode . flyspell-prog-mode)))
 
 (use-package flymake
-  :diminish
   :hook (prog-mode . flymake-mode))
 
 (use-package imenu
@@ -1017,7 +1011,6 @@
   (imenu-auto-rescan t))
 
 (use-package simple
-  :diminish (visual-line-mode)
   :hook ((makefile-mode . indent-tabs-mode)
          (text-mode . visual-line-mode))
   :init
@@ -1920,7 +1913,6 @@
 
   (use-package org-fancy-priorities ; priority icons
     :ensure
-    :diminish
     :hook (org-mode . org-fancy-priorities-mode)
     :hook (org-agenda-mode . org-fancy-priorities-mode)
     :custom
@@ -2247,7 +2239,6 @@
 
   (use-package org-roam-ui
     :ensure
-    :diminish (org-roam-ui-mode org-roam-ui-follow-mode)
     :after org-roam
     :hook (org-mode . (lambda () (unless org-roam-ui-mode(org-roam-ui-mode 'toggle))))
     :config
@@ -2310,7 +2301,6 @@
 
   (use-package consult-org-roam
     :ensure
-    :diminish
     :after org-roam
     :init
     (require 'consult-org-roam)
