@@ -929,6 +929,17 @@ Making /Emacs/ more colourful.
 
   (use-package nerd-fonts)
 #+end_src
+** =helpful=
+#+begin_src emacs-lisp -n
+  (use-package helpful
+    :ensure
+    :bind
+    ("C-h f" . helpful-function)
+    ([remap describe-symbol] . helpful-symbol)
+    ([remap describe-variable] . helpful-variable)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-key] . helpful-key))
+#+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-ui)
