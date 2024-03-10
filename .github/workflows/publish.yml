@@ -12,7 +12,7 @@ jobs:
       - name: Check Out
         uses: actions/checkout@v4
       - name: Install Emacs
-        run: apt install emacs-nox --yes
+        run: sudo apt install emacs-nox --yes
       - name: Build the site
         run: ./publish.sh
       - name: Publish generated content to GitHub Pages
