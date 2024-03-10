@@ -3787,7 +3787,7 @@
     :hook ((js2-mode) . lsp-deferred)
     :hook (js2-mode . rainbow-delimiters-mode)
     :hook (js2-mode . js2-imenu-extras-mode)
-    :hook (js2-mode . (lambda () (flycheck-select-checker 'javascript-eslint)))
+    :hook (js2-mode . (lambda () (flycheck-select-checker 'javascript-jslint)))
     :hook (js2-mode . (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
     :config
     (with-eval-after-load 'skewer-mode
