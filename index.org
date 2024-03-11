@@ -1024,6 +1024,7 @@ Making /Emacs/ more colourful.
     :init
     (global-auto-revert-mode 1)
     :custom
+    (auto-revert-interval 60)
     (global-auto-revert-non-file-buffers t)
     (auto-revert-verbose nil)
     (auto-revert-stop-on-user-input t))
