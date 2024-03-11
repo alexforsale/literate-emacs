@@ -12,7 +12,6 @@
 
 (package-install 'htmlize)
 (package-install 'reformatter)
-(package-install 'nix-mode)
 (package-install 'color-theme-modern)
 
 (require 'htmlize)
@@ -29,17 +28,24 @@
       org-src-fontify-natively t)
 
 (setq org-publish-project-alist
-      (list
-       (list "literate-emacs"
-             :recursive t
-             :base-directory "./content"
-             :publishing-directory "./public"
-             :publishing-function 'org-html-publish-to-html
-             :with-author t
-             :with-creator nil
-             :with-toc t
-             :setion-numbers nil
-             :time-stamp-file nil)))
+      '(("literate-emacs"
+         :components ("pages" "static"))
+        ("pages"
+         :recursive t
+         :base-directory "./content"
+         :publishing-directory "./public"
+         :publishing-function org-html-publish-to-html
+         :with-author t
+         :with-creator nil
+         :with-toc t
+         :setion-numbers nil
+         :time-stamp-file nil)
+        ("static"
+         :recursive t
+         :base-directory "./assets"
+         :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+         :publishing-directory "./public/assets"
+         :publishing-function org-publish-attachment)))
 
 ;; Generate site
 
