@@ -2574,7 +2574,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
     :ensure
     :after org-roam
     :custom
-    (deft-directory org-roam-directory)
+    (deft-directory org-directory)
     (deft-default-extension "org")
     (deft-recursive t)
     (deft-use-filename-as-title t)
@@ -2583,7 +2583,24 @@ I still have a mixed feeling for this package, but it still easier to configure 
        (nospace . "-")
        (case-fn . downcase)))
     :config
-    (add-to-list 'deft-extensions "tex")
+    (setq deft-strip-summary-regexp
+          (concat "\\("
+                  "[\n\t]" ;; blank
+                  "\\|^#\\+[[:alpha:]_]+:.*$" ;; org-mode metadata
+                  "\\|^:PROPERTIES:\n\\(.+\n\\)+:END:\n" ;; org-roam ID
+                  "\\|\\[\\[\\(.*\\]\\)" ;; any link
+                  "\\)"))
+    (setq deft-strip-title-regexp
+          (concat "\\("
+                  "?:^%+"
+                  "\\|^:PROPERTIES:\n\\(.+\n\\)+:END:\n" ;; org-roam ID
+                  "\\|^\\TITLE: *"
+                  "\\|^[#* ]+"
+                  "\\|-\\*-[[:alpha:]]+-\\*-"
+                  "\\|^Title:[	 ]*"
+                  "\\|#+$"
+                  "\\)"))
+    (setq deft-extensions (list "org"))
     (add-hook 'deft-mode-hook #'evil-normalize-keymaps)
     (evil-set-initial-state #'deft-mode 'insert))
 #+end_src
