@@ -1037,7 +1037,7 @@ Making /Emacs/ more colourful.
     :custom
     (global-auto-revert-non-file-buffers t)
     (auto-revert-verbose nil)
-    (auto-revert-stop-on-user-input nil))
+    (auto-revert-stop-on-user-input t))
 #+end_src
 ** =savehist=                                                      :builtin:
 #+begin_src emacs-lisp -n
