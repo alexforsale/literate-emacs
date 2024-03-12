@@ -3669,10 +3669,10 @@ Useful for reading /epubs/.
   ;;; config-dired.el ends here
 #+end_src
 * Treemacs
-I sometimes need /treemacs/ when working on a large directory of files.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-treemacs.el :mkdirp t
 :END:
+I sometimes need /treemacs/ when working on a large directory of files.
 ** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-treemacs --- treemacs configuration file -*- lexical-binding: t -*-
