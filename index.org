@@ -3554,6 +3554,15 @@ This is supposed to be a builtin package, but somehow I can not load it.
       "lp" 'lorem-ipsum-insert-paragraphs
       "ls" 'lorem-ipsum-insert-sentences)))
 #+end_src
+** =vimrc-mode=
+Blasphemy, I know. But I still needs /vim/ for editing mostly in remote machine, and sometimes the connection is unreliable which makes my /Emacs/ hangs. For this situation, /vim/ + /screen/ or /tmux/ is more sensible.
+#+begin_src emacs-lisp -n
+  (use-package vimrc-mode
+    :ensure
+    :defer t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
+#+end_src
 ** footer                                                          :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-tools)
