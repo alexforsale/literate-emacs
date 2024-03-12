@@ -1687,6 +1687,7 @@ Since /Emacs/ is a self-documenting editor[fn:18]. It's certainly nice to have a
 ** =eshell=                                                        :builtin:
 #+caption: /eshell/ in action
 [[./assets/img/emacs-eshell.png][file:assets/img/emacs-eshell.png]]
+
 A shell-like command interpreter implemented in Emacs Lisp.
 #+begin_src emacs-lisp -n
   (use-package eshell
@@ -1927,7 +1928,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 :PROPERTIES:
 :header-args: :tangle ./modules/config-project.el :mkdirp t
 :END:
-** header
+** header                                                         :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-project --- project configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -2279,7 +2280,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 :PROPERTIES:
 :header-args: :tangle ./modules/config-org.el :mkdirp t
 :END:
-** header
+** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-org --- Org-mode configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -3458,7 +3459,6 @@ Useful for reading /epubs/.
 ** =emms=                                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package emms
-    :commands (emms)
     :config
     (emms-all)
     (emms-default-players)
