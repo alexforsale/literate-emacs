@@ -698,6 +698,8 @@ A fancy and fast mode-line inspired by minimalism design[fn:16].
 #+end_src
 ** =dashboard=
 An extensible emacs dashboard[fn:17].
+#+caption: /Emacs/ dashboard
+[[./assets/img/emacs-dashboard.png][file:assets/img/emacs-dashboard.png]]
 #+begin_src emacs-lisp -n
   ;; use-package with package.el:
   (use-package dashboard
