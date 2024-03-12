@@ -1237,8 +1237,8 @@ Making /Emacs/ more colourful.
         (add-to-list 'ispell-hunspell-dict-paths-alist
                      `("id_ID" ,hunspell-id_ID-path)))))
 #+end_src
-** =whitespace=                                                    :builtin:
-#+begin_src emacs-lisp -n
+** =whitespace=                                           :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
   (use-package whitespace
     :hook (((prog-mode text-mode conf-mode) . whitespace-mode)
            (before-save . whitespace-cleanup))
@@ -1627,8 +1627,8 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package tempel
     :ensure
-    :custom
-    (tempel-trigger-prefix "<")
+    ;; :custom
+    ;; (tempel-trigger-prefix "<")
     :bind (("M-+" . tempel-complete)
            ("M-*" . tempel-insert))
     :init
@@ -1885,6 +1885,14 @@ I still have a mixed feeling for this package, but it still easier to configure 
     ;;    "C-\"" 'sp-change-inner
     ;;    "M-i" 'sp-change-enclosing))
     )
+#+end_src
+** ws-butler
+#+begin_src emacs-lisp -n
+  (use-package ws-butler
+    :ensure
+    :hook (prog-mode . ws-butler-mode)
+    :config
+    (setq ws-butler-convert-leading-tabs-or-spaces t))
 #+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -3401,13 +3409,6 @@ Useful for reading /epubs/.
         "4" 'emms-browser-expand-to-level-4)
       (general-def 'emms-playlist-mode-map
         "q" 'bury-buffer)))
-#+end_src
-** =ws-butler=
-#+begin_src emacs-lisp -n
-  (use-package ws-butler
-    :ensure
-    :config
-    (setq ws-butler-convert-leading-tabs-or-spaces t))
 #+end_src
 ** =editorconfig=
 #+begin_src emacs-lisp -n
