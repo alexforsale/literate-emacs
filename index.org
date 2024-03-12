@@ -3460,9 +3460,11 @@ Useful for reading /epubs/.
     :init
     (elfeed-org))
 #+end_src
-** =emms=                                                          :builtin:
+** =emms=                                                 
+This is supposed to be a builtin package, but somehow I can not load it.
 #+begin_src emacs-lisp -n
   (use-package emms
+    :disabled
     :config
     (emms-all)
     (emms-default-players)
