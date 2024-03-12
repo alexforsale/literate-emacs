@@ -24,7 +24,7 @@ This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mo
 
 #+caption: many /Emacs/ capabilities
 [[./assets/img/emacs.png][file:assets/img/emacs.png]]
-Since this file in /Emacs/ is considered to be a library, it should follow the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Headers.html][convention]]. But this is not needed in the /HTML/ exported file, so every heading with the name =header= or =footer= will be tagged with the =noexport= tag.
+Since this file in /Emacs/ is considered to be a library, it should follow the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Headers.html][convention]]. But this is not needed in the /HTML/ exported file, so every heading with the name =header= or =footer= will be tagged with the =noexport= tag and won't show in the /HTML/ page, it's' kind of repetitive anyway.
 ** header                                                         :noexport:
 #+begin_src emacs-lisp +n
   ;;; config --- Custom Configuration -*- lexical-binding: t -*-
@@ -407,6 +407,7 @@ Multiple cursors for evil-mode, based on iedit[fn:11].
   ;;; config-evil.el ends here
 #+end_src
 * Keybindings
+Keybindings in /Emacs/ is always been my struggle, my brain isn't big enough to memorize all the default keybindings (though over the years my fingers started to memorize some of them). At first I started using /[[https://github.com/abo-abo/hydra/][hydra]]/, it's a wonderful package for customized keybindings. But configuring them feels like a chore, considering I'm still working my way on finding my own comfort in keybindings.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-keybindings.el :mkdirp t
 :ID:       3b19d30f-9f31-4328-9a90-cccb19f23fac
@@ -418,6 +419,7 @@ Multiple cursors for evil-mode, based on iedit[fn:11].
   ;;; Code:
 #+end_src
 ** =general.el=
+(I think) is the keybindings used in /doom/, CMIIW it's been a while since I've used /doomemacs/.
 #+caption: general keybindings with =which-key=
 [[./assets/img/general-keybinding-with-which-key.png][file:assets/img/general-keybinding-with-which-key.png]]
 More convenient key definitions in emacs[fn:12].
@@ -673,7 +675,7 @@ A utility package to collect various Icon Fonts and propertize them within Emacs
 #+end_src
 This needs a manual intervention from the user to install the fonts (by running the =all-the-icons-install-fonts= command).
 ** =doom-themes=
- A megapack of themes for GNU Emacs[fn:15].
+ A megapack of themes for GNU Emacs[fn:15]. I'm not the kind of guy who enjoys /[[https://wiki.installgentoo.com/index.php/GNU/Linux_ricing][ricing]]/, I look every once in a while for a nice colorscheme and then I just stick it everywhere else. Been a /solarized/ fans most of the time, now I'm trying /[[https://www.nordtheme.com/][nord]]/.
 #+begin_src emacs-lisp -n
   (use-package doom-themes
     :ensure t
@@ -694,7 +696,7 @@ This needs a manual intervention from the user to install the fonts (by running 
     (doom-themes-org-config))
 #+end_src
 ** =doom-modeline=
-A fancy and fast mode-line inspired by minimalism design[fn:16].
+A fancy and fast mode-line inspired by minimalism design[fn:16]. I'm using their themes, why not the modeline as well?
 #+begin_src emacs-lisp -n
   (use-package doom-modeline
     :ensure
@@ -704,6 +706,8 @@ A fancy and fast mode-line inspired by minimalism design[fn:16].
 An extensible emacs dashboard[fn:17].
 #+caption: /Emacs/ dashboard
 [[./assets/img/emacs-dashboard.png][file:assets/img/emacs-dashboard.png]]
+
+My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer/ each time I opened a new /Emacs/ frame.
 #+begin_src emacs-lisp -n
   ;; use-package with package.el:
   (use-package dashboard
