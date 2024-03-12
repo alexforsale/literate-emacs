@@ -371,7 +371,33 @@ Multiple cursors for evil-mode, based on iedit[fn:11].
     :config
     (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match)
     (evil-multiedit-mode)
-    (evil-multiedit-default-keybinds))
+    (evil-multiedit-default-keybinds)
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'evil-multiedit-state-map
+       "RET" 'evil-multiedit-toggle-or-restrict-region)
+      (general-mmap
+        :keymaps 'evil-motion-state-map
+        "RET" 'evil-multiedit-toggle-or-restrict-region)
+      (general-define-key
+       :keymaps '(evil-multiedit-state-map evil-multiedit-insert-state-map)
+       "C-n" 'evil-multiedit-next
+       "C-p" 'evil-multiedit-prev)
+      (general-vmap
+        :keymaps 'evil-visual-state-map
+        "R" 'evil-multiedit-match-all)
+      (general-nmap
+        :keymaps 'evil-normal-state-map
+        "M-d" 'evil-multiedit-match-and-next
+        "M-D" 'evil-multiedit-match-and-prev)
+      (general-vmap
+        :keymaps 'evil-visual-state-map
+        "M-d" 'evil-multiedit-match-and-next
+        "M-D" 'evil-multiedit-match-and-prev
+        "C-M-D" 'evil-multiedit-restore)
+      (general-iemap
+        :keymaps 'evil-insert-state-map
+        "M-d" 'evil-multiedit-toggle-marker-here)))
 #+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -593,13 +619,6 @@ More convenient key definitions in emacs[fn:12].
         "q" '(save-buffers-kill-terminal :wk "quit and save")
         "R" '(restart-emacs :wk "restart Emacs"))
       )
-#+end_src
-** =notmuch=
-#+begin_src emacs-lisp -n
-    (with-eval-after-load 'notmuch
-      (+config/leader-key
-        "M-m" '(:ignore t :wk "Mail")
-        "M-m m" 'notmuch))
 #+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -930,7 +949,17 @@ Making /Emacs/ more colourful.
     ([remap describe-symbol] . helpful-symbol)
     ([remap describe-variable] . helpful-variable)
     ([remap describe-command] . helpful-command)
-    ([remap describe-key] . helpful-key))
+    ([remap describe-key] . helpful-key)
+    :config
+    (with-eval-after-load 'general
+      (general-define-key
+       "C-h F" 'helpful-function
+       :keymaps 'prog-mode-map
+       "C-c C-d" 'helpful-at-point)
+      (general-nvmap
+        :keymaps 'prog-mode-map
+        "K" '(helpful-at-point :wk "helpful at point")
+        "gr" '(helpful-update :wk "update"))))
 #+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -1293,6 +1322,17 @@ Making /Emacs/ more colourful.
   (use-package elec-pair
     :init
     (electric-pair-mode -1))
+#+end_src
+** =xref=
+#+begin_src emacs-lisp -n
+  (use-package xref
+    :ensure nil
+    :config
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'override
+       "M-." 'xref-find-definitions
+       "M-?" 'xref-find-references)))
 #+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -1697,7 +1737,15 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package multi-vterm
     :ensure
-    :after vterm)
+    :after vterm
+    :config
+    (with-eval-after-load 'general
+      (general-iemap
+        :keymaps 'vterm-mode-map
+        "C-SPC" '(:ignore t :wk "multi vterm")
+        "C-SPC a" '(multi-vterm :wk "new vterm buffer")
+        "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
+        "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer"))))
 #+end_src
 ** =vterm-toggle=
 #+begin_src emacs-lisp -n
@@ -1887,7 +1935,12 @@ I still have a mixed feeling for this package, but it still easier to configure 
                           diff-hl-show-staged-changes nil)
     :config
     (when (featurep 'flycheck)
-      (setq flycheck-indication-mode 'right-fringe)))
+      (setq flycheck-indication-mode 'right-fringe))
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'override
+        "[[" '(diff-hl-previous-hunk :wk "previous hunk" :repeat t :jump t)
+        "]]" '(diff-hl-next-hunk :wk "next hunk" :repeat t :jump t))))
 #+end_src
 ** =perspective=
 #+begin_src emacs-lisp -n
@@ -1939,7 +1992,12 @@ I still have a mixed feeling for this package, but it still easier to configure 
   (use-package persp-projectile
     :ensure t
     :after perspective
-    :commands projectile-persp-switch-project)
+    :commands projectile-persp-switch-project
+    :config
+    (with-eval-after-load 'general
+      (general-def
+        :keymaps 'perspective-map
+        "P" 'projectile-persp-switch-project)))
 #+end_src
 ** =git-link=
 #+begin_src emacs-lisp -n
@@ -2045,6 +2103,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
           lsp-modeline-code-actions-segments '(count icon name))
     :custom
     (lsp-completion-provider :none)
+    :config
     (when (featurep 'exwm)
       (advice-add #'corfu--make-frame :around
                   (defun +corfu--make-frame-a (oldfun &rest args)
@@ -2064,16 +2123,26 @@ I still have a mixed feeling for this package, but it still easier to configure 
     (defun my/ignore-elisp-keywords (cand)
       (or (not (keywordp cand))
           (eq (char-after (car completion-in-region--data)) ?:)))
-    (defun my/setup-elisp ()
-      (setq-local completion-at-point-functions
-                  `(,(cape-super-capf
-                      (cape-capf-predicate
-                       #'elisp-completion-at-point
-                       #'my/ignore-elisp-keywords)
-                      #'cape-dabbrev)
-                    cape-file)
-                  cape-dabbrev-min-length 5))
-    (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp))
+    ;; (defun my/setup-elisp ()
+    ;;   (setq-local completion-at-point-functions
+    ;;               `(,(cape-super-capf
+    ;;                   (cape-capf-predicate
+    ;;                    #'elisp-completion-at-point
+    ;;                    #'my/ignore-elisp-keywords)
+    ;;                   #'cape-dabbrev)
+    ;;                 cape-file)
+    ;;               cape-dabbrev-min-length 5))
+    ;; (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp)
+    (with-eval-after-load 'general
+      (+config/leader-key
+        :keymaps 'lsp-mode-map
+        "l" (general-simulate-key "C-c C-l"
+              :name general-SPC-l-simulates-C-c-C-l
+              :docstring "Simulates C-c C-l"
+              :which-key "LSP"))
+      (general-nvmap
+        :keymaps 'lsp-mode-map
+        "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))))
 #+end_src
 ** =lsp-ui=
 #+begin_src emacs-lisp -n
@@ -2098,7 +2167,14 @@ I still have a mixed feeling for this package, but it still easier to configure 
     (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
     (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
-    (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t))
+    (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t)
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps '(lsp-ui-mode-map)
+       [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
+       [remap xref-find-references] 'lsp-ui-peek-find-references
+       "M-." 'lsp-ui-peek-find-definitions
+       "M-?" 'lsp-ui-peek-find-references)))
 #+end_src
 ** =consult-lsp=
 #+begin_src emacs-lisp -n
@@ -2132,134 +2208,220 @@ I still have a mixed feeling for this package, but it still easier to configure 
 ** =org-mode= main package                                         :builtin:
 #+begin_src emacs-lisp -n
   (use-package org
-  :commands org-tempo
-  :preface
-  (if (not +config/org-directory)
-      (cond
-       ((file-directory-p
-         (expand-file-name "Dropbox/org" (getenv "HOME")))
-        (setq org-directory (expand-file-name "Dropbox/org" (getenv "HOME"))))
-       ((file-directory-p
-         (expand-file-name "Sync/org" (getenv "HOME")))
-        (setq org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
-       ((file-directory-p
-         (expand-file-name "Documents/google-drive/org" (getenv "HOME")))
-        (setq org-directory (expand-file-name "Documents/google-drive/org" (getenv "HOME")))))
-    (customize-set-variable 'org-directory +config/org-directory))
-  :hook ((org-mode . org-indent-mode)
-         (org-mode . +config/org-prettify-symbols))
-  :config
-  (with-eval-after-load 'general
-    (general-def
-      "C-c c" 'org-capture
-      "C-c a" 'org-agenda
-      "C-c l" 'org-store-link))
-  (when(file-directory-p (expand-file-name "braindump/org" org-directory))
-    (customize-set-variable '+config/org-roam-directory
-                            (expand-file-name "braindump/org" org-directory)))
-  (when (file-directory-p (expand-file-name "alexforsale.github.io" org-directory))
-    (customize-set-variable '+config/blog-directory
-                            (expand-file-name "alexforsale.github.io" org-directory)))
-  (modify-syntax-entry ?= "$" org-mode-syntax-table)
-  (modify-syntax-entry ?~ "$" org-mode-syntax-table)
-  (modify-syntax-entry ?_ "$" org-mode-syntax-table)
-  (modify-syntax-entry ?+ "$" org-mode-syntax-table)
-  (modify-syntax-entry ?/ "$" org-mode-syntax-table)
-  (modify-syntax-entry ?* "$" org-mode-syntax-table)
-  (add-to-list 'org-modules 'org-tempo t)
-  (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
-  (add-to-list 'org-structure-template-alist '("co" . "src conf"))
-  (add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
-  (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-  (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
-  (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
-  (add-to-list 'org-structure-template-alist '("py" . "src python"))
-  (add-to-list 'org-structure-template-alist '("go" . "src go"))
-  (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
-  (add-to-list 'org-structure-template-alist '("js" . "src js"))
-  (add-to-list 'org-structure-template-alist '("json" . "src json"))
-  (add-to-list 'org-structure-template-alist '("n" . "note"))
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((emacs-lisp . t)
-     (awk . t)
-     (C . t)
-     (css . t)
-     (calc . t)
-     (screen . t)
-     (dot . t )
-     (haskell . t)
-     (java . t)
-     (js . t)
-     (latex . t)
-     (lisp . t)
-     (lua . t)
-     (org . t)
-     (perl . t)
-     (python .t)
-     (ruby . t)
-     (shell . t)
-     (sed . t)
-     (scheme . t)
-     (sql . t)
-     (sqlite . t)))
-  (add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
-  (defun +config/org-prettify-symbols ()
-    (push '("[ ]" . "☐") prettify-symbols-alist)
-    (push '("[X]" . "☑") prettify-symbols-alist)
-    (prettify-symbols-mode))
-  :custom
-  (org-replace-disputed-keys t)
-  (org-indirect-buffer-display 'current-window)
-  (org-enforce-todo-dependencies t)
-  (org-fontify-whole-heading-line t)
-  (org-return-follows-link t)
-  (org-mouse-1-follows-link t)
-  (org-image-actual-width nil)
-  (org-adapt-indentation nil)
-  (org-startup-indented t)
-  (org-link-descriptive nil)
-  (org-log-done 'time)
-  (org-log-refile 'time)
-  (org-log-redeadline 'time)
-  (org-log-reschedule 'time)
-  (org-log-into-drawer t)
-  (org-clone-delete-id t)
-  (org-default-notes-file (expand-file-name "notes.org" org-directory))
-  (org-pretty-entities t)
-  (org-use-sub-superscripts '{})
-  (org-use-property-inheritance t)
-  (org-todo-keywords
-   '((sequence
-      "TODO(t!)"  ; A task that needs doing & is ready to do
-      "NEXT(n!)"  ; Tasks that can be delayed
-      "PROJ(p!)"  ; A project, which usually contains other tasks
-      "PROG(g!)"  ; A task that is in progress
-      "WAIT(w!)"  ; Something external is holding up this task
-      "HOLD(h!)"  ; This task is paused/on hold because of me
-      "IDEA(i!)"  ; An unconfirmed and unapproved task or notion
-      "|"
-      "DONE(d!)"  ; Task successfully completed
-      "DELEGATED(l!)" ; Task is delegated
-      "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
-     ))
-  (org-todo-keyword-faces
-   '(("PROJ" . (:foreground "cyan" :weight bold))
-     ("WAIT" . (:foreground "yellow" :weight bold))
-     ("IDEA" . (:foreground "magenta" :weight bold))
-     ("DELEGATED" . "blue")
-     ("KILL" . "green")))
-  (org-todo-state-tags-triggers
-   '(("KILL" ("killed" . t) ("Archives" . t))
-     ("WAIT" ("wait" . t))
-     ("HOLD" ("wait") ("hold" . t))
-     (done ("wait") ("hold"))
-     ("PROJ" ("project" . t))
-     ("TODO" ("wait") ("killed") ("hold"))
-     ("NEXT" ("wait") ("killed") ("hold"))
-     ("PROG" ("wait") ("killed") ("hold"))
-     ("STRT" ("wait") ("killed") ("hold"))
-     ("DONE" ("wait") ("killed") ("hold")))))
+    :commands org-tempo
+    :preface
+    (if (not +config/org-directory)
+        (cond
+         ((file-directory-p
+           (expand-file-name "Dropbox/org" (getenv "HOME")))
+          (setq org-directory (expand-file-name "Dropbox/org" (getenv "HOME"))))
+         ((file-directory-p
+           (expand-file-name "Sync/org" (getenv "HOME")))
+          (setq org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
+         ((file-directory-p
+           (expand-file-name "Documents/google-drive/org" (getenv "HOME")))
+          (setq org-directory (expand-file-name "Documents/google-drive/org" (getenv "HOME")))))
+      (customize-set-variable 'org-directory +config/org-directory))
+    :hook ((org-mode . org-indent-mode)
+           (org-mode . +config/org-prettify-symbols))
+    :config
+    (with-eval-after-load 'general
+      (general-def
+        "C-c c" 'org-capture
+        "C-c a" 'org-agenda
+        "C-c l" 'org-store-link))
+    (when(file-directory-p (expand-file-name "braindump/org" org-directory))
+      (customize-set-variable '+config/org-roam-directory
+                              (expand-file-name "braindump/org" org-directory)))
+    (when (file-directory-p (expand-file-name "alexforsale.github.io" org-directory))
+      (customize-set-variable '+config/blog-directory
+                              (expand-file-name "alexforsale.github.io" org-directory)))
+    (modify-syntax-entry ?= "$" org-mode-syntax-table)
+    (modify-syntax-entry ?~ "$" org-mode-syntax-table)
+    (modify-syntax-entry ?_ "$" org-mode-syntax-table)
+    (modify-syntax-entry ?+ "$" org-mode-syntax-table)
+    (modify-syntax-entry ?/ "$" org-mode-syntax-table)
+    (modify-syntax-entry ?* "$" org-mode-syntax-table)
+    (add-to-list 'org-modules 'org-tempo t)
+    (add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+    (add-to-list 'org-structure-template-alist '("co" . "src conf"))
+    (add-to-list 'org-structure-template-alist '("lisp" . "src lisp"))
+    (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+    (add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+    (add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+    (add-to-list 'org-structure-template-alist '("py" . "src python"))
+    (add-to-list 'org-structure-template-alist '("go" . "src go"))
+    (add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+    (add-to-list 'org-structure-template-alist '("js" . "src js"))
+    (add-to-list 'org-structure-template-alist '("json" . "src json"))
+    (add-to-list 'org-structure-template-alist '("n" . "note"))
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (awk . t)
+       (C . t)
+       (css . t)
+       (calc . t)
+       (screen . t)
+       (dot . t )
+       (haskell . t)
+       (java . t)
+       (js . t)
+       (latex . t)
+       (lisp . t)
+       (lua . t)
+       (org . t)
+       (perl . t)
+       (python .t)
+       (ruby . t)
+       (shell . t)
+       (sed . t)
+       (scheme . t)
+       (sql . t)
+       (sqlite . t)))
+    (add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
+    (defun +config/org-prettify-symbols ()
+      (push '("[ ]" . "☐") prettify-symbols-alist)
+      (push '("[X]" . "☑") prettify-symbols-alist)
+      (prettify-symbols-mode))
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'override
+       "C-c l" '(org-store-link :wk "Store link")
+       "C-c a" '(org-agenda :wk "Org Agenda")
+       "C-c c" '(org-capture :wk "Org Capture")
+       "C-c C-s" 'org-schedule)
+      (+config/local-leader
+        :major-modes 'org-mode
+        :keymaps 'org-mode-map
+        "a" '(:ignore t :wk "action")
+        "s" '(:ignore t :wk "search")
+        )
+      (+config/local-leader
+        :keymaps 'org-mode-map
+        "C-a" 'org-attach
+        "C-b" 'org-backward-heading-same-level
+        "C-c" 'org-ctrl-c-ctrl-c
+        "C-d" 'org-deadline
+        "C-e" 'org-export-dispatch
+        "C-f" 'org-forward-heading-same-level
+        "C-j" 'org-goto
+        "C-k" 'org-kill-note-or-show-branches
+        "C-l" 'org-insert-link
+        "C-n" 'org-next-visible-heading
+        "C-o" 'org-open-at-point
+        "C-p" 'org-previous-visible-heading
+        "C-q" 'org-set-tags-command
+        "C-r" 'org-fold-reveal
+        "C-s" 'org-schedule
+        "C-t" 'org-todo
+        "C-w" 'org-refile
+        "C-y" 'org-evaluate-time-range
+        "C-z" 'org-add-note
+        "M-b" 'org-previous-block
+        "M-f" 'org-next-block
+        "M-l" 'org-insert-last-stored-link
+        "M-w" 'org-refile-copy
+        "C-^" 'org-up-element
+        "C-_" 'org-down-element
+        "C-<" 'org-promote-subtree
+        "C->" 'org-demote-subtree
+        "C-," 'org-insert-structure-template
+        "C-*" 'org-list-make-subtree
+        "{" 'org-table-toggle-formula-debugger
+        "}" 'org-table-toggle-coordinate-overlays
+        "`" 'org-table-edit-field
+        "\\" 'org-match-sparse-tree
+        "^" 'org-sort
+        "[" 'org-agenda-file-to-front
+        "]" 'org-remove-file
+        "@" 'org-mark-subtree
+        "?" 'org-table-field-info
+        "=" 'org-table-eval-formula
+        ">" 'org-goto-calendar
+        "+" 'org-table-sum
+        "<" 'org-date-from-calendar
+        ";" 'org-toggle-comment
+        ":" 'org-toggle-fixed-width
+        "/" 'org-sparse-tree
+        "," 'org-priority
+        "." 'org-timestamp
+        "*" 'org-ctrl-c-star
+        "-" 'org-ctrl-c-minus
+        "#" 'org-update-statistics-cookies
+        "$" 'org-archive-subtree
+        "%" 'org-mark-ring-push
+        "'" 'org-edit-special
+        "TAB" '(org-clock-in :wk "clock-in")
+        "!" '(org-reload :wk "reload org")
+        "[" '(org-mark-ring-goto :wk "Jump to previous position in the mark ring")
+        "b" '(:ignore t :wk "buffer")
+        "bs" '(org-save-all-org-buffers :wk "save all org buffer")
+        "f" '(:ignore t :wk "files")
+        "fs" '(org-save-all-org-buffers :wk "save all org buffer")
+        "s" '(org-schedule :wk "org schedule")
+        "i" '(:ignore t :wk "insert")
+        "id" '(org-insert-drawer :wk "insert drawer")
+        "i@" '(org-cite-insert :wk "insert citation")
+        "if" '(org-footnote-action :wk "footnote")
+        "i C-f" '(org-emphasize :wk "insert emphasize")
+        "il" '(org-insert-link :wk "insert link")
+        "iD" '(org-deadline :wk "insert deadline")
+        "is" '(org-schedule :wk "insert schedule")
+        "ip" '(org-set-property :wk "insert property")
+        "it" '(org-insert-time-stamp :wk "insert time-stamp at point")))
+    :custom
+    (org-replace-disputed-keys t)
+    (org-indirect-buffer-display 'current-window)
+    (org-enforce-todo-dependencies t)
+    (org-fontify-whole-heading-line t)
+    (org-return-follows-link t)
+    (org-mouse-1-follows-link t)
+    (org-image-actual-width nil)
+    (org-adapt-indentation nil)
+    (org-startup-indented t)
+    (org-link-descriptive nil)
+    (org-log-done 'time)
+    (org-log-refile 'time)
+    (org-log-redeadline 'time)
+    (org-log-reschedule 'time)
+    (org-log-into-drawer t)
+    (org-clone-delete-id t)
+    (org-default-notes-file (expand-file-name "notes.org" org-directory))
+    (org-pretty-entities t)
+    (org-use-sub-superscripts '{})
+    (org-use-property-inheritance t)
+    (org-todo-keywords
+     '((sequence
+        "TODO(t!)"  ; A task that needs doing & is ready to do
+        "NEXT(n!)"  ; Tasks that can be delayed
+        "PROJ(p!)"  ; A project, which usually contains other tasks
+        "PROG(g!)"  ; A task that is in progress
+        "WAIT(w!)"  ; Something external is holding up this task
+        "HOLD(h!)"  ; This task is paused/on hold because of me
+        "IDEA(i!)"  ; An unconfirmed and unapproved task or notion
+        "|"
+        "DONE(d!)"  ; Task successfully completed
+        "DELEGATED(l!)" ; Task is delegated
+        "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
+       ))
+    (org-todo-keyword-faces
+     '(("PROJ" . (:foreground "cyan" :weight bold))
+       ("WAIT" . (:foreground "yellow" :weight bold))
+       ("IDEA" . (:foreground "magenta" :weight bold))
+       ("DELEGATED" . "blue")
+       ("KILL" . "green")))
+    (org-todo-state-tags-triggers
+     '(("KILL" ("killed" . t) ("Archives" . t))
+       ("WAIT" ("wait" . t))
+       ("HOLD" ("wait") ("hold" . t))
+       (done ("wait") ("hold"))
+       ("PROJ" ("project" . t))
+       ("TODO" ("wait") ("killed") ("hold"))
+       ("NEXT" ("wait") ("killed") ("hold"))
+       ("PROG" ("wait") ("killed") ("hold"))
+       ("STRT" ("wait") ("killed") ("hold"))
+       ("DONE" ("wait") ("killed") ("hold")))))
 #+end_src
 ** =org-src=                                                       :builtin:
 #+begin_src emacs-lisp -n
@@ -2485,7 +2647,16 @@ I still have a mixed feeling for this package, but it still easier to configure 
             ("ps" "Stuck Projects"
              ((stuck ""
                      ((org-agenda-block-separator nil)
-                      (org-agenda-overriding-header "\nStuck Projects\n"))))))))
+                      (org-agenda-overriding-header "\nStuck Projects\n")))))))
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'org-agenda-mode-map
+        "q" 'org-agenda-quit
+        "Q" 'org-agenda-quit
+        "RET" 'org-agenda-switch-to
+        "TAB" 'org-agenda-switch-to
+        "t" 'org-agenda-todo
+        "gr" 'org-agenda-redo-all)))
 #+end_src
 ** =org-timer=                                                     :builtin:
 #+begin_src emacs-lisp -n
@@ -2540,7 +2711,12 @@ I still have a mixed feeling for this package, but it still easier to configure 
     :ensure
     :hook ((org-mode markdown-mode) . toc-org-mode)
     :custom
-    (toc-org-hrefify-default "gh"))
+    (toc-org-hrefify-default "gh")
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'markdown-mode-map
+        "C-o" 'toc-org-markdown-follow-thing-at-point)))
 #+end_src
 ** =ox-pandoc=
 #+begin_src emacs-lisp -n
@@ -2590,7 +2766,13 @@ I still have a mixed feeling for this package, but it still easier to configure 
                   "\\)"))
     (setq deft-extensions (list "org"))
     (add-hook 'deft-mode-hook #'evil-normalize-keymaps)
-    (evil-set-initial-state #'deft-mode 'insert))
+    (evil-set-initial-state #'deft-mode 'insert)
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'deft-mode-map
+        "q" 'evil-quit
+        "C-j" 'forward-button
+        "C-k" 'backward-button)))
 #+end_src
 ** =org-pdftools=
 #+begin_src emacs-lisp -n
@@ -2875,7 +3057,29 @@ I still have a mixed feeling for this package, but it still easier to configure 
       ,#+hugo_tags: %^{tag}
       "))))
     (require 'org-roam-export)
-    (org-roam-setup))
+    (org-roam-setup)
+    (with-eval-after-load 'general
+      (+config/leader-notes
+        "r" '(:ignore t :wk "roam")
+        "rb" 'org-roam-buffer-toggle
+        "rc" 'org-roam-capture
+        "rd" '(:ignore t :wk "dailies")
+        "rdc" '(:ignore t :wk "capture day")
+        "rdcd" 'org-roam-dailies-capture-date
+        "rdct" 'org-roam-dailies-capture-today
+        "rdg" '(:ignore t :wk "goto")
+        "rdgt" 'org-roam-dailies-goto-today
+        "rdgd" 'org-roam-dailies-goto-date
+        "rdgp" 'org-roam-dailies-goto-previous-note
+        "rdgy" 'org-roam-dailies-goto-yesterday
+        "rdcy" 'org-roam-dailies-capture-yesterday
+        "ri" 'org-roam-node-insert
+        "rf" 'org-roam-node-find
+        "rg" 'org-roam-graph
+        "rr" '(:ignore t :wk "ref")
+        "rra" 'org-roam-ref-add
+        "rrf" 'org-roam-ref-find
+        "rrr" 'org-roam-ref-remove)))
 #+end_src
 ** =org-roam-ui=
 #+begin_src emacs-lisp -n
@@ -2886,7 +3090,16 @@ I still have a mixed feeling for this package, but it still easier to configure 
     (setq org-roam-ui-sync-theme t
           org-roam-ui-follow t
           org-roam-ui-update-on-save t
-          org-roam-ui-open-on-start nil))
+          org-roam-ui-open-on-start nil)
+    (with-eval-after-load 'general
+      (+config/leader-notes
+        "ru" '(:ignore t :wk "org-roam-ui")
+        "ruf" 'org-roam-ui-follow-mode
+        "ruo" 'org-roam-ui-open
+        "rus" 'org-roam-ui-sync-theme)
+      (+config/leader-notes
+        :keymaps 'org-roam-mode-map
+        "ruz" 'org-roam-ui-node-zoom)))
 #+end_src
 ** =org-journal=
 #+begin_src emacs-lisp -n
@@ -2945,6 +3158,10 @@ I still have a mixed feeling for this package, but it still easier to configure 
     (require 'consult-org-roam)
     ;; Activate the minor mode
     (consult-org-roam-mode 1)
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-notes
+        "rs" 'consult-org-roam-search))
     :custom
     ;; Use `ripgrep' for searching with `consult-org-roam-search'
     (consult-org-roam-grep-func #'consult-ripgrep)
@@ -3101,7 +3318,14 @@ Useful for reading /epubs/.
     :config
     (setq elfeed-search-filter "@2-week-ago "
           elfeed-show-entry-switch #'pop-to-buffer
-          shr-max-image-proportion 0.8))
+          shr-max-image-proportion 0.8)
+    (with-eval-after-load 'general
+      (general-def
+        :keymaps
+        'elfeed-search-mode-map
+        :states '(normal visual)
+        "q" '(elfeed-kill-buffer :wk "kill buffer")
+        "r" '(elfeed-search-update--force :wk "update"))))
 #+end_src
 ** =elfeed-org=
 #+begin_src emacs-lisp -n
@@ -3120,7 +3344,19 @@ Useful for reading /epubs/.
     :config
     (emms-all)
     (emms-default-players)
-    (emms-mpris-enable))
+    (emms-mpris-enable)
+    (with-eval-after-load 'general
+      (general-def 'emms-browser-mode-map
+        "?" 'describe-mode
+        "TAB" 'emms-browser-toggle-subitems
+        "p" 'emms-playlist-mode-go
+        "q" 'bury-buffer
+        "1" 'emms-browser-collapse-all
+        "2" 'emms-browser-expand-to-level-2
+        "3" 'emms-browser-expand-to-level-3
+        "4" 'emms-browser-expand-to-level-4)
+      (general-def 'emms-playlist-mode-map
+        "q" 'bury-buffer)))
 #+end_src
 ** =ws-butler=
 #+begin_src emacs-lisp -n
@@ -3188,7 +3424,14 @@ Useful for reading /epubs/.
 ** =lorem-ipsum=
 #+begin_src emacs-lisp -n
   (use-package lorem-ipsum
-    :ensure)
+    :ensure
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-insert
+      "l" '(:ignore t :wk "insert lorem ipsum")
+      "ll" 'lorem-ipsum-insert-list
+      "lp" 'lorem-ipsum-insert-paragraphs
+      "ls" 'lorem-ipsum-insert-sentences)))
 #+end_src
 ** footer                                                          :noexport:
 #+begin_src emacs-lisp -n
@@ -3216,7 +3459,18 @@ Useful for reading /epubs/.
           dired-recursive-copies 'always ; always copy recursively
           dired-recursive-deletes 'top ; ask only for top-level
           dired-create-destination-dirs 'ask
-          dired-clean-confirm-killing-deleted-buffers nil))
+          dired-clean-confirm-killing-deleted-buffers nil)
+    :config
+    (with-eval-after-load 'general
+      (general-nvmap 'dired-mode-map
+        "g$" 'dired-hide-subdir
+        "g?" 'dired-summary
+        "gG" 'dired-do-chgrp
+        "gj" 'dired-next-dirline
+        "gk" 'dired-prev-dirline
+        "go" 'dired-view-file
+        "gO" 'dired-find-file-other-window
+        "gy" 'dired-show-file-type)))
 #+end_src
 ** =image-dired=                                                   :builtin:
 #+begin_src emacs-lisp -n
@@ -3367,6 +3621,29 @@ I sometimes need /treemacs/ when working on a large directory of files.
           treemacs-width-increment 1
           treemacs-width-is-initially-locked t
           treemacs-workspace-switch-cleanup nil)
+    (with-eval-after-load 'general
+      (+config/leader-T
+       "t" 'treemacs
+       "p" 'treemacs-add-and-display-current-project-exclusively)
+      (general-define-key
+       :keymaps 'treemacs-mode-map
+       "[mouse-1]" 'treemacs-single-click-expand-action)
+      (general-nvmap
+        :keymaps 'treemacs-mode-map
+        "gr" '(treemacs-refresh :wk "refresh tree")
+        "zm" '(:ignore t :wk "move")
+        "zmf" '(treemacs-move-file :wk "move file")
+        "zmd" '(treemacs-move-project-down :wk "move project down")
+        "zmu" '(treemacs-move-project-up :wk "move project up")
+        "zr" '(:ignore t :wk "rename")
+        "zrf" '(treemacs-rename-file :wk "rename file")
+        "zrp" '(treemacs-rename-project :wk "rename project")
+        "zrw" '(treemacs-rename-workspace :wk "rename workspace")
+        "zc" '(:ignore t :wk "create/clean")
+        "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
+        "zcd" '(treemacs-create-dir :wk "create directory")
+        "zcf" '(treemacs-create-file :wk "create file")
+        "zd" '(treemacs-delete-file :wk "delete file")))
     (treemacs-peek-mode 1)
     (treemacs-filewatch-mode t)
     (treemacs-follow-mode t)
@@ -3420,7 +3697,13 @@ I sometimes need /treemacs/ when working on a large directory of files.
     :ensure
     :after treemacs lsp
     :config
-    (lsp-treemacs-sync-mode 1))
+    (lsp-treemacs-sync-mode 1)
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'treemacs-mode-map
+       "S" 'lsp-treemacs-symbols
+       "X" 'lsp-treemacs-errors-list
+       "Y" 'lsp-treemacs-call-hierarchy)))
 #+end_src
 ** =treemacs-perspective=
 #+begin_src emacs-lisp -n
@@ -3531,7 +3814,14 @@ I sometimes need /treemacs/ when working on a large directory of files.
                 (lambda ()
                   "Mark message as spam"
                   (interactive)
-                  (notmuch-show-tag (list +spam -new)))))
+                  (notmuch-show-tag (list +spam -new))))
+    (with-eval-after-load 'general
+      (+config/leader-mail
+        "m" '(notmuch :wk "open notmuch mail")
+        "M" '(compose-mail :wk "new mail"))
+      (general-nmap 'notmuch-common-keymap
+        "gr" 'notmuch-refresh-this-buffer
+        "gR" 'notmuch-poll-and-refresh-this-buffer)))
 #+end_src
 ** =notmuch-indicator=
 #+begin_src emacs-lisp -n
@@ -3620,13 +3910,27 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
           flycheck-buffer-switch-check-intermediate-buffers t
           flycheck-display-errors-delay 0.25)
     (evil-add-command-properties #'flycheck-next-error :repeat t :jump t)
-    (evil-add-command-properties #'flycheck-previous-error :repeat t :jump t))
+    (evil-add-command-properties #'flycheck-previous-error :repeat t :jump t)
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps '(normal visual)
+       :prefix "z"
+       "C-p" '(flycheck-previous-error
+               :properties
+               (:repeat t :jump t))
+       "C-n" '(flycheck-next-error
+               :properties
+               (:repeat t :jump t)))))
 #+end_src
 *** =consult-flycheck=
 #+begin_src emacs-lisp -n
   (use-package consult-flycheck
     :ensure
-    :after consult flycheck)
+    :after consult flycheck
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-register
+        "F" 'consult-flycheck)))
 #+end_src
 *** =flycheck-posframe=
 #+begin_src emacs-lisp -n
@@ -4165,6 +4469,16 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (with-eval-after-load 'web-mode
       (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
             "//"))
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'web-mode-map
+        "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))
+      (general-nvmap
+        :keymaps 'web-mode-map
+        "gn" 'web-mode-navigate)
+      (general-vmap
+        :keymaps 'web-mode-map
+        "gs" 'web-mode-surround))
     :hook ((html-mode
             web-mode
             html-mode-local-vars-hook
@@ -4182,7 +4496,14 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :config
     (when (require 'yasnippet nil t)
       (add-hook 'emmet-mode-hook #'yas-minor-mode-on))
-    (setq emmet-move-cursor-between-quotes t))
+    (setq emmet-move-cursor-between-quotes t)
+    (with-eval-after-load 'general
+      (general-vmap
+        :keymaps 'emmet-mode-keymap
+        "TAB" 'emmet-wrap-with-markup)
+      (general-def
+        :keymaps 'emmet-mode-keymap
+        "M-E" 'emmet-expand-line)))
 #+end_src
 *** =skewer-mode=
 #+begin_src emacs-lisp -n
@@ -4404,7 +4725,14 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :init
     (js2r-add-keybindings-with-prefix "C-c C-r")
     :config
-    (setq js2-skip-preprocessor-directives t))
+    (setq js2-skip-preprocessor-directives t)
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymap js2-refactor-mode-map
+        "zr" (general-simulate-key "C-c C-r"
+               :name general-z-r-simulates-C-c-C-r
+               :docstring "Simulates C-c C-r"
+               :which-key "JS2 Refactor"))))
 #+end_src
 *** =rjsx-mode=
 #+begin_src emacs-lisp -n
@@ -4420,7 +4748,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (with-eval-after-load 'compilation
       (add-to-list 'compilation-error-regexp-alist 'node)
       (add-to-list 'compilation-error-regexp-alist-alist '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-                          2 3 4)))
+                                                                2 3 4)))
     :config
     (with-eval-after-load 'compilation
       (add-to-list 'compilation-error-regexp-alist 'node)
@@ -4440,7 +4768,16 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
           js2-strict-missing-semi-warning nil
           ;; maximum fontification
           js2-highlight-level 3
-          js2-idle-timer-delay 0.15))
+          js2-idle-timer-delay 0.15)
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'rjsx-mode-map
+        "'" 'rjsx-jump-tag
+        "gj" 'rjsx-jump-closing-tag
+        "gk" 'rjsx-jump-opening-tag
+        "gr" 'rjsx-rename-tag-at-point
+        "z>" 'rjsx-electric-gt
+        "z<" 'rjsx-electric-lt)))
 #+end_src
 *** =typescript-mode=
 #+begin_src emacs-lisp -n
@@ -4636,90 +4973,90 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+end_src
 *** =markdown-mode=
 #+begin_src emacs-lisp -n
-  ;; autoloads (from doom)
-  ;;; Compilation handlers
+    ;; autoloads (from doom)
+    ;;; Compilation handlers
 
-  ;;;###autoload
-  (cond
-   ((and (boundp 'transient-mark-mode) (boundp 'mark-active))
-    (defun markdown-use-region-p ()
-      "Compatibility wrapper to provide `use-region-p'."
-      (and transient-mark-mode mark-active))))
+    ;;;###autoload
+    (cond
+     ((and (boundp 'transient-mark-mode) (boundp 'mark-active))
+      (defun markdown-use-region-p ()
+        "Compatibility wrapper to provide `use-region-p'."
+        (and transient-mark-mode mark-active))))
 
-  ;;;###autoload
-  (defun +markdown-compile (beg end output-buffer)
-    "Compile markdown into html.
+    ;;;###autoload
+    (defun +markdown-compile (beg end output-buffer)
+      "Compile markdown into html.
 
-  Runs `+markdown-compile-functions' until the first function to return non-nil,
-  otherwise throws an error."
-    (or (run-hook-with-args-until-success '+markdown-compile-functions
-                                          beg end output-buffer)
-        (user-error "No markdown program could be found. Install marked, pandoc, markdown or multimarkdown.")))
+    Runs `+markdown-compile-functions' until the first function to return non-nil,
+    otherwise throws an error."
+      (or (run-hook-with-args-until-success '+markdown-compile-functions
+                                            beg end output-buffer)
+          (user-error "No markdown program could be found. Install marked, pandoc, markdown or multimarkdown.")))
 
-  ;;;###autoload
-  (defun +markdown-compile-marked (beg end output-buffer)
-    "Compiles markdown with the marked program, if available.
-  Returns its exit code."
-    (when (executable-find "marked")
-      (apply #'call-process-region
-             beg end "marked" nil output-buffer nil
-             (when (eq major-mode 'gfm-mode)
-               (list "--gfm" "--tables" "--breaks")))))
+    ;;;###autoload
+    (defun +markdown-compile-marked (beg end output-buffer)
+      "Compiles markdown with the marked program, if available.
+    Returns its exit code."
+      (when (executable-find "marked")
+        (apply #'call-process-region
+               beg end "marked" nil output-buffer nil
+               (when (eq major-mode 'gfm-mode)
+                 (list "--gfm" "--tables" "--breaks")))))
 
-  ;;;###autoload
-  (defun +markdown-compile-pandoc (beg end output-buffer)
-    "Compiles markdown with the pandoc program, if available.
-  Returns its exit code."
-    (when (executable-find "pandoc")
-      (call-process-region beg end "pandoc" nil output-buffer nil
-                           "-f" "markdown"
-                           "-t" "html"
-                           "--mathjax"
-                           "--highlight-style=pygments")))
+    ;;;###autoload
+    (defun +markdown-compile-pandoc (beg end output-buffer)
+      "Compiles markdown with the pandoc program, if available.
+    Returns its exit code."
+      (when (executable-find "pandoc")
+        (call-process-region beg end "pandoc" nil output-buffer nil
+                             "-f" "markdown"
+                             "-t" "html"
+                             "--mathjax"
+                             "--highlight-style=pygments")))
 
-  ;;;###autoload
-  (defun +markdown-compile-multimarkdown (beg end output-buffer)
-    "Compiles markdown with the multimarkdown program, if available. Returns its
-  exit code."
-    (when (executable-find "multimarkdown")
-      (call-process-region beg end "multimarkdown" nil output-buffer)))
+    ;;;###autoload
+    (defun +markdown-compile-multimarkdown (beg end output-buffer)
+      "Compiles markdown with the multimarkdown program, if available. Returns its
+    exit code."
+      (when (executable-find "multimarkdown")
+        (call-process-region beg end "multimarkdown" nil output-buffer)))
 
-  ;;;###autoload
-  (defun +markdown-compile-markdown (beg end output-buffer)
-    "Compiles markdown using the Markdown.pl script (or markdown executable), if
-  available. Returns its exit code."
-    (when-let (exe (or (executable-find "Markdown.pl")
-                       (executable-find "markdown")))
-      (call-process-region beg end exe nil output-buffer nil)))
+    ;;;###autoload
+    (defun +markdown-compile-markdown (beg end output-buffer)
+      "Compiles markdown using the Markdown.pl script (or markdown executable), if
+    available. Returns its exit code."
+      (when-let (exe (or (executable-find "Markdown.pl")
+                         (executable-find "markdown")))
+        (call-process-region beg end exe nil output-buffer nil)))
 
-  (defvar +markdown-compile-functions
-    '(+markdown-compile-marked
-      +markdown-compile-pandoc
-      +markdown-compile-markdown
-      +markdown-compile-multimarkdown)
-    "A list of commands to try when attempting to build a markdown file with
-  `markdown-open' or `markdown-preview', stopping at the first one to return non-nil.
+    (defvar +markdown-compile-functions
+      '(+markdown-compile-marked
+        +markdown-compile-pandoc
+        +markdown-compile-markdown
+        +markdown-compile-multimarkdown)
+      "A list of commands to try when attempting to build a markdown file with
+    `markdown-open' or `markdown-preview', stopping at the first one to return non-nil.
 
-  Each function takes three argument. The beginning position of the region to
-  capture, the end position, and the output buffer.")
+    Each function takes three argument. The beginning position of the region to
+    capture, the end position, and the output buffer.")
 
-  ;;;###autoload
-  (defun +markdown/insert-del ()
-    "Surround region in github strike-through delimiters."
-    (interactive)
-    (let ((regexp "\\(^\\|[^\\]\\)\\(\\(~\\{2\\}\\)\\([^ \n	\\]\\|[^ \n	]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)")
-          (delim "~~"))
-      (if (markdown-use-region-p)
-          ;; Active region
-          (cl-destructuring-bind (beg . end)
-              (markdown-unwrap-things-in-region
-               (region-beginning) (region-end)
-               regexp 2 4)
-            (markdown-wrap-or-insert delim delim nil beg end))
-        ;; Bold markup removal, bold word at point, or empty markup insertion
-        (if (thing-at-point-looking-at regexp)
-            (markdown-unwrap-thing-at-point nil 2 4)
-          (markdown-wrap-or-insert delim delim 'word nil nil)))))
+    ;;;###autoload
+    (defun +markdown/insert-del ()
+      "Surround region in github strike-through delimiters."
+      (interactive)
+      (let ((regexp "\\(^\\|[^\\]\\)\\(\\(~\\{2\\}\\)\\([^ \n	\\]\\|[^ \n	]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)")
+            (delim "~~"))
+        (if (markdown-use-region-p)
+            ;; Active region
+            (cl-destructuring-bind (beg . end)
+                (markdown-unwrap-things-in-region
+                 (region-beginning) (region-end)
+                 regexp 2 4)
+              (markdown-wrap-or-insert delim delim nil beg end))
+          ;; Bold markup removal, bold word at point, or empty markup insertion
+          (if (thing-at-point-looking-at regexp)
+              (markdown-unwrap-thing-at-point nil 2 4)
+            (markdown-wrap-or-insert delim delim 'word nil nil)))))
 
   (use-package markdown-mode
     :ensure
@@ -4765,7 +5102,75 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
       (sp-local-pair '(markdown-mode gfm-mode) "`" "`"
                      :unless '(:add sp-point-before-word-p sp-point-before-same-p)))
     (with-eval-after-load 'rustic-mode
-      (add-to-list 'markdown-code-lang-modes '("rust" . rustic-mode))))
+      (add-to-list 'markdown-code-lang-modes '("rust" . rustic-mode)))
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'markdown-mode-map
+        "i" '(:ignore t :wk "insert")
+        "d" '(markdown-do :wk "do checklist")
+        "ib" '(markdown-insert-bold :wk "insert bold")
+        "ic" '(markdown-insert-code :wk "insert code")
+        "iC" '(markdown-insert-gfm-code-block :wk "insert gfm code block")
+        "iF" '(markdown-insert-foldable-block :wk "insert foldable block")
+        "if" '(markdown-insert-footnote :wk "insert footnote")
+        "ig" '(markdown-insert-gfm-checkbox :wk "insert gfm checkbox")
+        "ih" '(markdown-insert-header :wk "insert header")
+        "iI" '(markdown-insert-image :wk "insert image")
+        "ii" '(markdown-insert-italic :wk "insert italic")
+        "ij" '(markdown-insert-list-item :wk "insert list items")
+        "ik" '(markdown-insert-kbd :wk "insert kbd")
+        "il" '(markdown-insert-link :wk "insert link")
+        "ip" '(markdown-insert-pre :wk "insert pre")
+        "ir" '(markdown-insert-hr :wk "insert horizontal ruler")
+        "is" '(markdown-insert-strike-through :wk "insert strike-through")
+        "it" '(markdown-insert-table :wk "insert table")
+        "iu" '(markdown-insert-url :wk "insert url")
+        "iw" '(markdown-insert-wiki-link :wk "insert wikilink")
+        "iq" '(markdown-insert-blockquote :wk "insert block quote")
+        "m" '(:ignore t :wk "move")
+        "m M-j" '(markdown-move-subtree-down :wk "move subtree down")
+        "m M-k" '(markdown-move-subtree-up :wk "move subtree up")
+        "m C-k" '(markdown-move-list-item-down :wk "move list item down")
+        "m C-k" '(markdown-move-list-item-up :wk "move list item up")
+        "mj" '(markdown-move-down :wk "move down things at point")
+        "mk" '(markdown-move-up :wk "move up things at point")
+        "t" '(:ignore t :wk "toggle")
+        "ti" '(markdown-toggle-inline-images :wk "toggle inline images")
+        "tf" '(markdown-toggle-fontify-code-blocks-natively :wk "toggle fontify code")
+        "tG" '(markdown-toggle-gfm-checkbox-button :wk "toggle gfm checkbox button")
+        "tg" '(markdown-toggle-gfm-checkbox :wk "toggle gfm checkbox")
+        "tM" '(markdown-toggle-markup-hiding :wk "toggle markup hiding")
+        "tm" '(markdown-toggle-math :wk "toggle math")
+        "tu" '(markdown-toggle-url-hiding :wk "toggle url hiding")
+        "tw" '(markdown-toggle-wiki-links :wk "toggle wiki links")
+        )
+      (+config/local-leader
+        :keymaps 'markdown-mode-map
+        :states 'visual
+        "r" '(:ignore t :wk "region actions")
+        "rq" '(markdown-blockquote-region :wk "block quote region")
+        "rp" '(markdown-pre-region :wk "pre region"))
+      (general-nvmap
+        :keymaps 'markdown-mode-map
+        "gb" '(markdown-outline-previous-same-level :wk "previous same level")
+        "gf" '(markdown-outline-next-same-level :wk "next same level")
+        "gn" '(markdown-outline-next :wk "outline next")
+        "gp" '(markdown-outline-previous :wk "outline previous")
+        "z-" '(markdown-promote :wk "pronote")
+        "z=" '(markdown-demote :wk "demote")
+        "z<" '(markdown-outdent-region :wk "outdent region")
+        "z>" '(markdown-indent-region :wk "indent region")
+        "zj" '(markdown-move-down :wk "move up")
+        "zk" '(markdown-move-up :wk "move up")
+        "zt" '(:ignore t :wk "table")
+        "ztj" '(markdown-table-insert-row :wk "insert row")
+        "ztl" '(markdown-table-insert-column :wk "insert-column"))
+      (general-def
+        :keymaps 'markdown-mode-map
+        "M-h" '(markdown-promote-subtree :wk "promote subtree")
+        "M-S-h" '(markdown-promote :wk "promote")
+        "M-l" '(markdown-demote-subtree :wk "demote subtree")
+        "M-S-l" '(markdown-demote :wk "demote"))))
 #+end_src
 *** =edit-indirect=
 #+begin_src emacs-lisp -n
@@ -4837,12 +5242,24 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
       (setq flycheck-python-mypy-executable (executable-find "mypy")
             flycheck-python-flake8-executable (executable-find "flake8")
             flycheck-python-pylint-executable (executable-find "pylint")
-            flycheck-python-pyright-executable (executable-find "pyright"))))
+            flycheck-python-pyright-executable (executable-find "pyright")))
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'python-mode-map
+        "K" 'lsp-describe-thing-at-point)
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "d" '(:ignore t :wk "doc"))))
 #+end_src
 *** =pydoc=
 #+begin_src emacs-lisp -n
   (use-package pydoc
-    :ensure)
+    :ensure
+    :config
+    (with-eval-after-load 'general
+      (general-def
+        :keymaps 'python-mode-map
+        "C-c C-d" 'pydoc-at-point-no-jedi)))
 #+end_src
 *** =ob-ipython=
 #+begin_src emacs-lisp -n
@@ -4867,7 +5284,12 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 *** =inferior-python-mode=                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package inferior-python-mode
-    :hook (inferior-python-mode . hide-mode-line-mode))
+    :hook (inferior-python-mode . hide-mode-line-mode)
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "r" '(run-python :wk "run python"))))
 #+end_src
 *** =lsp-pyright=
 #+begin_src emacs-lisp -n
@@ -4889,7 +5311,12 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
   (use-package python-docstring
     :ensure
     :diminish
-    :hook (python-mode . python-docstring-mode))
+    :hook (python-mode . python-docstring-mode)
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "dq" 'python-docstring-fill)))
 #+end_src
 *** =pipenv=
 #+begin_src emacs-lisp -n
@@ -4902,7 +5329,12 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :init
     (setq pipenv-projectile-after-switch-function
           #'pipenv-projectile-after-switch-extended
-          pipenv-executable (executable-find "pipenv")))
+          pipenv-executable (executable-find "pipenv"))
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv"))))
 #+end_src
 *** =flycheck-pycheckers=
 #+begin_src emacs-lisp -n
@@ -4973,7 +5405,11 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
     ;; (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append)
     (with-eval-after-load 'lsp
-      (setq lsp-rust-analyzer-display-parameter-hints t)))
+      (setq lsp-rust-analyzer-display-parameter-hints t))
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps '(rustic-mode-map lsp-mode-map)
+        "K" 'lsp-describe-thing-at-point)))
 #+end_src
 *** =flycheck-rust=
 #+begin_src emacs-lisp -n
@@ -5011,7 +5447,13 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (put 'ansible-vault-password-file 'safe-local-variable #'stringp)
     :config
     (setq ansible-section-face 'font-lock-variable-name-face
-          ansible-task-label-face 'font-lock-doc-face))
+          ansible-task-label-face 'font-lock-doc-face)
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'yaml-mode-map
+        "a" '(:ignore t :wk ansible)
+        "ad" 'ansible-decrypt-buffer
+        "ae" 'ansible-encrypt-buffer)))
 #+end_src
 *** =ansible-doc=
 #+begin_src emacs-lisp -n
