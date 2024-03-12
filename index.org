@@ -22,6 +22,8 @@
 :END:
 This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mode]] which allows me to create an actual configuration file (by /[[https://orgmode.org/manual/Extracting-Source-Code.html][tangling]]/ this one =org= file), automatically export it into /HTML/ (and also publish it to my [[https://alexforsale.github.io/literate-emacs/][github page]] using /[[https://github.com/features/actions][github-action]]/), and also makes it easier to maintain.
 
+#+caption: many /Emacs/ capabilities
+[[./assets/img/emacs.png][file:assets/img/emacs.png]]
 Since this file in /Emacs/ is considered to be a library, it should follow the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Headers.html][convention]]. But this is not needed in the /HTML/ exported file, so every heading with the name =header= or =footer= will be tagged with the =noexport= tag.
 ** header                                                         :noexport:
 #+begin_src emacs-lisp +n
