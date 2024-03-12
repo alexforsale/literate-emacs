@@ -418,6 +418,8 @@ Multiple cursors for evil-mode, based on iedit[fn:11].
   ;;; Code:
 #+end_src
 ** =general.el=
+#+caption: general keybindings with =which-key=
+[[./assets/img/general-keybinding-with-which-key.png][file:assets/img/general-keybinding-with-which-key.png]]
 More convenient key definitions in emacs[fn:12].
 #+begin_src emacs-lisp -n
     (use-package general
@@ -721,7 +723,7 @@ An extensible emacs dashboard[fn:17].
           ))
 #+end_src
 ** =tab-bar=                                                       :builtin:
-Although I used /Perspective/ more, there are some cases where it's easier with tabs.
+Although I used /Perspective/ more, there are some cases where it's easier with tabs. And the default UI for the tabs is not that great.
 #+begin_src emacs-lisp -n
   (use-package tab-bar
     :init
@@ -945,6 +947,15 @@ Making /Emacs/ more colourful.
   (use-package nerd-fonts)
 #+end_src
 ** =helpful=
+Since /Emacs/ is a self-documenting editor[fn:18]. It's certainly nice to have a more contextual help buffers.
+#+caption: Helpful will also show the source code when available
+[[https://github.com/Wilfred/helpful/raw/master/screenshots/helpful_source.png]]
+
+#+caption: more prettier docstring
+[[https://github.com/Wilfred/helpful/raw/master/screenshots/helpful_docstring.png]]
+
+#+caption: helpful will also display any keybindings related
+[[https://github.com/Wilfred/helpful/raw/master/screenshots/helpful_bindings.png]]
 #+begin_src emacs-lisp -n
   (use-package helpful
     :ensure
@@ -1674,6 +1685,9 @@ Making /Emacs/ more colourful.
   ;;; Code:
 #+end_src
 ** =eshell=                                                        :builtin:
+#+caption: /eshell/ in action
+[[./assets/img/emacs-eshell.png][file:assets/img/emacs-eshell.png]]
+A shell-like command interpreter implemented in Emacs Lisp.
 #+begin_src emacs-lisp -n
   (use-package eshell
     :ensure nil
@@ -1920,6 +1934,8 @@ I still have a mixed feeling for this package, but it still easier to configure 
   ;;; Code:
 #+end_src
 ** =magit=
+#+caption: /Emacs magit/
+[[./assets/img/emacs-magit.png][file:assets/img/emacs-magit.png]]
 #+begin_src emacs-lisp -n
   (use-package magit
     :ensure
@@ -1979,6 +1995,8 @@ I still have a mixed feeling for this package, but it still easier to configure 
       (evil-collection-ripgrep-setup)))
 #+end_src
 ** =diff-hl=
+#+caption: highlighted uncommited changes
+[[./assets/img/emacs-diff-hl-indicator.png][file:assets/img/emacs-diff-hl-indicator.png]]
 #+begin_src emacs-lisp -n
   (use-package diff-hl
     :ensure
@@ -2076,6 +2094,8 @@ I still have a mixed feeling for this package, but it still easier to configure 
         "Gc" 'git-link-commit)))
 #+end_src
 ** =git-messenger=
+#+caption: /git messenger/ popup message
+[[./assets/img/emacs-git-messenger.png][file:assets/img/emacs-git-messenger.png]]
 #+begin_src emacs-lisp -n
   (use-package git-messenger
     :ensure
@@ -2133,6 +2153,8 @@ I still have a mixed feeling for this package, but it still easier to configure 
       (org-project-capture-single-file)))
 #+end_src
 ** =lsp=
+#+caption: /Emacs/ lsp in action
+[[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
 #+begin_src emacs-lisp -n
   (use-package lsp-mode
     :ensure
@@ -3403,6 +3425,8 @@ Useful for reading /epubs/.
     :config (setq wgrep-auto-save-buffer t))
 #+end_src
 ** =elfeed=
+#+caption: /elfeed/ RSS
+[[./assets/img/emacs-elfeed-rss.png][file:assets/img/emacs-elfeed-rss.png]]
 #+begin_src emacs-lisp -n
   (use-package elfeed
     :ensure
@@ -3434,7 +3458,7 @@ Useful for reading /epubs/.
 ** =emms=                                                          :builtin:
 #+begin_src emacs-lisp -n
   (use-package emms
-    :defer t
+    :commands (emms)
     :config
     (emms-all)
     (emms-default-players)
@@ -3791,6 +3815,8 @@ I sometimes need /treemacs/ when working on a large directory of files.
     :after treemacs evil)
 #+end_src
 ** =lsp-treemacs=
+#+caption: symbols in /lsp-treemacs/
+[[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+begin_src emacs-lisp -n
   (use-package lsp-treemacs
     :ensure
@@ -5657,6 +5683,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
   ;;; config-haskell.el ends here
 #+end_src
 * Footnotes
+[fn:18] https://www.emacswiki.org/emacs/SelfDocumentation
 
 [fn:17] https://github.com/emacs-dashboard/emacs-dashboard
 [fn:16] https://github.com/seagle0128/doom-modeline
