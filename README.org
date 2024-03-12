@@ -25,4 +25,7 @@
 #+end_html
 * About
 
+#+caption: many /Emacs/ capabilities
+[[./assets/img/emacs.png][file:assets/img/emacs.png]]
+
 This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mode]] which allows me to create an actual configuration file (by /[[https://orgmode.org/manual/Extracting-Source-Code.html][tangling]]/ this one =org= file), automatically export it into /HTML/ (and also publish it to my [[https://alexforsale.github.io/literate-emacs/][github page]] using /[[https://github.com/features/actions][github-action]]/), and also makes it easier to maintain.
