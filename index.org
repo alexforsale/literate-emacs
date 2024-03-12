@@ -1685,12 +1685,15 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package eshell-syntax-highlighting
     :ensure
+    :defer t
+    :after eshell
     :config
     (eshell-syntax-highlighting-global-mode +1))
 #+end_src
 ** =esh-autosuggest=
 #+begin_src emacs-lisp -n
   (use-package esh-autosuggest
+    :defer t
     :hook (eshell-mode . esh-autosuggest-mode)
     ;; If you have use-package-hook-name-suffix set to nil, uncomment and use the
     ;; line below instead:
@@ -1724,7 +1727,7 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package vterm
     :ensure
-    :demand t
+    :defer t
     :commands vterm-mode
     :config
     (add-hook 'vterm-mode-hook
@@ -1737,6 +1740,7 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package multi-vterm
     :ensure
+    :defer t
     :after vterm
     :config
     (with-eval-after-load 'general
@@ -1751,6 +1755,7 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package vterm-toggle
     :ensure
+    :defer t
     :after vterm
     :commands vterm-toggle
     :bind
@@ -1791,6 +1796,7 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
   (use-package bash-completion
     :ensure
+    :defer t
     :config
     (bash-completion-setup)
     :hook
@@ -2126,6 +2132,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package lsp-mode
     :ensure
+    :defer t
     :diminish (lsp-lens-mode lsp-mode)
     :commands lsp lsp-deferred
     :init
@@ -2200,7 +2207,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package lsp-ui
     :ensure
-    :demand t
+    :defer t
     :hook (lsp-mode . lsp-ui-mode)
     :init
     (setq lsp-ui-sideline-enable t
@@ -2737,6 +2744,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-superstar
     :ensure
+    :defer t
     :hook (org-mode . org-superstar-mode)
     :custom
     (org-superstar-leading-bullet ?\s)
@@ -2752,6 +2760,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-fancy-priorities ; priority icons
     :ensure
+    :defer t
     :hook (org-mode . org-fancy-priorities-mode)
     :hook (org-agenda-mode . org-fancy-priorities-mode)
     :custom
@@ -2761,6 +2770,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package toc-org
     :ensure
+    :defer t
     :hook ((org-mode markdown-mode) . toc-org-mode)
     :custom
     (toc-org-hrefify-default "gh")
@@ -2776,6 +2786,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
     :ensure
     :if (executable-find "pandoc")
     :after ox
+    :defer t
     :init
     (add-to-list 'org-export-backends 'pandoc)
     :custom
@@ -2788,6 +2799,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package deft
     :ensure
+    :defer t
     :after org-roam
     :custom
     (deft-directory org-directory)
@@ -2830,6 +2842,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-pdftools
     :ensure
+    :defer t
     :hook (org-mode . org-pdftools-setup-link)
     :commands org-pdftools-export)
 #+end_src
@@ -2837,6 +2850,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-noter
     :ensure
+    :defer t
     :after org-pdftools
     :custom
     (org-noter-auto-save-last-location t)
@@ -2848,6 +2862,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-noter-pdftools
     :ensure
+    :defer t
     :after org-noter
     :config
     ;; Add a function to ensure precise note is inserted
@@ -2883,12 +2898,14 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package ox-gfm
     :ensure
+    :defer t
     :after org)
 #+end_src
 ** =org-download=
 #+begin_src emacs-lisp -n
   (use-package org-download
     :ensure
+    :defer t
     :after org
     :hook (dired-mode . org-download-enable)
     :commands
@@ -2918,7 +2935,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
   (use-package org-cliplink
     :ensure
     :after org
-    :demand t
+    :defer t
     :bind ("C-x p i" . org-cliplink)
     :config
     (require 'org-capture)
@@ -2973,6 +2990,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 ** =transient=
 #+begin_src emacs-lisp -n
   (use-package transient
+    :defer t
     :config
     (transient-define-prefix +config/transient-hugo-server ()
       "Run hugo server with `transient'."
@@ -3010,6 +3028,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 ** =ox-hugo=
 #+begin_src emacs-lisp -n
   (use-package ox-hugo
+    :defer t
     :ensure
     :hook (org-hugo-auto-export-mode . +config/ox-hugo-transient-keybinding))
 #+end_src
@@ -3017,6 +3036,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-roam
     :ensure
+    :defer t
     :custom
     (org-roam-completion-everywhere t)
     :config
@@ -3137,6 +3157,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-roam-ui
     :ensure
+    :defer t
     :after org-roam
     :config
     (setq org-roam-ui-sync-theme t
@@ -3157,6 +3178,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-journal
     :ensure
+    :defer t
     :custom
     (org-icalendar-store-UID t)
     (org-icalendar-include-todo 'all)
@@ -3171,6 +3193,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package org-ref
     :ensure
+    :defer t
     :config
     (let ((ref-dir (expand-file-name "bibliography" org-directory)))
       (setq bibtex-completion-bibliography `(,(expand-file-name "references.bib" ref-dir)
@@ -3197,6 +3220,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
     (add-to-list 'load-path (expand-file-name "site-lisp/consult-bibtex" user-emacs-directory)))
 
   (use-package consult-bibtex
+    :defer t
     :config
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist '(bibtex-completion . consult-bibtex-embark-map))))
@@ -3205,6 +3229,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   (use-package consult-org-roam
     :ensure
+    :defer t
     :after org-roam
     :init
     (require 'consult-org-roam)
@@ -3235,7 +3260,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
     ("C-c n l" . consult-org-roam-forward-links)
     ("C-c n r" . consult-org-roam-search))
 #+end_src
-** =ox-latex=
+** =ox-latex=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package ox-latex
     :config
@@ -3260,17 +3285,20 @@ I still have a mixed feeling for this package, but it still easier to configure 
 Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package nov
-    :ensure)
+    :ensure
+    :defer t)
 #+end_src
 ** =djvu=
 #+begin_src emacs-lisp -n
   (use-package djvu
-    :ensure)
+    :ensure
+    :defer t)
 #+end_src
 ** =pdf-tools=
 #+begin_src emacs-lisp -n
   (use-package pdf-tools
     :ensure
+    :defer t
     :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
     :hook ((pdf-tools-enabled . (lambda ()
                                   (display-line-numbers-mode -1))))
@@ -3293,6 +3321,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package khalel
     :ensure
+    :defer t
     :if (executable-find "khal")
     :config
     (setq khalel-khal-command (executable-find "khal")
@@ -3305,6 +3334,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package direnv
     :ensure
+    :defer t
     :config
     (direnv-mode))
 #+end_src
@@ -3312,18 +3342,20 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package password-store
     :ensure
+    :defer t
     :config
     (setq password-store-password-length 12))
 
   (use-package password-store-otp
     :ensure
+    :defer t
     :after password-store)
 
   (use-package pass
-    :ensure)
+    :ensure
+    :defer t)
 
   (use-package auth-source-pass
-    :demand t
     :init
     (auth-source-pass-enable))
 #+end_src
@@ -3331,6 +3363,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package ement
     :ensure
+    :defer t
     :config
     (setf use-default-font-for-symbols nil)
     (set-fontset-font t 'unicode "Noto Emoji" nil 'append))
@@ -3339,6 +3372,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package pinentry
     :ensure
+    :defer t
     :config
     (pinentry-start))
 #+end_src
@@ -3351,6 +3385,7 @@ Useful for reading /epubs/.
 
   (use-package ripgrep
     :ensure
+    :defer t
     :init
     (with-eval-after-load 'evil-collection
       (evil-collection-ripgrep-setup)))
@@ -3359,6 +3394,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package wgrep
     :ensure
+    :defer t
     :commands wgrep-change-to-wgrep-mode
     :config (setq wgrep-auto-save-buffer t))
 #+end_src
@@ -3366,6 +3402,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package elfeed
     :ensure
+    :defer t
     :commands elfeed
     :config
     (setq elfeed-search-filter "@2-week-ago "
@@ -3383,6 +3420,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package elfeed-org
     :ensure
+    :defer t
     :after org elfeed
     :preface
     (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory)))
@@ -3414,7 +3452,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package editorconfig
     :ensure
-    :diminish
+    :defer t
     :config
     (editorconfig-mode 1)
     (with-eval-after-load 'ws-butler
@@ -3425,6 +3463,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package pdfgrep
     :ensure
+    :defer t
     :after pdf-tools
     :config (pdfgrep-mode))
 #+end_src
@@ -3432,7 +3471,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package selected
     :ensure
-    :diminish selected-minor-mode
+    :defer t
     :commands selected-minor-mode
     :init
     (selected-global-mode))
@@ -3441,6 +3480,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package yasnippet
     :ensure
+    :defer t
     :diminish yas-minor-mode
     :commands (yas-minor-mode-on
                yas-expand
@@ -3460,7 +3500,8 @@ Useful for reading /epubs/.
       (add-to-list 'yas-snippet-dirs (expand-file-name "snippets" user-emacs-directory))))
 
   (use-package yasnippet-snippets
-    :ensure)
+    :ensure
+    :after yasnippet)
 
   (use-package auto-yasnippet
     :ensure
@@ -3470,6 +3511,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package lorem-ipsum
     :ensure
+    :defer t
     :config
     (with-eval-after-load 'general
       (+config/leader-insert
@@ -3564,6 +3606,7 @@ Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package dired-git-info
     :ensure
+    :defer t
     ;; :hook
     ;; (dired-after-readin . dired-git-info-auto-enable)
     :config
@@ -3582,12 +3625,14 @@ Useful for reading /epubs/.
 ** =dired-rsync=
 #+begin_src emacs-lisp -n
   (use-package dired-rsync
-    :ensure)
+    :ensure
+    :defer t)
 #+end_src
 ** =diredfl=
 #+begin_src emacs-lisp -n
   (use-package diredfl
     :ensure
+    :defer t
     :hook (dired-mode . diredfl-global-mode))
 #+end_src
 ** footer                                                         :noexport:
@@ -3610,6 +3655,7 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs
     :ensure
+    :defer t
     :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
     :config
     (setq treemacs-hide-gitignored-files-mode t
@@ -3715,12 +3761,14 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-projectile
     :ensure
+    :defer t
     :after treemacs)
 #+end_src
 ** =treemacs-icons-dired=
 #+begin_src emacs-lisp -n
   (use-package treemacs-icons-dired
     :ensure
+    :defer t
     :after treemacs
     :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
@@ -3728,18 +3776,21 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-magit
     :ensure
+    :defer t
     :after treemacs magit)
 #+end_src
 ** =treemacs-evil=
 #+begin_src emacs-lisp -n
   (use-package treemacs-evil
     :ensure
+    :defer t
     :after treemacs evil)
 #+end_src
 ** =lsp-treemacs=
 #+begin_src emacs-lisp -n
   (use-package lsp-treemacs
     :ensure
+    :defer t
     :after treemacs lsp
     :config
     (lsp-treemacs-sync-mode 1)
@@ -3754,6 +3805,7 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-perspective
     :ensure
+    :defer t
     :after treemacs perspective
     :config
     (treemacs-set-scope-type 'Perspectives))
@@ -3762,12 +3814,14 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-tab-bar
     :ensure
+    :defer t
     :after treemacs)
 #+end_src
 ** =treemacs-nerd-icons=
 #+begin_src emacs-lisp -n
   (use-package treemacs-nerd-icons
     :ensure
+    :defer t
     :config
     (treemacs-load-theme "nerd-icons"))
 #+end_src
@@ -3791,6 +3845,8 @@ I sometimes need /treemacs/ when working on a large directory of files.
   (use-package notmuch
     :ensure
     :if (executable-find "notmuch")
+    :defer t
+    :commands (notmuch)
     :hook
     (message-setup . mml-secure-sign-pgpmime)
     :config
@@ -3945,7 +4001,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 
   (use-package flycheck
     :ensure
-    :diminish
+    :defer t
     :commands flycheck-list-errors flycheck-buffer
     :hook (prog-mode . global-flycheck-mode)
     :config
@@ -4090,6 +4146,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package macrostep
     :ensure
+    :defer t
     :bind (:map emacs-lisp-mode-map
                 ("C-c e" . macrostep-expand)))
 #+end_src
@@ -4113,6 +4170,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package sly
     :ensure
+    :defer t
     :commands sly-autoloads
     :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
            (lisp-mode . sly-editing-mode)))
@@ -4169,12 +4227,14 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   ;;;; clojure
   (use-package cider
-    :ensure)
+    :ensure
+    :defer t)
 #+end_src
 **** =clj-refactor=
 #+begin_src emacs-lisp -n
   (use-package clj-refactor
     :ensure
+    :defer t
     :hook (clojure-mode . +config/clojure-mode-hook)
     :config
     (defun +config/clojure-mode-hook ()
@@ -4188,6 +4248,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
   ;;;; scheme
   (use-package geiser
     :ensure
+    :defer t
     :diminish geiser-autodoc-mode
     ;; :hook (geiser-repl-mode . turn-on-smartparens-strict-mode)
     :init
@@ -4199,6 +4260,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package geiser-guile
     :ensure
+    :defer t
     :config
     (let ((nonguix-path (expand-file-name "Projects/guix/nonguix"
                                           (getenv "HOME")))
@@ -4213,6 +4275,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package macrostep-geiser
     :ensure
+    :defer t
     :after geiser-mode geiser-repl
     :hook ((geiser-mode geiser-repl-mode) . macrostep-geiser-setup)
     :bind (:map geiser-mode-map
@@ -4292,21 +4355,22 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+end_src
 *** =yaml-mode=
 #+begin_src emacs-lisp -n
-(use-package yaml-mode
-  :ensure
-  :config
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
-  (setq tab-width 2)
-  ;; (when (treesit-available-p)
-  ;;   (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode)))
-  :hook
-  ((yaml-mode . (lambda ()
-                   (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-   (yaml-mode . (lambda ()
-                  (run-hooks 'prog-mode-hook)))
-   (yaml-mode . lsp-deferred)
-   ))
+  (use-package yaml-mode
+    :ensure
+    :defer t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+    (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+    (setq tab-width 2)
+    ;; (when (treesit-available-p)
+    ;;   (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode)))
+    :hook
+    ((yaml-mode . (lambda ()
+                    (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+     (yaml-mode . (lambda ()
+                    (run-hooks 'prog-mode-hook)))
+     (yaml-mode . lsp-deferred)
+     ))
 #+end_src
 *** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -4327,6 +4391,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package toml-mode
     :ensure
+    :defer t
     :mode
     ("\\.toml\\'" . toml-mode)
     :hook
@@ -4357,6 +4422,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package lua-mode
     :ensure
+    :defer t
     :hook (lua-mode . lsp-deferred)
     :config
     (with-eval-after-load 'lsp-mode
@@ -4382,6 +4448,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package jinja2-mode
     :ensure
+    :defer t
     :config
     ;; The default behavior is to reindent the whole buffer on save. This is
     ;; disruptive and imposing. There are indentation commands available; the user
@@ -4411,6 +4478,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 *** =json-mode=                                                     :builtin:
 #+begin_src emacs-lisp -n
   (use-package json-mode
+    :defer t
     :hook
     (json-mode . lsp-deferred))
 #+end_src
@@ -4452,6 +4520,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 
   (use-package web-mode
     :ensure
+    :defer t
     :mode "\\.[px]?html?\\'"
     :mode "\\.\\(?:tpl\\|blade\\)\\(?:\\.php\\)?\\'"
     :mode "\\.erb\\'"
@@ -4537,6 +4606,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package emmet-mode
     :ensure
+    :defer t
     :hook (css-mode web-mode html-mode haml-mode nxml-mode rjsx-mode reason-mode)
     :config
     (when (require 'yasnippet nil t)
@@ -4554,6 +4624,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package skewer-mode
     :ensure
+    :defer t
     :hook ((web-mode . skewer-html-mode)
            (js2-mode . skewer-mode)))
 #+end_src
@@ -4561,6 +4632,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package lsp-tailwindcss
     :ensure
+    :defer t
     :init
     (setq lsp-tailwindcss-add-on-mode t))
 #+end_src
@@ -4568,6 +4640,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package sass-mode
     :ensure
+    :defer t
     :hook (scss-mode . rainbow-mode)
     :hook (scss-mode-local-vars . lsp-deferred))
 #+end_src
@@ -4575,6 +4648,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package css-eldoc
     :ensure
+    :defer t
     :commands turn-on-css-eldoc
     ;;add a hook if you want always to see the selector options in the minibuffer
     :config
@@ -4585,6 +4659,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package com-css-sort
     :ensure
+    :defer t
     :commands (com-css-sort com-css-sort-attributes-block com-css-sort-attributes-document)
     :config
     (setq com-css-sort-sort-type 'alphabetic-sort))
@@ -4736,6 +4811,8 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 *** =js2-mode=
 #+begin_src emacs-lisp -n
   (use-package js2-mode
+    :ensure
+    :defer t
     :interpreter ("node" . js2-mode)
     :hook ((js2-mode) . lsp-deferred)
     :hook (js2-mode . rainbow-delimiters-mode)
@@ -4756,6 +4833,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package xref-js2
     :ensure
+    :defer t
     :if (executable-find "ag") ; silver-searcher
     :config
     (add-hook 'js2-mode-hook (lambda ()
@@ -4765,7 +4843,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package js2-refactor
     :ensure
-    :demand t
+    :defer t
     :hook (js2-mode . js2-refactor-mode)
     :init
     (js2r-add-keybindings-with-prefix "C-c C-r")
@@ -4783,6 +4861,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package rjsx-mode
     :ensure
+    :defer t
     :mode "\\.[mc]?js\\'"
     :mode "\\.es6\\'"
     :mode "\\.pac\\'"
@@ -4828,6 +4907,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package typescript-mode
     :ensure
+    :defer t
     :hook (typescript-mode . rainbow-delimiters-mode)
     :hook (typescript-mode . lsp-deferred)
     :hook (typescript-tsx-mode . rainbow-delimiters-mode)
@@ -4859,6 +4939,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package tide
     :ensure
+    :defer t
     :hook (tide-mode . tide-hl-identifier-mode)
     :config
     (setq tide-completion-detailed t
@@ -4870,15 +4951,14 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 *** =npm-mode=
 #+begin_src emacs-lisp -n
   (use-package npm-mode
-    :ensure)
+    :ensure
+    :defer t)
 #+end_src
 *** =nodejs-repl=
 #+begin_src emacs-lisp -n
   (use-package nodejs-repl
-    :ensure)
-
-  (with-eval-after-load 'js
-    (setq js-indent-level 2))
+    :ensure
+    :defer t)
 #+end_src
 *** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -4932,7 +5012,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :init
     (setq reftex-plug-into-AUCTeX t))
 #+end_src
-*** =bibtex=
+*** =bibtex=                                                      :builtin:
 #+begin_src emacs-lisp -n
   (use-package bibtex
     :config
@@ -5108,7 +5188,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :mode ("README\\.md\\'" . gfm-mode)
     :mode ("\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'" . markdown-mode)
     :hook (markdown-mode . lsp-deferred)
-    :diminish gfm-mode
+    :defer t
     :init
     (require 'lsp-marksman)
     (cond
@@ -5434,6 +5514,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package rustic
     :ensure
+    ;defer t
     :mode ("\\.rs$" . rustic-mode)
     :init
     (with-eval-after-load 'rustic-flycheck
@@ -5484,6 +5565,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package ansible
     :ensure
+    :defer t
     :if (executable-find "ansible")
     :ensure
     :commands ansible-auto-decrypt-encrypt
@@ -5529,6 +5611,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package cperl-mode
     :ensure
+    :defer t
     :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 #+end_src
 *** footer                                                       :noexport:
@@ -5550,6 +5633,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package haskell-mode
     :ensure t
+    :defer t
     :init
     (setq flymake-allowed-file-name-masks nil)
     :custom
@@ -5559,7 +5643,9 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (haskell-tags-on-save t))
 
   (use-package lsp-haskell
-    :ensure t)
+    :ensure t
+    :defer t
+    :after lsp)
 #+end_src
 *** footer                                                       :noexport:
 #+begin_src emacs-lisp -n
