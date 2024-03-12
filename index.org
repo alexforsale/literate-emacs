@@ -1818,6 +1818,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
   (use-package smartparens
     :ensure
     :demand t
+    :hook (eval-expression-minibuffer-setup . turn-on-smartparens-strict-mode)
     :config
     (require 'smartparens-config)
     (show-smartparens-global-mode 1)
@@ -1840,7 +1841,50 @@ I still have a mixed feeling for this package, but it still easier to configure 
                                            (not (sp-point-in-string-or-comment))))
                                       (t (not (sp-point-in-string-or-comment))))))))
     (sp-with-modes '(html-mode sgml-mode nxml-mode web-mode)
-      (sp-local-pair "<" ">")))
+      (sp-local-pair "<" ">"))
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'smartparens-mode-map
+        "<" 'sp-backward-barf-sexp
+        "C-<" 'sp-backward-slurp-sexp
+        ">" 'sp-forward-slurp-sexp
+        "C->" 'sp-forward-barf-sexp)
+
+      (general-define-key
+       :keymaps 'smartparens-mode-map
+       "M-DEL" 'sp-unwrap-sexp))
+    ;; (with-eval-after-load 'general
+    ;;   (general-define-key
+    ;;    :keymaps 'smartparens-mode-map
+    ;;    "C-M-f" 'sp-forward-sexp
+    ;;    "C-M-b" 'sp-backward-sexp
+    ;;    "C-M-d" 'sp-down-sexp
+    ;;    "C-M-a" 'sp-backward-down-sexp
+    ;;    "C-S-d" 'sp-beginning-of-sexp
+    ;;    "C-S-a" 'sp-end-of-sexp
+    ;;    "C-M-e" 'sp-up-sexp
+    ;;    "C-M-u" 'sp-backward-up-sexp
+    ;;    "C-M-t" 'sp-transpose-sexp
+    ;;    "C-M-k" 'sp-kill-sexp
+    ;;    "C-M-w" 'sp-copy-sexp
+    ;;    "M-<delete>" 'sp-unwrap-sexp
+    ;;    "M-<backspace>" 'sp-backward-unwrap-sexp
+    ;;    "C-<right>" 'sp-forward-slurp-sexp
+    ;;    "C-<left>" 'sp-forward-barf-sexp
+    ;;    "C-M-<left>" 'sp-backward-slurp-sexp
+    ;;    "C-M-<right>" 'sp-backward-barf-sexp
+    ;;    "M-D" 'sp-split-sexp
+    ;;    "C-M-<delete>" 'sp-splice-sexp-killing-forward
+    ;;    "C-M-<backspace>" 'sp-splice-sexp-killing-backward
+    ;;    "C-S-<backspace>" 'sp-splice-sexp-killing-around
+    ;;    "C-]" 'sp-select-next-thing-exchange
+    ;;    "C-<left_bracket>" 'sp-select-previous-thing
+    ;;    "C-M-]" 'sp-select-next-thing
+    ;;    "M-F" 'sp-forward-symbol
+    ;;    "M-B" 'sp-backward-symbol
+    ;;    "C-\"" 'sp-change-inner
+    ;;    "M-i" 'sp-change-enclosing))
+    )
 #+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
