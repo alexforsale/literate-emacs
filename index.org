@@ -2953,22 +2953,22 @@ I still have a mixed feeling for this package, but it still easier to configure 
                       `(("b" "(b)log post" plain
                          (file +config/create-new-blog-post)
                          "\
-      ,#+options: ':nil -:nil ^:{} num:nil toc:nil
-      ,#+author: %n
-      ,#+creator: Emacs %(eval emacs-version) (Org mode %(eval org-version) + ox-hugo)
-      ,#+hugo_section: posts
-      ,#+hugo_base_dir: ../../
-      ,#+date: %t
-      ,#+title: %^{title}
-      ,#+description: %^{description}
-      ,#+hugo_draft: true
-      ,#+hugo_tags: %^{tags}
-      ,#+hugo_categories: %^{categories}
-      ,#+hugo_auto_set_lastmod: t
-      ,#+startup: inlineimages
+  ,#+options: ':nil -:nil ^:{} num:nil toc:nil
+  ,#+author: %n
+  ,#+creator: Emacs %(eval emacs-version) (Org mode %(eval org-version) + ox-hugo)
+  ,#+hugo_section: posts
+  ,#+hugo_base_dir: ../../
+  ,#+date: %t
+  ,#+title: %^{title}
+  ,#+description: %^{description}
+  ,#+hugo_draft: true
+  ,#+hugo_tags: %^{tags}
+  ,#+hugo_categories: %^{categories}
+  ,#+hugo_auto_set_lastmod: t
+  ,#+startup: inlineimages
 
-      ,* %?
-      " :unnarrowed t :jump-to-captured t)))
+  ,* %?
+  " :unnarrowed t :jump-to-captured t)))
 #+end_src
 ** =transient=
 #+begin_src emacs-lisp -n
@@ -3041,41 +3041,41 @@ I still have a mixed feeling for this package, but it still easier to configure 
             `(("o" "others" plain "%?"
                :target
                (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-      ,#+title: ${title}
-      ,#+author: %n
-      ,#+description: %^{description}
-      ,#+date: %T
-      ,#+hugo_base_dir: ..
-      ,#+hugo_section: posts
-      ,#+hugo_categories: others
-      ,#+hugo_tags: %^{tag}
-      ")
+  ,#+title: ${title}
+  ,#+author: %n
+  ,#+description: %^{description}
+  ,#+date: %T
+  ,#+hugo_base_dir: ..
+  ,#+hugo_section: posts
+  ,#+hugo_categories: others
+  ,#+hugo_tags: %^{tag}
+  ")
                :unnarrowed t)
               ("t" "tech" plain "%?"
                :target
                (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-      ,#+title: ${title}
-      ,#+author: %n
-      ,#+description: %^{description}
-      ,#+date: %T
-      ,#+hugo_base_dir: ..
-      ,#+hugo_section: posts
-      ,#+hugo_categories: tech
-      ,#+hugo_tags: %^{tag}
-      ")
+  ,#+title: ${title}
+  ,#+author: %n
+  ,#+description: %^{description}
+  ,#+date: %T
+  ,#+hugo_base_dir: ..
+  ,#+hugo_section: posts
+  ,#+hugo_categories: tech
+  ,#+hugo_tags: %^{tag}
+  ")
                :unnarrowed t)
               ("p" "programming" plain "%?"
                :target
                (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-      ,#+title: ${title}
-      ,#+author: %n
-      ,#+description: %^{description}
-      ,#+date: %T
-      ,#+hugo_base_dir: ..
-      ,#+hugo_section: posts
-      ,#+hugo_categories: programming
-      ,#+hugo_tags: %^{tag}
-      ")
+  ,#+title: ${title}
+  ,#+author: %n
+  ,#+description: %^{description}
+  ,#+date: %T
+  ,#+hugo_base_dir: ..
+  ,#+hugo_section: posts
+  ,#+hugo_categories: programming
+  ,#+hugo_tags: %^{tag}
+  ")
                :unnarrowed t)
               )
             ))
@@ -3085,29 +3085,29 @@ I still have a mixed feeling for this package, but it still easier to configure 
     (setq org-roam-capture-ref-templates
           `(("r" "ref" plain "%?" :target
              (file+head ,(expand-file-name "%<%Y%m%d%H%M%S>-${slug}.org" org-roam-directory) "
-      ,#+title: ${title}
-      ,#+author: %n
-      ,#+description: %^{description}
-      ,#+date: %T
-      ,#+hugo_base_dir: ..
-      ,#+hugo_section: posts
-      ,#+hugo_categories: reference
-      ,#+hugo_tags: %^{tag}
-      ") :unnarrowed t)))
+  ,#+title: ${title}
+  ,#+author: %n
+  ,#+description: %^{description}
+  ,#+date: %T
+  ,#+hugo_base_dir: ..
+  ,#+hugo_section: posts
+  ,#+hugo_categories: reference
+  ,#+hugo_tags: %^{tag}
+  ") :unnarrowed t)))
     (require 'org-roam-dailies)
     (setq org-roam-dailies-directory "daily/"
           org-roam-dailies-capture-templates
           '(("d" "default" entry "* %?" :target
              (file+head "%<%Y-%m-%d>.org" "
-      ,#+title: %<%Y-%m-%d>
-      ,#+author: %n
-      ,#+description: %^{description}
-      ,#+date: %T
-      ,#+hugo_base_dir: ../..
-      ,#+hugo_section: posts
-      ,#+hugo_categories: daily
-      ,#+hugo_tags: %^{tag}
-      "))))
+  ,#+title: %<%Y-%m-%d>
+  ,#+author: %n
+  ,#+description: %^{description}
+  ,#+date: %T
+  ,#+hugo_base_dir: ../..
+  ,#+hugo_section: posts
+  ,#+hugo_categories: daily
+  ,#+hugo_tags: %^{tag}
+  "))))
     (require 'org-roam-export)
     (org-roam-setup)
     (with-eval-after-load 'general
