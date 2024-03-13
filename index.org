@@ -407,11 +407,11 @@ Multiple cursors for evil-mode, based on iedit[fn:11].
   ;;; config-evil.el ends here
 #+end_src
 * Keybindings
-Keybindings in /Emacs/ is always been my struggle, my brain isn't big enough to memorize all the default keybindings (though over the years my fingers started to memorize some of them). At first I started using /[[https://github.com/abo-abo/hydra/][hydra]]/, it's a wonderful package for customized keybindings. But configuring them feels like a chore, considering I'm still working my way on finding my own comfort in keybindings.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-keybindings.el :mkdirp t
 :ID:       3b19d30f-9f31-4328-9a90-cccb19f23fac
 :END:
+Keybindings in /Emacs/ is always been my struggle, my brain isn't big enough to memorize all the default keybindings (though over the years my fingers started to memorize some of them). At first I started using /[[https://github.com/abo-abo/hydra/][hydra]]/, it's a wonderful package for customized keybindings. But configuring them feels like a chore, considering I'm still working my way on finding my own comfort in keybindings.
 ** header                                                         :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-keybindings --- Keybindings -*- lexical-binding: t -*-
