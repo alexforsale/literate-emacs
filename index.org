@@ -35,8 +35,8 @@ Since this file in /Emacs/ is considered to be a library, it should follow the [
 Every top level heading in this file should be tangled to a separate file, this section will be tangled as ~./config.el~.
 #+begin_src emacs-lisp -n
   (require 'config-variables (expand-file-name "modules/config-variables.el" user-emacs-directory) t)
-  (require 'config-evil nil t)
   (require 'config-keybindings nil t)
+  (require 'config-evil nil t)
   (require 'config-ui nil t)
   (require 'config-builtin nil t)
   (require 'config-completion nil t)
@@ -427,8 +427,7 @@ More convenient key definitions in emacs[fn:12].
   (use-package general
     :ensure t
     :init
-    (with-eval-after-load 'evil
-      (general-evil-setup))
+    (general-evil-setup t)
     (general-auto-unbind-keys)
     :config
     (general-override-mode)
