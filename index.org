@@ -1905,6 +1905,14 @@ I have these builtin packages loaded, I would like to investigate them one by on
        "M-." 'xref-find-definitions
        "M-?" 'xref-find-references)))
 #+end_src
+** =server=
+#+begin_src emacs-lisp
+(use-package server
+  :config
+  (unless (server-running-p)
+    (server-start))
+  (require 'org-protocol))
+#+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-builtin)
