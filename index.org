@@ -1217,6 +1217,17 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
     (which-key-setup-minibuffer)
     (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
 #+end_src
+** =nerd-icons=
+#+begin_src emacs-lisp
+  (use-package nerd-icons
+    :ensure t
+    :custom
+    ;; The Nerd Font you want to use in GUI
+    ;; "Symbols Nerd Font Mono" is the default and is recommended
+    ;; but you can use any other Nerd Font if you want
+    (nerd-icons-font-family "Symbols Nerd Font Mono")
+    )
+#+end_src
 ** =all-the-icons=
 A utility package to collect various Icon Fonts and propertize them within Emacs[fn:14].
 #+begin_src emacs-lisp -n
@@ -1274,8 +1285,14 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
                             (registers . 5))
           dashboard-projects-switch-function 'projectile-persp-switch-project
           dashboard-week-agenda t
-          dashboard-filter-agenda-entry 'dashboard-no-filter-agenda
+          dashboard-filter-agenda-entry 'dashboard-filter-agenda-by-todo
           dashboard-startup-banner 'logo
+          dashboard-center-content t
+          dashboard-vertically-center-content t
+          ;; dashboard-icon-type 'all-the-icons
+          dashboard-display-icons-p t
+          dashboard-set-heading-icons t
+          dashboard-set-file-icons t
           ))
 #+end_src
 ** =tab-bar=                                                       :builtin:
