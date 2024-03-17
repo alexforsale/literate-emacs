@@ -2863,8 +2863,10 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
        (C . t)
        (css . t)
        (calc . t)
+       (ditaa . t) ; needs the `ditaa' package
+       (diagrams . t) ; `ob-diagrams'
+       (dot . t ) ; `graphviz'
        (screen . t)
-       (dot . t )
        (haskell . t)
        (java . t)
        (js . t)
@@ -2873,6 +2875,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
        (lua . t)
        (org . t)
        (perl . t)
+       (plantuml . t)
        (python .t)
        (ruby . t)
        (shell . t)
@@ -2886,7 +2889,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
       (push '("[ ]" . "☐") prettify-symbols-alist)
       (push '("[X]" . "☑") prettify-symbols-alist)
       (prettify-symbols-mode))
-   :custom
+    :custom
     (org-replace-disputed-keys t)
     (org-indirect-buffer-display 'current-window)
     (org-enforce-todo-dependencies t)
@@ -2945,7 +2948,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   (use-package org-src
     :hook (org-src-mode . (lambda () (outline-minor-mode -1)))
     :custom
-    (org-src-preserve-indentation nil))
+    (org-src-preserve-indentation nil)
+    (org-edit-src-content-indentation 0))
 #+end_src
 ** =org-faces=                                                     :builtin:
 #+begin_src emacs-lisp -n
@@ -3719,12 +3723,118 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     ("C-c n l" . consult-org-roam-forward-links)
     ("C-c n r" . consult-org-roam-search))
 #+end_src
-** =ox-latex=                                                      :builtin:
+** =ox-latex= :builtin:
 #+begin_src emacs-lisp -n
   (use-package ox-latex
     :config
     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f")))
 #+end_src
+** =org-plantum=
+#+begin_src emacs-lisp -n
+(use-package ob-plantuml
+  :ensure nil
+  :config
+  (when (file-exists-p "/usr/share/java/plantuml/plantuml.jar")
+    (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")))
+#+end_src
+*** example
+**** Simple
+#+begin_src plantuml :exports both :file ./assets/img/ping.svg
+Client -> Server : Ping
+Server -> Client : Pong
+#+end_src
+
+#+RESULTS:
+[[file:./assets/ping.svg]]
+
+**** gerrit
+#+BEGIN_SRC plantuml :exports results :file ./assets/img/git-gerrit-workflow.png
+title Git + Gerrit Work Flow
+
+(*) -down-> "clone repository"
+note right
+git clone url/to/repository
+scp -p url/to/hooks/commit-msg repository/.git/hooks/
+endnote
+-down->[get an assignment] "coding" as coding
+-down-> "commit locally"
+note right
+git add xxx
+git commit
+endnote
+-down-> "review" as review
+note right: git push origin refs/for/<branch_name>
+--> if "" then
+-right->[approved] "submit"
+note bottom: click "submit" on corresponding gerrit page
+-u-> "update local repository"
+note right: git pull <color:red>--rebase</color>
+-left-> [get another task(a new cycle)] coding
+else
+-left->[rejected] "rework"
+-up-> "recommit"
+note top
+git add xxx
+git commit <color:red>--amend</color>
+endnote
+-right-> review
+endif
+#+END_SRC
+
+#+RESULTS:
+[[file:./assets/img/git-gerrit-workflow.png]]
+
+** =ob-ditaa=
+#+begin_src emacs-lisp -n
+(use-package ob-ditaa
+  :config
+  (when (file-exists-p "/usr/share/java/ditaa/ditaa-0.11.jar")
+    (setq org-ditaa-jar-path "/usr/share/java/ditaa/ditaa-0.11.jar")))
+#+end_src
+
+*** example
+#+begin_src ditaa :file ./assets/img/hello-world.png
++--------------+
+|              |
+| Hello World! |
+|              |
++--------------+
+#+end_src
+
+#+RESULTS:
+[[file:./assets/hello-world.png]]
+
+** =ob-diagrams=
+:PROPERTIES:
+:ID:       f70ea00a-85fe-4d1c-b7c3-fcda13847bcc
+:END:
+Generate various diagrams inside org mode with org-babel and the help from various tools.
+
+#+begin_src emacs-lisp -n
+  (use-package ob-diagrams
+    :ensure
+    :demand t)
+#+end_src
+
+#+begin_src diagrams :type flowchart :exports both
+  st=>start: Incoming Tasks
+  e=>end
+  op1=>operation: My Operation
+  sub1=>subroutine: My Subroutine
+  cond=>condition: Yes
+  or No?:>http://www.google.com
+  io=>inputoutput: catch something
+  st->op1->cond
+  cond(yes)->io->e
+  cond(no)->sub1(right)->op1
+#+end_src
+
+#+RESULTS:
+
+*** requirements
+- [[https://github.com/francoislaberge/diagrams][diagrams cli]]
+- [[https://github.com/sverweij/state-machine-cat][state-machine-cat]]
+- [[https://github.com/BurntSushi/erd][erd]]
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-org)
