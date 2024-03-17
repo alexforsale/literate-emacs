@@ -1275,6 +1275,7 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
           dashboard-projects-switch-function 'projectile-persp-switch-project
           dashboard-week-agenda t
           dashboard-filter-agenda-entry 'dashboard-no-filter-agenda
+          dashboard-startup-banner 'logo
           ))
 #+end_src
 ** =tab-bar=                                                       :builtin:
