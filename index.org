@@ -2862,6 +2862,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
        (scheme . t)
        (sql . t)
        (sqlite . t)))
+    (setq org-use-sub-superscripts '{})
     (add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
     (defun +config/org-prettify-symbols ()
       (push '("[ ]" . "☐") prettify-symbols-alist)
@@ -2886,8 +2887,10 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (org-clone-delete-id t)
     (org-default-notes-file (expand-file-name "notes.org" org-directory))
     (org-pretty-entities t)
-    (org-use-sub-superscripts '{})
     (org-use-property-inheritance t)
+    (org-priority-highest ?A)
+    (org-priority-lowest ?D)
+    (org-priority-default ?B)
     (org-todo-keywords
      '((sequence
         "TODO(t!)"  ; A task that needs doing & is ready to do
@@ -2895,28 +2898,29 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
         "PROG(p!)"  ; A task that is in progress
         "WAIT(w!)"  ; Something external is holding up this task
         "HOLD(h!)"  ; This task is paused/on hold because of me
-        "IDEA(i!)"  ; An unconfirmed and unapproved task or notion
         "|"
         "DONE(d!)"  ; Task successfully completed
         "DELEGATED(l!)" ; Task is delegated
         "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
        ))
     (org-todo-keyword-faces
-     '(("PROG" . (:foreground "cyan" :weight bold))
-       ("WAIT" . (:foreground "yellow" :weight bold))
-       ("IDEA" . (:foreground "magenta" :weight bold))
-       ("DELEGATED" . "blue")
-       ("KILL" . "green")))
-    (org-todo-state-tags-triggers
-     '(("KILL" ("killed" . t) ("Archives" . t))
-       ("WAIT" ("wait" . t))
-       ("HOLD" ("wait") ("hold" . t))
-       (done ("wait") ("hold"))
-       ("PROG" ("active" . t))
-       ("TODO" ("wait") ("killed") ("hold"))
-       ("NEXT" ("wait") ("killed") ("hold"))
-       ("PROG" ("wait") ("killed") ("hold"))
-       ("DONE" ("wait") ("killed") ("hold")))))
+     '(("PROG" . (:foreground "#5e81ac" :weight bold))
+       ("WAIT" . (:foreground "#ebcb8b" :weight bold))
+       ("HOLD" . (:foreground "#d08770" :weight bold))
+       ("NEXT" . (:foreground "#81a1c1" :weight bold))
+       ("DELEGATED" . "#8fbcbb")
+       ("KILL" . "#a3be8c")))
+    ;; (org-todo-state-tags-triggers
+    ;;  '(("KILL" ("killed" . t) ("Archives" . t))
+    ;;    ("WAIT" ("wait" . t))
+    ;;    ("HOLD" ("wait") ("hold" . t))
+    ;;    (done ("wait") ("hold"))
+    ;;    ("PROG" ("active" . t))
+    ;;    ("TODO" ("wait") ("killed") ("hold"))
+    ;;    ("NEXT" ("wait") ("killed") ("hold"))
+    ;;    ("PROG" ("wait") ("killed") ("hold"))
+    ;;    ("DONE" ("wait") ("killed") ("hold"))))
+    )
 #+end_src
 ** =org-src=                                                       :builtin:
 #+begin_src emacs-lisp -n
@@ -2946,7 +2950,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (org-archive-subtree-save-file-p t)
     (org-archive-mark-done t)
     (org-archive-reversed-order t)
-    (org-archive-location (concat (expand-file-name "archives.org" org-directory) "::datetree/* Finished Tasks")))
+    (org-archive-location (concat (expand-file-name "archives.org" org-directory) "::datetree/* Archived Tasks")))
 #+end_src
 ** =org-capture=                                                   :builtin:
 #+begin_src emacs-lisp -n
@@ -2958,6 +2962,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
           `(("i" "Inbox - Goes Here first!" entry
              (file+headline ,(expand-file-name "inbox.org" org-directory) "Inbox")
              "** %?\n%i\n%a" :prepend t)
+            ("r" "Request" entry (file+headline ,(expand-file-name "inbox.org" org-directory) "Request")
+             (file ,(expand-file-name "request.template" org-directory)))
             ("l" "Links" entry
              (file+headline ,(expand-file-name "links.org" org-directory) "Links")))))
 #+end_src
@@ -2968,10 +2974,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :hook (org-after-refile-insert . save-buffer)
     :custom
     (org-refile-targets
-     `((,(expand-file-name "archives.org" org-directory) :maxlevel . 1)
-       (,(expand-file-name "notes.org" org-directory) :maxlevel . 1)
-       (,(expand-file-name "projects.org" org-directory) :maxlevel . 1)
-       (,(expand-file-name "todo.org" org-directory) :maxlevel . 1)))
+     `((,(expand-file-name "projects.org" org-directory) :maxlevel . 1)
+       (,(expand-file-name "routines.org" org-directory) :maxlevel . 1)
+       (,(expand-file-name "personal.org" org-directory) :maxlevel . 1)))
     (org-refile-use-outline-path 'file)
     (org-outline-path-complete-in-steps nil))
 #+end_src
@@ -3061,88 +3066,112 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :config
     (with-eval-after-load 'evil
       (evil-set-initial-state #'org-agenda-mode 'normal))
+    ;; (setq org-agenda-custom-commands
+    ;;       `(("a" "All Agenda"
+    ;;          ((tags-todo "+followup"
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nNeeds Followup\n")))
+    ;;           (tags-todo "+reading"
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nReading List\n")))
+    ;;           (agenda ""
+    ;;                   ((org-agenda-span 1)
+    ;;                    (org-agenda-block-separator nil)
+    ;;                    (org-deadline-warning-days 0)
+    ;;                    (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+    ;;                    (org-agenda-start-on-weekday 1)
+    ;;                    (org-scheduled-past-days 0)
+    ;;                    (org-agenda-overriding-header "\nToday\n")))
+    ;;           (agenda ""
+    ;;                   ((org-agenda-block-separator nil)
+    ;;                    (org-agenda-start-day "+1d")
+    ;;                    (org-agenda-overriding-header "\nAll Agendas\n")))))
+    ;;         ("w" . "Work")
+    ;;         ("wa" "All Work Agenda"
+    ;;          ((tags-todo "+followup"
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nNeeds Followup\n")))
+    ;;           (tags-todo "+reading"
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nReading List\n")))
+    ;;           (agenda ""
+    ;;                   ((org-agenda-span 1)
+    ;;                    (org-agenda-block-separator nil)
+    ;;                    (org-deadline-warning-days 0)
+    ;;                    (org-scheduled-past-days 0)
+    ;;                    (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+    ;;                    (org-agenda-format-date "%A %-e %B %Y")
+    ;;                    (org-agenda-start-on-weekday 1)
+    ;;                    (org-agenda-overriding-header "\nToday's Work\n")))
+    ;;           (agenda ""
+    ;;                   ((org-agenda-start-on-weekday nil)
+    ;;                    (org-agenda-start-day "+1d")
+    ;;                    (org-agenda-span 3)
+    ;;                    (org-deadline-warning-days 0)
+    ;;                    (org-agenda-block-separator nil)
+    ;;                    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+    ;;                    (org-agenda-overriding-header "\nNext three days\n")))
+    ;;           (agenda ""
+    ;;                   ((org-agenda-time-grid nil)
+    ;;                    (org-agenda-start-day "+4d")
+    ;;                    (org-agenda-span 14)
+    ;;                    (org-agenda-show-all-dates nil)
+    ;;                    (org-deadline-warning-days 0)
+    ;;                    (org-agenda-block-separator nil)
+    ;;                    (org-agenda-entry-types '(:deadline))
+    ;;                    (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+    ;;                    (org-agenda-overriding-header "\nUpcoming deadlines\n"))))
+    ;;          ((org-agenda-tag-filter-preset '("+work" "-personal"))))
+    ;;         ("h" . "Personal")
+    ;;         ("ha" "Personal Agenda"
+    ;;          ((tags-todo "+followup"
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nNeeds Followup\n")))
+    ;;           (tags-todo "+reading"
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nReading List\n")))
+    ;;           (agenda ""
+    ;;                   ((org-agenda-block-separator nil)
+    ;;                    (org-agenda-overriding-header "\nPersonal Agenda\n")))
+    ;;           (alltodo ""))
+    ;;          ((org-agenda-tag-filter-preset '("+personal" "-work"))))
+    ;;         ("p" . "Projects")
+    ;;         ("pa" "All Projects"
+    ;;          ((tags-todo "+{project*}+TODO=\"PROJ\""
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nAll Projects\n")))))
+    ;;         ("pp" "Personal Projects"
+    ;;          ((tags-todo "+{project*}+personal+TODO=\"PROJ\""
+    ;;                      ((org-agenda-block-separator nil)
+    ;;                       (org-agenda-overriding-header "\nPersonal Projects\n")))))
+    ;;         ("ps" "Stuck Projects"
+    ;;          ((stuck ""
+    ;;                  ((org-agenda-block-separator nil)
+    ;;                   (org-agenda-overriding-header "\nStuck Projects\n")))))))
     (setq org-agenda-custom-commands
-          `(("a" "All Agenda"
-             ((tags-todo "+followup"
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nNeeds Followup\n")))
-              (tags-todo "+reading"
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nReading List\n")))
+          `(("n" "Agenda and all TODOs"
+             ((agenda ""
+                    ((org-agenda-span 1)
+                     (org-agenda-start-on-weekday t)
+                     (org-agenda-block-separator nil)
+                     (org-agenda-use-time-grid t)
+                     (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                     (org-agenda-format-date "%A %-e %B %Y")
+                     (org-agenda-overriding-header "\nToday\n")))
+              (tags-todo "TODO=\"TODO\"|\"NEXT\""
+                    ((org-agenda-block-separator nil)
+                     (org-agenda-skip-function '(org-agenda-skip-if-todo 'nottodo 'done))
+                     (org-agenda-use-time-grid nil)
+                     (org-agenda-overriding-header "\nIncomplete\n")))
               (agenda ""
-                      ((org-agenda-span 1)
-                       (org-agenda-block-separator nil)
-                       (org-deadline-warning-days 0)
-                       (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                       (org-agenda-start-on-weekday 1)
-                       (org-scheduled-past-days 0)
-                       (org-agenda-overriding-header "\nToday\n")))
-              (agenda ""
-                      ((org-agenda-block-separator nil)
-                       (org-agenda-start-day "+1d")
-                       (org-agenda-overriding-header "\nAll Agendas\n")))))
-            ("w" . "Work")
-            ("wa" "All Work Agenda"
-             ((tags-todo "+followup"
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nNeeds Followup\n")))
-              (tags-todo "+reading"
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nReading List\n")))
-              (agenda ""
-                      ((org-agenda-span 1)
-                       (org-agenda-block-separator nil)
-                       (org-deadline-warning-days 0)
-                       (org-scheduled-past-days 0)
-                       (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                       (org-agenda-format-date "%A %-e %B %Y")
-                       (org-agenda-start-on-weekday 1)
-                       (org-agenda-overriding-header "\nToday's Work\n")))
-              (agenda ""
-                      ((org-agenda-start-on-weekday nil)
-                       (org-agenda-start-day "+1d")
-                       (org-agenda-span 3)
-                       (org-deadline-warning-days 0)
-                       (org-agenda-block-separator nil)
-                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                       (org-agenda-overriding-header "\nNext three days\n")))
-              (agenda ""
-                      ((org-agenda-time-grid nil)
-                       (org-agenda-start-day "+4d")
-                       (org-agenda-span 14)
-                       (org-agenda-show-all-dates nil)
-                       (org-deadline-warning-days 0)
-                       (org-agenda-block-separator nil)
-                       (org-agenda-entry-types '(:deadline))
-                       (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-                       (org-agenda-overriding-header "\nUpcoming deadlines\n"))))
-             ((org-agenda-tag-filter-preset '("+work" "-personal"))))
-            ("h" . "Personal")
-            ("ha" "Personal Agenda"
-             ((tags-todo "+followup"
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nNeeds Followup\n")))
-              (tags-todo "+reading"
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nReading List\n")))
-              (agenda ""
-                      ((org-agenda-block-separator nil)
-                       (org-agenda-overriding-header "\nPersonal Agenda\n")))
-              (alltodo ""))
-             ((org-agenda-tag-filter-preset '("+personal" "-work"))))
-            ("p" . "Projects")
-            ("pa" "All Projects"
-             ((tags-todo "+{project*}+TODO=\"PROJ\""
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nAll Projects\n")))))
-            ("pp" "Personal Projects"
-             ((tags-todo "+{project*}+personal+TODO=\"PROJ\""
-                         ((org-agenda-block-separator nil)
-                          (org-agenda-overriding-header "\nPersonal Projects\n")))))
-            ("ps" "Stuck Projects"
-             ((stuck ""
-                     ((org-agenda-block-separator nil)
-                      (org-agenda-overriding-header "\nStuck Projects\n"))))))))
+                    ((org-agenda-span 7)
+                     (org-agenda-start-on-weekday 1)
+                     (org-agenda-block-separator nil)
+                     (org-agenda-use-time-grid nil)
+                     (org-agenda-overriding-header "\nWeekly\n"))))
+             ((org-agenda-tag-filter-preset '("-personal" "-home")))
+             )))
+    )
 #+end_src
 ** =org-timer=                                                     :builtin:
 #+begin_src emacs-lisp -n
@@ -3191,7 +3220,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :hook (org-mode . org-fancy-priorities-mode)
     :hook (org-agenda-mode . org-fancy-priorities-mode)
     :custom
-    (org-fancy-priorities-list '("⚑" "⬆" "■")))
+    (org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 #+end_src
 ** =toc-org=
 #+begin_src emacs-lisp -n
