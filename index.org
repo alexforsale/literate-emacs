@@ -960,9 +960,9 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   (+config/leader-key
     "TAB" (general-simulate-key "C-c TAB"
           :state '(normal visual)
-          :name general-SPC-h-simulates-C-h
+          :name general-SPC-h-simulates-C-c-TAB
           :docstring "Simulates C-c TAB in normal and visual mode."
-          :which-key "Help"))
+          :which-key "Perspective"))
 
   (+config/leader-key
     ;; "TAB" '(:keymap perspective-map
