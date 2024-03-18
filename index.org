@@ -2801,6 +2801,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 :PROPERTIES:
 :header-args: :tangle ./modules/config-org.el :mkdirp t
 :END:
+My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-workflow/][based around my workflow]].
 ** header                                                         :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-org --- Org-mode configuration -*- lexical-binding: t -*-
@@ -3842,6 +3843,20 @@ Generate various diagrams inside org mode with org-babel and the help from vario
 - [[https://github.com/francoislaberge/diagrams][diagrams cli]]
 - [[https://github.com/sverweij/state-machine-cat][state-machine-cat]]
 - [[https://github.com/BurntSushi/erd][erd]]
+** =khalel=
+Interacting through Emacs with locally-stored calendars via the console application khal and syncing with remote CalDAV calendars using vdirsyncer.
+#+caption: from the [[https://github.com/emacsmirror/khalel/][github page]]
+#+begin_src emacs-lisp -n
+(use-package khalel
+  :ensure
+  :if (executable-find "khal")
+  :after org
+  :config
+  (setq khalel-khal-command (executable-find "khal")
+        khalel-vdirsyncer-command (executable-find "vdirsyncer")
+        khalel-import-org-file (expand-file-name "calendar.org" org-directory))
+  (khalel-add-capture-template))
+#+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-org)
