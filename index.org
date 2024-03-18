@@ -3246,31 +3246,32 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 ** =org-modern=
 #+begin_src emacs-lisp
-  (use-package org-modern
-    :ensure t
-    :config
-    (setq
-     ;; Edit settings
-     org-auto-align-tags nil
-     org-tags-column 0
-     org-fold-catch-invisible-edits 'show-and-error
-     org-special-ctrl-a/e t
-     org-insert-heading-respect-content t
+(use-package org-modern
+  :ensure t
+  :config
+  (setq
+   ;; Edit settings
+   org-auto-align-tags nil
+   org-tags-column 0
+   org-fold-catch-invisible-edits 'show-and-error
+   org-special-ctrl-a/e t
+   org-insert-heading-respect-content t
 
-     ;; Org styling, hide markup etc.
-     org-hide-emphasis-markers t
-     org-ellipsis "…"
-     ;; Agenda styling
-     org-agenda-tags-column 0
-     org-agenda-block-separator ?─
-     org-agenda-time-grid
-     '((daily today require-timed)
-       (800 1000 1200 1400 1600 1800 2000)
-       " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-     org-agenda-current-time-string
-     "◀── now ─────────────────────────────────────────────────")
-    (global-org-modern-mode))
+   ;; Org styling, hide markup etc.
+   org-hide-emphasis-markers nil ; set to nil for easier editing
+   org-ellipsis "…"
+   ;; Agenda styling
+   org-agenda-tags-column 0
+   org-agenda-block-separator ?─
+   org-agenda-time-grid
+   '((daily today require-timed)
+     (800 1000 1200 1400 1600 1800 2000)
+     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+   org-agenda-current-time-string
+   "◀── now ─────────────────────────────────────────────────")
+  (global-org-modern-mode))
 #+end_src
+
 ** =org-fancy-priority=
 #+begin_src emacs-lisp -n
   (use-package org-fancy-priorities ; priority icons
