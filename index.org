@@ -25,7 +25,7 @@ This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mo
 #+caption: many /Emacs/ capabilities
 [[./assets/img/emacs.png][file:assets/img/emacs.png]]
 Since this file in /Emacs/ is considered to be a library, it should follow the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Headers.html][convention]]. But this is not needed in the /HTML/ exported file, so every heading with the name =header= or =footer= will be tagged with the =noexport= tag and won't show in the /HTML/ page, it's' kind of repetitive anyway.
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config --- Custom Configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -67,7 +67,7 @@ Every top level heading in this file should be tangled to a separate file, this 
   (require 'config-haskell nil t)
 #+end_src
 Since the =load-path= for the modules directory is defined in ~./modules/config-variables.el~, the first =require= line also state the location.
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config)
   ;;; config.el ends.here
@@ -77,7 +77,7 @@ Since the =load-path= for the modules directory is defined in ~./modules/config-
 :header-args: :tangle ./early-init.el
 :END:
 Customizations defined in this file (~./early-init.el~) takes effect earlier than the normal init file. Usually before the package systems and GUI is initialized.
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; early-init --- `Emacs' Initialization file -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -100,7 +100,7 @@ The =custom-file= is used to save customization settings for future use.
     (load custom-file))
 #+end_src
 
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'early-init)
   ;;; early-init.el ends here
@@ -109,7 +109,7 @@ The =custom-file= is used to save customization settings for future use.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-variables.el :mkdirp t
 :END:
-*** header                                                       :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-variables --- Custom variables -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -155,11 +155,11 @@ Now much more simpler since =[[https://github.com/jwiegley/use-package][use-pack
    '(use-package-verbose t)
    '(use-package-check-before-init nil))
 #+end_src
-*** footer                                                       :noexport:
+*** =use-package=
 #+begin_src emacs-lisp -n
   (require 'use-package)
 #+end_src
-*** footer                                                       :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-variables)
   ;;; config-variables.el ends.here
@@ -169,7 +169,7 @@ Now much more simpler since =[[https://github.com/jwiegley/use-package][use-pack
 :header-args: :tangle ./modules/config-evil.el :mkdirp t
 :END:
 It's not like I hate the standard /Emacs/ keychord, I actually used it for a while, and most of the /shells/ default to /Emacs/ key. But I have to admit, using /vim/ keys allows me to type faster.
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-evil --- `evil-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -341,7 +341,7 @@ Some evil-ex command previews[fn:8].
     (evil-traces-mode))
 #+end_src
 ** =evil-visualstar=
- Start a * or # search from the visual selection[fn:9].
+Start a * or # search from the visual selection[fn:9].
 #+begin_src emacs-lisp -n
   (use-package evil-visualstar
     :after evil
@@ -351,8 +351,8 @@ Some evil-ex command previews[fn:8].
                evil-visualstar/begin-search-backward)
     :init
     (evil-define-key* 'visual 'global
-                      "*" #'evil-visualstar/begin-search-forward
-                      "#" #'evil-visualstar/begin-search-backward))
+      "*" #'evil-visualstar/begin-search-forward
+      "#" #'evil-visualstar/begin-search-backward))
 #+end_src
 ** =exato=
 🔖 EXATO: Evil XML Attributes Text Object[fn:10].
@@ -374,56 +374,57 @@ Multiple cursors for evil-mode, based on iedit[fn:11].
     (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match)
     (evil-multiedit-mode)
     (evil-multiedit-default-keybinds)
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps 'evil-multiedit-state-map
-       "RET" 'evil-multiedit-toggle-or-restrict-region)
-      (general-mmap
-        :keymaps 'evil-motion-state-map
-        "RET" 'evil-multiedit-toggle-or-restrict-region)
-      (general-define-key
-       :keymaps '(evil-multiedit-state-map evil-multiedit-insert-state-map)
-       "C-n" 'evil-multiedit-next
-       "C-p" 'evil-multiedit-prev)
-      (general-vmap
-        :keymaps 'evil-visual-state-map
-        "R" 'evil-multiedit-match-all)
-      (general-nmap
-        :keymaps 'evil-normal-state-map
-        "M-d" 'evil-multiedit-match-and-next
-        "M-D" 'evil-multiedit-match-and-prev)
-      (general-vmap
-        :keymaps 'evil-visual-state-map
-        "M-d" 'evil-multiedit-match-and-next
-        "M-D" 'evil-multiedit-match-and-prev
-        "C-M-D" 'evil-multiedit-restore)
-      (general-iemap
-        :keymaps 'evil-insert-state-map
-        "M-d" 'evil-multiedit-toggle-marker-here)))
+    ;; (with-eval-after-load 'general
+    ;;   (general-define-key
+    ;;    :keymaps 'evil-multiedit-state-map
+    ;;    "RET" 'evil-multiedit-toggle-or-restrict-region)
+    ;;   (general-mmap
+    ;;    :keymaps 'evil-motion-state-map
+    ;;    "RET" 'evil-multiedit-toggle-or-restrict-region)
+    ;;   (general-define-key
+    ;;    :keymaps '(evil-multiedit-state-map evil-multiedit-insert-state-map)
+    ;;    "C-n" 'evil-multiedit-next
+    ;;    "C-p" 'evil-multiedit-prev)
+    ;;   (general-vmap
+    ;;    :keymaps 'evil-visual-state-map
+    ;;    "R" 'evil-multiedit-match-all)
+    ;;   (general-nmap
+    ;;    :keymaps 'evil-normal-state-map
+    ;;    "M-d" 'evil-multiedit-match-and-next
+    ;;    "M-D" 'evil-multiedit-match-and-prev)
+    ;;   (general-vmap
+    ;;    :keymaps 'evil-visual-state-map
+    ;;    "M-d" 'evil-multiedit-match-and-next
+    ;;    "M-D" 'evil-multiedit-match-and-prev
+    ;;    "C-M-D" 'evil-multiedit-restore)
+    ;;   (general-iemap
+    ;;    :keymaps 'evil-insert-state-map
+    ;;    "M-d" 'evil-multiedit-toggle-marker-here))
+    )
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-evil)
-  ;;; config-evil.el ends here
 #+end_src
+;;; config-evil.el ends here
 * Keybindings
 :PROPERTIES:
 :header-args: :tangle ./modules/config-keybindings.el :mkdirp t
 :ID:       3b19d30f-9f31-4328-9a90-cccb19f23fac
 :END:
 Keybindings in /Emacs/ is always been my struggle, my brain isn't big enough to memorize all the default keybindings (though over the years my fingers started to memorize some of them). At first I started using /[[https://github.com/abo-abo/hydra/][hydra]]/, it's a wonderful package for customized keybindings. But configuring them feels like a chore, considering I'm still working my way on finding my own comfort in keybindings.
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-keybindings --- Keybindings -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =general.el=
+** =general.el= :disabled:
 (I think) is the keybindings used in /doom/, CMIIW it's been a while since I've used /doomemacs/.
 #+caption: general keybindings with =which-key=
 [[./assets/img/general-keybinding-with-which-key.png][file:assets/img/general-keybinding-with-which-key.png]]
 More convenient key definitions in emacs[fn:12].
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (use-package general
     :ensure t
     :init
@@ -432,16 +433,16 @@ More convenient key definitions in emacs[fn:12].
     :config
     (general-override-mode)
     (general-create-definer +config/leader-key
-      :keymaps 'override
-      :states  '(insert emacs normal hybrid motion visual operator)
-      :prefix "SPC"
-      :non-normal-prefix "s-SPC")
+                            :keymaps 'override
+                            :states  '(insert emacs normal hybrid motion visual operator)
+                            :prefix "SPC"
+                            :non-normal-prefix "s-SPC")
     (general-create-definer +config/local-leader
-      :keymaps 'override
-      :states '(emacs normal hybrid motion visual operator)
-      :prefix "m"
-      :non-normal-prefix "s-m"
-      "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
+                            :keymaps 'override
+                            :states '(emacs normal hybrid motion visual operator)
+                            :prefix "m"
+                            :non-normal-prefix "s-m"
+                            "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
     ;; useful macro
     (defmacro +config/leader-menu! (name infix-key &rest body)
       "Create a definer NAME `+config/leader-NAME' wrapping `+config/leader-key'.
@@ -449,11 +450,11 @@ More convenient key definitions in emacs[fn:12].
       (declare (indent 2))
       `(progn
          (general-create-definer ,(intern (concat "+config/leader-" name))
-           :wrapping +config/leader-key
-           :prefix-map (quote ,(intern (concat "+config/leader-" name "-map")))
-           :infix ,infix-key
-           :wk-full-keys nil
-           "" '(:ignore t :which-key ,name))
+                                 :wrapping +config/leader-key
+                                 :prefix-map (quote ,(intern (concat "+config/leader-" name "-map")))
+                                 :infix ,infix-key
+                                 :wk-full-keys nil
+                                 "" '(:ignore t :which-key ,name))
          (,(intern (concat "+config/leader-" name))
           ,@body)))
     )
@@ -463,7 +464,7 @@ What I'm doing before is setting the /general/ keybindings inside their respecti
 I prefer to have the keybindings inside the /use-package/ declaration, this way if I decided not to use the package(s), their custom keybindings will also be removed. The other way for this is to use the =:demand t= keyword, with the down side of having a longer initialization time.
 ** Packages keybindings
 *** First level menu
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; First level menu
   (+config/leader-menu! "buffer" "b")
   (+config/leader-menu! "files" "f")
@@ -482,89 +483,89 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   (+config/leader-menu! "window" "w")
 #+end_src
 *** First level keybinding
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; keybindings
   (+config/leader-key
-    ";" 'pp-eval-expression
-    ":" 'execute-extended-command
-    "." '(find-file :wk "find file")
-    "^" '(subword-capitalize :wk "Capitalize subword")
-    "u" 'universal-argument)
+   ";" 'pp-eval-expression
+   ":" 'execute-extended-command
+   "." '(find-file :wk "find file")
+   "^" '(subword-capitalize :wk "Capitalize subword")
+   "u" 'universal-argument)
 #+end_src
 *** buffer
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; buffer
   (+config/leader-buffer
-    "[" '(previous-buffer :wk "previous buffer")
-    "]" '(next-buffer :wk "next buffer")
-    "TAB" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
-    "b" '(switch-to-buffer :wk "switch to buffer")
-    "s" '(basic-save-buffer :wk "save buffer")
-    "c" '(clone-indirect-buffer :wk "clone buffer")
-    "C" '(clone-indirect-buffer-other-window :wk "clone buffer other window")
-    "d" '(kill-current-buffer :wk "kill current buffer")
-    "i" 'ibuffer
-    "k" '(kill-buffer :wk "kill buffer")
-    "l" '(evil-switch-to-windows-last-buffer :wk "Switch to last open buffer")
-    "m" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :wk "switch to messages buffer")
-    "n" '(next-buffer :wk "next buffer")
-    "N" '(evil-buffer-new :wk "New unnamed buffer")
-    "p" '(previous-buffer :wk "previous buffer")
-    "o" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
-    "r" '(revert-buffer-quick :wk "revert buffer")
-    "R" '(rename-buffer :wk "rename buffer")
-    "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
-    "z" '(bury-buffer :wk "bury buffer"))
+   "[" '(previous-buffer :wk "previous buffer")
+   "]" '(next-buffer :wk "next buffer")
+   "TAB" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+   "b" '(switch-to-buffer :wk "switch to buffer")
+   "s" '(basic-save-buffer :wk "save buffer")
+   "c" '(clone-indirect-buffer :wk "clone buffer")
+   "C" '(clone-indirect-buffer-other-window :wk "clone buffer other window")
+   "d" '(kill-current-buffer :wk "kill current buffer")
+   "i" 'ibuffer
+   "k" '(kill-buffer :wk "kill buffer")
+   "l" '(evil-switch-to-windows-last-buffer :wk "Switch to last open buffer")
+   "m" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :wk "switch to messages buffer")
+   "n" '(next-buffer :wk "next buffer")
+   "N" '(evil-buffer-new :wk "New unnamed buffer")
+   "p" '(previous-buffer :wk "previous buffer")
+   "o" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+   "r" '(revert-buffer-quick :wk "revert buffer")
+   "R" '(rename-buffer :wk "rename buffer")
+   "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
+   "z" '(bury-buffer :wk "bury buffer"))
 #+end_src
 *** Editing
 **** =smartparens=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap
-    :keymaps 'smartparens-mode-map
-    "<" 'sp-backward-barf-sexp
-    "C-<" 'sp-backward-slurp-sexp
-    ">" 'sp-forward-slurp-sexp
-    "C->" 'sp-forward-barf-sexp)
+   :keymaps 'smartparens-mode-map
+   "<" 'sp-backward-barf-sexp
+   "C-<" 'sp-backward-slurp-sexp
+   ">" 'sp-forward-slurp-sexp
+   "C->" 'sp-forward-barf-sexp)
 
   (general-define-key
    :keymaps 'smartparens-mode-map
    "M-DEL" 'sp-unwrap-sexp)
 #+end_src
 *** dired
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap 'dired-mode-map
-    "g$" 'dired-hide-subdir
-    "g?" 'dired-summary
-    "gG" 'dired-do-chgrp
-    "gj" 'dired-next-dirline
-    "gk" 'dired-prev-dirline
-    "go" 'dired-view-file
-    "gO" 'dired-find-file-other-window
-    "gy" 'dired-show-file-type)
+                 "g$" 'dired-hide-subdir
+                 "g?" 'dired-summary
+                 "gG" 'dired-do-chgrp
+                 "gj" 'dired-next-dirline
+                 "gk" 'dired-prev-dirline
+                 "go" 'dired-view-file
+                 "gO" 'dired-find-file-other-window
+                 "gy" 'dired-show-file-type)
 #+end_src
 *** files
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; files
   (+config/leader-files
-    "D" 'dired
-    "d" 'dired-jump
-    "f" '(find-file :wk "find file")
-    "F" '(find-file-other-frame :wk "find file other frame")
-    "k" 'delete-frame
-    "r" 'recentf
-    "S" '(write-file :wk "save file")
-    "s" '(save-buffer :wk "save buffer")
-    "w" '(find-file-other-window :wk "find file other window"))
+   "D" 'dired
+   "d" 'dired-jump
+   "f" '(find-file :wk "find file")
+   "F" '(find-file-other-frame :wk "find file other frame")
+   "k" 'delete-frame
+   "r" 'recentf
+   "S" '(write-file :wk "save file")
+   "s" '(save-buffer :wk "save buffer")
+   "w" '(find-file-other-window :wk "find file other window"))
 #+end_src
 *** find
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; find
   (+config/leader-find
-    "g" 'grep
-    "r" '(rgrep :wk "recursive grep"))
+   "g" 'grep
+   "r" '(rgrep :wk "recursive grep"))
 #+end_src
 *** flycheck
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-define-key
    :keymaps '(normal visual)
    :prefix "z"
@@ -576,441 +577,441 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
            (:repeat t :jump t)))
 #+end_src
 *** help
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; help
   (+config/leader-key
-    "h" (general-simulate-key "C-h"
-          :state '(normal visual)
-          :name general-SPC-h-simulates-C-h
-          :docstring "Simulates C-h in normal and visual mode."
-          :which-key "Help"))
+   "h" (general-simulate-key "C-h"
+                             :state '(normal visual)
+                             :name general-SPC-h-simulates-C-h
+                             :docstring "Simulates C-h in normal and visual mode."
+                             :which-key "Help"))
 #+end_src
 *** go
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; go
   (+config/leader-go
-    "'" '(:ignore t :wk "avy")
-    "''" 'avy-resume
-    "'c" 'evil-avy-goto-char
-    "'l" 'evil-avy-goto-line
-    "'w" 'evil-avy-goto-word-or-subword-1)
+   "'" '(:ignore t :wk "avy")
+   "''" 'avy-resume
+   "'c" 'evil-avy-goto-char
+   "'l" 'evil-avy-goto-line
+   "'w" 'evil-avy-goto-word-or-subword-1)
 #+end_src
 *** insert
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; insert
   (+config/leader-insert
-    "u" '(insert-char :wk "insert character"))
+   "u" '(insert-char :wk "insert character"))
 #+end_src
 *** mail
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-menu! "mail" "M-m"
-    "m" '(notmuch :wk "Notmuch Mail"))
+                        "m" '(notmuch :wk "Notmuch Mail"))
 
   (+config/leader-mail
-    "m" '(notmuch :wk "open notmuch mail")
-    "M" '(compose-mail :wk "new mail"))
+   "m" '(notmuch :wk "open notmuch mail")
+   "M" '(compose-mail :wk "new mail"))
 
   (general-nmap 'notmuch-common-keymap
-    "gr" 'notmuch-refresh-this-buffer
-    "gR" 'notmuch-poll-and-refresh-this-buffer)
+                "gr" 'notmuch-refresh-this-buffer
+                "gR" 'notmuch-poll-and-refresh-this-buffer)
 #+end_src
 *** mark
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; mark
   (+config/leader-mark
-    "m" '(bookmark-set :wk "set bookmark")
-    "b" '(bookmark-jump :wk "jump to bookmark")
-    "B" '(bookmark-jump-other-window :wk "jump to bookmark other window")
-    "C-c b" '(bookmark-jump-other-frame :wk "jump to bookmark other frame")
-    "c" '(consult-bookmark :wk "consult bookmark") ;; require `consult' package
-    "l" '(bookmark-bmenu-list :wk "list bookmarks")
-    "L" '(bookmark-load :wk "load bookmark")
-    "d" '(bookmark-delete :wk "delete bookmark")
-    "D" '(bookmark-delete-all :wk "delete all bookmarks")
-    "s" '(bookmark-save :wk "save bookmark")
-    "r" '(bookmark-rename :wk "rename bookmark"))
+   "m" '(bookmark-set :wk "set bookmark")
+   "b" '(bookmark-jump :wk "jump to bookmark")
+   "B" '(bookmark-jump-other-window :wk "jump to bookmark other window")
+   "C-c b" '(bookmark-jump-other-frame :wk "jump to bookmark other frame")
+   "c" '(consult-bookmark :wk "consult bookmark") ;; require `consult' package
+   "l" '(bookmark-bmenu-list :wk "list bookmarks")
+   "L" '(bookmark-load :wk "load bookmark")
+   "d" '(bookmark-delete :wk "delete bookmark")
+   "D" '(bookmark-delete-all :wk "delete all bookmarks")
+   "s" '(bookmark-save :wk "save bookmark")
+   "r" '(bookmark-rename :wk "rename bookmark"))
 #+end_src
 *** open
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; open
   (+config/leader-open
-    "i" '((lambda () (interactive) (find-file user-init-file)) :wk "open Emacs configuration file"))
+   "i" '((lambda () (interactive) (find-file user-init-file)) :wk "open Emacs configuration file"))
 #+end_src
 *** =org-mode=
-#+begin_src emacs-lisp -n
-(general-define-key
- :keymaps 'override
- "C-c l" '(org-store-link :wk "Store link")
- "C-c a" '(org-agenda :wk "Org Agenda")
- "C-c c" '(org-capture :wk "Org Capture")
- "C-c C-s" 'org-schedule)
+#+begin_src emacs-lisp -n :tangle no
+  (general-define-key
+   :keymaps 'override
+   "C-c l" '(org-store-link :wk "Store link")
+   "C-c a" '(org-agenda :wk "Org Agenda")
+   "C-c c" '(org-capture :wk "Org Capture")
+   "C-c C-s" 'org-schedule)
 
-(+config/leader-notes
-  "a" 'org-agenda
-  "c" 'org-capture
-  "C" 'org-capture-goto-last-stored
-  "r" 'org-refile-goto-last-stored)
+  (+config/leader-notes
+   "a" 'org-agenda
+   "c" 'org-capture
+   "C" 'org-capture-goto-last-stored
+   "r" 'org-refile-goto-last-stored)
 
-;; (+config/local-leader
-;;   :major-modes 'org-mode
-;;   :keymaps 'org-mode-map
-;;   "a" '(:ignore t :wk "action")
-;;   "s" '(:ignore t :wk "search"))
+  ;; (+config/local-leader
+  ;;   :major-modes 'org-mode
+  ;;   :keymaps 'org-mode-map
+  ;;   "a" '(:ignore t :wk "action")
+  ;;   "s" '(:ignore t :wk "search"))
 
-(+config/local-leader
-  :keymaps 'org-mode-map
-  "C-a" 'org-attach
-  "C-b" 'org-backward-heading-same-level
-  "C-c" 'org-ctrl-c-ctrl-c
-  "C-d" 'org-deadline
-  "C-e" 'org-export-dispatch
-  "C-f" 'org-forward-heading-same-level
-  "C-j" 'org-goto
-  "C-k" 'org-kill-note-or-show-branches
-  "C-l" 'org-insert-link
-  "C-n" 'org-next-visible-heading
-  "C-o" 'org-open-at-point
-  "C-p" 'org-previous-visible-heading
-  "C-q" 'org-set-tags-command
-  "C-r" 'org-fold-reveal
-  "C-s" 'org-schedule
-  "C-t" 'org-todo
-  "C-w" 'org-refile
-  "C-y" 'org-evaluate-time-range
-  "C-z" 'org-add-note
-  "M-b" 'org-previous-block
-  "M-f" 'org-next-block
-  "M-l" 'org-insert-last-stored-link
-  "M-w" 'org-refile-copy
-  "C-^" 'org-up-element
-  "C-_" 'org-down-element
-  "C-<" 'org-promote-subtree
-  "C->" 'org-demote-subtree
-  "C-," 'org-insert-structure-template
-  "C-*" 'org-list-make-subtree
-  "{" 'org-table-toggle-formula-debugger
-  "}" 'org-table-toggle-coordinate-overlays
-  "`" 'org-table-edit-field
-  "\\" 'org-match-sparse-tree
-  "^" 'org-sort
-  "[" 'org-agenda-file-to-front
-  "]" 'org-remove-file
-  "@" 'org-mark-subtree
-  "?" 'org-table-field-info
-  "=" 'org-table-eval-formula
-  ">" 'org-goto-calendar
-  "+" 'org-table-sum
-  "<" 'org-date-from-calendar
-  ";" 'org-toggle-comment
-  ":" 'org-toggle-fixed-width
-  "/" 'org-sparse-tree
-  "," 'org-priority
-  "." 'org-timestamp
-  "*" 'org-ctrl-c-star
-  "-" 'org-ctrl-c-minus
-  "#" 'org-update-statistics-cookies
-  "$" 'org-archive-subtree
-  "%" 'org-mark-ring-push
-  "'" 'org-edit-special
-  "TAB" '(org-clock-in :wk "clock-in")
-  "!" '(org-reload :wk "reload org")
-  "[" '(org-mark-ring-goto :wk "Jump to previous position in the mark ring")
-  "b" '(:ignore t :wk "buffer")
-  "bs" '(org-save-all-org-buffers :wk "save all org buffer")
-  "f" '(:ignore t :wk "files")
-  "fs" '(org-save-all-org-buffers :wk "save all org buffer")
-  "s" '(org-schedule :wk "org schedule")
-  "i" '(:ignore t :wk "insert")
-  "id" '(org-insert-drawer :wk "insert drawer")
-  "i@" '(org-cite-insert :wk "insert citation")
-  "if" '(org-footnote-action :wk "footnote")
-  "i C-f" '(org-emphasize :wk "insert emphasize")
-  "il" '(org-insert-link :wk "insert link")
-  "iD" '(org-deadline :wk "insert deadline")
-  "is" '(org-schedule :wk "insert schedule")
-  "ip" '(org-set-property :wk "insert property")
-  "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
+  (+config/local-leader
+   :keymaps 'org-mode-map
+   "C-a" 'org-attach
+   "C-b" 'org-backward-heading-same-level
+   "C-c" 'org-ctrl-c-ctrl-c
+   "C-d" 'org-deadline
+   "C-e" 'org-export-dispatch
+   "C-f" 'org-forward-heading-same-level
+   "C-j" 'org-goto
+   "C-k" 'org-kill-note-or-show-branches
+   "C-l" 'org-insert-link
+   "C-n" 'org-next-visible-heading
+   "C-o" 'org-open-at-point
+   "C-p" 'org-previous-visible-heading
+   "C-q" 'org-set-tags-command
+   "C-r" 'org-fold-reveal
+   "C-s" 'org-schedule
+   "C-t" 'org-todo
+   "C-w" 'org-refile
+   "C-y" 'org-evaluate-time-range
+   "C-z" 'org-add-note
+   "M-b" 'org-previous-block
+   "M-f" 'org-next-block
+   "M-l" 'org-insert-last-stored-link
+   "M-w" 'org-refile-copy
+   "C-^" 'org-up-element
+   "C-_" 'org-down-element
+   "C-<" 'org-promote-subtree
+   "C->" 'org-demote-subtree
+   "C-," 'org-insert-structure-template
+   "C-*" 'org-list-make-subtree
+   "{" 'org-table-toggle-formula-debugger
+   "}" 'org-table-toggle-coordinate-overlays
+   "`" 'org-table-edit-field
+   "\\" 'org-match-sparse-tree
+   "^" 'org-sort
+   "[" 'org-agenda-file-to-front
+   "]" 'org-remove-file
+   "@" 'org-mark-subtree
+   "?" 'org-table-field-info
+   "=" 'org-table-eval-formula
+   ">" 'org-goto-calendar
+   "+" 'org-table-sum
+   "<" 'org-date-from-calendar
+   ";" 'org-toggle-comment
+   ":" 'org-toggle-fixed-width
+   "/" 'org-sparse-tree
+   "," 'org-priority
+   "." 'org-timestamp
+   "*" 'org-ctrl-c-star
+   "-" 'org-ctrl-c-minus
+   "#" 'org-update-statistics-cookies
+   "$" 'org-archive-subtree
+   "%" 'org-mark-ring-push
+   "'" 'org-edit-special
+   "TAB" '(org-clock-in :wk "clock-in")
+   "!" '(org-reload :wk "reload org")
+   "[" '(org-mark-ring-goto :wk "Jump to previous position in the mark ring")
+   "b" '(:ignore t :wk "buffer")
+   "bs" '(org-save-all-org-buffers :wk "save all org buffer")
+   "f" '(:ignore t :wk "files")
+   "fs" '(org-save-all-org-buffers :wk "save all org buffer")
+   "s" '(org-schedule :wk "org schedule")
+   "i" '(:ignore t :wk "insert")
+   "id" '(org-insert-drawer :wk "insert drawer")
+   "i@" '(org-cite-insert :wk "insert citation")
+   "if" '(org-footnote-action :wk "footnote")
+   "i C-f" '(org-emphasize :wk "insert emphasize")
+   "il" '(org-insert-link :wk "insert link")
+   "iD" '(org-deadline :wk "insert deadline")
+   "is" '(org-schedule :wk "insert schedule")
+   "ip" '(org-set-property :wk "insert property")
+   "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
 #+end_src
 **** =deft=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap
-    :keymaps 'deft-mode-map
-    "q" 'evil-quit
-    "C-j" 'forward-button
-    "C-k" 'backward-button)
+   :keymaps 'deft-mode-map
+   "q" 'evil-quit
+   "C-j" 'forward-button
+   "C-k" 'backward-button)
 #+end_src
 **** =org-agenda=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap
-    :keymaps 'org-agenda-mode-map
-    "q" 'org-agenda-quit
-    "Q" 'org-agenda-quit
-    "RET" 'org-agenda-switch-to
-    "TAB" 'org-agenda-switch-to
-    "t" 'org-agenda-todo
-    "gr" 'org-agenda-redo-all)
+   :keymaps 'org-agenda-mode-map
+   "q" 'org-agenda-quit
+   "Q" 'org-agenda-quit
+   "RET" 'org-agenda-switch-to
+   "TAB" 'org-agenda-switch-to
+   "t" 'org-agenda-todo
+   "gr" 'org-agenda-redo-all)
 #+end_src
 **** =org-roam=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-notes
-      "r" '(:ignore t :wk "roam")
-      "rb" 'org-roam-buffer-toggle
-      "rc" 'org-roam-capture
-      "rd" '(:ignore t :wk "dailies")
-      "rdc" '(:ignore t :wk "capture day")
-      "rdcd" 'org-roam-dailies-capture-date
-      "rdct" 'org-roam-dailies-capture-today
-      "rdg" '(:ignore t :wk "goto")
-      "rdgt" 'org-roam-dailies-goto-today
-      "rdgd" 'org-roam-dailies-goto-date
-      "rdgp" 'org-roam-dailies-goto-previous-note
-      "rdgy" 'org-roam-dailies-goto-yesterday
-      "rdcy" 'org-roam-dailies-capture-yesterday
-      "ri" 'org-roam-node-insert
-      "rf" 'org-roam-node-find
-      "rg" 'org-roam-graph
-      "rr" '(:ignore t :wk "ref")
-      "rra" 'org-roam-ref-add
-      "rrf" 'org-roam-ref-find
-      "rrr" 'org-roam-ref-remove)
+   "r" '(:ignore t :wk "roam")
+   "rb" 'org-roam-buffer-toggle
+   "rc" 'org-roam-capture
+   "rd" '(:ignore t :wk "dailies")
+   "rdc" '(:ignore t :wk "capture day")
+   "rdcd" 'org-roam-dailies-capture-date
+   "rdct" 'org-roam-dailies-capture-today
+   "rdg" '(:ignore t :wk "goto")
+   "rdgt" 'org-roam-dailies-goto-today
+   "rdgd" 'org-roam-dailies-goto-date
+   "rdgp" 'org-roam-dailies-goto-previous-note
+   "rdgy" 'org-roam-dailies-goto-yesterday
+   "rdcy" 'org-roam-dailies-capture-yesterday
+   "ri" 'org-roam-node-insert
+   "rf" 'org-roam-node-find
+   "rg" 'org-roam-graph
+   "rr" '(:ignore t :wk "ref")
+   "rra" 'org-roam-ref-add
+   "rrf" 'org-roam-ref-find
+   "rrr" 'org-roam-ref-remove)
 #+end_src
 **** =org-roam-ui=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-notes
-    "ru" '(:ignore t :wk "org-roam-ui")
-    "ruf" 'org-roam-ui-follow-mode
-    "ruo" 'org-roam-ui-open
-    "rus" 'org-roam-ui-sync-theme)
+   "ru" '(:ignore t :wk "org-roam-ui")
+   "ruf" 'org-roam-ui-follow-mode
+   "ruo" 'org-roam-ui-open
+   "rus" 'org-roam-ui-sync-theme)
   (+config/leader-notes
-    :keymaps 'org-roam-mode-map
-    "ruz" 'org-roam-ui-node-zoom)
+   :keymaps 'org-roam-mode-map
+   "ruz" 'org-roam-ui-node-zoom)
 #+end_src
 **** =ox-hugo=
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (defun +config/ox-hugo-transient-keybinding ()
     (+config/local-leader
-      :keymaps 'org-mode-map
-      "h" '(:ignore t :wk "hugo")
-      "hs" '+config/transient-hugo-server))
+     :keymaps 'org-mode-map
+     "h" '(:ignore t :wk "hugo")
+     "hs" '+config/transient-hugo-server))
 #+end_src
 **** =toc-org=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/local-leader
-    :keymaps 'markdown-mode-map
-    "C-o" 'toc-org-markdown-follow-thing-at-point)
+   :keymaps 'markdown-mode-map
+   "C-o" 'toc-org-markdown-follow-thing-at-point)
 #+end_src
 *** Programming Languages
 **** ansible
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/local-leader
-      :keymaps 'yaml-mode-map
-      "a" '(:ignore t :wk ansible)
-      "ad" 'ansible-decrypt-buffer
-      "ae" 'ansible-encrypt-buffer)
+   :keymaps 'yaml-mode-map
+   "a" '(:ignore t :wk ansible)
+   "ad" 'ansible-decrypt-buffer
+   "ae" 'ansible-encrypt-buffer)
 #+end_src
 **** Markdown
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/local-leader
-    :keymaps 'markdown-mode-map
-    "i" '(:ignore t :wk "insert")
-    "d" '(markdown-do :wk "do checklist")
-    "ib" '(markdown-insert-bold :wk "insert bold")
-    "ic" '(markdown-insert-code :wk "insert code")
-    "iC" '(markdown-insert-gfm-code-block :wk "insert gfm code block")
-    "iF" '(markdown-insert-foldable-block :wk "insert foldable block")
-    "if" '(markdown-insert-footnote :wk "insert footnote")
-    "ig" '(markdown-insert-gfm-checkbox :wk "insert gfm checkbox")
-    "ih" '(markdown-insert-header :wk "insert header")
-    "iI" '(markdown-insert-image :wk "insert image")
-    "ii" '(markdown-insert-italic :wk "insert italic")
-    "ij" '(markdown-insert-list-item :wk "insert list items")
-    "ik" '(markdown-insert-kbd :wk "insert kbd")
-    "il" '(markdown-insert-link :wk "insert link")
-    "ip" '(markdown-insert-pre :wk "insert pre")
-    "ir" '(markdown-insert-hr :wk "insert horizontal ruler")
-    "is" '(markdown-insert-strike-through :wk "insert strike-through")
-    "it" '(markdown-insert-table :wk "insert table")
-    "iu" '(markdown-insert-url :wk "insert url")
-    "iw" '(markdown-insert-wiki-link :wk "insert wikilink")
-    "iq" '(markdown-insert-blockquote :wk "insert block quote")
-    "m" '(:ignore t :wk "move")
-    "m M-j" '(markdown-move-subtree-down :wk "move subtree down")
-    "m M-k" '(markdown-move-subtree-up :wk "move subtree up")
-    "m C-k" '(markdown-move-list-item-down :wk "move list item down")
-    "m C-k" '(markdown-move-list-item-up :wk "move list item up")
-    "mj" '(markdown-move-down :wk "move down things at point")
-    "mk" '(markdown-move-up :wk "move up things at point")
-    "t" '(:ignore t :wk "toggle")
-    "ti" '(markdown-toggle-inline-images :wk "toggle inline images")
-    "tf" '(markdown-toggle-fontify-code-blocks-natively :wk "toggle fontify code")
-    "tG" '(markdown-toggle-gfm-checkbox-button :wk "toggle gfm checkbox button")
-    "tg" '(markdown-toggle-gfm-checkbox :wk "toggle gfm checkbox")
-    "tM" '(markdown-toggle-markup-hiding :wk "toggle markup hiding")
-    "tm" '(markdown-toggle-math :wk "toggle math")
-    "tu" '(markdown-toggle-url-hiding :wk "toggle url hiding")
-    "tw" '(markdown-toggle-wiki-links :wk "toggle wiki links")
-    )
+   :keymaps 'markdown-mode-map
+   "i" '(:ignore t :wk "insert")
+   "d" '(markdown-do :wk "do checklist")
+   "ib" '(markdown-insert-bold :wk "insert bold")
+   "ic" '(markdown-insert-code :wk "insert code")
+   "iC" '(markdown-insert-gfm-code-block :wk "insert gfm code block")
+   "iF" '(markdown-insert-foldable-block :wk "insert foldable block")
+   "if" '(markdown-insert-footnote :wk "insert footnote")
+   "ig" '(markdown-insert-gfm-checkbox :wk "insert gfm checkbox")
+   "ih" '(markdown-insert-header :wk "insert header")
+   "iI" '(markdown-insert-image :wk "insert image")
+   "ii" '(markdown-insert-italic :wk "insert italic")
+   "ij" '(markdown-insert-list-item :wk "insert list items")
+   "ik" '(markdown-insert-kbd :wk "insert kbd")
+   "il" '(markdown-insert-link :wk "insert link")
+   "ip" '(markdown-insert-pre :wk "insert pre")
+   "ir" '(markdown-insert-hr :wk "insert horizontal ruler")
+   "is" '(markdown-insert-strike-through :wk "insert strike-through")
+   "it" '(markdown-insert-table :wk "insert table")
+   "iu" '(markdown-insert-url :wk "insert url")
+   "iw" '(markdown-insert-wiki-link :wk "insert wikilink")
+   "iq" '(markdown-insert-blockquote :wk "insert block quote")
+   "m" '(:ignore t :wk "move")
+   "m M-j" '(markdown-move-subtree-down :wk "move subtree down")
+   "m M-k" '(markdown-move-subtree-up :wk "move subtree up")
+   "m C-k" '(markdown-move-list-item-down :wk "move list item down")
+   "m C-k" '(markdown-move-list-item-up :wk "move list item up")
+   "mj" '(markdown-move-down :wk "move down things at point")
+   "mk" '(markdown-move-up :wk "move up things at point")
+   "t" '(:ignore t :wk "toggle")
+   "ti" '(markdown-toggle-inline-images :wk "toggle inline images")
+   "tf" '(markdown-toggle-fontify-code-blocks-natively :wk "toggle fontify code")
+   "tG" '(markdown-toggle-gfm-checkbox-button :wk "toggle gfm checkbox button")
+   "tg" '(markdown-toggle-gfm-checkbox :wk "toggle gfm checkbox")
+   "tM" '(markdown-toggle-markup-hiding :wk "toggle markup hiding")
+   "tm" '(markdown-toggle-math :wk "toggle math")
+   "tu" '(markdown-toggle-url-hiding :wk "toggle url hiding")
+   "tw" '(markdown-toggle-wiki-links :wk "toggle wiki links")
+   )
   (+config/local-leader
-    :keymaps 'markdown-mode-map
-    :states 'visual
-    "r" '(:ignore t :wk "region actions")
-    "rq" '(markdown-blockquote-region :wk "block quote region")
-    "rp" '(markdown-pre-region :wk "pre region"))
+   :keymaps 'markdown-mode-map
+   :states 'visual
+   "r" '(:ignore t :wk "region actions")
+   "rq" '(markdown-blockquote-region :wk "block quote region")
+   "rp" '(markdown-pre-region :wk "pre region"))
   (general-nvmap
-    :keymaps 'markdown-mode-map
-    "gb" '(markdown-outline-previous-same-level :wk "previous same level")
-    "gf" '(markdown-outline-next-same-level :wk "next same level")
-    "gn" '(markdown-outline-next :wk "outline next")
-    "gp" '(markdown-outline-previous :wk "outline previous")
-    "z-" '(markdown-promote :wk "pronote")
-    "z=" '(markdown-demote :wk "demote")
-    "z<" '(markdown-outdent-region :wk "outdent region")
-    "z>" '(markdown-indent-region :wk "indent region")
-    "zj" '(markdown-move-down :wk "move up")
-    "zk" '(markdown-move-up :wk "move up")
-    "zt" '(:ignore t :wk "table")
-    "ztj" '(markdown-table-insert-row :wk "insert row")
-    "ztl" '(markdown-table-insert-column :wk "insert-column"))
+   :keymaps 'markdown-mode-map
+   "gb" '(markdown-outline-previous-same-level :wk "previous same level")
+   "gf" '(markdown-outline-next-same-level :wk "next same level")
+   "gn" '(markdown-outline-next :wk "outline next")
+   "gp" '(markdown-outline-previous :wk "outline previous")
+   "z-" '(markdown-promote :wk "pronote")
+   "z=" '(markdown-demote :wk "demote")
+   "z<" '(markdown-outdent-region :wk "outdent region")
+   "z>" '(markdown-indent-region :wk "indent region")
+   "zj" '(markdown-move-down :wk "move up")
+   "zk" '(markdown-move-up :wk "move up")
+   "zt" '(:ignore t :wk "table")
+   "ztj" '(markdown-table-insert-row :wk "insert row")
+   "ztl" '(markdown-table-insert-column :wk "insert-column"))
   (general-def
-    :keymaps 'markdown-mode-map
-    "M-h" '(markdown-promote-subtree :wk "promote subtree")
-    "M-S-h" '(markdown-promote :wk "promote")
-    "M-l" '(markdown-demote-subtree :wk "demote subtree")
-    "M-S-l" '(markdown-demote :wk "demote"))
+   :keymaps 'markdown-mode-map
+   "M-h" '(markdown-promote-subtree :wk "promote subtree")
+   "M-S-h" '(markdown-promote :wk "promote")
+   "M-l" '(markdown-demote-subtree :wk "demote subtree")
+   "M-S-l" '(markdown-demote :wk "demote"))
 #+end_src
 **** Python
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap
-    :keymaps 'python-mode-map
-    "K" 'lsp-describe-thing-at-point)
+   :keymaps 'python-mode-map
+   "K" 'lsp-describe-thing-at-point)
 
   (+config/local-leader
-    :keymaps 'python-mode-map
-    "d" '(:ignore t :wk "doc"))
+   :keymaps 'python-mode-map
+   "d" '(:ignore t :wk "doc"))
 #+end_src
 ***** =inferior-python-mode=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/local-leader
-    :keymaps 'python-mode-map
-    "r" '(run-python :wk "run python"))
+   :keymaps 'python-mode-map
+   "r" '(run-python :wk "run python"))
 #+end_src
 ***** =pipenv=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/local-leader
-    :keymaps 'python-mode-map
-    "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv"))
+   :keymaps 'python-mode-map
+   "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv"))
 #+end_src
 ***** =pydoc=
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp -n :tangle no
   (general-def
-    :keymaps 'python-mode-map
-    "C-c C-d" 'pydoc-at-point-no-jedi)
+   :keymaps 'python-mode-map
+   "C-c C-d" 'pydoc-at-point-no-jedi)
 #+end_src
 ***** =python-docstring=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/local-leader
-    :keymaps 'python-mode-map
-    "dq" 'python-docstring-fill)
+   :keymaps 'python-mode-map
+   "dq" 'python-docstring-fill)
 #+end_src
 **** Web
 ***** =emmet-mode=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-vmap
-      :keymaps 'emmet-mode-keymap
-      "TAB" 'emmet-wrap-with-markup)
-    (general-def
-      :keymaps 'emmet-mode-keymap
-      "M-E" 'emmet-expand-line)
+   :keymaps 'emmet-mode-keymap
+   "TAB" 'emmet-wrap-with-markup)
+  (general-def
+   :keymaps 'emmet-mode-keymap
+   "M-E" 'emmet-expand-line)
 #+end_src
 ***** =js2-refactor=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap
-    :keymap 'js2-refactor-mode-map
-    "zr" (general-simulate-key "C-c C-r"
-           :name general-z-r-simulates-C-c-C-r
-           :docstring "Simulates C-c C-r"
-           :which-key "JS2 Refactor"))
+   :keymap 'js2-refactor-mode-map
+   "zr" (general-simulate-key "C-c C-r"
+                              :name general-z-r-simulates-C-c-C-r
+                              :docstring "Simulates C-c C-r"
+                              :which-key "JS2 Refactor"))
 #+end_src
 ***** =rjsx-mode=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap
-    :keymaps 'rjsx-mode-map
-    "'" 'rjsx-jump-tag
-    "gj" 'rjsx-jump-closing-tag
-    "gk" 'rjsx-jump-opening-tag
-    "gr" 'rjsx-rename-tag-at-point
-    "z>" 'rjsx-electric-gt
-    "z<" 'rjsx-electric-lt)
+   :keymaps 'rjsx-mode-map
+   "'" 'rjsx-jump-tag
+   "gj" 'rjsx-jump-closing-tag
+   "gk" 'rjsx-jump-opening-tag
+   "gr" 'rjsx-rename-tag-at-point
+   "z>" 'rjsx-electric-gt
+   "z<" 'rjsx-electric-lt)
 #+end_src
 *** Project
 **** =projectile=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-key
-    "SPC" 'projectile-find-file
-    "p" '(:keymap projectile-command-map :package projectile :wk "projectile"))
+   "SPC" 'projectile-find-file
+   "p" '(:keymap projectile-command-map :package projectile :wk "projectile"))
 #+end_src
 **** =dif-hl=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-nvmap
-    :keymaps 'override
-    "[[" '(diff-hl-previous-hunk :wk "previous hunk" :repeat t :jump t)
-    "]]" '(diff-hl-next-hunk :wk "next hunk" :repeat t :jump t))
+   :keymaps 'override
+   "[[" '(diff-hl-previous-hunk :wk "previous hunk" :repeat t :jump t)
+   "]]" '(diff-hl-next-hunk :wk "next hunk" :repeat t :jump t))
 #+end_src
 **** =perspective=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-def
-    :keymaps 'perspective-map
-    "TAB" '(persp-switch-last :wk "switch to last perspective")
-    "P" 'projectile-persp-switch-project)
+   :keymaps 'perspective-map
+   "TAB" '(persp-switch-last :wk "switch to last perspective")
+   "P" 'projectile-persp-switch-project)
 
   (+config/leader-key
-    "TAB" (general-simulate-key "C-c TAB"
-          :state '(normal visual)
-          :name general-SPC-h-simulates-C-c-TAB
-          :docstring "Simulates C-c TAB in normal and visual mode."
-          :which-key "Perspective"))
+   "TAB" (general-simulate-key "C-c TAB"
+                               :state '(normal visual)
+                               :name general-SPC-h-simulates-C-c-TAB
+                               :docstring "Simulates C-c TAB in normal and visual mode."
+                               :which-key "Perspective"))
 
   (+config/leader-key
-    ;; "TAB" '(:keymap perspective-map
-    ;;                 :package perspective
-    ;;                 :which-key "perspective")
-    ;; "TAB TAB" '(persp-switch-last :wk "switch to last perspective")
-    "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer"))
+   ;; "TAB" '(:keymap perspective-map
+   ;;                 :package perspective
+   ;;                 :which-key "perspective")
+   ;; "TAB TAB" '(persp-switch-last :wk "switch to last perspective")
+   "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer"))
 #+end_src
 **** =perspective-projectile=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-def
-    :keymaps 'perspective-map
-    "P" 'projectile-persp-switch-project)
+   :keymaps 'perspective-map
+   "P" 'projectile-persp-switch-project)
 #+end_src
 **** =git-link=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-go
-    "G" '(:ignore t :wk "git")
-    "Gl" 'git-link
-    "Gh" 'git-link-homepage
-    "Gc" 'git-link-commit)
+   "G" '(:ignore t :wk "git")
+   "Gl" 'git-link
+   "Gh" 'git-link-homepage
+   "Gc" 'git-link-commit)
 #+end_src
 **** =git-timemachine=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-go
-    "Gt" 'git-timemachine-toggle)
+   "Gt" 'git-timemachine-toggle)
 #+end_src
 **** =lsp=
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-key
-    :keymaps 'lsp-mode-map
-    "l" (general-simulate-key "C-c C-l"
-          :name general-SPC-l-simulates-C-c-C-l
-          :docstring "Simulates C-c C-l"
-          :which-key "LSP"))
+   :keymaps 'lsp-mode-map
+   "l" (general-simulate-key "C-c C-l"
+                             :name general-SPC-l-simulates-C-c-C-l
+                             :docstring "Simulates C-c C-l"
+                             :which-key "LSP"))
 
   (general-nvmap
-    :keymaps 'lsp-mode-map
-    "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))
+   :keymaps 'lsp-mode-map
+   "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))
 #+end_src
 **** =lsp-ui=
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (general-define-key
    :keymaps '(lsp-ui-mode-map)
    [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
@@ -1019,92 +1020,92 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
    "M-?" 'lsp-ui-peek-find-references)
 #+end_src
 *** quit
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; quit
   (+config/leader-quit
-    "q" '(save-buffers-kill-terminal :wk "quit and save")
-    "R" '(restart-emacs :wk "restart Emacs"))
+   "q" '(save-buffers-kill-terminal :wk "quit and save")
+   "R" '(restart-emacs :wk "restart Emacs"))
 #+end_src
 *** register
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; register
   (+config/leader-register
-    ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
-    "+" '(increment-register :wk "augment content of register")
-    "C-@" '(point-to-register :wk "store current point to register")
-    "C-SPC" '(point-to-register :wk "store current point to register")
-    "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
-    "SPC" '(point-to-register :wk "store current point to register")
-    "c" '(clear-rectangle :wk "blank out region-rectangle")
-    "d" '(delete-rectangle :wk "delete region-rectangle")
-    "f" '(frameset-to-register :wk "store frameset to register")
-    "g" '(insert-register :wk "insert register")
-    "i" '(insert-register :wk "insert register")
-    "j" '(jump-to-register :wk "jump to register")
-    "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
-    "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
-    "m" '(bookmark-set :wk "set bookmark")
-    "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
-    "n" '(number-to-register :wk "store a number in a register")
-    "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
-    "o" '(open-rectangle :wk "blank out region-rectangle")
-    "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
-    "s" '(copy-to-register :wk "copy region to register")
-    "t" '(string-rectangle :wk "replace rectangle with string")
-    "x" '(copy-to-register :wk "copy region to register")
-    "w" '(window-configuration-to-register :wk "store window configuration to register")
-    "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
+   ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
+   "+" '(increment-register :wk "augment content of register")
+   "C-@" '(point-to-register :wk "store current point to register")
+   "C-SPC" '(point-to-register :wk "store current point to register")
+   "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
+   "SPC" '(point-to-register :wk "store current point to register")
+   "c" '(clear-rectangle :wk "blank out region-rectangle")
+   "d" '(delete-rectangle :wk "delete region-rectangle")
+   "f" '(frameset-to-register :wk "store frameset to register")
+   "g" '(insert-register :wk "insert register")
+   "i" '(insert-register :wk "insert register")
+   "j" '(jump-to-register :wk "jump to register")
+   "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
+   "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
+   "m" '(bookmark-set :wk "set bookmark")
+   "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
+   "n" '(number-to-register :wk "store a number in a register")
+   "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
+   "o" '(open-rectangle :wk "blank out region-rectangle")
+   "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
+   "s" '(copy-to-register :wk "copy region to register")
+   "t" '(string-rectangle :wk "replace rectangle with string")
+   "x" '(copy-to-register :wk "copy region to register")
+   "w" '(window-configuration-to-register :wk "store window configuration to register")
+   "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
 #+end_src
 *** Shell
 **** =vterm=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-menu! "vterm" "tv"
-    "RET" 'vterm-toggle
-    "v" 'vterm)
+                        "RET" 'vterm-toggle
+                        "v" 'vterm)
 #+end_src
 **** =multi-vterm=
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-iemap
-      :keymaps 'vterm-mode-map
-      "C-SPC" '(:ignore t :wk "multi vterm")
-      "C-SPC a" '(multi-vterm :wk "new vterm buffer")
-      "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
-      "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer"))
+   :keymaps 'vterm-mode-map
+   "C-SPC" '(:ignore t :wk "multi vterm")
+   "C-SPC a" '(multi-vterm :wk "new vterm buffer")
+   "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
+   "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer"))
 #+end_src
 *** Tools
 **** elfeed
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-def
-    :keymaps
-    'elfeed-search-mode-map
-    :states '(normal visual)
-    "q" '(elfeed-kill-buffer :wk "kill buffer")
-    "r" '(elfeed-search-update--force :wk "update"))
+   :keymaps
+   'elfeed-search-mode-map
+   :states '(normal visual)
+   "q" '(elfeed-kill-buffer :wk "kill buffer")
+   "r" '(elfeed-search-update--force :wk "update"))
 #+end_src
 **** emms
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (general-def 'emms-browser-mode-map
-    "?" 'describe-mode
-    "TAB" 'emms-browser-toggle-subitems
-    "p" 'emms-playlist-mode-go
-    "q" 'bury-buffer
-    "1" 'emms-browser-collapse-all
-    "2" 'emms-browser-expand-to-level-2
-    "3" 'emms-browser-expand-to-level-3
-    "4" 'emms-browser-expand-to-level-4)
+               "?" 'describe-mode
+               "TAB" 'emms-browser-toggle-subitems
+               "p" 'emms-playlist-mode-go
+               "q" 'bury-buffer
+               "1" 'emms-browser-collapse-all
+               "2" 'emms-browser-expand-to-level-2
+               "3" 'emms-browser-expand-to-level-3
+               "4" 'emms-browser-expand-to-level-4)
   (general-def 'emms-playlist-mode-map
-    "q" 'bury-buffer)
+               "q" 'bury-buffer)
 #+end_src
 **** lorem-ipsum
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-insert
-    "l" '(:ignore t :wk "insert lorem ipsum")
-    "ll" 'lorem-ipsum-insert-list
-    "lp" 'lorem-ipsum-insert-paragraphs
-    "ls" 'lorem-ipsum-insert-sentences)
+   "l" '(:ignore t :wk "insert lorem ipsum")
+   "ll" 'lorem-ipsum-insert-list
+   "lp" 'lorem-ipsum-insert-paragraphs
+   "ls" 'lorem-ipsum-insert-sentences)
 #+end_src
 *** treemacs
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (+config/leader-tree
    "t" 'treemacs
    "p" 'treemacs-add-and-display-current-project-exclusively)
@@ -1114,21 +1115,21 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
    "[mouse-1]" 'treemacs-single-click-expand-action)
 
   (general-nvmap
-    :keymaps 'treemacs-mode-map
-    "gr" '(treemacs-refresh :wk "refresh tree")
-    "zm" '(:ignore t :wk "move")
-    "zmf" '(treemacs-move-file :wk "move file")
-    "zmd" '(treemacs-move-project-down :wk "move project down")
-    "zmu" '(treemacs-move-project-up :wk "move project up")
-    "zr" '(:ignore t :wk "rename")
-    "zrf" '(treemacs-rename-file :wk "rename file")
-    "zrp" '(treemacs-rename-project :wk "rename project")
-    "zrw" '(treemacs-rename-workspace :wk "rename workspace")
-    "zc" '(:ignore t :wk "create/clean")
-    "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
-    "zcd" '(treemacs-create-dir :wk "create directory")
-    "zcf" '(treemacs-create-file :wk "create file")
-    "zd" '(treemacs-delete-file :wk "delete file"))
+   :keymaps 'treemacs-mode-map
+   "gr" '(treemacs-refresh :wk "refresh tree")
+   "zm" '(:ignore t :wk "move")
+   "zmf" '(treemacs-move-file :wk "move file")
+   "zmd" '(treemacs-move-project-down :wk "move project down")
+   "zmu" '(treemacs-move-project-up :wk "move project up")
+   "zr" '(:ignore t :wk "rename")
+   "zrf" '(treemacs-rename-file :wk "rename file")
+   "zrp" '(treemacs-rename-project :wk "rename project")
+   "zrw" '(treemacs-rename-workspace :wk "rename workspace")
+   "zc" '(:ignore t :wk "create/clean")
+   "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
+   "zcd" '(treemacs-create-dir :wk "create directory")
+   "zcf" '(treemacs-create-file :wk "create file")
+   "zd" '(treemacs-delete-file :wk "delete file"))
 #+end_src
 **** lsp-treemacs
 #+begin_src emacs-lisp -n
@@ -1139,67 +1140,67 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
    "Y" 'lsp-treemacs-call-hierarchy)
 #+end_src
 *** window
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   ;; window
   (+config/leader-window
-    "C-o" '(delete-other-windows :wk "delete other windows")
-    "[" '(evil-window-left :wk "left window")
-    "]" '(evil-window-right :wk "right window")
-    "+" '(enlarge-window :wk "enlarge window")
-    "-" '(shrink-window :wk "shrink window")
-    "}" '(enlarge-window-horizontally :wk "enlarge window horizontally")
-    "{" '(shrink-window-horizontally :wk "shrink window horizontally")
-    "+" 'evil-window-increase-height
-    "-" 'evil-window-decrease-height
-    ":" 'evil-ex
-    "<" 'evil-window-decrease-width
-    "=" 'balance-windows
-    ">" 'evil-window-increase-height
-    "_" 'evil-window-set-height
-    "b" 'evil-window-bottom-right
-    "c" 'evil-window-delete
-    "d" '(delete-window :wk "delete window")
-    "h" 'evil-window-left
-    "f" '(ffap-other-window :wk "ffap other window")
-    "j" 'evil-window-down
-    "k" 'evil-window-up
-    "l" 'evil-window-right
-    "n" 'evil-window-new
-    "p" 'evil-window-mru
-    "q" 'evil-quit
-    "r" 'evil-window-rotate-downwards
-    "R" 'evil-window-rotate-upwards
-    "s" 'evil-window-split
-    "T" '(tear-off-window :wk "tear off window")
-    "t" 'evil-window-top-left
-    "u" 'winner-undo
-    "v" 'evil-window-vsplit
-    "w" '(other-window :wk "other window")
-    "W" 'evil-window-prev
-    "x" 'evil-window-exchange
-    "|" 'evil-window-set-width
-    "<left>" 'evil-window-left
-    "<right>" 'evil-window-right
-    "<down>" 'evil-window-down
-    "<up>" 'evil-win-up)
+   "C-o" '(delete-other-windows :wk "delete other windows")
+   "[" '(evil-window-left :wk "left window")
+   "]" '(evil-window-right :wk "right window")
+   "+" '(enlarge-window :wk "enlarge window")
+   "-" '(shrink-window :wk "shrink window")
+   "}" '(enlarge-window-horizontally :wk "enlarge window horizontally")
+   "{" '(shrink-window-horizontally :wk "shrink window horizontally")
+   "+" 'evil-window-increase-height
+   "-" 'evil-window-decrease-height
+   ":" 'evil-ex
+   "<" 'evil-window-decrease-width
+   "=" 'balance-windows
+   ">" 'evil-window-increase-height
+   "_" 'evil-window-set-height
+   "b" 'evil-window-bottom-right
+   "c" 'evil-window-delete
+   "d" '(delete-window :wk "delete window")
+   "h" 'evil-window-left
+   "f" '(ffap-other-window :wk "ffap other window")
+   "j" 'evil-window-down
+   "k" 'evil-window-up
+   "l" 'evil-window-right
+   "n" 'evil-window-new
+   "p" 'evil-window-mru
+   "q" 'evil-quit
+   "r" 'evil-window-rotate-downwards
+   "R" 'evil-window-rotate-upwards
+   "s" 'evil-window-split
+   "T" '(tear-off-window :wk "tear off window")
+   "t" 'evil-window-top-left
+   "u" 'winner-undo
+   "v" 'evil-window-vsplit
+   "w" '(other-window :wk "other window")
+   "W" 'evil-window-prev
+   "x" 'evil-window-exchange
+   "|" 'evil-window-set-width
+   "<left>" 'evil-window-left
+   "<right>" 'evil-window-right
+   "<down>" 'evil-window-down
+   "<up>" 'evil-win-up)
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
-    (provide 'config-keybindings)
-    ;;; config-keybindings.el ends here
+  (provide 'config-keybindings)
+  ;;; config-keybindings.el ends here
 #+end_src
 * UI
 :PROPERTIES:
 :header-args: :tangle ./modules/config-ui.el :mkdirp t
 :END:
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-ui --- Themes and UI configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
 ** =which-key=
- Emacs package that displays available keybindings in popup[fn:13]. This is one of the top /Emacs/ packages that I must have in my configuration.
+Emacs package that displays available keybindings in popup[fn:13]. This is one of the top /Emacs/ packages that I must have in my configuration.
 #+begin_src emacs-lisp -n
   (use-package which-key
     :ensure
@@ -1243,7 +1244,7 @@ A utility package to collect various Icon Fonts and propertize them within Emacs
 #+end_src
 This needs a manual intervention from the user to install the fonts (by running the =all-the-icons-install-fonts= command).
 ** =doom-themes=
- A megapack of themes for GNU Emacs[fn:15]. I'm not the kind of guy who enjoys /[[https://wiki.installgentoo.com/index.php/GNU/Linux_ricing][ricing]]/, I look every once in a while for a nice colorscheme and then I just stick it everywhere else. Been a /solarized/ fans most of the time, now I'm trying /[[https://www.nordtheme.com/][nord]]/.
+A megapack of themes for GNU Emacs[fn:15]. I'm not the kind of guy who enjoys /[[https://wiki.installgentoo.com/index.php/GNU/Linux_ricing][ricing]]/, I look every once in a while for a nice colorscheme and then I just stick it everywhere else. Been a /solarized/ fans most of the time, now I'm trying /[[https://www.nordtheme.com/][nord]]/.
 #+begin_src emacs-lisp -n
   (use-package doom-themes
     :ensure t
@@ -1277,33 +1278,33 @@ An extensible emacs dashboard[fn:17].
 
 My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer/ each time I opened a new /Emacs/ frame.
 #+begin_src emacs-lisp -n
-;; use-package with package.el:
-(use-package dashboard
-  :ensure t
-  :config
-  (dashboard-setup-startup-hook)
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))
-        ;;dashboard-banner-logo-title (format "Welcome, %s" user-full-name)
-        dashboard-items '((recents . 3)
-                          (bookmarks . 2)
-                          (projects . 5)
-                          (agenda . 8)
-                          (registers . 2))
-        dashboard-projects-switch-function 'projectile-persp-switch-project
-        dashboard-week-agenda t
-        dashboard-filter-agenda-entry nil
-        dashboard-startup-banner 'logo
-        dashboard-center-content t
-        dashboard-vertically-center-content t
-        ;; dashboard-icon-type 'all-the-icons
-        dashboard-display-icons-p t
-        dashboard-set-heading-icons t
-        dashboard-set-file-icons t
-        dashboard-agenda-sort-strategy
-        '(todo-state-up time-down priority-down todo-state-down time-up priority-up)
-        ))
+  ;; use-package with package.el:
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))
+          ;;dashboard-banner-logo-title (format "Welcome, %s" user-full-name)
+          dashboard-items '((recents . 3)
+                            (bookmarks . 2)
+                            (projects . 5)
+                            (agenda . 8)
+                            (registers . 2))
+          dashboard-projects-switch-function 'projectile-persp-switch-project
+          dashboard-week-agenda t
+          dashboard-filter-agenda-entry nil
+          dashboard-startup-banner 'logo
+          dashboard-center-content t
+          dashboard-vertically-center-content t
+          ;; dashboard-icon-type 'all-the-icons
+          dashboard-display-icons-p t
+          dashboard-set-heading-icons t
+          dashboard-set-file-icons t
+          dashboard-agenda-sort-strategy
+          '(todo-state-up time-down priority-down todo-state-down time-up priority-up)
+          ))
 #+end_src
-** =tab-bar=                                                       :builtin:
+** =tab-bar= :builtin:
 Although I used /Perspective/ more, there are some cases where it's easier with tabs. And the default UI for the tabs is not that great.
 #+begin_src emacs-lisp -n
   (use-package tab-bar
@@ -1333,13 +1334,13 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
      ((find-font (font-spec :family "DejaVu Sans Mono"))
       (set-frame-font "DejaVu Sans Mono 10" nil t))))
 #+end_src
-** =window=                                                        :builtin:
+** =window= :builtin:
 #+begin_src emacs-lisp -n
   (use-package window
     :config
     (setq split-width-threshold 160))
 #+end_src
-** =display-line-number=                                           :builtin:
+** =display-line-number= :builtin:
 #+begin_src emacs-lisp -n
   (use-package display-line-numbers
     :init
@@ -1348,18 +1349,18 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
     :custom
     (display-line-numbers-grow-only t))
 #+end_src
-** =help-at-pt=                                                    :builtin:
+** =help-at-pt= :builtin:
 #+begin_src emacs-lisp -n
   (use-package help-at-pt
     :custom
     (help-at-pt-display-when-idle t))
 #+end_src
-** =hidehow=                                                       :builtin:
+** =hidehow= :builtin:
 #+begin_src emacs-lisp -n
   (use-package hideshow
     :hook (prog-mode . hs-minor-mode))
 #+end_src
-** =uniquify=                                                      :builtin:
+** =uniquify= :builtin:
 #+begin_src emacs-lisp -n
   (use-package uniquify
     :ensure nil
@@ -1369,7 +1370,7 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
           uniquify-after-kill-buffer-p t
           uniquify-ignore-buffers-re "^\\*"))
 #+end_src
-** =speedbar=                                                      :builtin:
+** =speedbar= :builtin:
 #+begin_src emacs-lisp -n
   (use-package speedbar
     :custom
@@ -1425,13 +1426,13 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
       ".txt"
       "README")))
 #+end_src
-** =winner=                                                        :builtin:
+** =winner= :builtin:
 #+begin_src emacs-lisp -n
   (use-package winner
     :init
     (winner-mode 1))
 #+end_src
-** =time=                                                          :builtin:
+** =time= :builtin:
 #+begin_src emacs-lisp -n
   (use-package time
     :hook (after-init . display-time-mode)
@@ -1442,7 +1443,7 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
     (display-time-24hr-format t)
     (display-time-day-and-date t))
 #+end_src
-** =paren=                                                         :builtin:
+** =paren= :builtin:
 #+begin_src emacs-lisp -n
   (use-package paren
     :config
@@ -1450,19 +1451,19 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
     :custom
     (show-paren-style 'mixed))
 #+end_src
-** =hl-line=                                                       :builtin:
+** =hl-line= :builtin:
 #+begin_src emacs-lisp -n
   (use-package hl-line
     :config
     (global-hl-line-mode 1))
 #+end_src
-** =font-core=                                                     :builtin:
+** =font-core= :builtin:
 #+begin_src emacs-lisp -n
   (use-package font-core
     :init
     (global-font-lock-mode t))
 #+end_src
-** =menu-bar=, =tool-bar=, and =scroll-bar=                        :builtin:
+** =menu-bar=, =tool-bar=, and =scroll-bar= :builtin:
 #+begin_src emacs-lisp -n
   (use-package menu-bar
     :init
@@ -1476,13 +1477,13 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
     :init
     (scroll-bar-mode -1))
 #+end_src
-** =xt-mouse=                                                      :builtin:
+** =xt-mouse= :builtin:
 #+begin_src emacs-lisp -n
   (use-package xt-mouse
     :config
     (xterm-mouse-mode 1))
 #+end_src
-** =avy=                                                           :builtin:
+** =avy= :builtin:
 #+begin_src emacs-lisp -n
   (use-package avy
     :after evil
@@ -1497,7 +1498,7 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
     ;; (evil-define-key 'normal 'global (kbd "<localleader>gL") 'evil-avy-goto-line-above)
     )
 #+end_src
-** =tabify=                                                        :builtin:
+** =tabify= :builtin:
 #+begin_src emacs-lisp -n
   (use-package tabify
     :ensure nil
@@ -1537,7 +1538,7 @@ Since /Emacs/ is a self-documenting editor[fn:18]. It's certainly nice to have a
 
 #+caption: helpful will also display any keybindings related
 [[https://github.com/Wilfred/helpful/raw/master/screenshots/helpful_bindings.png]]
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (use-package helpful
     :ensure
     :bind
@@ -1553,11 +1554,11 @@ Since /Emacs/ is a self-documenting editor[fn:18]. It's certainly nice to have a
        :keymaps 'prog-mode-map
        "C-c C-d" 'helpful-at-point)
       (general-nvmap
-        :keymaps 'prog-mode-map
-        "K" '(helpful-at-point :wk "helpful at point")
-        "gr" '(helpful-update :wk "update"))))
+       :keymaps 'prog-mode-map
+       "K" '(helpful-at-point :wk "helpful at point")
+       "gr" '(helpful-update :wk "update"))))
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-ui)
   ;;; config-ui.el ends here
@@ -1567,19 +1568,19 @@ Since /Emacs/ is a self-documenting editor[fn:18]. It's certainly nice to have a
 :header-args: :tangle ./modules/config-builtin.el :mkdirp t
 :END:
 I have these builtin packages loaded, I would like to investigate them one by one, gradually removing those I don't really need.
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-builtin --- `Emacs' builtin package configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** byte compilation                                                :builtin:
+** byte compilation :builtin:
 #+begin_src emacs-lisp -n
   (use-package bytecomp
     :custom
     (byte-compile-warnings nil))
 #+end_src
-** Base configuration                                              :builtin:
+** Base configuration :builtin:
 #+begin_src emacs-lisp -n
   (use-package emacs
     :init
@@ -1629,7 +1630,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
     (set-default 'indicate-empty-lines t)
     (setq-default x-stretch-cursor t))
 #+end_src
-** =saveplace=                                                     :builtin:
+** =saveplace= :builtin:
 #+begin_src emacs-lisp -n
   (use-package saveplace
     :init
@@ -1637,7 +1638,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
     :custom
     (save-place-file (expand-file-name "places" user-emacs-directory)))
 #+end_src
-** =autorevert=                                                    :builtin:
+** =autorevert= :builtin:
 #+begin_src emacs-lisp -n
   (use-package autorevert
     :init
@@ -1648,7 +1649,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
     (auto-revert-verbose nil)
     (auto-revert-stop-on-user-input t))
 #+end_src
-** =savehist=                                                      :builtin:
+** =savehist= :builtin:
 #+begin_src emacs-lisp -n
   (use-package savehist
     :init
@@ -1665,7 +1666,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
        search-ring
        regexp-search-ring)))
 #+end_src
-** =prog-mode=                                                     :builtin:
+** =prog-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package prog-mode
     :hook ((prog-mode . prettify-symbols-mode)
@@ -1681,19 +1682,19 @@ I have these builtin packages loaded, I would like to investigate them one by on
             ("<-" . "← ")
             ("=>" . "⇒"))))
 #+end_src
-** =select=                                                        :builtin:
+** =select= :builtin:
 #+begin_src emacs-lisp -n
   (use-package select
     :custom
     (select-enable-clipboard t))
 #+end_src
-** Compression mode                                                :builtin:
+** Compression mode :builtin:
 #+begin_src emacs-lisp -n
   (use-package jka-cmpr-hook
     :custom
     (auto-compression-mode t))
 #+end_src
-** =recentf=                                                       :builtin:
+** =recentf= :builtin:
 #+begin_src emacs-lisp -n
   (use-package recentf
     :bind ("C-c f" . recentf)
@@ -1716,27 +1717,27 @@ I have these builtin packages loaded, I would like to investigate them one by on
        "^/\\(?:ssh\\|su\\|sudo\\)?:" ;; ignore tramp/ssh files
        (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")))))))
 #+end_src
-** =eldoc=                                                         :builtin:
+** =eldoc= :builtin:
 #+begin_src emacs-lisp -n
   (use-package eldoc
     :hook ((prog-mode . eldoc-mode)
            (emacs-lisp-mode . eldoc-mode)
            (lisp-interaction-mode . eldoc-mode)))
 #+end_src
-** =bookmark=                                                      :builtin:
+** =bookmark= :builtin:
 #+begin_src emacs-lisp -n
   (use-package bookmark
     :custom
     (bookmark-save-flag 1)
     (bookmark-default-file (expand-file-name ".bookmark" user-emacs-directory)))
 #+end_src
-** =executable=                                                    :builtin:
+** =executable= :builtin:
 #+begin_src emacs-lisp -n
   (use-package executable
     :hook
     (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
-** =files=                                                         :builtin:
+** =files= :builtin:
 #+begin_src emacs-lisp -n
   (use-package files
     :config
@@ -1769,37 +1770,37 @@ I have these builtin packages loaded, I would like to investigate them one by on
     (auto-mode-case-fold nil)
     (require-final-newline t))
 #+end_src
-** =tramp=                                                         :builtin:
+** =tramp= :builtin:
 #+begin_src emacs-lisp -n
   (use-package tramp
     :custom
     (tramp-backup-directory-alist backup-directory-alist)
     (tramp-auto-save-directory (expand-file-name ".tramp-autosave/" user-emacs-directory)))
 #+end_src
-** =abbrev=                                                        :builtin:
+** =abbrev= :builtin:
 #+begin_src emacs-lisp -n
   (use-package abbrev
     :ensure nil)
 #+end_src
-** =ffap=                                                          :builtin:
+** =ffap= :builtin:
 #+begin_src emacs-lisp -n
   (use-package ffap
     :custom
     (ffap-machine-p-known 'reject))
 #+end_src
-** =epg-config=                                                    :builtin:
+** =epg-config= :builtin:
 #+begin_src emacs-lisp -n
   (use-package epg-config
     :custom
     (epg-pinentry-mode 'loopback))
 #+end_src
-** =make-mode=                                                     :builtin:
+** =make-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package make-mode
     :config
     (add-hook 'makefile-mode-hook 'indent-tabs-mode))
 #+end_src
-** =ispell=                                                        :builtin:
+** =ispell= :builtin:
 #+begin_src emacs-lisp -n
   (use-package ispell
     :custom
@@ -1834,7 +1835,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
         (add-to-list 'ispell-hunspell-dict-paths-alist
                      `("id_ID" ,hunspell-id_ID-path)))))
 #+end_src
-** =whitespace=                                           :builtin:disabled:
+** =whitespace= :builtin:disabled:
 #+begin_src emacs-lisp -n :tangle no
   (use-package whitespace
     :hook (((prog-mode text-mode conf-mode) . whitespace-mode)
@@ -1846,13 +1847,13 @@ I have these builtin packages loaded, I would like to investigate them one by on
     :config
     (global-whitespace-mode))
 #+end_src
-** =subword=                                                       :builtin:
+** =subword= :builtin:
 #+begin_src emacs-lisp -n
   (use-package subword
     :init
     (global-subword-mode 1))
 #+end_src
-** =ediff=                                                         :builtin:
+** =ediff= :builtin:
 #+begin_src emacs-lisp -n
   (use-package ediff
     :config
@@ -1860,20 +1861,20 @@ I have these builtin packages loaded, I would like to investigate them one by on
           ediff-split-window-function 'split-window-horizontally
           ediff-window-setup-function 'ediff-setup-windows-plain))
 #+end_src
-** =delsel=                                                        :builtin:
+** =delsel= :builtin:
 #+begin_src emacs-lisp -n
   (use-package delsel
     :init
     (delete-selection-mode))
 #+end_src
-** =text-mode=                                                     :builtin:
+** =text-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package text-mode
     :ensure nil
     :config
     (setq-default sentence-end-double-space nil))
 #+end_src
-** =flyspell=                                                      :builtin:
+** =flyspell= :builtin:
 #+begin_src emacs-lisp -n
   (use-package flyspell
     :custom
@@ -1883,18 +1884,18 @@ I have these builtin packages loaded, I would like to investigate them one by on
             . flyspell-mode)
            (prog-mode . flyspell-prog-mode)))
 #+end_src
-** =flymake=                                                       :builtin:
+** =flymake= :builtin:
 #+begin_src emacs-lisp -n
   (use-package flymake
     :hook (prog-mode . flymake-mode))
 #+end_src
-** =imenu=                                                         :builtin:
+** =imenu= :builtin:
 #+begin_src emacs-lisp -n
   (use-package imenu
     :custom
     (imenu-auto-rescan t))
 #+end_src
-** =simple=                                                        :builtin:
+** =simple= :builtin:
 #+begin_src emacs-lisp -n
   (use-package simple
     :hook ((makefile-mode . indent-tabs-mode)
@@ -1914,7 +1915,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
     (with-eval-after-load 'evil
       (evil-set-initial-state #'message-mode 'insert)))
 #+end_src
-** =elec-pair=                                                     :builtin:
+** =elec-pair= :builtin:
 #+begin_src emacs-lisp -n
   (use-package elec-pair
     :init
@@ -1931,15 +1932,15 @@ I have these builtin packages loaded, I would like to investigate them one by on
        "M-." 'xref-find-definitions
        "M-?" 'xref-find-references)))
 #+end_src
-** =server=
+** =server= :builtin:
 #+begin_src emacs-lisp
-(use-package server
-  :config
-  (unless (server-running-p)
-    (server-start))
-  (require 'org-protocol))
+  (use-package server
+    :config
+    (unless (server-running-p)
+      (server-start))
+    (require 'org-protocol))
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-builtin)
   ;;; config-builtin.el ends here
@@ -1948,7 +1949,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
 :PROPERTIES:
 :header-args: :tangle ./modules/config-completion.el :mkdirp t
 :END:
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-completion --- completion configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -2237,7 +2238,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
     :bind (("M-+" . tempel-complete)
            ("M-*" . tempel-insert))
     :init
-      (defun tempel-setup-capf ()
+    (defun tempel-setup-capf ()
       ;; Add the Tempel Capf to `completion-at-point-functions'.
       ;; `tempel-expand' only triggers on exact matches. Alternatively use
       ;; `tempel-complete' if you want to see all matches, but then you
@@ -2259,7 +2260,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
 
   (use-package tempel-collection)
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-completion)
   ;;; config-completion.el ends here
@@ -2268,13 +2269,13 @@ I have these builtin packages loaded, I would like to investigate them one by on
 :PROPERTIES:
 :header-args: :tangle ./modules/config-shell.el :mkdirp t
 :END:
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-shell --- `Emacs' various shell configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =eshell=                                                        :builtin:
+** =eshell= :builtin:
 #+caption: /eshell/ in action
 [[./assets/img/emacs-eshell.png][file:assets/img/emacs-eshell.png]]
 
@@ -2309,7 +2310,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
     ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
     :ensure t)
 #+end_src
-** =sh-script=                                                     :builtin:
+** =sh-script= :builtin:
 #+begin_src emacs-lisp -n
   (use-package sh-script
     :mode ("\\.bats\\'" . sh-mode)
@@ -2403,7 +2404,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :hook
     (shell-dynamic-complete-function bash-completion-dynamic-complete))
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-shell)
   ;;; config-shell.el ends here
@@ -2412,7 +2413,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-editing.el :mkdirp t
 :END:
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-editing --- Editor configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -2435,21 +2436,21 @@ I still have a mixed feeling for this package, but it still easier to configure 
     ;; (eval) is used as a hack to quiet Flycheck errors about (sp-with-modes)
     (eval
      '(sp-with-modes sp-lisp-modes
-        ;; disable ', it's the quote character!
-        (sp-local-pair "'" nil :actions nil)
-        ;; also only use the pseudo-quote inside strings where it serve as
-        ;; hyperlink.
-        (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
-        (sp-local-pair "`" nil
-                       :skip-match (lambda (ms mb me)
-                                     (cond
-                                      ((equal ms "'")
-                                       (or (sp--org-skip-markup ms mb me)
-                                           (not (sp-point-in-string-or-comment))))
-                                      (t (not (sp-point-in-string-or-comment))))))))
+                     ;; disable ', it's the quote character!
+                     (sp-local-pair "'" nil :actions nil)
+                     ;; also only use the pseudo-quote inside strings where it serve as
+                     ;; hyperlink.
+                     (sp-local-pair "`" "'" :when '(sp-in-string-p sp-in-comment-p))
+                     (sp-local-pair "`" nil
+                                    :skip-match (lambda (ms mb me)
+                                                  (cond
+                                                   ((equal ms "'")
+                                                    (or (sp--org-skip-markup ms mb me)
+                                                        (not (sp-point-in-string-or-comment))))
+                                                   (t (not (sp-point-in-string-or-comment))))))))
     (sp-with-modes '(html-mode sgml-mode nxml-mode web-mode)
-      (sp-local-pair "<" ">"))
-      ;; (with-eval-after-load 'general
+                   (sp-local-pair "<" ">"))
+    ;; (with-eval-after-load 'general
     ;;   (general-define-key
     ;;    :keymaps 'smartparens-mode-map
     ;;    "C-M-f" 'sp-forward-sexp
@@ -2491,7 +2492,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
     :config
     (setq ws-butler-convert-leading-tabs-or-spaces t))
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-editing)
   ;;; config-editing.el ends here
@@ -2500,7 +2501,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
 :PROPERTIES:
 :header-args: :tangle ./modules/config-project.el :mkdirp t
 :END:
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-project --- project configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -2515,9 +2516,9 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
     :demand t
     :config
     (evil-set-initial-state #'git-commit-mode 'insert)
-    (with-eval-after-load 'general
-      (+config/leader-go
-        "g" 'magit-status))
+    ;; (with-eval-after-load 'general
+    ;;   (+config/leader-go
+    ;;    "g" 'magit-status))
     :custom
     (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     (magit-diff-refine-hunk 'all)
@@ -2611,8 +2612,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                 :default  t
                 :items
                 #'(lambda () (consult--buffer-query :sort 'visibility
-                                               :predicate '(lambda (buf) (persp-is-current-buffer buf t))
-                                               :as #'buffer-name)))))
+                                                    :predicate '(lambda (buf) (persp-is-current-buffer buf t))
+                                                    :as #'buffer-name)))))
       (consult-customize consult--source-buffer :hidden t :default nil)
       (add-to-list 'consult-buffer-sources persp-consult-source))
     :init
@@ -2630,48 +2631,53 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :after perspective
     :commands projectile-persp-switch-project)
 #+end_src
-** =git-link=
+** =git-link= :disabled:
 #+begin_src emacs-lisp -n
   (use-package git-link
     :demand
     :ensure
+    :disabled
     :commands (git-link git-link-commit git-link-homepage))
 #+end_src
-** =git-messenger=
+** =git-messenger= :disabled:
 #+caption: /git messenger/ popup message
 [[./assets/img/emacs-git-messenger.png][file:assets/img/emacs-git-messenger.png]]
 #+begin_src emacs-lisp -n
   (use-package git-messenger
     :ensure
+    :disabled
     :config
     (with-eval-after-load 'general
       (+config/leader-go
-        "Gm" 'git-messenger:popup-message))
+       "Gm" 'git-messenger:popup-message))
     :custom
     ;; Enable magit-show-commit instead of pop-to-buffer
     (git-messenger:use-magit-popup t)
     (git-messenger:show-detail t))
 #+end_src
-** =git-timemachine=
+** =git-timemachine= :disabled:
 #+begin_src emacs-lisp -n
   (use-package git-timemachine
     :ensure
+    :disabled
     :after magit)
 #+end_src
-** =magit-todos=
+** =magit-todos= :disabled:
 #+begin_src emacs-lisp -n
   (use-package magit-todos
     :ensure
+    :disabled
     :after magit
     :hook (magit-mode . magit-todos-mode)
     :custom
     (magit-todos-group-by
      '(magit-todos-item-first-path-component magit-todos-item-keyword magit-todos-item-filename)))
 #+end_src
-** =forge=
+** =forge= :disabled:
 #+begin_src emacs-lisp -n
   (use-package forge
     :after magit
+    :disabled
     :defer t
     :bind ((:map forge-issue-section-map
                  ("C-c C-v" . forge-browse-topic))
@@ -2680,10 +2686,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :custom
     (forge-add-default-bindings nil))
 #+end_src
-** =org-project-capture=
+** =org-project-capture= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-project-capture
     :bind (("C-c n p" . org-project-capture-project-todo-completing-read))
+    :disabled
     :ensure t
     :config
     (progn
@@ -2692,12 +2699,13 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
       (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
       (org-project-capture-single-file)))
 #+end_src
-** =lsp=
+** =lsp= :disabled:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
 #+begin_src emacs-lisp -n
   (use-package lsp-mode
     :ensure
+    :disabled
     :defer t
     :diminish (lsp-lens-mode lsp-mode)
     :commands lsp lsp-deferred
@@ -2760,10 +2768,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     ;; (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp)
     )
 #+end_src
-** =lsp-ui=
+** =lsp-ui= :disabled:
 #+begin_src emacs-lisp -n
   (use-package lsp-ui
     :ensure
+    :disabled
     :defer t
     :hook (lsp-mode . lsp-ui-mode)
     :init
@@ -2785,16 +2794,17 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
     (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t))
 #+end_src
-** =consult-lsp=
+** =consult-lsp= :disabled:
 #+begin_src emacs-lisp -n
   (use-package consult-lsp
     :ensure
     :after consult lsp
+    :disabled
     :bind
     (:map lsp-mode-map
           ([remap xref-find-apropos] . consult-lsp-symbols)))
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-project)
   ;;; config-project.el ends here
@@ -2804,7 +2814,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 :header-args: :tangle ./modules/config-org.el :mkdirp t
 :END:
 My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-workflow/][based around my workflow]].
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-org --- Org-mode configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -2815,7 +2825,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
   (when (file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
     (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
 #+end_src
-** =org-mode= main package                                         :builtin:
+** =org-mode= main package :builtin:
 #+begin_src emacs-lisp -n
   (use-package org
     :commands org-tempo
@@ -2837,9 +2847,9 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :config
     (with-eval-after-load 'general
       (general-def
-        "C-c c" 'org-capture
-        "C-c a" 'org-agenda
-        "C-c l" 'org-store-link))
+       "C-c c" 'org-capture
+       "C-c a" 'org-agenda
+       "C-c l" 'org-store-link))
     (when(file-directory-p (expand-file-name "braindump/org" org-directory))
       (customize-set-variable '+config/org-roam-directory
                               (expand-file-name "braindump/org" org-directory)))
@@ -2952,7 +2962,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     ;;    ("DONE" ("wait") ("killed") ("hold"))))
     )
 #+end_src
-** =org-src=                                                       :builtin:
+** =org-src= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-src
     :hook (org-src-mode . (lambda () (outline-minor-mode -1)))
@@ -2960,19 +2970,19 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (org-src-preserve-indentation nil)
     (org-edit-src-content-indentation 0))
 #+end_src
-** =org-faces=                                                     :builtin:
+** =org-faces= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-faces
     :custom
     (org-fontify-quote-and-verse-blocks t))
 #+end_src
-** =org-compat=                                                    :builtin:
+** =org-compat= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-compat
     :custom
     (org-imenu-depth 6))
 #+end_src
-** =org-archive=                                                   :builtin:
+** =org-archive= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-archive
     :after org
@@ -2983,7 +2993,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (org-archive-reversed-order t)
     (org-archive-location (concat (expand-file-name "archives.org" org-directory) "::datetree/* Archived Tasks")))
 #+end_src
-** =org-capture=                                                   :builtin:
+** =org-capture= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-capture
     :after org
@@ -2998,7 +3008,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
             ("l" "Links" entry
              (file+headline ,(expand-file-name "links.org" org-directory) "Links")))))
 #+end_src
-** =org-refile=                                                    :builtin:
+** =org-refile= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-refile
     :after org
@@ -3011,7 +3021,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (org-refile-use-outline-path 'file)
     (org-outline-path-complete-in-steps nil))
 #+end_src
-** =org-num=                                                       :builtin:
+** =org-num= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-num
     :after org
@@ -3019,14 +3029,14 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (org-num-face '(:inherit org-special-keyword :underline nil :weight bold))
     (org-num-skip-tags '("noexport" "nonum")))
 #+end_src
-** =org-fold=                                                      :builtin:
+** =org-fold= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-fold
     :after org org-contrib
     :custom
     (org-catch-invisible-edits 'smart))
 #+end_src
-** =org-id=                                                        :builtin:
+** =org-id= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-id
     :after org
@@ -3047,7 +3057,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (with-eval-after-load 'org
       (add-to-list 'org-tags-exclude-from-inheritance "crypt")))
 #+end_src
-** =org-attach=                                                    :builtin:
+** =org-attach= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-attach
     :after org
@@ -3066,7 +3076,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :custom
     (org-attach-auto-tag nil))
 #+end_src
-** =org-clock=                                                     :builtin:
+** =org-clock= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-clock
     :after org
@@ -3082,7 +3092,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :config
     (org-clock-persistence-insinuate))
 #+end_src
-** =org-agenda=                                                    :builtin:
+** =org-agenda= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-agenda
     :after org
@@ -3182,29 +3192,29 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (setq org-agenda-custom-commands
           `(("n" "Agenda and all TODOs"
              ((agenda ""
-                    ((org-agenda-span 1)
-                     (org-agenda-start-on-weekday t)
-                     (org-agenda-block-separator nil)
-                     (org-agenda-use-time-grid t)
-                     (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
-                     (org-agenda-format-date "%A %-e %B %Y")
-                     (org-agenda-overriding-header "\nToday\n")))
+                      ((org-agenda-span 1)
+                       (org-agenda-start-on-weekday t)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-use-time-grid t)
+                       (org-agenda-day-face-function (lambda (date) 'org-agenda-date))
+                       (org-agenda-format-date "%A %-e %B %Y")
+                       (org-agenda-overriding-header "\nToday\n")))
               (tags-todo "TODO=\"TODO\"|\"NEXT\""
-                    ((org-agenda-block-separator nil)
-                     (org-agenda-skip-function '(org-agenda-skip-if-todo 'nottodo 'done))
-                     (org-agenda-use-time-grid nil)
-                     (org-agenda-overriding-header "\nIncomplete\n")))
+                         ((org-agenda-block-separator nil)
+                          (org-agenda-skip-function '(org-agenda-skip-if-todo 'nottodo 'done))
+                          (org-agenda-use-time-grid nil)
+                          (org-agenda-overriding-header "\nIncomplete\n")))
               (agenda ""
-                    ((org-agenda-span 7)
-                     (org-agenda-start-on-weekday 1)
-                     (org-agenda-block-separator nil)
-                     (org-agenda-use-time-grid nil)
-                     (org-agenda-overriding-header "\nWeekly\n"))))
+                      ((org-agenda-span 7)
+                       (org-agenda-start-on-weekday 1)
+                       (org-agenda-block-separator nil)
+                       (org-agenda-use-time-grid nil)
+                       (org-agenda-overriding-header "\nWeekly\n"))))
              ((org-agenda-tag-filter-preset '("-personal" "-home")))
              )))
     )
 #+end_src
-** =org-timer=                                                     :builtin:
+** =org-timer= :builtin:
 #+begin_src emacs-lisp -n
   (use-package org-timer
     :config
@@ -3227,11 +3237,11 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :ensure t
     :after org)
 #+end_src
-** =org-superstar=                                                :disabled:
+** =org-superstar= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-superstar
     :ensure
-    :disabled t
+    :disabled
     :defer t
     :hook (org-mode . org-superstar-mode)
     :custom
@@ -3249,30 +3259,30 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
 #+end_src
 ** =org-modern=
 #+begin_src emacs-lisp
-(use-package org-modern
-  :ensure t
-  :config
-  (setq
-   ;; Edit settings
-   org-auto-align-tags nil
-   org-tags-column 0
-   org-fold-catch-invisible-edits 'show-and-error
-   org-special-ctrl-a/e t
-   org-insert-heading-respect-content t
+  (use-package org-modern
+    :ensure t
+    :config
+    (setq
+     ;; Edit settings
+     org-auto-align-tags nil
+     org-tags-column 0
+     org-fold-catch-invisible-edits 'show-and-error
+     org-special-ctrl-a/e t
+     org-insert-heading-respect-content t
 
-   ;; Org styling, hide markup etc.
-   org-hide-emphasis-markers nil ; set to nil for easier editing
-   org-ellipsis "…"
-   ;; Agenda styling
-   org-agenda-tags-column 0
-   org-agenda-block-separator ?─
-   org-agenda-time-grid
-   '((daily today require-timed)
-     (800 1000 1200 1400 1600 1800 2000)
-     " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
-   org-agenda-current-time-string
-   "◀── now ─────────────────────────────────────────────────")
-  (global-org-modern-mode))
+     ;; Org styling, hide markup etc.
+     org-hide-emphasis-markers t ; set to nil for easier editing
+     org-ellipsis "…"
+     ;; Agenda styling
+     org-agenda-tags-column 0
+     org-agenda-block-separator ?─
+     org-agenda-time-grid
+     '((daily today require-timed)
+       (800 1000 1200 1400 1600 1800 2000)
+       " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+     org-agenda-current-time-string
+     "◀── now ─────────────────────────────────────────────────")
+    (global-org-modern-mode))
 #+end_src
 
 ** =org-fancy-priority=
@@ -3285,19 +3295,21 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :custom
     (org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 #+end_src
-** =toc-org=
+** =toc-org= :disabled:
 #+begin_src emacs-lisp -n
   (use-package toc-org
     :ensure
+    :disabled
     :defer t
     :hook ((org-mode markdown-mode) . toc-org-mode)
     :custom
     (toc-org-hrefify-default "gh"))
 #+end_src
-** =ox-pandoc=
+** =ox-pandoc= :disabled:
 #+begin_src emacs-lisp -n
   (use-package ox-pandoc
     :ensure
+    :disabled
     :if (executable-find "pandoc")
     :after ox
     :defer t
@@ -3309,10 +3321,11 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
        (mathjax . t)
        (variable . "revealjs-url=https://revealjs.com"))))
 #+end_src
-** =deft=
+** =deft= :disabled:
 #+begin_src emacs-lisp -n
   (use-package deft
     :ensure
+    :disabled
     :defer t
     :after org-roam
     :custom
@@ -3346,18 +3359,20 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (add-hook 'deft-mode-hook #'evil-normalize-keymaps)
     (evil-set-initial-state #'deft-mode 'insert))
 #+end_src
-** =org-pdftools=
+** =org-pdftools= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-pdftools
     :ensure
+    :disabled
     :defer t
     :hook (org-mode . org-pdftools-setup-link)
     :commands org-pdftools-export)
 #+end_src
-** =org-noter=
+** =org-noter= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-noter
     :ensure
+    :disabled
     :defer t
     :after org-pdftools
     :custom
@@ -3366,10 +3381,11 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :config
     (require 'org-noter-pdftools))
 #+end_src
-** =org-noter-pdftools=
+** =org-noter-pdftools= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-noter-pdftools
     :ensure
+    :disabled
     :defer t
     :after org-noter
     :config
@@ -3402,17 +3418,19 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (with-eval-after-load 'pdf-annot
       (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 #+end_src
-** =ox-gfm=
+** =ox-gfm= :disabled:
 #+begin_src emacs-lisp -n
   (use-package ox-gfm
     :ensure
+    :disabled
     :defer t
     :after org)
 #+end_src
-** =org-download=
+** =org-download= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-download
     :ensure
+    :disabled
     :defer t
     :after org
     :hook (dired-mode . org-download-enable)
@@ -3438,10 +3456,11 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (unless org-download-image-dir
       (setq org-download-image-dir org-attach-id-dir)))
 #+end_src
-** =org-cliplink=
+** =org-cliplink= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-cliplink
     :ensure
+    :disabled
     :after org
     :defer t
     :bind ("C-x p i" . org-cliplink)
@@ -3495,9 +3514,10 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
   ,* %?
   " :unnarrowed t :jump-to-captured t)))
 #+end_src
-** =transient=
+** =transient= :disabled:
 #+begin_src emacs-lisp -n
   (use-package transient
+    :disabled
     :defer t
     :config
     (transient-define-prefix +config/transient-hugo-server ()
@@ -3527,17 +3547,19 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
       ["Action"
        ("s" "hugo server" +config/start-hugo-server)]))
 #+end_src
-** =ox-hugo=
+** =ox-hugo= :disabled:
 #+begin_src emacs-lisp -n
   (use-package ox-hugo
     :defer t
+    :disabled
     :ensure
     :hook (org-hugo-auto-export-mode . +config/ox-hugo-transient-keybinding))
 #+end_src
-** =org-roam=
+** =org-roam= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-roam
     :ensure
+    :disabled
     :defer t
     :commands (org-roam-node-find)
     :custom
@@ -3635,10 +3657,11 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (org-roam-setup)
     )
 #+end_src
-** =org-roam-ui=
+** =org-roam-ui= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-roam-ui
     :ensure
+    :disabled
     :defer t
     :after org-roam
     :config
@@ -3647,10 +3670,11 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
           org-roam-ui-update-on-save t
           org-roam-ui-open-on-start nil))
 #+end_src
-** =org-journal=
+** =org-journal= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-journal
     :ensure
+    :disabled
     :defer t
     :custom
     (org-icalendar-store-UID t)
@@ -3662,11 +3686,12 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (org-journal-dir (expand-file-name "journal" org-directory))
     (org-journal-date-format "%A, %d %B %Y"))
 #+end_src
-** =org-ref=
+** =org-ref= :disabled:
 #+begin_src emacs-lisp -n
   (use-package org-ref
     :ensure
     :defer t
+    :disabled
     :config
     (let ((ref-dir (expand-file-name "bibliography" org-directory)))
       (setq bibtex-completion-bibliography `(,(expand-file-name "references.bib" ref-dir)
@@ -3687,22 +3712,24 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
           (lambda (fpath)
             (call-process "open" nil 0 nil fpath))))
 #+end_src
-** =consult-bibtex=
+** =consult-bibtex= :disabled:
 #+begin_src emacs-lisp -n
   (when (file-directory-p (expand-file-name "site-lisp/consult-bibtex" user-emacs-directory))
     (add-to-list 'load-path (expand-file-name "site-lisp/consult-bibtex" user-emacs-directory)))
 
   (use-package consult-bibtex
     :defer t
+    :disabled
     :config
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist '(bibtex-completion . consult-bibtex-embark-map))))
 #+end_src
-** =consult-org-roam=
+** =consult-org-roam= :disabled:
 #+begin_src emacs-lisp -n
   (use-package consult-org-roam
     :ensure
     :defer t
+    :disabled
     :after org-roam
     :init
     (require 'consult-org-roam)
@@ -3711,7 +3738,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :config
     (with-eval-after-load 'general
       (+config/leader-notes
-        "rs" 'consult-org-roam-search))
+       "rs" 'consult-org-roam-search))
     :custom
     ;; Use `ripgrep' for searching with `consult-org-roam-search'
     (consult-org-roam-grep-func #'consult-ripgrep)
@@ -3739,82 +3766,24 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :config
     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f")))
 #+end_src
-** =org-plantum=
+** =org-plantum= :builtin:disabled:
 #+begin_src emacs-lisp -n
-(use-package ob-plantuml
-  :ensure nil
-  :config
-  (when (file-exists-p "/usr/share/java/plantuml/plantuml.jar")
-    (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")))
+  (use-package ob-plantuml
+    :ensure nil
+    :disabled
+    :config
+    (when (file-exists-p "/usr/share/java/plantuml/plantuml.jar")
+      (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")))
 #+end_src
-*** example
-**** Simple
-#+begin_src plantuml :exports both :file ./assets/img/ping.svg
-Client -> Server : Ping
-Server -> Client : Pong
-#+end_src
-
-#+RESULTS:
-[[file:./assets/ping.svg]]
-
-**** gerrit
-#+BEGIN_SRC plantuml :exports results :file ./assets/img/git-gerrit-workflow.png
-title Git + Gerrit Work Flow
-
-(*) -down-> "clone repository"
-note right
-git clone url/to/repository
-scp -p url/to/hooks/commit-msg repository/.git/hooks/
-endnote
--down->[get an assignment] "coding" as coding
--down-> "commit locally"
-note right
-git add xxx
-git commit
-endnote
--down-> "review" as review
-note right: git push origin refs/for/<branch_name>
---> if "" then
--right->[approved] "submit"
-note bottom: click "submit" on corresponding gerrit page
--u-> "update local repository"
-note right: git pull <color:red>--rebase</color>
--left-> [get another task(a new cycle)] coding
-else
--left->[rejected] "rework"
--up-> "recommit"
-note top
-git add xxx
-git commit <color:red>--amend</color>
-endnote
--right-> review
-endif
-#+END_SRC
-
-#+RESULTS:
-[[file:./assets/img/git-gerrit-workflow.png]]
-
-** =ob-ditaa=
+** =ob-ditaa= :disabled:
 #+begin_src emacs-lisp -n
-(use-package ob-ditaa
-  :config
-  (when (file-exists-p "/usr/share/java/ditaa/ditaa-0.11.jar")
-    (setq org-ditaa-jar-path "/usr/share/java/ditaa/ditaa-0.11.jar")))
+  (use-package ob-ditaa
+    :disabled
+    :config
+    (when (file-exists-p "/usr/share/java/ditaa/ditaa-0.11.jar")
+      (setq org-ditaa-jar-path "/usr/share/java/ditaa/ditaa-0.11.jar")))
 #+end_src
-
-*** example
-#+begin_src ditaa :file ./assets/img/hello-world.png
-+--------------+
-|              |
-| Hello World! |
-|              |
-+--------------+
-#+end_src
-
-#+RESULTS:
-[[file:./assets/hello-world.png]]
-
-** =ob-diagrams=
+** =ob-diagrams= :disabled:
 :PROPERTIES:
 :ID:       f70ea00a-85fe-4d1c-b7c3-fcda13847bcc
 :END:
@@ -3823,43 +3792,30 @@ Generate various diagrams inside org mode with org-babel and the help from vario
 #+begin_src emacs-lisp -n
   (use-package ob-diagrams
     :ensure
+    :disabled
     :demand t)
 #+end_src
-
-#+begin_src diagrams :type flowchart :exports both
-  st=>start: Incoming Tasks
-  e=>end
-  op1=>operation: My Operation
-  sub1=>subroutine: My Subroutine
-  cond=>condition: Yes
-  or No?:>http://www.google.com
-  io=>inputoutput: catch something
-  st->op1->cond
-  cond(yes)->io->e
-  cond(no)->sub1(right)->op1
-#+end_src
-
-#+RESULTS:
 
 *** requirements
 - [[https://github.com/francoislaberge/diagrams][diagrams cli]]
 - [[https://github.com/sverweij/state-machine-cat][state-machine-cat]]
 - [[https://github.com/BurntSushi/erd][erd]]
-** =khalel=
+** =khalel= :disabled:
 Interacting through Emacs with locally-stored calendars via the console application khal and syncing with remote CalDAV calendars using vdirsyncer.
 #+caption: from the [[https://github.com/emacsmirror/khalel/][github page]]
 #+begin_src emacs-lisp -n
-(use-package khalel
-  :ensure
-  :if (executable-find "khal")
-  :after org
-  :config
-  (setq khalel-khal-command (executable-find "khal")
-        khalel-vdirsyncer-command (executable-find "vdirsyncer")
-        khalel-import-org-file (expand-file-name "calendar.org" org-directory))
-  (khalel-add-capture-template))
+  (use-package khalel
+    :ensure
+    :if (executable-find "khal")
+    :disabled
+    :after org
+    :config
+    (setq khalel-khal-command (executable-find "khal")
+          khalel-vdirsyncer-command (executable-find "vdirsyncer")
+          khalel-import-org-file (expand-file-name "calendar.org" org-directory))
+    (khalel-add-capture-template))
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-org)
   ;;; config-org.el ends here
@@ -3874,23 +3830,26 @@ Interacting through Emacs with locally-stored calendars via the console applicat
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =nov=
+** =nov= :disabled:
 Useful for reading /epubs/.
 #+begin_src emacs-lisp -n
   (use-package nov
     :ensure
+    :disabled
     :defer t)
 #+end_src
-** =djvu=
+** =djvu= :disabled:
 #+begin_src emacs-lisp -n
   (use-package djvu
     :ensure
+    :disabled
     :defer t)
 #+end_src
-** =pdf-tools=
+** =pdf-tools= :disabled:
 #+begin_src emacs-lisp -n
   (use-package pdf-tools
     :ensure
+    :disabled
     :defer t
     :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
     :hook ((pdf-tools-enabled . (lambda ()
@@ -3910,10 +3869,11 @@ Useful for reading /epubs/.
     (define-key pdf-view-mode-map (kbd "t") 'pdf-annot-add-text-annotation)
     (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
 #+end_src
-** =khalel=
+** =khalel= :disabled:
 #+begin_src emacs-lisp -n
   (use-package khalel
     :ensure
+    :disabled
     :defer t
     :if (executable-find "khal")
     :config
@@ -3923,10 +3883,11 @@ Useful for reading /epubs/.
           khalel-import-org-file-confirm-overwrite nil)
     (khalel-add-capture-template))
 #+end_src
-** =direnv=
+** =direnv= :disabled:
 #+begin_src emacs-lisp -n
   (use-package direnv
     :ensure
+    :disabled
     :defer t
     :config
     (direnv-mode))
@@ -3952,16 +3913,17 @@ Useful for reading /epubs/.
     :init
     (auth-source-pass-enable))
 #+end_src
-** =ement=
+** =ement= :disabled:
 #+begin_src emacs-lisp -n
   (use-package ement
     :ensure
+    :disabled
     :defer t
     :config
     (setf use-default-font-for-symbols nil)
     (set-fontset-font t 'unicode "Noto Emoji" nil 'append))
 #+end_src
-** pinentry
+** =pinentry=
 #+begin_src emacs-lisp -n
   (use-package pinentry
     :ensure
@@ -3975,28 +3937,23 @@ Useful for reading /epubs/.
     :if (executable-find "rg")
     :ensure
     :defer t)
-
-  (use-package ripgrep
-    :ensure
-    :defer t
-    :init
-    (with-eval-after-load 'evil-collection
-      (evil-collection-ripgrep-setup)))
 #+end_src
-** =wgrep=
+** =wgrep= :disabled:
 #+begin_src emacs-lisp -n
   (use-package wgrep
     :ensure
+    :disabled
     :defer t
     :commands wgrep-change-to-wgrep-mode
     :config (setq wgrep-auto-save-buffer t))
 #+end_src
-** =elfeed=
+** =elfeed= :disabled:
 #+caption: /elfeed/ RSS
 [[./assets/img/emacs-elfeed-rss.png][file:assets/img/emacs-elfeed-rss.png]]
 #+begin_src emacs-lisp -n
   (use-package elfeed
     :ensure
+    :disabled
     :defer t
     :commands elfeed
     :config
@@ -4004,10 +3961,11 @@ Useful for reading /epubs/.
           elfeed-show-entry-switch #'pop-to-buffer
           shr-max-image-proportion 0.8))
 #+end_src
-** =elfeed-org=
+** =elfeed-org= :disabled:
 #+begin_src emacs-lisp -n
   (use-package elfeed-org
     :ensure
+    :disabled
     :defer t
     :after org elfeed
     :preface
@@ -4015,7 +3973,7 @@ Useful for reading /epubs/.
     :init
     (elfeed-org))
 #+end_src
-** =emms=                                                 
+** =emms= :disabled:
 This is supposed to be a builtin package, but somehow I can not load it.
 #+begin_src emacs-lisp -n
   (use-package emms
@@ -4026,10 +3984,11 @@ This is supposed to be a builtin package, but somehow I can not load it.
     (emms-mpris-enable)
     )
 #+end_src
-** =editorconfig=
+** =editorconfig= :disabled:
 #+begin_src emacs-lisp -n
   (use-package editorconfig
     :ensure
+    :disabled
     :defer t
     :config
     (editorconfig-mode 1)
@@ -4037,27 +3996,30 @@ This is supposed to be a builtin package, but somehow I can not load it.
       (setq editorconfig-trim-whitespaces-mode
             'ws-butler-mode)))
 #+end_src
-** =pdfgrep=
+** =pdfgrep= :disabled:
 #+begin_src emacs-lisp -n
   (use-package pdfgrep
+    :disabled
     :ensure
     :defer t
     :after pdf-tools
     :config (pdfgrep-mode))
 #+end_src
-** =selected=
+** =selected= :disabled:
 #+begin_src emacs-lisp -n
   (use-package selected
     :ensure
+    :disabled
     :defer t
     :commands selected-minor-mode
     :init
     (selected-global-mode))
 #+end_src
-** =yasnippet=
+** =yasnippet= :disabled:
 #+begin_src emacs-lisp -n
   (use-package yasnippet
     :ensure
+    :disabled
     :defer t
     :diminish yas-minor-mode
     :commands (yas-minor-mode-on
@@ -4085,17 +4047,19 @@ This is supposed to be a builtin package, but somehow I can not load it.
     :ensure
     :after yasnippet)
 #+end_src
-** =lorem-ipsum=
+** =lorem-ipsum= :disabled:
 #+begin_src emacs-lisp -n
   (use-package lorem-ipsum
     :ensure
+    :disabled
     :defer t)
 #+end_src
-** =vimrc-mode=
+** =vimrc-mode= :disabled:
 Blasphemy, I know. But I still needs /vim/ for editing mostly in remote machine, and sometimes the connection is unreliable which makes my /Emacs/ hangs. For this situation, /vim/ + /screen/ or /tmux/ is more sensible.
 #+begin_src emacs-lisp -n
   (use-package vimrc-mode
     :ensure
+    :disabled
     :defer t
     :config
     (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
@@ -4220,10 +4184,11 @@ I sometimes need /treemacs/ when working on a large directory of files.
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =treemacs= main package
+** =treemacs= main package :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs
     :ensure
+    :disabled
     :defer t
     :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
     :config
@@ -4303,66 +4268,74 @@ I sometimes need /treemacs/ when working on a large directory of files.
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag)))
 #+end_src
-** =treemacs-projectile=
+** =treemacs-projectile= :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs-projectile
     :ensure
+    :disabled
     :defer t
     :after treemacs)
 #+end_src
-** =treemacs-icons-dired=
+** =treemacs-icons-dired= :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs-icons-dired
     :ensure
+    :disabled
     :defer t
     :after treemacs
     :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
-** =treemacs-magit=
+** =treemacs-magit= :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs-magit
     :ensure
+    :disabled
     :defer t
     :after treemacs magit)
 #+end_src
-** =treemacs-evil=
+** =treemacs-evil= :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs-evil
     :ensure
+    :disabled
     :defer t
     :after treemacs evil)
 #+end_src
-** =lsp-treemacs=
+** =lsp-treemacs= :disabled:
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+begin_src emacs-lisp -n
   (use-package lsp-treemacs
     :ensure
+    :disabled
     :defer t
     :after treemacs lsp
     :config
     (lsp-treemacs-sync-mode 1))
 #+end_src
-** =treemacs-perspective=
+** =treemacs-perspective= :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs-perspective
     :ensure
     :defer t
+    :disabled
     :after treemacs perspective
     :config
     (treemacs-set-scope-type 'Perspectives))
 #+end_src
-** =treemacs-tab-bar=
+** =treemacs-tab-bar= :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs-tab-bar
     :ensure
     :defer t
+    :disabled
     :after treemacs)
 #+end_src
-** =treemacs-nerd-icons=
+** =treemacs-nerd-icons= :disabled:
 #+begin_src emacs-lisp -n
   (use-package treemacs-nerd-icons
     :ensure
+    :disabled
     :defer t
     :config
     (treemacs-load-theme "nerd-icons"))
@@ -4376,17 +4349,18 @@ I sometimes need /treemacs/ when working on a large directory of files.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-mail.el :mkdirp t
 :END:
-** header                                                         :noexport:
+** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-mail --- mail configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-** =notmuch= main package
+** =notmuch= main package :disabled:
 #+begin_src emacs-lisp -n
   (use-package notmuch
     :ensure
     :if (executable-find "notmuch")
+    :disabled
     :defer t
     :commands (notmuch)
     :hook
@@ -4460,51 +4434,58 @@ I sometimes need /treemacs/ when working on a large directory of files.
                   (notmuch-show-tag (list +spam -new))))
     )
 #+end_src
-** =notmuch-indicator=
+** =notmuch-indicator= :disabled:
 #+begin_src emacs-lisp -n
   (use-package notmuch-indicator
     :ensure
+    :disabled
     :config
     (setq notmuch-indicator-args
           '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
     (notmuch-indicator-mode))
 #+end_src
-** =consult-notmuch=
+** =consult-notmuch= :disabled:
 #+begin_src emacs-lisp -n
   (use-package consult-notmuch
     :ensure
+    :after consult
+    :disabled
     :config
     (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
 #+end_src
-** =ol-notmuch=
+** =ol-notmuch= :disabled:
 #+begin_src emacs-lisp -n
   (use-package ol-notmuch
+    :disabled
     :ensure)
 #+end_src
-** =notmuch-maildir=
+** =notmuch-maildir= :disabled:
 #+begin_src emacs-lisp -n
   (use-package notmuch-maildir
     :ensure
+    :disabled
     :config
     (notmuch-maildir-inject-section))
 #+end_src
-** =message=                                                       :builtin:
+** =message= :builtin:disabled:
 #+begin_src emacs-lisp -n
   (use-package message
+    :disabled
     :custom
     (message-directory (expand-file-name ".mail" (getenv "HOME")))
     (message-sendmail-envelope-from 'header))
 #+end_src
-** =sendmail=                                                      :builtin:
+** =sendmail= :builtin:disabled:
 #+begin_src emacs-lisp -n
   (use-package sendmail
+    :disabled
     :custom
     (mail-specify-envelope-from t)
     (mail-envelope-from 'header)
     (send-mail-function 'sendmail-send-it)
     (sendmail-program (executable-find "msmtp")))
 #+end_src
-** footer                                                         :noexport:
+** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-mail)
   ;;; config-mail.el ends here
@@ -4515,7 +4496,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-flycheck.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-flycheck --- flycheck -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -4557,7 +4538,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :config
     (with-eval-after-load 'general
       (+config/leader-register
-        "F" 'consult-flycheck)))
+       "F" 'consult-flycheck)))
 #+end_src
 *** =flycheck-posframe=
 #+begin_src emacs-lisp -n
@@ -4582,7 +4563,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :ensure
     :hook (flycheck-mode . flycheck-color-mode-line-mode))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-flycheck)
   ;;; config-flycheck.el ends here
@@ -4591,13 +4572,13 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-lisp.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-lisp --- Various lisp configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** =elisp-mode=                                                    :builtin:
+*** =elisp-mode= :builtin:
 #+begin_src emacs-lisp -n
   (when (locate-library "aggressive-indent")
     (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
@@ -4616,7 +4597,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
                                (outline-minor-mode)
                                (rainbow-delimiters-mode))))
 #+end_src
-**** =ielm=                                                       :builtin:
+**** =ielm= :builtin:
 #+begin_src emacs-lisp -n
   (use-package ielm
     :ensure nil
@@ -4807,7 +4788,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :bind (:map geiser-mode-map
                 ("C-c e" . macrostep-expand)))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-lisp)
   ;;; config-lisp.el ends here
@@ -4816,13 +4797,13 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-cc.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-cc `cc-mode' configuratition -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** =cc-mode=                                                       :builtin:
+*** =cc-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package cc-mode
     :mode ("\\.mm\\'" . objc-mode)
@@ -4837,7 +4818,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (with-eval-after-load 'ffap
       (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-cc)
   ;;; config-cc-mode.el ends here
@@ -4846,13 +4827,13 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-xml.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-xml --- `xml-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** =nxml-mode=                                                     :builtin:
+*** =nxml-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package nxml-mode
     :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
@@ -4864,7 +4845,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (setq nxml-slash-auto-complete-flag t
           nxml-auto-insert-xml-declaration-flag t))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-xml)
   ;;; config-xml.el ends here
@@ -4873,11 +4854,11 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-yaml.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
-;;; config-yaml --- `yaml-mode' configuration -*- lexical-binding: t -*-
-;;; Commentary:
-;;; Code:
+  ;;; config-yaml --- `yaml-mode' configuration -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
 #+end_src
 *** =yaml-mode=
 #+begin_src emacs-lisp -n
@@ -4897,16 +4878,16 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
                     (run-hooks 'prog-mode-hook)))
      (yaml-mode . lsp-deferred)))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
-(provide 'config-yaml)
-;;; config-yaml.el ends here
+  (provide 'config-yaml)
+  ;;; config-yaml.el ends here
 #+end_src
 ** TOML
 :PROPERTIES:
 :header-args: :tangle ./modules/config-toml.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-toml --- `toml-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -4928,7 +4909,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
       (setq lsp-toml-command (executable-find "taplo")))
     (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-toml)
   ;;; config-toml.el ends here
@@ -4937,7 +4918,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-lua.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-lua --- `lua-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -4954,7 +4935,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
       (setq lsp-lua-hint-enable t
             lsp-lua-hint-set-type t)))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-lua)
   ;;; config-lua.el end
@@ -4963,7 +4944,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-jinja2.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-jinja2 --- `jinja2-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -4984,7 +4965,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :hook
     (jinja2-mode . lsp-deferred))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-jinja2)
   ;;; config-jinja2.el ends here
@@ -4993,21 +4974,21 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-json.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-json --- `json-mode' configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Configuration for json.
   ;;; Code:
 #+end_src
-*** =json-mode=                                                     :builtin:
+*** =json-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package json-mode
     :defer t
     :hook
     (json-mode . lsp-deferred))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-json)
   ;;; config-json.el ends here
@@ -5016,7 +4997,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-web.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-web.el --- html configuration             -*- lexical-binding: t; -*-
   ;;; Commentary:
@@ -5110,14 +5091,14 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
             "//"))
     (with-eval-after-load 'general
       (general-nvmap
-        :keymaps 'web-mode-map
-        "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))
+       :keymaps 'web-mode-map
+       "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))
       (general-nvmap
-        :keymaps 'web-mode-map
-        "gn" 'web-mode-navigate)
+       :keymaps 'web-mode-map
+       "gn" 'web-mode-navigate)
       (general-vmap
-        :keymaps 'web-mode-map
-        "gs" 'web-mode-surround))
+       :keymaps 'web-mode-map
+       "gs" 'web-mode-surround))
     :hook ((html-mode
             web-mode
             html-mode-local-vars-hook
@@ -5182,7 +5163,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :config
     (setq com-css-sort-sort-type 'alphabetic-sort))
 #+end_src
-*** =css-mode=                                                      :builtin:
+*** =css-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package css-mode
     :hook ((css-mode
@@ -5415,10 +5396,10 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :hook (typescript-tsx-mode . rainbow-delimiters-mode)
     :hook (typescript-tsx-mode . lsp-deferred)
     :hook (typescript-mode . (lambda () (setq comment-line-break-function #'js2-line-break
-                                         typescript-indent-level (or (and (bound-and-true-p tide-mode)
-                                                                          (plist-get (tide-tsfmt-options) :indentSize))
-                                                                     typescript-indent-level)
-                                         emmet-expand-jsx-className? t)))
+                                              typescript-indent-level (or (and (bound-and-true-p tide-mode)
+                                                                               (plist-get (tide-tsfmt-options) :indentSize))
+                                                                          typescript-indent-level)
+                                              emmet-expand-jsx-className? t)))
     :init
     (add-to-list 'auto-mode-alist
                  (cons "\\.tsx\\'" #'typescript-mode))
@@ -5462,7 +5443,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :ensure
     :defer t)
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-web)
   ;;; config-web.el ends here
@@ -5471,13 +5452,13 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-latex.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-latex.el --- latex configuration          -*- lexical-binding: t; -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** =auctex=                                                        :builtin:
+*** =auctex= :builtin:
 #+begin_src emacs-lisp -n
   (use-package auctex
     :mode (("\\.tex\\'" . latex-mode)
@@ -5495,7 +5476,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
             TeX-PDF-mode t)
       (setq-default TeX-master nil)))
 #+end_src
-*** =preview=                                                       :builtin:
+*** =preview= :builtin:
 #+begin_src emacs-lisp -n
   (use-package preview
     :ensure nil
@@ -5506,7 +5487,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
       (setq-default preview-scale 1.4
                     preview-scale-function '(lambda () (* (/ 10.0 (preview-document-pt)) preview-scale)))))
 #+end_src
-*** =reftex=                                                        :builtin:
+*** =reftex= :builtin:
 #+begin_src emacs-lisp -n
   (use-package reftex
     :ensure nil
@@ -5514,7 +5495,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :init
     (setq reftex-plug-into-AUCTeX t))
 #+end_src
-*** =bibtex=                                                      :builtin:
+*** =bibtex= :builtin:
 #+begin_src emacs-lisp -n
   (use-package bibtex
     :config
@@ -5583,7 +5564,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
         (substring fname-or-url 7)
       fname-or-url))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-latex)
   ;;; config-latex.el ends here
@@ -5592,7 +5573,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-markdown.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-markdown --- `markdown-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -5600,90 +5581,90 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+end_src
 *** =markdown-mode=
 #+begin_src emacs-lisp -n
-    ;; autoloads (from doom)
+  ;; autoloads (from doom)
     ;;; Compilation handlers
 
     ;;;###autoload
-    (cond
-     ((and (boundp 'transient-mark-mode) (boundp 'mark-active))
-      (defun markdown-use-region-p ()
-        "Compatibility wrapper to provide `use-region-p'."
-        (and transient-mark-mode mark-active))))
+  (cond
+   ((and (boundp 'transient-mark-mode) (boundp 'mark-active))
+    (defun markdown-use-region-p ()
+      "Compatibility wrapper to provide `use-region-p'."
+      (and transient-mark-mode mark-active))))
 
     ;;;###autoload
-    (defun +markdown-compile (beg end output-buffer)
-      "Compile markdown into html.
+  (defun +markdown-compile (beg end output-buffer)
+    "Compile markdown into html.
 
     Runs `+markdown-compile-functions' until the first function to return non-nil,
     otherwise throws an error."
-      (or (run-hook-with-args-until-success '+markdown-compile-functions
-                                            beg end output-buffer)
-          (user-error "No markdown program could be found. Install marked, pandoc, markdown or multimarkdown.")))
+    (or (run-hook-with-args-until-success '+markdown-compile-functions
+                                          beg end output-buffer)
+        (user-error "No markdown program could be found. Install marked, pandoc, markdown or multimarkdown.")))
 
     ;;;###autoload
-    (defun +markdown-compile-marked (beg end output-buffer)
-      "Compiles markdown with the marked program, if available.
+  (defun +markdown-compile-marked (beg end output-buffer)
+    "Compiles markdown with the marked program, if available.
     Returns its exit code."
-      (when (executable-find "marked")
-        (apply #'call-process-region
-               beg end "marked" nil output-buffer nil
-               (when (eq major-mode 'gfm-mode)
-                 (list "--gfm" "--tables" "--breaks")))))
+    (when (executable-find "marked")
+      (apply #'call-process-region
+             beg end "marked" nil output-buffer nil
+             (when (eq major-mode 'gfm-mode)
+               (list "--gfm" "--tables" "--breaks")))))
 
     ;;;###autoload
-    (defun +markdown-compile-pandoc (beg end output-buffer)
-      "Compiles markdown with the pandoc program, if available.
+  (defun +markdown-compile-pandoc (beg end output-buffer)
+    "Compiles markdown with the pandoc program, if available.
     Returns its exit code."
-      (when (executable-find "pandoc")
-        (call-process-region beg end "pandoc" nil output-buffer nil
-                             "-f" "markdown"
-                             "-t" "html"
-                             "--mathjax"
-                             "--highlight-style=pygments")))
+    (when (executable-find "pandoc")
+      (call-process-region beg end "pandoc" nil output-buffer nil
+                           "-f" "markdown"
+                           "-t" "html"
+                           "--mathjax"
+                           "--highlight-style=pygments")))
 
     ;;;###autoload
-    (defun +markdown-compile-multimarkdown (beg end output-buffer)
-      "Compiles markdown with the multimarkdown program, if available. Returns its
+  (defun +markdown-compile-multimarkdown (beg end output-buffer)
+    "Compiles markdown with the multimarkdown program, if available. Returns its
     exit code."
-      (when (executable-find "multimarkdown")
-        (call-process-region beg end "multimarkdown" nil output-buffer)))
+    (when (executable-find "multimarkdown")
+      (call-process-region beg end "multimarkdown" nil output-buffer)))
 
     ;;;###autoload
-    (defun +markdown-compile-markdown (beg end output-buffer)
-      "Compiles markdown using the Markdown.pl script (or markdown executable), if
+  (defun +markdown-compile-markdown (beg end output-buffer)
+    "Compiles markdown using the Markdown.pl script (or markdown executable), if
     available. Returns its exit code."
-      (when-let (exe (or (executable-find "Markdown.pl")
-                         (executable-find "markdown")))
-        (call-process-region beg end exe nil output-buffer nil)))
+    (when-let (exe (or (executable-find "Markdown.pl")
+                       (executable-find "markdown")))
+      (call-process-region beg end exe nil output-buffer nil)))
 
-    (defvar +markdown-compile-functions
-      '(+markdown-compile-marked
-        +markdown-compile-pandoc
-        +markdown-compile-markdown
-        +markdown-compile-multimarkdown)
-      "A list of commands to try when attempting to build a markdown file with
+  (defvar +markdown-compile-functions
+    '(+markdown-compile-marked
+      +markdown-compile-pandoc
+      +markdown-compile-markdown
+      +markdown-compile-multimarkdown)
+    "A list of commands to try when attempting to build a markdown file with
     `markdown-open' or `markdown-preview', stopping at the first one to return non-nil.
 
     Each function takes three argument. The beginning position of the region to
     capture, the end position, and the output buffer.")
 
     ;;;###autoload
-    (defun +markdown/insert-del ()
-      "Surround region in github strike-through delimiters."
-      (interactive)
-      (let ((regexp "\\(^\\|[^\\]\\)\\(\\(~\\{2\\}\\)\\([^ \n	\\]\\|[^ \n	]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)")
-            (delim "~~"))
-        (if (markdown-use-region-p)
-            ;; Active region
-            (cl-destructuring-bind (beg . end)
-                (markdown-unwrap-things-in-region
-                 (region-beginning) (region-end)
-                 regexp 2 4)
-              (markdown-wrap-or-insert delim delim nil beg end))
-          ;; Bold markup removal, bold word at point, or empty markup insertion
-          (if (thing-at-point-looking-at regexp)
-              (markdown-unwrap-thing-at-point nil 2 4)
-            (markdown-wrap-or-insert delim delim 'word nil nil)))))
+  (defun +markdown/insert-del ()
+    "Surround region in github strike-through delimiters."
+    (interactive)
+    (let ((regexp "\\(^\\|[^\\]\\)\\(\\(~\\{2\\}\\)\\([^ \n	\\]\\|[^ \n	]\\(?:.\\|\n[^\n]\\)*?[^\\ ]\\)\\(\\3\\)\\)")
+          (delim "~~"))
+      (if (markdown-use-region-p)
+          ;; Active region
+          (cl-destructuring-bind (beg . end)
+              (markdown-unwrap-things-in-region
+               (region-beginning) (region-end)
+               regexp 2 4)
+            (markdown-wrap-or-insert delim delim nil beg end))
+        ;; Bold markup removal, bold word at point, or empty markup insertion
+        (if (thing-at-point-looking-at regexp)
+            (markdown-unwrap-thing-at-point nil 2 4)
+          (markdown-wrap-or-insert delim delim 'word nil nil)))))
 
   (use-package markdown-mode
     :ensure
@@ -5737,7 +5718,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :ensure
     :after markdown-mode)
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-markdown)
   ;;; config-markdown.el ends here
@@ -5746,13 +5727,13 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-python.el :mkdirp t
 :END:
-*** header                                                       :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-python --- `python-mode' configuration -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** =python=                                                        :builtin:
+*** =python= :builtin:
 #+begin_src emacs-lisp -n
   (use-package python
     :mode ("[./]flake8\\'" . conf-mode)
@@ -5828,7 +5809,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :config
     (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
 #+end_src
-*** =inferior-python-mode=                                          :builtin:
+*** =inferior-python-mode= :builtin:
 #+begin_src emacs-lisp -n
   (use-package inferior-python-mode
     :hook (inferior-python-mode . hide-mode-line-mode))
@@ -5881,7 +5862,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
   (use-package ein
     :ensure t)
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-python)
   ;;; config-python.el ends here
@@ -5890,7 +5871,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-rust.el :mkdirp t
 :END:
-*** header                                                         :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-rust --- rust-mode configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -5921,7 +5902,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 #+begin_src emacs-lisp -n
   (use-package rustic
     :ensure
-    ;defer t
+                                          ;defer t
     :mode ("\\.rs$" . rustic-mode)
     :init
     (with-eval-after-load 'rustic-flycheck
@@ -5941,8 +5922,8 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
       (setq lsp-rust-analyzer-display-parameter-hints t))
     (with-eval-after-load 'general
       (general-nvmap
-        :keymaps '(rustic-mode-map lsp-mode-map)
-        "K" 'lsp-describe-thing-at-point)))
+       :keymaps '(rustic-mode-map lsp-mode-map)
+       "K" 'lsp-describe-thing-at-point)))
 #+end_src
 *** =flycheck-rust=
 #+begin_src emacs-lisp -n
@@ -5953,7 +5934,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (with-eval-after-load 'rustic
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
-*** footer                                                         :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-rust)
   ;;; config-rust.el ends here
@@ -5962,7 +5943,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-ansible.el :mkdirp t
 :END:
-*** header                                                        :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp -n
   ;;; config-ansible --- ansible configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -5993,7 +5974,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     (when (featurep 'evil)
       (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
 #+end_src
-*** footer                                                        :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-ansible)
   ;;; config-ansible.el ends here
@@ -6002,7 +5983,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-perl.el :mkdirp t
 :END:
-*** header                                                       :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-perl --- perl configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -6015,7 +5996,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :defer t
     :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 #+end_src
-*** footer                                                       :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-perl)
   ;;; config-perl.el ends here
@@ -6024,7 +6005,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 :PROPERTIES:
 :header-args: :tangle ./modules/config-haskell.el :mkdirp t
 :END:
-*** header                                                       :noexport:
+*** header :noexport:
 #+begin_src emacs-lisp +n
   ;;; config-haskell --- haskell configuration -*- lexical-binding: t -*-
   ;;; Commentary:
@@ -6048,7 +6029,7 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
     :defer t
     :after lsp)
 #+end_src
-*** footer                                                       :noexport:
+*** footer :noexport:
 #+begin_src emacs-lisp -n
   (provide 'config-haskell)
   ;;; config-haskell.el ends here
