@@ -1277,29 +1277,31 @@ An extensible emacs dashboard[fn:17].
 
 My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer/ each time I opened a new /Emacs/ frame.
 #+begin_src emacs-lisp -n
-  ;; use-package with package.el:
-  (use-package dashboard
-    :ensure t
-    :config
-    (dashboard-setup-startup-hook)
-    (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))
-          ;;dashboard-banner-logo-title (format "Welcome, %s" user-full-name)
-          dashboard-items '((recents . 5)
-                            (bookmarks . 5)
-                            (projects . 5)
-                            (agenda . 5)
-                            (registers . 5))
-          dashboard-projects-switch-function 'projectile-persp-switch-project
-          dashboard-week-agenda t
-          dashboard-filter-agenda-entry 'dashboard-filter-agenda-by-todo
-          dashboard-startup-banner 'logo
-          dashboard-center-content t
-          dashboard-vertically-center-content t
-          ;; dashboard-icon-type 'all-the-icons
-          dashboard-display-icons-p t
-          dashboard-set-heading-icons t
-          dashboard-set-file-icons t
-          ))
+;; use-package with package.el:
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*"))
+        ;;dashboard-banner-logo-title (format "Welcome, %s" user-full-name)
+        dashboard-items '((recents . 3)
+                          (bookmarks . 2)
+                          (projects . 5)
+                          (agenda . 8)
+                          (registers . 2))
+        dashboard-projects-switch-function 'projectile-persp-switch-project
+        dashboard-week-agenda t
+        dashboard-filter-agenda-entry nil
+        dashboard-startup-banner 'logo
+        dashboard-center-content t
+        dashboard-vertically-center-content t
+        ;; dashboard-icon-type 'all-the-icons
+        dashboard-display-icons-p t
+        dashboard-set-heading-icons t
+        dashboard-set-file-icons t
+        dashboard-agenda-sort-strategy
+        '(todo-state-up time-down priority-down todo-state-down time-up priority-up)
+        ))
 #+end_src
 ** =tab-bar=                                                       :builtin:
 Although I used /Perspective/ more, there are some cases where it's easier with tabs. And the default UI for the tabs is not that great.
