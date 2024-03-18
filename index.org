@@ -638,92 +638,98 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 #+end_src
 *** =org-mode=
 #+begin_src emacs-lisp -n
-  (general-define-key
-   :keymaps 'override
-   "C-c l" '(org-store-link :wk "Store link")
-   "C-c a" '(org-agenda :wk "Org Agenda")
-   "C-c c" '(org-capture :wk "Org Capture")
-   "C-c C-s" 'org-schedule)
+(general-define-key
+ :keymaps 'override
+ "C-c l" '(org-store-link :wk "Store link")
+ "C-c a" '(org-agenda :wk "Org Agenda")
+ "C-c c" '(org-capture :wk "Org Capture")
+ "C-c C-s" 'org-schedule)
 
-  (+config/local-leader
-    :major-modes 'org-mode
-    :keymaps 'org-mode-map
-    "a" '(:ignore t :wk "action")
-    "s" '(:ignore t :wk "search"))
+(+config/leader-notes
+  "a" 'org-agenda
+  "c" 'org-capture
+  "C" 'org-capture-goto-last-stored
+  "r" 'org-refile-goto-last-stored)
 
-  (+config/local-leader
-    :keymaps 'org-mode-map
-    "C-a" 'org-attach
-    "C-b" 'org-backward-heading-same-level
-    "C-c" 'org-ctrl-c-ctrl-c
-    "C-d" 'org-deadline
-    "C-e" 'org-export-dispatch
-    "C-f" 'org-forward-heading-same-level
-    "C-j" 'org-goto
-    "C-k" 'org-kill-note-or-show-branches
-    "C-l" 'org-insert-link
-    "C-n" 'org-next-visible-heading
-    "C-o" 'org-open-at-point
-    "C-p" 'org-previous-visible-heading
-    "C-q" 'org-set-tags-command
-    "C-r" 'org-fold-reveal
-    "C-s" 'org-schedule
-    "C-t" 'org-todo
-    "C-w" 'org-refile
-    "C-y" 'org-evaluate-time-range
-    "C-z" 'org-add-note
-    "M-b" 'org-previous-block
-    "M-f" 'org-next-block
-    "M-l" 'org-insert-last-stored-link
-    "M-w" 'org-refile-copy
-    "C-^" 'org-up-element
-    "C-_" 'org-down-element
-    "C-<" 'org-promote-subtree
-    "C->" 'org-demote-subtree
-    "C-," 'org-insert-structure-template
-    "C-*" 'org-list-make-subtree
-    "{" 'org-table-toggle-formula-debugger
-    "}" 'org-table-toggle-coordinate-overlays
-    "`" 'org-table-edit-field
-    "\\" 'org-match-sparse-tree
-    "^" 'org-sort
-    "[" 'org-agenda-file-to-front
-    "]" 'org-remove-file
-    "@" 'org-mark-subtree
-    "?" 'org-table-field-info
-    "=" 'org-table-eval-formula
-    ">" 'org-goto-calendar
-    "+" 'org-table-sum
-    "<" 'org-date-from-calendar
-    ";" 'org-toggle-comment
-    ":" 'org-toggle-fixed-width
-    "/" 'org-sparse-tree
-    "," 'org-priority
-    "." 'org-timestamp
-    "*" 'org-ctrl-c-star
-    "-" 'org-ctrl-c-minus
-    "#" 'org-update-statistics-cookies
-    "$" 'org-archive-subtree
-    "%" 'org-mark-ring-push
-    "'" 'org-edit-special
-    "TAB" '(org-clock-in :wk "clock-in")
-    "!" '(org-reload :wk "reload org")
-    "[" '(org-mark-ring-goto :wk "Jump to previous position in the mark ring")
-    "b" '(:ignore t :wk "buffer")
-    "bs" '(org-save-all-org-buffers :wk "save all org buffer")
-    "f" '(:ignore t :wk "files")
-    "fs" '(org-save-all-org-buffers :wk "save all org buffer")
-    "s" '(org-schedule :wk "org schedule")
-    "i" '(:ignore t :wk "insert")
-    "id" '(org-insert-drawer :wk "insert drawer")
-    "i@" '(org-cite-insert :wk "insert citation")
-    "if" '(org-footnote-action :wk "footnote")
-    "i C-f" '(org-emphasize :wk "insert emphasize")
-    "il" '(org-insert-link :wk "insert link")
-    "iD" '(org-deadline :wk "insert deadline")
-    "is" '(org-schedule :wk "insert schedule")
-    "ip" '(org-set-property :wk "insert property")
-    "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
+;; (+config/local-leader
+;;   :major-modes 'org-mode
+;;   :keymaps 'org-mode-map
+;;   "a" '(:ignore t :wk "action")
+;;   "s" '(:ignore t :wk "search"))
+
+(+config/local-leader
+  :keymaps 'org-mode-map
+  "C-a" 'org-attach
+  "C-b" 'org-backward-heading-same-level
+  "C-c" 'org-ctrl-c-ctrl-c
+  "C-d" 'org-deadline
+  "C-e" 'org-export-dispatch
+  "C-f" 'org-forward-heading-same-level
+  "C-j" 'org-goto
+  "C-k" 'org-kill-note-or-show-branches
+  "C-l" 'org-insert-link
+  "C-n" 'org-next-visible-heading
+  "C-o" 'org-open-at-point
+  "C-p" 'org-previous-visible-heading
+  "C-q" 'org-set-tags-command
+  "C-r" 'org-fold-reveal
+  "C-s" 'org-schedule
+  "C-t" 'org-todo
+  "C-w" 'org-refile
+  "C-y" 'org-evaluate-time-range
+  "C-z" 'org-add-note
+  "M-b" 'org-previous-block
+  "M-f" 'org-next-block
+  "M-l" 'org-insert-last-stored-link
+  "M-w" 'org-refile-copy
+  "C-^" 'org-up-element
+  "C-_" 'org-down-element
+  "C-<" 'org-promote-subtree
+  "C->" 'org-demote-subtree
+  "C-," 'org-insert-structure-template
+  "C-*" 'org-list-make-subtree
+  "{" 'org-table-toggle-formula-debugger
+  "}" 'org-table-toggle-coordinate-overlays
+  "`" 'org-table-edit-field
+  "\\" 'org-match-sparse-tree
+  "^" 'org-sort
+  "[" 'org-agenda-file-to-front
+  "]" 'org-remove-file
+  "@" 'org-mark-subtree
+  "?" 'org-table-field-info
+  "=" 'org-table-eval-formula
+  ">" 'org-goto-calendar
+  "+" 'org-table-sum
+  "<" 'org-date-from-calendar
+  ";" 'org-toggle-comment
+  ":" 'org-toggle-fixed-width
+  "/" 'org-sparse-tree
+  "," 'org-priority
+  "." 'org-timestamp
+  "*" 'org-ctrl-c-star
+  "-" 'org-ctrl-c-minus
+  "#" 'org-update-statistics-cookies
+  "$" 'org-archive-subtree
+  "%" 'org-mark-ring-push
+  "'" 'org-edit-special
+  "TAB" '(org-clock-in :wk "clock-in")
+  "!" '(org-reload :wk "reload org")
+  "[" '(org-mark-ring-goto :wk "Jump to previous position in the mark ring")
+  "b" '(:ignore t :wk "buffer")
+  "bs" '(org-save-all-org-buffers :wk "save all org buffer")
+  "f" '(:ignore t :wk "files")
+  "fs" '(org-save-all-org-buffers :wk "save all org buffer")
+  "s" '(org-schedule :wk "org schedule")
+  "i" '(:ignore t :wk "insert")
+  "id" '(org-insert-drawer :wk "insert drawer")
+  "i@" '(org-cite-insert :wk "insert citation")
+  "if" '(org-footnote-action :wk "footnote")
+  "i C-f" '(org-emphasize :wk "insert emphasize")
+  "il" '(org-insert-link :wk "insert link")
+  "iD" '(org-deadline :wk "insert deadline")
+  "is" '(org-schedule :wk "insert schedule")
+  "ip" '(org-set-property :wk "insert property")
+  "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
 #+end_src
 **** =deft=
 #+begin_src emacs-lisp -n
