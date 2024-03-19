@@ -461,14 +461,14 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
    "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
 #+end_src
 *** quit
-#+begin_src emacs-lisp -n :tangle no
+#+begin_src emacs-lisp -n
   ;; quit
   (+config/leader-quit
    "q" '(save-buffers-kill-terminal :wk "quit and save")
    "R" '(restart-emacs :wk "restart Emacs"))
 #+end_src
 *** register
-#+begin_src emacs-lisp -n :tangle no
+#+begin_src emacs-lisp -n
   ;; register
   (+config/leader-register
    ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
@@ -497,7 +497,6 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
    "w" '(window-configuration-to-register :wk "store window configuration to register")
    "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
 #+end_src
-*** Shell
 *** window
 #+begin_src emacs-lisp -n
   ;; window
@@ -2364,7 +2363,6 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+begin_src emacs-lisp -n
 (use-package lsp-mode
   :ensure
-  :defer t
   :diminish (lsp-lens-mode lsp-mode)
   :commands lsp lsp-deferred
   :init
@@ -2380,6 +2378,16 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   :hook
   (lsp-mode . lsp-enable-which-key-integration)
   (lsp-completion-mode . my/lsp-mode-setup-completion)
+  ((c-mode c++-mode xml-mode
+           yaml-mode toml-mode
+           lua-mode jinja2-mode
+           json-mode html-mode
+           web-mode html-mode-local-vars-hook
+           web-mode-local-vars-hook nxml-mode-local-vars-hook
+           scss-mode-local-vars css-mode-local-vars
+           less-css-mode-local-vars css-mode
+           typescript-mode javascript-mode
+           js2-mode typescript-tsx-mode) . lsp-deferred)
   :config
   (setq lsp-toml-command
         (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
@@ -2411,19 +2419,6 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                   (redirect-frame-focus corfu--frame
                                         (or (frame-parent corfu--frame)
                                             exwm-workspace--current)))))
-  (defun my/ignore-elisp-keywords (cand)
-    (or (not (keywordp cand))
-        (eq (char-after (car completion-in-region--data)) ?:)))
-  ;; (defun my/setup-elisp ()
-  ;;   (setq-local completion-at-point-functions
-  ;;               `(,(cape-super-capf
-  ;;                   (cape-capf-predicate
-  ;;                    #'elisp-completion-at-point
-  ;;                    #'my/ignore-elisp-keywords)
-  ;;                   #'cape-dabbrev)
-  ;;                 cape-file)
-  ;;               cape-dabbrev-min-length 5))
-  ;; (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp)
   :general
   (+config/leader-key
     :keymaps 'lsp-mode-map
@@ -4536,8 +4531,6 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
     :mode "\\.xs\\(?:d\\|lt\\)\\'"   ; xslt, xsd
     :mode "\\.rss\\'"
-    :hook
-    (xml-mode . lsp-deferred)
     :config
     (setq nxml-slash-auto-complete-flag t
           nxml-auto-insert-xml-declaration-flag t))
@@ -4572,8 +4565,7 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     ((yaml-mode . (lambda ()
                     (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
      (yaml-mode . (lambda ()
-                    (run-hooks 'prog-mode-hook)))
-     (yaml-mode . lsp-deferred)))
+                    (run-hooks 'prog-mode-hook)))))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp -n
@@ -4597,8 +4589,6 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     :defer t
     :mode
     ("\\.toml\\'" . toml-mode)
-    :hook
-    (toml-mode . lsp-deferred)
     :config
     ;; (when (treesit-available-p)
     ;; 	(add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
@@ -4626,7 +4616,6 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   (use-package lua-mode
     :ensure
     :defer t
-    :hook (lua-mode . lsp-deferred)
     :config
     (with-eval-after-load 'lsp-mode
       (setq lsp-lua-hint-enable t
@@ -4658,9 +4647,7 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     ;; can decide when they want their code reindented.
     (setq jinja2-enable-indent-on-save nil)
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-    (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
-    :hook
-    (jinja2-mode . lsp-deferred))
+    (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp -n
@@ -4682,9 +4669,7 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 #+begin_src emacs-lisp -n
 (use-package json-mode
   :ensure nil
-  :defer t
-  :hook
-  (json-mode . lsp-deferred))
+  :defer t)
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp -n
@@ -4787,11 +4772,6 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   (with-eval-after-load 'web-mode
     (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
           "//"))
-  :hook ((html-mode
-          web-mode
-          html-mode-local-vars-hook
-          web-mode-local-vars-hook
-          nxml-mode-local-vars-hook) . lsp-deferred)
   :hook ((html-mode-local-vars-hook
           mhtml-mode-local-vars-hook) . tree-sitter)
   :hook (web-mode . +config/django-web-mode)
@@ -4845,8 +4825,7 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   (use-package sass-mode
     :ensure
     :defer t
-    :hook (scss-mode . rainbow-mode)
-    :hook (scss-mode-local-vars . lsp-deferred))
+    :hook (scss-mode . rainbow-mode))
 #+end_src
 *** =css-eldoc=
 #+begin_src emacs-lisp -n
@@ -4873,10 +4852,7 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   (use-package css-mode
     :hook ((css-mode
             stylus-mode) . rainbow-mode)
-    :hook ((css-mode-local-vars
-            less-css-mode-local-vars) . lsp-deferred)
     :hook (css-mode-local-vars . tree-sitter)
-    :hook (css-mode . lsp-deferred)
     :config
     (with-eval-after-load 'skewer-mode
       (add-hook 'css-mode-hook 'skewer-css-mode)))
@@ -5018,7 +4994,6 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     :ensure
     :defer t
     :interpreter ("node" . js2-mode)
-    :hook ((js2-mode) . lsp-deferred)
     :hook (js2-mode . rainbow-delimiters-mode)
     :hook (js2-mode . js2-imenu-extras-mode)
     :hook (js2-mode . (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
@@ -5113,9 +5088,7 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     :ensure
     :defer t
     :hook (typescript-mode . rainbow-delimiters-mode)
-    :hook (typescript-mode . lsp-deferred)
     :hook (typescript-tsx-mode . rainbow-delimiters-mode)
-    :hook (typescript-tsx-mode . lsp-deferred)
     :hook (typescript-mode . (lambda () (setq comment-line-break-function #'js2-line-break
                                               typescript-indent-level (or (and (bound-and-true-p tide-mode)
                                                                                (plist-get (tide-tsfmt-options) :indentSize))
