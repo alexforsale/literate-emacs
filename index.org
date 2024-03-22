@@ -2867,7 +2867,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
    org-insert-heading-respect-content t
 
    ;; Org styling, hide markup etc.
-   org-hide-emphasis-markers t ; set to nil for easier editing
+   org-hide-emphasis-markers nil ; set to nil for easier editing
    org-ellipsis "…"
    ;; Agenda styling
    org-agenda-tags-column 0
@@ -3402,14 +3402,15 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     :config
     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f")))
 #+end_src
-** =org-plantum= :builtin:disabled:
+** =org-plantum= :builtin:
 #+begin_src emacs-lisp -n
-  (use-package ob-plantuml
-    :ensure nil
-    :disabled
-    :config
-    (when (file-exists-p "/usr/share/java/plantuml/plantuml.jar")
-      (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")))
+(use-package ob-plantuml
+  :after org
+  :demand
+  :ensure nil
+  :config
+  (when (file-exists-p "/usr/share/java/plantuml/plantuml.jar")
+    (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")))
 #+end_src
 ** =ob-ditaa= :disabled:
 #+begin_src emacs-lisp -n
