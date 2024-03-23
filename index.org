@@ -631,10 +631,7 @@ For parts of /Emacs/ not covered by Evil[fn:2].
     (with-eval-after-load 'nov
       (evil-collection-nov-setup))
     (with-eval-after-load 'eww
-      (evil-collection-eww-setup))
-    (with-eval-after-load 'emms
-      (evil-collection-emms-setup)
-      (evil-collection-emms-browser-setup)))
+      (evil-collection-eww-setup)))
 #+end_src
 ** =evil-terminal-cursor-changer=
 Changing the cursor shape in terminal[fn:3].
@@ -3640,23 +3637,60 @@ Useful for reading /epubs/.
 This is supposed to be a builtin package, but somehow I can not load it.
 #+begin_src emacs-lisp -n
 (use-package emms
+  :init 
+  (require 'emms-setup)
+  (require 'emms-mpris)
   :config
-  (require 'emms-browser)
   (emms-all)
   (emms-default-players)
   (emms-mpris-enable)
+  (setq-default
+   emms-source-playlist-formats 'm3u
+   emms-playlist-mode-center-when-go t
+   emms-playlist-default-major-mode 'emms-playlist-mode
+   emms-volume-change-function 'emms-volume-pulse-change)
   :general
-  (general-def 'emms-browser-mode-map
+  (general-nvmap
+    :keymaps 'emms-browser-mode-map
     "?" 'describe-mode
     "TAB" 'emms-browser-toggle-subitems
+    "RET" 'emms-browser-add-tracks
+    "C-j" 'emms-browser-add-tracks-and-play
+    "C" 'emms-browser-clear-playlist
+    "E" 'emms-browser-expand-all
     "p" 'emms-playlist-mode-go
-    "q" 'bury-buffer
+    "r" 'emms-browser-goto-random
     "1" 'emms-browser-collapse-all
     "2" 'emms-browser-expand-to-level-2
     "3" 'emms-browser-expand-to-level-3
-    "4" 'emms-browser-expand-to-level-4)
-  (general-def 'emms-playlist-mode-map
-    "q" 'bury-buffer))
+    "4" 'emms-browser-expand-to-level-4
+    "q" 'bury-buffer)
+  (general-nvmap
+    :keymaps 'emms-playlist-mode-map
+    "?" 'describe-mode
+    "C-f" 'scroll-up
+    "C-j" 'emms-playlist-mode-insert-newline
+    "C-k" 'emms-playlist-mode-kill-track
+    "C-n" 'next-line
+    "C-o" 'emms-playlist-mode-shift-track-down
+    "C-p" 'previous-line
+    "C-u" 'scroll-up
+    "TAB" 'emms-playlist-mode-shift-track-up
+    "RET" 'emms-playlist-mode-play-smart
+    "a" 'emms-playlist-mode-add-contents
+    "b" 'emms-playlist-set-playlist-buffer
+    "c" 'emms-playlist-mode-center-current
+    "d" 'emms-playlist-mode-goto-dired-at-point
+    "f" 'emms-show 
+    "j" 'next-line
+    "k" 'previous-line
+    "n" 'emms-next
+    "p" 'emms-previous
+    "r" 'emms-random
+    "s" 'emms-stop
+    "q" 'bury-buffer)
+  (+config/leader-open
+    "e" '((lambda () (interactive) (require 'emms-browser) (emms-browser)) :wk "emms-browser")))
 #+end_src
 ** =editorconfig= :disabled:
 #+begin_src emacs-lisp -n
