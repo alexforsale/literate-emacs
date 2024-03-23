@@ -3641,6 +3641,7 @@ This is supposed to be a builtin package, but somehow I can not load it.
 #+begin_src emacs-lisp -n
 (use-package emms
   :config
+  (require 'emms-browser)
   (emms-all)
   (emms-default-players)
   (emms-mpris-enable)
