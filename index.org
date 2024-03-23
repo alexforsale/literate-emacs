@@ -2220,7 +2220,7 @@ A project interaction library for /Emacs/, with little external dependency as po
     (setq flycheck-indication-mode 'right-fringe))
   :general
   (general-nvmap
-    :keymaps 'override
+    :keymaps 'diff-hl-mode-map
     "[[" '(diff-hl-previous-hunk :wk "previous hunk" :repeat t :jump t)
     "]]" '(diff-hl-next-hunk :wk "next hunk" :repeat t :jump t)))
 #+end_src
