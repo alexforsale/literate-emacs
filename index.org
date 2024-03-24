@@ -2567,7 +2567,7 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
        (scheme . t)
        (sql . t)
        (sqlite . t)))
-    (setq org-use-sub-superscripts '{})
+    (setq-default org-use-sub-superscripts '{})
     (add-to-list 'org-babel-tangle-lang-exts '("js" . "js"))
     (defun +config/org-prettify-symbols ()
       (push '("[ ]" . "☐") prettify-symbols-alist)
@@ -3767,12 +3767,11 @@ This is supposed to be a builtin package, but somehow I can not load it.
     "lp" 'lorem-ipsum-insert-paragraphs
     "ls" 'lorem-ipsum-insert-sentences))
 #+end_src
-** =vimrc-mode= :disabled:
+** =vimrc-mode= 
 Blasphemy, I know. But I still needs /vim/ for editing mostly in remote machine, and sometimes the connection is unreliable which makes my /Emacs/ hangs. For this situation, /vim/ + /screen/ or /tmux/ is more sensible.
 #+begin_src emacs-lisp -n
   (use-package vimrc-mode
     :ensure
-    :disabled
     :defer t
     :config
     (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
