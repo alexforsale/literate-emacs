@@ -3901,7 +3901,6 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
 (use-package treemacs
   :ensure
-  :defer t
   :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
   :config
   (setq treemacs-hide-gitignored-files-mode t
@@ -4009,14 +4008,12 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-projectile
     :ensure
-    :defer t
     :after treemacs)
 #+end_src
 ** =treemacs-icons-dired= 
 #+begin_src emacs-lisp -n
   (use-package treemacs-icons-dired
     :ensure
-    :defer t
     :after treemacs
     :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
@@ -4024,14 +4021,12 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-magit
     :ensure
-    :defer t
     :after treemacs magit)
 #+end_src
 ** =treemacs-evil= 
 #+begin_src emacs-lisp -n
   (use-package treemacs-evil
     :ensure
-    :defer t
     :after treemacs evil)
 #+end_src
 ** =lsp-treemacs= 
@@ -4040,7 +4035,6 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
 (use-package lsp-treemacs
   :ensure
-  :defer t
   :after treemacs lsp
   :config
   (lsp-treemacs-sync-mode 1)
@@ -4055,7 +4049,6 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-perspective
     :ensure
-    :defer t
     :after treemacs perspective
     :config
     (treemacs-set-scope-type 'Perspectives))
@@ -4064,16 +4057,15 @@ I sometimes need /treemacs/ when working on a large directory of files.
 #+begin_src emacs-lisp -n
   (use-package treemacs-tab-bar
     :ensure
-    :defer t
     :after treemacs)
 #+end_src
 ** =treemacs-nerd-icons= 
 #+begin_src emacs-lisp -n
-  (use-package treemacs-nerd-icons
-    :ensure
-    :defer t
-    :config
-    (treemacs-load-theme "nerd-icons"))
+(use-package treemacs-nerd-icons
+  :ensure
+  :after treemacs
+  :config
+  (treemacs-load-theme "nerd-icons"))
 #+end_src
 ** footer                                                         :noexport:
 #+begin_src emacs-lisp -n
@@ -5613,6 +5605,17 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     :keymaps 'python-mode-map
     "d" '(:ignore t :wk "doc")))
 #+end_src
+System Packages:
+- mypy
+- python-black
+- autopep8
+- flake8
+- python-pycodestyle
+- python-pydocstyle
+- python-pylint
+- python-pyflakes
+- yapf
+Note: you don't have to install them all, only what you'll going to use.
 *** =pydoc=
 #+begin_src emacs-lisp -n
 (use-package pydoc
