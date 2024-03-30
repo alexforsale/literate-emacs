@@ -70,6 +70,10 @@ Every top level heading in this file should be tangled to a separate file, this 
 (require 'config-ansible nil t)
 (require 'config-perl nil t)
 (require 'config-haskell nil t)
+(when (string= "exwm"
+               (or (getenv "GDMSESSION")
+                   (getenv "DESKTOP_SESSION")))
+  (require 'config-exwm))
 #+end_src
 Since the =load-path= for the modules directory is defined in ~./modules/config-variables.el~, the first =require= line also state the location.
 ** footer :noexport:
@@ -5926,6 +5930,460 @@ Note: you don't have to install them all, only what you'll going to use.
 (provide 'config-haskell)
 ;;; config-haskell.el ends here
 #+end_src
+* EXWM
+** Script
+:PROPERTIES:
+:header-args: :tangle ~/.local/bin/startexwm :shebang #!/bin/sh :mkdirp t
+:END:
+*** Allow connection to the X server
+#+begin_src sh
+xhost +
+#+end_src
+*** run xinit
+#+begin_src sh
+xinit
+#+end_src
+*** set wmname
+Needs the package =wmname=
+#+begin_src sh
+wmname LG3D
+#+end_src
+*** xsetroot
+#+begin_src sh
+xsetroot -cursor_name left_ptr
+#+end_src
+*** start emacs with dbus
+#+begin_src sh
+exec dbus-launch --exit-with-session emacs --eval "(exwm-enable)"
+#+end_src
+** Desktop File
+This should be placed in ~/usr/share/xsessions~ with the name =exwm.desktop=
+#+begin_src conf
+[Desktop Entry]
+Name=EXWM
+Comment=Emacs Window Manager
+Exec=exwm-start
+Type=Application
+#+end_src
+** the package
+:PROPERTIES:
+:header-args: :tangle ./modules/config-exwm.el :mkdirp t
+:END:
+*** header :noexport:
+#+begin_src emacs-lisp +n
+;;; config-exwm --- exwm configuration -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+#+end_src
+*** =desktop-environment=
+#+begin_src emacs-lisp -n
+(use-package desktop-environment
+  :ensure
+  :commands (desktop-environment-music-next )
+  :after exwm
+  :init
+  (customize-set-variable 'desktop-environment-brightness-small-increment "1%+")
+  (customize-set-variable 'desktop-environment-brightness-small-decrement "1%-")
+  (customize-set-variable 'desktop-environment-brightness-normal-increment "1%+")
+  (customize-set-variable 'desktop-environment-brightness-normal-decrement "1%-")
+  (customize-set-variable 'desktop-environment-volume-normal-decrement "1%-")
+  (customize-set-variable 'desktop-environment-volume-normal-increment "1%+")
+  (customize-set-variable 'desktop-environment-screenshot-command "flameshot gui")
+  (customize-set-variable 'desktop-environment-screenshot-directory (expand-file-name "Screenshots/" (getenv "XDG_PICTURES_DIR")))
+  (unless (file-directory-p desktop-environment-screenshot-directory)
+    (make-directory desktop-environment-screenshot-directory :parents))
+  (if (featurep 'emms)
+      (progn
+        (customize-set-variable 'desktop-environment-music-next-command nil)
+        (customize-set-variable 'desktop-environment-music-previous-command nil)
+        (customize-set-variable 'desktop-environment-music-stop-command nil)
+        (customize-set-variable 'desktop-environment-music-toggle-command nil)
+        ;; (define-key desktop-environment-mode-map (kbd "<XF86AudioNext>") #'emms-next)
+        ;; (define-key desktop-environment-mode-map (kbd "<XF86AudioPrev>") #'emms-previous)
+        ;; (define-key desktop-environment-mode-map (kbd "<XF86AudioPlay>") #'emms-pause)
+        (global-set-key (kbd "M-s-<f12>") #'emms-next)
+        (global-set-key (kbd "M-s-<f11>") #'emms-pause)
+        (global-set-key (kbd "M-s-<f10>") #'emms-previous)
+        (global-set-key (kbd "M-s-<f9>") 'desktop-environment-volume-increment)
+        (global-set-key (kbd "M-s-<f8>") 'desktop-environment-volume-decrement)
+        (global-set-key (kbd "M-s-<f7>") 'desktop-environment-toggle-mute))
+    (progn
+      (global-set-key (kbd "M-s-<f12>") 'desktop-environment-music-next)
+      (global-set-key (kbd "M-s-<f11>") 'desktop-environment-toggle-music)
+      (global-set-key (kbd "M-s-<f10>") 'desktop-environment-music-previous)
+      (global-set-key (kbd "M-s-<f9>") 'desktop-environment-volume-increment)
+      (global-set-key (kbd "M-s-<f8>") 'desktop-environment-volume-decrement)
+      (global-set-key (kbd "M-s-<f7>") 'desktop-environment-toggle-mute)))
+  (desktop-environment-mode))
+#+end_src
+*** =perspective-exwm=
+#+begin_src emacs-lisp -n
+(use-package perspective-exwm
+  :ensure
+  :after perspective exwm
+  :config
+  (setq perspective-exwm-override-initial-name
+        '((0 . "Term")
+          (1 . "Dev")
+          (2 . "Web")
+          (3 . "Mail")
+          (4 . "Files")
+          (5 . "Multimedia")
+          (6 . "Remotes")
+          (7 . "Games")
+          (8 . "Work")
+          (9 . "Others"))))
+#+end_src
+*** =exwm-modeline=
+#+begin_src emacs-lisp -n
+(use-package exwm-modeline
+  :ensure
+  :after exwm)
+#+end_src
+*** =exwm=
+#+begin_src emacs-lisp -n
+(use-package exwm
+  :ensure
+  :demand t ; prevent automatic deferred loading.
+  :preface ; runs before everything except :disabled.
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (fringe-mode 1)
+
+  (require 'time)
+  (setq display-time-default-load-average nil)
+  (customize-set-variable 'display-time-24hr-format t)
+  (customize-set-variable 'display-time-day-and-date t)
+  (display-time-mode 1)
+
+  (if (and (fboundp 'server-running-p)
+           (not (server-running-p)))
+      (server-start))
+
+  :init ; runs before `exwm' is loaded.
+  (require 'exwm-modeline)
+  (require 'battery)
+  (with-eval-after-load 'battery
+    (when
+        (or
+         (eq battery-status-function
+             'battery-upower)
+         (eq battery-status-function
+             'battery-bsd-apm)
+         (eq battery-status-function
+             'battery-linux-sysfs)
+         (eq battery-status-function
+             'battery-linux-proc-apm)
+         (eq battery-status-function
+             'battery-linux-proc-acpi))
+      (display-battery-mode)))
+
+  (unless (equal persp-mode t)
+    (persp-mode))
+
+  (setenv "GPG_AGENT_INFO" nil)  ;; use emacs pinentry
+
+  (when (featurep 'corfu)
+    (advice-add #'corfu--make-frame :around
+                (defun +corfu--make-frame-a (oldfun &rest args)
+                  (cl-letf (((symbol-function #'frame-parent)
+                             (lambda (frame)
+                               (or (frame-parameter frame 'parent-frame)
+                                   exwm-workspace--current))))
+                    (apply oldfun args))
+                  (when exwm--connection
+                    (set-frame-parameter corfu--frame 'parent-frame nil))))
+
+    (advice-add #'corfu--popup-redirect-focus :override
+                (defun +corfu--popup-redirect-focus-a ()
+                  (redirect-frame-focus corfu--frame
+                                        (or (frame-parent corfu--frame)
+                                            exwm-workspace--current)))))
+
+  (defun +config-exwm--init-hook ()
+    "Things that should run after initialization."
+    (when (file-exists-p "~/.fehbg")
+      (+config-exwm--run-in-background "~/.fehbg"))
+    (+config-exwm--run-in-background "~/.local/bin/monitor-setup")
+    (+config-exwm--run-in-background "xrdb -merge ~/.Xresources")
+    (+config-exwm--run-in-background "xsetroot -cursor_name left_ptr")
+    (+config-exwm--run-in-background "xset r rate 300 30")
+    (+config-exwm--run-in-background "nm-applet")
+    (+config-exwm--run-in-background "iwgtk -i")
+    (+config-exwm--run-in-background "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    (+config-exwm--run-in-background "picom")
+    (+config-exwm--run-in-background "udiskie -t")
+    (+config-exwm--run-in-background "dunst -conf ~/.config/dunst/dunstrc")
+    (+config-exwm--run-in-background "light-locker")
+    (+config-exwm--run-in-background "wal --theme solarized")
+    (+config-exwm--run-in-background "blueman-applet")
+    (+config-exwm--run-in-background "volumeicon")
+    (+config-exwm--run-in-background "xsettingsd")
+    (+config-exwm--run-in-background "unclutter")
+    (+config-exwm--run-in-background "greenclip daemon>/dev/null")
+    (+config-exwm--run-in-background "kdeconnect-indicator")
+    (+config-exwm--run-in-background "/usr/lib/geoclue-2.0/demos/agent"))
+
+  :config ; runs after `exwm' is loaded
+  (defun +config-exwm--fix-exwm-floating-windows ()
+    "Fix behaviour when switching to floating."
+    (setq-local exwm-workspace-warp-cursor nil)
+    (setq-local mouse-autoselect-window nil)
+    (setq-local focus-follows-mouse nil))
+
+  (defun +config-exwm--fix-exwm-title ()
+    "Rename buffer name with exwm-title."
+    (when (or (not exwm-instance-name)
+              (string-prefix-p "sun-awt-X11-" exwm-instance-name)
+              (string= "gimp" exwm-instance-name))
+      (exwm-workspace-rename-buffer exwm-title)))
+
+  (defun +config-exwm--rename-buffer-to-class-name ()
+    "Rename workspace buffer to `exwm-class-name'."
+    (exwm-workspace-rename-buffer exwm-class-name))
+
+  (defmacro +config-exwm--raise-or-run (prog)
+    "Run program or raise if already ran."
+    (let ((Prog (capitalize prog)))
+      `(defun ,(intern (format "run-or-rise-%s" prog)) ()
+         ,(format "Run or rise %s" Prog)
+         (interactive)
+         (if (string= (buffer-name) ,Prog)
+             (bury-buffer)
+           (if (get-buffer ,Prog)
+               (exwm-workspace-switch-to-buffer ,Prog)
+             (start-process ,prog nil ,prog))))))
+
+  (defun +config-exwm--run-in-background (command)
+    "Run COMMAND in background if exists."
+    (let ((command-parts (split-string command "[ ]+")))
+      (when (executable-find (car command-parts))
+        (apply #'call-process `(,(car command-parts) nil 0 nil ,@(cdr command-parts))))))
+
+  (defun +config-exwm--exwm-logout ()
+    "Logout cleanly from EXWM."
+    (interactive)
+    (recentf-save-list)
+    (save-some-buffers)
+    (save-buffers-kill-terminal))
+
+  (defun +config-exwm--rofi-launcher ()
+    "Run rofi."
+    (interactive)
+    (+config-exwm--run-in-background "rofi -show drun -theme exwm"))
+
+  (defun +config-exwm--greenclip-launcher ()
+    "Run greenclip."
+    (interactive)
+    (+config-exwm--run-in-background "rofi-greenclip exwm"))
+
+  (defun +config-exwm--setup-header-line-format ()
+    "Hide header line if required."
+    (set-window-parameter (next-window) 'header-line-format
+                          (unless (window-at-side-p (next-window) 'top)
+                            'none))) (defvar +config-exwm--exwm-workspace-switch-history-hack (cons exwm-workspace-current-index '()))
+
+  (defun +config-exwm--set-current-workspace-index ()
+    "Set index of workspace in +CONFIG-EXWM--EXWM-WORKSPACE-SWITCH-HISTORY-HACK.
+Unless EXWM-WORKSPACE-CURRENT-INDEX is equal to +config-exwm--exwm-workspace-switch-history-hack."
+    (unless (= exwm-workspace-current-index (car +config-exwm--exwm-workspace-switch-history-hack))
+      (setq +config-exwm--exwm-workspace-switch-history-hack
+            (cons exwm-workspace-current-index
+                  (car +config-exwm--exwm-workspace-switch-history-hack)))))
+
+  (defun +config-exwm--workspace-switch-to-last ()
+    "Switch to last visited workspace."
+    (interactive)
+    "Switch to the workspace that was used before current workspace"
+    (exwm-workspace-switch (cdr +config-exwm--exwm-workspace-switch-history-hack)))
+
+  (defvar +config-exwm--simulation-key-window-classes
+    '(google-chrome firefox qutebrowser))
+
+  (defun +config-exwm--local-simulation-key ()
+    "Simulation keys for certain classes."
+    (when (and exwm-class-name
+               (member exwm-class-name +config-exwm--simulation-key-window-classes))
+      (exwm-input-set-local-simulation-keys
+       '(([?\C-b] . [left])
+         ([?\M-b] . [C-left])
+         ([?\C-f] . [right])
+         ([?\M-f] . [C-right])
+         ([?\C-p] . [up])
+         ([?\C-n] . [down])
+         ([?\C-a] . [home])
+         ([?\C-e] . [end])
+         ([?\M-v] . [prior])
+         ([?\C-v] . [next])
+         ([?\C-d] . [delete])
+         ;;([?\C-k] . [S-end delete])
+         ([?\C-w] . [?\C-x])
+         ([?\M-w] . [?\C-c])
+         ([?\C-y] . [?\C-v])
+         ([?\C-c ?\C-c] . [?\C-c])
+         ([?\C-w ?\C-w] . [?\C-w])
+         ([?\C-v ?\C-v] . [?\C-v])
+         ([?\C-s] . [?\C-f])))))
+
+  (setq exwm-workspace-show-all-buffers nil ; keep buffers per workspace
+        exwm-workspace-warp-cursor t ; after workspace switch
+        mouse-autoselect-window t ; like any other tiling window manager
+        focus-follows-mouse nil
+        exwm-workspace-number 10)
+
+  (setq exwm-manage-configurations
+        ;; workspace 0 reserved for terminal emulators
+        '(((string= exwm-class-name "Xterm")
+           char-mode t workspace 0)
+          ((string= exwm-class-name "Termite")
+           char-mode t workspace 0)
+          ((string= exwm-class-name "URxvt")
+           char-mode t workspace 0)
+          ((string= exwm-class-name "Gnome-terminal")
+           char-mode t workspace 0)        ;; windows 1 is exclusively for `Emacs'
+          ;; windows 2 is for web browsers
+          ((string= exwm-class-name "firefox")
+           char-mode t workspace 2)
+          ((string= exwm-class-name "Nyxt")
+           char-mode t workspace 2)
+          ((string= exwm-class-name "qutebrowser")
+           char-mode t workspace 2)
+          ;; workspace 3 for mail apps
+          ((string= exwm-class-name "thunderbird")
+           char-mode t workspace 3)
+          ((string= exwm-class-name "Mail")
+           char-mode t workspace 3)
+          ;; workspace 4 is for files
+          ((string= exwm-class-name "Thunar")
+           char-mode t workspace 4)
+          ;; workspace 5 for multimedia
+          ((string= exwm-class-name "Spotify")
+           char-mode t workspace 5)
+          ((string= exwm-class-name "Cheese")
+           char-mode t workspace 5)
+          ((string= exwm-class-name "Picard")
+           char-mode t workspace 5)
+          ((string= exwm-class-name "hakuneko-desktop")
+           char-mode t workspace 5)
+          ((string= exwm-class-name "mpv")
+           char-mode t workspace 5)
+          ((string= exwm-class-name "vlc")
+           char-mode t workspace 5)
+          ((string= exwm-class-name "Gimp")
+           char-mode t workspace 5)
+          ;; workspace 6 for Network apps
+          ((string= exwm-class-name "Org.remmina.Remmina")
+           char-mode t workspace 6)
+          ((string= exwm-class-name "Virt-manager")
+           char-mode t workspace 6)
+          ((string= exwm-class-name "Vncviewer")
+           char-mode t workspace 6)
+          ;; workspace 7 for Games
+          ;; workspace 8 for work
+          ((string= exwm-class-name "TelegramDesktop")
+           char-mode t workspace 8)
+          ((string= exwm-class-name "libreoffice-startcenter")
+           char-mode t workspace 8)
+          ((string= exwm-class-name "libreoffice-calc")
+           char-mode t workspace 8)
+          ((string= exwm-class-name "libreoffice-draw")
+           char-mode t workspace 8)
+          ((string= exwm-class-name "libreoffice-math")
+           char-mode t workspace 8)
+          ((string= exwm-class-name "libreoffice-writer")
+           char-mode t workspace 8)
+          ))
+
+  (exwm-input-set-key (kbd "C-x C-c") '+config-exwm--exwm-logout)
+
+  (setq exwm-input-global-keys
+        `(
+          ;; Bind "s-r" to exit char-mode and fullscreen mode.
+          ([?\s-r] . exwm-reset)
+          ;; Bind "s-w" to switch workspace interactively.
+          ([?\s-w] . exwm-workspace-switch)
+          ([?\s-q] . delete-window)
+          ([?\s-j] . perspective-exwm-cycle-exwm-buffers-forward)
+          ([?\s-J] . perspective-exwm-cycle-all-buffers-forward)
+          ([?\s-k] . perspective-exwm-cycle-exwm-buffers-backward)
+          ([?\s-K] . perspective-exwm-cycle-all-buffers-backward)
+          ([?\s-m] . exwm-layout-toggle-mode-line)
+          ;; Bind "s-0" to "s-9" to switch to a workspace by its index.
+          ,@(mapcar (lambda (i)
+                      `(,(kbd (format "s-%d" i)) .
+                        (lambda ()
+                          (interactive)
+                          (exwm-workspace-switch-create ,i))))
+                    (number-sequence 0 9))
+          ([s-tab] . +config-exwm--workspace-switch-to-last)
+          ([?\s-d] . +config-exwm--rofi-launcher)
+          ([?\s-c] . +config-exwm--greenclip-launcher)
+          ;; Bind "s-&" to launch applications ('M-&' also works if the output
+          ;; buffer does not bother you).
+          ([?\s-D] . (lambda (command)
+                       (interactive (list (read-shell-command "$ ")))
+                       (start-process-shell-command command nil command)))
+          ([s-f11] . exwm-layout-toggle-fullscreen)
+          ;; Bind "s-<f2>" to "slock", a simple X display locker.
+          ([s-f1] . (lambda ()
+                      (interactive)
+                      (start-process "" nil "/usr/bin/slock")))))
+  (define-key exwm-mode-map [?\C-q] #'exwm-input-send-next-key)
+  (define-key exwm-mode-map (kbd "C-x C-x")
+              (lambda () (interactive) (exwm-input--fake-key ?\C-x)))
+  (define-key exwm-mode-map (kbd "C-c C-c")
+              (lambda () (interactive) (exwm-input--fake-key ?\C-c)))
+
+  (with-eval-after-load 'all-the-icons
+    (add-to-list 'all-the-icons-mode-icon-alist
+                 '(exwm-mode all-the-icons-faicon "desktop"
+                             :height 1.0 :face all-the-icons-purple)))
+  (require 'exwm-randr)
+  (cond ((string= "somalia-minimal" system-name)
+         (progn
+           (setq exwm-randr-workspace-monitor-plist
+                 '(0 "eDP1" 1 "eDP1" 2 "eDP1" 3 "eDP1" 4 "HDMI-1"
+                     5 "HDMI-1" 6 "HDMI-1" 7 "HDMI-1" 8 "HDMI-1" 9 "HDMI-1")))))
+  (add-hook 'exwm-randr-screen-change-hook
+            (lambda ()
+              (+config-exwm--run-in-background "~/.fehbg")))
+  ;; (exwm-randr-refresh)
+  (exwm-randr-enable)
+  (require 'perspective-exwm)
+  (perspective-exwm-mode)
+
+  (exwm-enable)
+  ;; Initialize EXWM
+  :hook
+  (exwm-init . +config-exwm--init-hook)
+  (exwm-init . exwm-modeline-mode)
+  ;; Normal hook run when an X window has been made floating
+  (exwm-floating-setup . +config-exwm--fix-exwm-floating-windows)
+  (exwm-floating-setup . exwm-layout-hide-mode-line)
+  ;; Normal hook run when window title is updated.
+  (exwm-update-title . +config-exwm--fix-exwm-title)
+  ;; Normal hook run when window class is updated.
+  (exwm-update-class . +config-exwm--rename-buffer-to-class-name)
+  ;; normal hook run after switching workspace.
+  (exwm-workspace-switch . +config-exwm--set-current-workspace-index)
+  (window-configuration-change . +config-exwm--setup-header-line-format)
+  (exwm-manage-finish . +config-exwm--local-simulation-key))
+#+end_src
+*** =exwm-systemtray=
+#+begin_src emacs-lisp
+(use-package exwm-systemtray
+  :after exwm
+  :config
+  (setq exwm-systemtray-height 12) ; default 16
+  (exwm-systemtray-enable))
+#+end_src
+*** footer :noexport:
+#+begin_src emacs-lisp -n
+(provide 'config-exwm)
+;;; config-exwm.el ends here
+#+end_src
+
 * Footnotes
 [fn:18] https://www.emacswiki.org/emacs/SelfDocumentation
 
