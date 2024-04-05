@@ -37,3 +37,4 @@ early-init.el
 content/
 public/
 emms/
+persist/

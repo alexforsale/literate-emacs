@@ -4458,39 +4458,46 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 #+begin_src emacs-lisp -n
 (use-package sly
   :ensure
-  :defer t
   :commands sly-autoloads
   :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
-         (lisp-mode . sly-editing-mode)))
+         (lisp-mode . sly-editing-mode))
+  :config
+  (require 'sly-autoloads))
 #+end_src
-**** =sly-stepper=
+**** =sly-stepper= :disabled:
 #+begin_src emacs-lisp -n
 (use-package sly-stepper
+  :disabled
   :ensure nil
   :after sly
   :config
-  (require 'sly-stepper-autoloads))
+  (require 'sly-stepper-autoloads)
+  (add-to-list 'sly-contribs 'sly-stepper 'append))
 #+end_src
-**** =sly-quicklisp=
+**** =sly-quicklisp= :disabled:
 #+begin_src emacs-lisp -n
 (use-package sly-quicklisp
-  :ensure nil
+  :disabled
+  :ensure t
   :after sly
   :config
-  (require 'sly-quicklisp-autoloads))
+  (require 'sly-quicklisp-autoloads)
+  (add-to-list 'sly-contribs 'sly-quicklisp 'append))
 #+end_src
-**** =sly-macrostep=
+**** =sly-macrostep= :disabled:
 #+begin_src emacs-lisp -n
 (use-package sly-macrostep
-  :ensure nil
+  :ensure t
+  :disabled
   :after sly
   :config
   (require 'sly-macrostep-autoloads))
 #+end_src
-**** =sly-asdf=
+**** =sly-asdf= :disabled:
 #+begin_src emacs-lisp -n
 (use-package sly-asdf
   :ensure
+  :disabled
   :after sly
   :config
   (add-to-list 'sly-contribs 'sly-asdf 'append))
