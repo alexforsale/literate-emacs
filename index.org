@@ -232,6 +232,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 *** First level menu
 #+begin_src emacs-lisp -n
 ;; First level menu
+(+config/leader-menu! "activities" "C-a")
 (+config/leader-menu! "buffer" "b")
 (+config/leader-menu! "files" "f")
 (+config/leader-menu! "find" "gf")
@@ -2153,6 +2154,36 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
   :hook (prog-mode . ws-butler-mode)
   :config
   (setq ws-butler-convert-leading-tabs-or-spaces t))
+#+end_src
+** =activities-mode=
+#+begin_src emacs-lisp -n
+(use-package activities
+  :init
+  (activities-mode)
+  (activities-tabs-mode)
+  ;; Prevent `edebug' default bindings from interfering.
+  (setq edebug-inhibit-emacs-lisp-mode-bindings t)
+  :bind
+  (("C-x C-a C-n" . activities-new)
+   ("C-x C-a C-d" . activities-define)
+   ("C-x C-a C-a" . activities-resume)
+   ("C-x C-a C-s" . activities-suspend)
+   ("C-x C-a C-k" . activities-kill)
+   ("C-x C-a RET" . activities-switch)
+   ("C-x C-a b" . activities-switch-buffer)
+   ("C-x C-a g" . activities-revert)
+   ("C-x C-a l" . activities-list))
+  :general
+  (+config/leader-activities
+   "C-n" 'activities-new
+   "C-d" 'activities-define
+   "C-a" 'activities-resume
+   "C-s" 'activities-suspend
+   "C-k" 'activities-kill
+   "RET" 'activities-switch
+   "b" 'activities-switch-buffer
+   "g" 'activities-revert
+   "l" 'activities-list))
 #+end_src
 ** footer :noexport:
 #+begin_src emacs-lisp -n
