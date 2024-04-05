@@ -5948,10 +5948,6 @@ Needs the package =wmname=
 #+begin_src sh
 wmname LG3D
 #+end_src
-*** xsetroot
-#+begin_src sh
-xsetroot -cursor_name left_ptr
-#+end_src
 *** start emacs with dbus
 #+begin_src sh
 exec dbus-launch --exit-with-session emacs --eval "(exwm-enable)"
@@ -6103,19 +6099,15 @@ Type=Application
 
   (defun +config-exwm--init-hook ()
     "Things that should run after initialization."
-    (when (file-exists-p "~/.fehbg")
-      (+config-exwm--run-in-background "~/.fehbg"))
-    (+config-exwm--run-in-background "~/.local/bin/monitor-setup")
+    (+config-exwm--run-in-background "dbus-update-activation-environment --systemd --all")
     (+config-exwm--run-in-background "xrdb -merge ~/.Xresources")
     (+config-exwm--run-in-background "xsetroot -cursor_name left_ptr")
     (+config-exwm--run-in-background "xset r rate 300 30")
-    (+config-exwm--run-in-background "nm-applet")
-    (+config-exwm--run-in-background "iwgtk -i")
-    (+config-exwm--run-in-background "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+    (+config-exwm--run-in-background "nm-applet --indicator")
+    (+config-exwm--run-in-background "/usr/lib/polkit-kde-authentication-agent-1")
     (+config-exwm--run-in-background "picom")
     (+config-exwm--run-in-background "udiskie -t")
     (+config-exwm--run-in-background "dunst -conf ~/.config/dunst/dunstrc")
-    (+config-exwm--run-in-background "light-locker")
     (+config-exwm--run-in-background "wal --theme solarized")
     (+config-exwm--run-in-background "blueman-applet")
     (+config-exwm--run-in-background "volumeicon")
