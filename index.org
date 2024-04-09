@@ -843,7 +843,7 @@ Emacs package that displays available keybindings in popup[fn:13]. This is one o
   ;; but you can use any other Nerd Font if you want
   (nerd-icons-font-family "Symbols Nerd Font Mono"))
 #+end_src
-** =all-the-icons=
+** =all-the-icons= 
 A utility package to collect various Icon Fonts and propertize them within Emacs[fn:14].
 #+begin_src emacs-lisp -n
 (use-package all-the-icons
@@ -914,9 +914,9 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
         '(todo-state-up time-down priority-down todo-state-down time-up priority-up)
         ))
 #+end_src
-** =tab-bar= :builtin:
+** =tab-bar= :builtin:disabled:
 Although I used /Perspective/ more, there are some cases where it's easier with tabs. And the default UI for the tabs is not that great.
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package tab-bar
   :init
   (setq tab-bar-show 1
@@ -944,14 +944,14 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
    ((find-font (font-spec :family "DejaVu Sans Mono"))
     (set-frame-font "DejaVu Sans Mono 10" nil t))))
 #+end_src
-** =window= :builtin:
-#+begin_src emacs-lisp -n
+** =window= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package window
   :config
   (setq split-width-threshold 160))
 #+end_src
-** =display-line-number= :builtin:
-#+begin_src emacs-lisp -n
+** =display-line-number= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package display-line-numbers
   :init
   (setq display-line-numbers-type t)
@@ -959,19 +959,19 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
   :custom
   (display-line-numbers-grow-only t))
 #+end_src
-** =help-at-pt= :builtin:
-#+begin_src emacs-lisp -n
+** =help-at-pt= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package help-at-pt
   :custom
   (help-at-pt-display-when-idle t))
 #+end_src
-** =hidehow= :builtin:
-#+begin_src emacs-lisp -n
+** =hidehow= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package hideshow
   :hook (prog-mode . hs-minor-mode))
 #+end_src
-** =uniquify= :builtin:
-#+begin_src emacs-lisp -n
+** =uniquify= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package uniquify
   :ensure nil
   :config
@@ -980,8 +980,8 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
         uniquify-after-kill-buffer-p t
         uniquify-ignore-buffers-re "^\\*"))
 #+end_src
-** =speedbar= :builtin:
-#+begin_src emacs-lisp -n
+** =speedbar= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package speedbar
   :custom
   (speedbar-use-images nil)
@@ -1036,14 +1036,14 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
     ".txt"
     "README")))
 #+end_src
-** =winner= :builtin:
-#+begin_src emacs-lisp -n
+** =winner= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package winner
   :init
   (winner-mode 1))
 #+end_src
-** =time= :builtin:
-#+begin_src emacs-lisp -n
+** =time= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package time
   :hook (after-init . display-time-mode)
   :config
@@ -1087,14 +1087,14 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
   :init
   (scroll-bar-mode -1))
 #+end_src
-** =xt-mouse= :builtin:
-#+begin_src emacs-lisp -n
+** =xt-mouse= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package xt-mouse
   :config
   (xterm-mouse-mode 1))
 #+end_src
-** =avy= :builtin:
-#+begin_src emacs-lisp -n
+** =avy= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package avy
   :after evil
   :ensure ;; when `use-package-always-ensure' is nil
@@ -1115,7 +1115,7 @@ Although I used /Perspective/ more, there are some cases where it's easier with 
   :config
   (setq tabify-regexp "^\t* [ \t]+"))
 #+end_src
-** =rainbow-mode=, =rainbow-identifiers=, and =rainbow-delimiters=
+** =rainbow-mode=, =rainbow-identifiers=, and =rainbow-delimiters= 
 Making /Emacs/ more colourful.
 #+begin_src emacs-lisp -n
 (use-package rainbow-mode
@@ -1130,15 +1130,15 @@ Making /Emacs/ more colourful.
   :ensure
   :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
-** =nerd-fonts=
+** =nerd-fonts= :disabled:
 [[https://github.com/twlz0ne/nerd-fonts.el/][This package]] still not available at /Melpa/, so I have to clone it as a submodule.
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (when (file-directory-p (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory)))
 
 (use-package nerd-fonts)
 #+end_src
-** =helpful=
+** =helpful= :disabled:
 Since /Emacs/ is a self-documenting editor[fn:18]. It's certainly nice to have a more contextual help buffers.
 #+caption: Helpful will also show the source code when available
 [[https://github.com/Wilfred/helpful/raw/master/screenshots/helpful_source.png]]
@@ -1390,11 +1390,6 @@ I have these builtin packages loaded, I would like to investigate them one by on
   (tramp-backup-directory-alist backup-directory-alist)
   (tramp-auto-save-directory (expand-file-name ".tramp-autosave/" user-emacs-directory)))
 #+end_src
-** =abbrev= :builtin:
-#+begin_src emacs-lisp -n
-(use-package abbrev
-  :ensure nil)
-#+end_src
 ** =ffap= :builtin:
 #+begin_src emacs-lisp -n
 (use-package ffap
@@ -1416,6 +1411,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
 ** =ispell= :builtin:
 #+begin_src emacs-lisp -n
 (use-package ispell
+  :defer
   :custom
   (ispell-program-name "hunspell")
   (ispell-dictionary "english")
@@ -1487,8 +1483,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
   :config
   (setq-default sentence-end-double-space nil))
 #+end_src
-** =flyspell= :builtin:
-#+begin_src emacs-lisp -n
+** =flyspell= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package flyspell
   :custom
   (flyspell-issue-welcome-flag nil)
@@ -1497,8 +1493,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
           . flyspell-mode)
          (prog-mode . flyspell-prog-mode)))
 #+end_src
-** =flymake= :builtin:
-#+begin_src emacs-lisp -n
+** =flymake= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package flymake
   :hook (prog-mode . flymake-mode))
 #+end_src
@@ -1528,8 +1524,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
   (with-eval-after-load 'evil
     (evil-set-initial-state #'message-mode 'insert)))
 #+end_src
-** =elec-pair= :builtin:
-#+begin_src emacs-lisp -n
+** =elec-pair= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package elec-pair
   :init
   (electric-pair-mode -1))
@@ -1540,8 +1536,12 @@ I have these builtin packages loaded, I would like to investigate them one by on
   :ensure nil
   :config
   (with-eval-after-load 'general
-    (general-define-key
-     :keymaps 'override
+    (general-nvmap
+     :keymaps 'prog-mode-map
+     "M-." 'xref-find-definitions
+     "M-?" 'xref-find-references)
+    (general-iemap
+     :keymaps 'prog-mode-map
      "M-." 'xref-find-definitions
      "M-?" 'xref-find-references)))
 #+end_src
@@ -1568,7 +1568,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
 ;;; Commentary:
 ;;; Code:
 #+end_src
-** =vertico=
+** =vertico= 
 #+begin_src emacs-lisp -n
 ;; Enable vertico
 (use-package vertico
@@ -1610,7 +1610,7 @@ I have these builtin packages loaded, I would like to investigate them one by on
   :custom
   (xref-show-definitions-function 'xref-show-definitions-completing-read))
 #+end_src
-** =marginalia=
+** =marginalia= 
 #+begin_src emacs-lisp -n
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
@@ -1620,16 +1620,16 @@ I have these builtin packages loaded, I would like to investigate them one by on
   :init
   (marginalia-mode))
 #+end_src
-** =nerd-icons-completion=
-#+begin_src emacs-lisp -n
+** =nerd-icons-completion= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package nerd-icons-completion
   :ensure
   :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
   :config
   (nerd-icons-completion-mode))
 #+end_src
-** =orderless=
-#+begin_src emacs-lisp -n
+** =orderless= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package orderless
   :ensure t
   :custom
@@ -1637,8 +1637,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
-** =consult=
-#+begin_src emacs-lisp -n
+** =consult= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package consult
   :ensure
   ;; Replace bindings. Lazily loaded due by `use-package'.
@@ -1750,8 +1750,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
   ;; (setq consult-project-function nil)
   )
 #+end_src
-** =corfu=
-#+begin_src emacs-lisp -n
+** =corfu= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package corfu
   :ensure t
   ;; Optional customizations
@@ -1787,8 +1787,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
         ("S-TAB" . corfu-previous)
         ([backtab] . corfu-previous)))
 #+end_src
-** =nerd-icons-corfu=
-#+begin_src emacs-lisp -n
+** =nerd-icons-corfu= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package nerd-icons-corfu
   :ensure
   :config
@@ -1799,8 +1799,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
           ;; ...
           (t :style "cod" :icon "code" :face font-lock-warning-face))))
 #+end_src
-** =embark=
-#+begin_src emacs-lisp -n
+** =embark= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package embark
   :ensure
   :bind (("C-." . embark-act)
@@ -1830,15 +1830,15 @@ I have these builtin packages loaded, I would like to investigate them one by on
     "." 'embark-act
     "M-." 'embark-dwim))
 #+end_src
-** =embark-consult=
-#+begin_src emacs-lisp -n
+** =embark-consult= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package embark-consult
   :ensure t ; only need to install it, embark loads it after consult if found
   :hook
   (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
-** =cape=
-#+begin_src emacs-lisp -n
+** =cape= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 ;; Add extensions
 (use-package cape
   :ensure
@@ -1880,8 +1880,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
   ;;(add-to-list 'completion-at-point-functions #'cape-line)
   )
 #+end_src
-** =tempel=
-#+begin_src emacs-lisp -n
+** =tempel= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package tempel
   :ensure
   :custom
@@ -1942,8 +1942,8 @@ A shell-like command interpreter implemented in Emacs Lisp.
   (eshell-destroy-buffer-when-process-dies t)
   (eshell-prompt-regexp "^[^\)]*[\)] "))
 #+end_src
-** =eshell-syntax-highlighting=
-#+begin_src emacs-lisp -n
+** =eshell-syntax-highlighting= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package eshell-syntax-highlighting
   :ensure
   :defer t
@@ -1951,8 +1951,8 @@ A shell-like command interpreter implemented in Emacs Lisp.
   :config
   (eshell-syntax-highlighting-global-mode +1))
 #+end_src
-** =esh-autosuggest=
-#+begin_src emacs-lisp -n
+** =esh-autosuggest= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package esh-autosuggest
   :defer t
   :hook (eshell-mode . esh-autosuggest-mode)
@@ -1984,8 +1984,8 @@ A shell-like command interpreter implemented in Emacs Lisp.
   (with-eval-after-load 'smartparens
     (sp-local-pair 'sh-mode "`" "`" :unless '(sp-point-before-word-p sp-point-before-same-p))))
 #+end_src
-** =vterm=
-#+begin_src emacs-lisp -n
+** =vterm= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package vterm
   :ensure
   :defer t
@@ -2002,8 +2002,8 @@ A shell-like command interpreter implemented in Emacs Lisp.
     "RET" 'vterm-toggle
     "v" 'vterm))
 #+end_src
-** =multi-vterm=
-#+begin_src emacs-lisp -n
+** =multi-vterm= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package multi-vterm
   :ensure
   :defer t
@@ -2016,8 +2016,8 @@ A shell-like command interpreter implemented in Emacs Lisp.
     "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
     "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer")))
 #+end_src
-** =vterm-toggle=
-#+begin_src emacs-lisp -n
+** =vterm-toggle= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package vterm-toggle
   :ensure
   :defer t
@@ -2042,23 +2042,23 @@ A shell-like command interpreter implemented in Emacs Lisp.
                  (reusable-frames . visible)
                  (window-height . 0.4))))
 #+end_src
-** =fish-mode=
-#+begin_src emacs-lisp -n
+** =fish-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package fish-mode
   :ensure
   :if (executable-find "fish")
   :defer t)
 #+end_src
-** =fish-completion=
-#+begin_src emacs-lisp -n
+** =fish-completion= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package fish-completion
   :ensure
   :after fish-mode
   :config
   (setq fish-completion-fallback-on-bash-p t))
 #+end_src
-** =bash-completion=
-#+begin_src emacs-lisp -n
+** =bash-completion= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package bash-completion
   :ensure
   :defer t
@@ -2147,17 +2147,18 @@ I still have a mixed feeling for this package, but it still easier to configure 
   )
 #+end_src
 The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/files/smartparens.el][example configuration]] messes up my /evil-mode/. I have them commented for now.
-** ws-butler
-#+begin_src emacs-lisp -n
+** =ws-butler= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package ws-butler
   :ensure
   :hook (prog-mode . ws-butler-mode)
   :config
   (setq ws-butler-convert-leading-tabs-or-spaces t))
 #+end_src
-** =activities-mode=
-#+begin_src emacs-lisp -n
+** =activities-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package activities
+  :ensure
   :init
   (activities-mode)
   (activities-tabs-mode)
@@ -2391,10 +2392,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     "Gt" 'git-timemachine-toggle))
 #+end_src
 ** =magit-todos= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package magit-todos
   :ensure
-  :disabled
   :after magit
   :hook (magit-mode . magit-todos-mode)
   :custom
@@ -2402,10 +2402,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
    '(magit-todos-item-first-path-component magit-todos-item-keyword magit-todos-item-filename)))
 #+end_src
 ** =forge= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package forge
   :after magit
-  :disabled
   :defer t
   :bind ((:map forge-issue-section-map
                ("C-c C-v" . forge-browse-topic))
@@ -2426,10 +2425,10 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
     (org-project-capture-single-file)))
 #+end_src
-** =lsp= 
+** =lsp= :disabled:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package lsp-mode
   :ensure
   :diminish (lsp-lens-mode lsp-mode)
@@ -2500,8 +2499,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :keymaps 'lsp-mode-map
     "K" '(lsp-describe-thing-at-point :wk "describe thing at point")))
 #+end_src
-** =lsp-ui= 
-#+begin_src emacs-lisp -n
+** =lsp-ui= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package lsp-ui
   :ensure
   :defer t
@@ -2532,8 +2531,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
    "M-." 'lsp-ui-peek-find-definitions
    "M-?" 'lsp-ui-peek-find-references))
 #+end_src
-** =consult-lsp= 
-#+begin_src emacs-lisp -n
+** =consult-lsp= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package consult-lsp
   :ensure
   :after consult lsp
@@ -2923,10 +2922,9 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
   :after org)
 #+end_src
 ** =org-superstar= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-superstar
   :ensure
-  :disabled
   :defer t
   :hook (org-mode . org-superstar-mode)
   :custom
@@ -2971,8 +2969,8 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
   (global-org-modern-mode))
 #+end_src
 
-** =org-fancy-priority=
-#+begin_src emacs-lisp -n
+** =org-fancy-priority= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-fancy-priorities ; priority icons
   :ensure
   :defer t
@@ -2981,8 +2979,8 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
   :custom
   (org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 #+end_src
-** =toc-org= 
-#+begin_src emacs-lisp -n
+** =toc-org= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package toc-org
   :ensure
   :defer t
@@ -2995,10 +2993,9 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     "C-o" 'toc-org-markdown-follow-thing-at-point))
 #+end_src
 ** =ox-pandoc= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package ox-pandoc
   :ensure
-  :disabled
   :if (executable-find "pandoc")
   :after ox
   :defer t
@@ -3010,8 +3007,8 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
      (mathjax . t)
      (variable . "revealjs-url=https://revealjs.com"))))
 #+end_src
-** =deft= 
-#+begin_src emacs-lisp -n
+** =deft= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package deft
   :ensure
   :defer t
@@ -3054,19 +3051,17 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     "C-k" 'backward-button))
 #+end_src
 ** =org-pdftools= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-pdftools
   :ensure
-  :disabled
   :defer t
   :hook (org-mode . org-pdftools-setup-link)
   :commands org-pdftools-export)
 #+end_src
 ** =org-noter= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-noter
   :ensure
-  :disabled
   :defer t
   :after org-pdftools
   :custom
@@ -3076,10 +3071,9 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
   (require 'org-noter-pdftools))
 #+end_src
 ** =org-noter-pdftools= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-noter-pdftools
   :ensure
-  :disabled
   :defer t
   :after org-noter
   :config
@@ -3113,18 +3107,16 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
 #+end_src
 ** =ox-gfm= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package ox-gfm
   :ensure
-  :disabled
   :defer t
   :after org)
 #+end_src
 ** =org-download= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-download
   :ensure
-  :disabled
   :defer t
   :after org
   :hook (dired-mode . org-download-enable)
@@ -3151,10 +3143,9 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (setq org-download-image-dir org-attach-id-dir)))
 #+end_src
 ** =org-cliplink= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-cliplink
   :ensure
-  :disabled
   :after org
   :defer t
   :bind ("C-x p i" . org-cliplink)
@@ -3397,10 +3388,9 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     "ruz" 'org-roam-ui-node-zoom))
 #+end_src
 ** =org-journal= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-journal
   :ensure
-  :disabled
   :defer t
   :custom
   (org-icalendar-store-UID t)
@@ -3413,11 +3403,10 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
   (org-journal-date-format "%A, %d %B %Y"))
 #+end_src
 ** =org-ref= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package org-ref
   :ensure
   :defer t
-  :disabled
   :config
   (let ((ref-dir (expand-file-name "bibliography" org-directory)))
     (setq bibtex-completion-bibliography `(,(expand-file-name "references.bib" ref-dir)
@@ -3439,23 +3428,21 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
           (call-process "open" nil 0 nil fpath))))
 #+end_src
 ** =consult-bibtex= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (when (file-directory-p (expand-file-name "site-lisp/consult-bibtex" user-emacs-directory))
   (add-to-list 'load-path (expand-file-name "site-lisp/consult-bibtex" user-emacs-directory)))
 
 (use-package consult-bibtex
   :defer t
-  :disabled
   :config
   (with-eval-after-load 'embark
     (add-to-list 'embark-keymap-alist '(bibtex-completion . consult-bibtex-embark-map))))
 #+end_src
 ** =consult-org-roam= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package consult-org-roam
   :ensure
   :defer t
-  :disabled
   :after org-roam
   :init
   (require 'consult-org-roam)
@@ -3503,9 +3490,8 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
     (setq org-plantuml-jar-path "/usr/share/java/plantuml/plantuml.jar")))
 #+end_src
 ** =ob-ditaa= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package ob-ditaa
-  :disabled
   :config
   (when (file-exists-p "/usr/share/java/ditaa/ditaa-0.11.jar")
     (setq org-ditaa-jar-path "/usr/share/java/ditaa/ditaa-0.11.jar")))
@@ -3516,10 +3502,9 @@ My /org-mode/ configuration is [[https://alexforsale.github.io/posts/org-mode-wo
 :END:
 Generate various diagrams inside org mode with org-babel and the help from various tools.
 
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package ob-diagrams
   :ensure
-  :disabled
   :demand t)
 #+end_src
 
@@ -3530,11 +3515,10 @@ Generate various diagrams inside org mode with org-babel and the help from vario
 ** =khalel= :disabled:
 Interacting through Emacs with locally-stored calendars via the console application khal and syncing with remote CalDAV calendars using vdirsyncer.
 #+caption: from the [[https://github.com/emacsmirror/khalel/][github page]]
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package khalel
   :ensure
   :if (executable-find "khal")
-  :disabled
   :after org
   :config
   (setq khalel-khal-command (executable-find "khal")
@@ -3559,24 +3543,21 @@ Interacting through Emacs with locally-stored calendars via the console applicat
 #+end_src
 ** =nov= :disabled:
 Useful for reading /epubs/.
-#+begin_src emacs-lisp -n
-(use-package nov
+#+begin_src emacs-lisp -n :tangle no
+(use-package nov 
   :ensure
-  :disabled
   :defer t)
 #+end_src
 ** =djvu= :disabled:
-#+begin_src emacs-lisp -n
-(use-package djvu
+#+begin_src emacs-lisp -n :tangle no
+(use-package djvu 
   :ensure
-  :disabled
   :defer t)
 #+end_src
 ** =pdf-tools= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package pdf-tools
   :ensure
-  :disabled
   :defer t
   :mode ("\\.[pP][dD][fF]\\'" . pdf-view-mode)
   :hook ((pdf-tools-enabled . (lambda ()
@@ -3597,10 +3578,9 @@ Useful for reading /epubs/.
   (define-key pdf-view-mode-map (kbd "D") 'pdf-annot-delete))
 #+end_src
 ** =khalel= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package khalel
   :ensure
-  :disabled
   :defer t
   :if (executable-find "khal")
   :config
@@ -3611,10 +3591,9 @@ Useful for reading /epubs/.
   (khalel-add-capture-template))
 #+end_src
 ** =direnv= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package direnv
   :ensure
-  :disabled
   :defer t
   :config
   (direnv-mode))
@@ -3641,10 +3620,9 @@ Useful for reading /epubs/.
   (auth-source-pass-enable))
 #+end_src
 ** =ement= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package ement
   :ensure
-  :disabled
   :defer t
   :config
   (setf use-default-font-for-symbols nil)
@@ -3666,18 +3644,17 @@ Useful for reading /epubs/.
   :defer t)
 #+end_src
 ** =wgrep= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package wgrep
   :ensure
-  :disabled
   :defer t
   :commands wgrep-change-to-wgrep-mode
   :config (setq wgrep-auto-save-buffer t))
 #+end_src
-** =elfeed= 
+** =elfeed= :disabled:
 #+caption: /elfeed/ RSS
 [[./assets/img/emacs-elfeed-rss.png][file:assets/img/emacs-elfeed-rss.png]]
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package elfeed
   :ensure
   :defer t
@@ -3695,10 +3672,9 @@ Useful for reading /epubs/.
     "r" '(elfeed-search-update--force :wk "update")))
 #+end_src
 ** =elfeed-org= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package elfeed-org
   :ensure
-  :disabled
   :defer t
   :after org elfeed
   :preface
@@ -3766,10 +3742,9 @@ This is supposed to be a builtin package, but somehow I can not load it.
     "e" '((lambda () (interactive) (require 'emms-browser) (emms-browser)) :wk "emms-browser")))
 #+end_src
 ** =editorconfig= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package editorconfig
   :ensure
-  :disabled
   :defer t
   :config
   (editorconfig-mode 1)
@@ -3778,29 +3753,26 @@ This is supposed to be a builtin package, but somehow I can not load it.
           'ws-butler-mode)))
 #+end_src
 ** =pdfgrep= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package pdfgrep
-  :disabled
   :ensure
   :defer t
   :after pdf-tools
   :config (pdfgrep-mode))
 #+end_src
 ** =selected= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package selected
   :ensure
-  :disabled
   :defer t
   :commands selected-minor-mode
   :init
   (selected-global-mode))
 #+end_src
 ** =yasnippet= :disabled:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package yasnippet
   :ensure
-  :disabled
   :defer t
   :diminish yas-minor-mode
   :commands (yas-minor-mode-on
@@ -3828,8 +3800,8 @@ This is supposed to be a builtin package, but somehow I can not load it.
   :ensure
   :after yasnippet)
 #+end_src
-** =lorem-ipsum= 
-#+begin_src emacs-lisp -n
+** =lorem-ipsum= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package lorem-ipsum
   :ensure
   :defer t
@@ -3840,11 +3812,9 @@ This is supposed to be a builtin package, but somehow I can not load it.
     "lp" 'lorem-ipsum-insert-paragraphs
     "ls" 'lorem-ipsum-insert-sentences))
 #+end_src
-** =vimrc-mode= 
+** =vimrc-mode= :disabled:
 Blasphemy, I know. But I still needs /vim/ for editing mostly in remote machine, and sometimes the connection is unreliable which makes my /Emacs/ hangs. For this situation, /vim/ + /screen/ or /tmux/ is more sensible.
-#+begin_src emacs-lisp -n
-(use-package vimrc-mode
-  :ensure
+#+begin_src emacs-lisp -n :tangle no
   :defer t
   :config
   (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
@@ -3969,8 +3939,8 @@ I sometimes need /treemacs/ when working on a large directory of files.
 ;;; Commentary:
 ;;; Code:
 #+end_src
-** =treemacs= main package 
-#+begin_src emacs-lisp -n
+** =treemacs= main package :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs
   :ensure
   :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
@@ -4076,35 +4046,35 @@ I sometimes need /treemacs/ when working on a large directory of files.
     "zcf" '(treemacs-create-file :wk "create file")
     "zd" '(treemacs-delete-file :wk "delete file")))
 #+end_src
-** =treemacs-projectile= 
-#+begin_src emacs-lisp -n
+** =treemacs-projectile= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs-projectile
   :ensure
   :after treemacs)
 #+end_src
-** =treemacs-icons-dired= 
-#+begin_src emacs-lisp -n
+** =treemacs-icons-dired= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs-icons-dired
   :ensure
   :after treemacs
   :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
-** =treemacs-magit= 
-#+begin_src emacs-lisp -n
+** =treemacs-magit= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs-magit
   :ensure
   :after treemacs magit)
 #+end_src
-** =treemacs-evil= 
-#+begin_src emacs-lisp -n
+** =treemacs-evil= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs-evil
   :ensure
   :after treemacs evil)
 #+end_src
-** =lsp-treemacs= 
+** =lsp-treemacs= :disabled:
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
 (use-package lsp-treemacs
   :ensure
   :after treemacs lsp
@@ -4117,22 +4087,22 @@ I sometimes need /treemacs/ when working on a large directory of files.
    "X" 'lsp-treemacs-errors-list
    "Y" 'lsp-treemacs-call-hierarchy))
 #+end_src
-** =treemacs-perspective= 
-#+begin_src emacs-lisp -n
+** =treemacs-perspective= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs-perspective
   :ensure
   :after treemacs perspective
   :config
   (treemacs-set-scope-type 'Perspectives))
 #+end_src
-** =treemacs-tab-bar= 
-#+begin_src emacs-lisp -n
+** =treemacs-tab-bar= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs-tab-bar
   :ensure
   :after treemacs)
 #+end_src
-** =treemacs-nerd-icons= 
-#+begin_src emacs-lisp -n
+** =treemacs-nerd-icons= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package treemacs-nerd-icons
   :ensure
   :after treemacs
@@ -4304,8 +4274,8 @@ These are the /programming languages/ that I interacts the most, I'm not a progr
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =flycheck= package
-#+begin_src emacs-lisp -n
+*** =flycheck= package :disabled:
+#+begin_src emacs-lisp -n :tangle no
 ;;;###autoload
 (defun +syntax-init-popups-h ()
   "Activate `flycheck-posframe-mode' if available and in GUI Emacs.
@@ -4342,8 +4312,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
            :properties
            (:repeat t :jump t))))
 #+end_src
-*** =consult-flycheck=
-#+begin_src emacs-lisp -n
+*** =consult-flycheck= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package consult-flycheck
   :ensure
   :after consult flycheck
@@ -4352,14 +4322,14 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     (+config/leader-register
       "F" 'consult-flycheck)))
 #+end_src
-*** =flycheck-posframe=
-#+begin_src emacs-lisp -n
+*** =flycheck-posframe= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package flycheck-posframe
   :if (display-graphic-p)
   :ensure)
 #+end_src
-*** =flycheck-popup-tip=
-#+begin_src emacs-lisp -n
+*** =flycheck-popup-tip= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package flycheck-popup-tip
   :ensure
   :commands flycheck-popup-tip-show-popup flycheck-popup-tip-delete-popup
@@ -4369,8 +4339,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   :config
   (setq flycheck-popup-tip-error-prefix "X "))
 #+end_src
-*** =flycheck-color-mode-line=
-#+begin_src emacs-lisp -n
+*** =flycheck-color-mode-line= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package flycheck-color-mode-line
   :ensure
   :hook (flycheck-mode . flycheck-color-mode-line-mode))
@@ -4622,8 +4592,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =cc-mode= :builtin:
-#+begin_src emacs-lisp -n
+*** =cc-mode= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package cc-mode
   :mode ("\\.mm\\'" . objc-mode)
   :mode ("\\.h\\'" . +cc-c-c++-objc-mode)
@@ -4652,8 +4622,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =nxml-mode= :builtin:
-#+begin_src emacs-lisp -n
+*** =nxml-mode= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package nxml-mode
   :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
   :mode "\\.xs\\(?:d\\|lt\\)\\'"   ; xslt, xsd
@@ -4677,8 +4647,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =yaml-mode=
-#+begin_src emacs-lisp -n
+*** =yaml-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package yaml-mode
   :ensure
   :defer t
@@ -4709,8 +4679,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =toml-mode=
-#+begin_src emacs-lisp -n
+*** =toml-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package toml-mode
   :ensure
   :defer t
@@ -4738,8 +4708,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =lua-mode=
-#+begin_src emacs-lisp -n
+*** =lua-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package lua-mode
   :ensure
   :defer t
@@ -4763,8 +4733,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =jinja2-mode=
-#+begin_src emacs-lisp -n
+*** =jinja2-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package jinja2-mode
   :ensure
   :defer t
@@ -4792,8 +4762,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Configuration for json.
 ;;; Code:
 #+end_src
-*** =json-mode= :builtin:
-#+begin_src emacs-lisp -n
+*** =json-mode= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package json-mode
   :ensure nil
   :defer t)
@@ -4813,8 +4783,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =web-mode=
-#+begin_src emacs-lisp -n
+*** =web-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (defun +config/django-web-mode ()
   "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
   (if (projectile-project-p)
@@ -4913,8 +4883,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     :keymaps 'web-mode-map
     "gs" 'web-mode-surround))
 #+end_src
-*** =emmet-mode=
-#+begin_src emacs-lisp -n
+*** =emmet-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package emmet-mode
   :ensure
   :defer t
@@ -4931,31 +4901,31 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
     :keymaps 'emmet-mode-keymap
     "M-E" 'emmet-expand-line))
 #+end_src
-*** =skewer-mode=
-#+begin_src emacs-lisp -n
+*** =skewer-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package skewer-mode
   :ensure
   :defer t
   :hook ((web-mode . skewer-html-mode)
          (js2-mode . skewer-mode)))
 #+end_src
-*** =lsp-tailwindcss=
-#+begin_src emacs-lisp -n
+*** =lsp-tailwindcss= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package lsp-tailwindcss
   :ensure
   :defer t
   :init
   (setq lsp-tailwindcss-add-on-mode t))
 #+end_src
-*** =sass-mode=
-#+begin_src emacs-lisp -n
+*** =sass-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package sass-mode
   :ensure
   :defer t
   :hook (scss-mode . rainbow-mode))
 #+end_src
-*** =css-eldoc=
-#+begin_src emacs-lisp -n
+*** =css-eldoc= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package css-eldoc
   :ensure
   :defer t
@@ -4965,8 +4935,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   (add-hook 'css-mode-hook 'turn-on-css-eldoc)
   (add-hook 'scss-mode-hook 'turn-on-css-eldoc))
 #+end_src
-*** =com-css-sort=
-#+begin_src emacs-lisp -n
+*** =com-css-sort= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package com-css-sort
   :ensure
   :defer t
@@ -4974,8 +4944,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   :config
   (setq com-css-sort-sort-type 'alphabetic-sort))
 #+end_src
-*** =css-mode= :builtin:
-#+begin_src emacs-lisp -n
+*** =css-mode= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package css-mode
   :hook ((css-mode
           stylus-mode) . rainbow-mode)
@@ -4984,8 +4954,8 @@ Do nothing if `lsp-ui-mode' is active and `lsp-ui-sideline-enable' is non-nil."
   (with-eval-after-load 'skewer-mode
     (add-hook 'css-mode-hook 'skewer-css-mode)))
 #+end_src
-*** =javascript=
-#+begin_src emacs-lisp -n
+*** =javascript= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (defvar +javascript-npm-conf (make-hash-table :test 'equal))
 
 ;;;###autoload
@@ -5115,8 +5085,8 @@ Run this for any buffer you want to skewer."
   (add-to-list 'projectile-globally-ignored-directories "^node_modules$")
   (add-to-list 'projectile-globally-ignored-directories "^flow-typed$"))
 #+end_src
-*** =js2-mode=
-#+begin_src emacs-lisp -n
+*** =js2-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package js2-mode
   :ensure
   :defer t
@@ -5135,8 +5105,8 @@ Run this for any buffer you want to skewer."
                 js2-indent-on-enter-key t
                 js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$")))
 #+end_src
-*** =xref-js2=
-#+begin_src emacs-lisp -n
+*** =xref-js2= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package xref-js2
   :ensure
   :defer t
@@ -5145,8 +5115,8 @@ Run this for any buffer you want to skewer."
   (add-hook 'js2-mode-hook (lambda ()
                              (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 #+end_src
-*** =js2-refactor=
-#+begin_src emacs-lisp -n
+*** =js2-refactor= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package js2-refactor
   :ensure
   :defer t
@@ -5163,8 +5133,8 @@ Run this for any buffer you want to skewer."
            :docstring "Simulates C-c C-r"
            :which-key "JS2 Refactor")))
 #+end_src
-*** =rjsx-mode=
-#+begin_src emacs-lisp -n
+*** =rjsx-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package rjsx-mode
   :ensure
   :defer t
@@ -5209,8 +5179,8 @@ Run this for any buffer you want to skewer."
     "z>" 'rjsx-electric-gt
     "z<" 'rjsx-electric-lt))
 #+end_src
-*** =typescript-mode=
-#+begin_src emacs-lisp -n
+*** =typescript-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package typescript-mode
   :ensure
   :defer t
@@ -5239,8 +5209,8 @@ Run this for any buffer you want to skewer."
     (define-derived-mode typescript-tsx-mode web-mode "TypeScript-TSX"))
   (autoload 'js2-line-break "js2-mode" nil t))
 #+end_src
-*** =tide=
-#+begin_src emacs-lisp -n
+*** =tide= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package tide
   :ensure
   :defer t
@@ -5252,14 +5222,14 @@ Run this for any buffer you want to skewer."
         tide-completion-setup-company-backend nil)
   (add-hook 'tide-mode-hook (lambda () (add-hook 'kill-buffer-hook #'+javascript-cleanup-tide-processes-h nil 'local))))
 #+end_src
-*** =npm-mode=
-#+begin_src emacs-lisp -n
+*** =npm-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package npm-mode
   :ensure
   :defer t)
 #+end_src
-*** =nodejs-repl=
-#+begin_src emacs-lisp -n
+*** =nodejs-repl= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package nodejs-repl
   :ensure
   :defer t)
@@ -5279,8 +5249,8 @@ Run this for any buffer you want to skewer."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =auctex= :builtin:
-#+begin_src emacs-lisp -n
+*** =auctex= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package auctex
   :ensure nil
   :mode (("\\.tex\\'" . latex-mode)
@@ -5298,8 +5268,8 @@ Run this for any buffer you want to skewer."
           TeX-PDF-mode t)
     (setq-default TeX-master nil)))
 #+end_src
-*** =preview= :builtin:
-#+begin_src emacs-lisp -n
+*** =preview= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package preview
   :ensure nil
   :after auctex
@@ -5309,16 +5279,16 @@ Run this for any buffer you want to skewer."
     (setq-default preview-scale 1.4
                   preview-scale-function '(lambda () (* (/ 10.0 (preview-document-pt)) preview-scale)))))
 #+end_src
-*** =reftex= :builtin:
-#+begin_src emacs-lisp -n
+*** =reftex= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package reftex
   :ensure nil
   :commands turn-on-reftex
   :init
   (setq reftex-plug-into-AUCTeX t))
 #+end_src
-*** =bibtex= :builtin:
-#+begin_src emacs-lisp -n
+*** =bibtex= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package bibtex
   :config
   (setq bibtex-autokey-year-length 4
@@ -5329,8 +5299,8 @@ Run this for any buffer you want to skewer."
         bibtex-autokey-titlewords-stretch 1
         bibtex-autokey-titleword-length 5))
 #+end_src
-*** =LaTex=
-#+begin_src emacs-lisp -n
+*** =LaTex= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 ;; Auto-fill for LaTeX
 (defun lem-latex-auto-fill ()
   "Turn on auto-fill for LaTeX mode."
@@ -5401,8 +5371,8 @@ Run this for any buffer you want to skewer."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =markdown-mode=
-#+begin_src emacs-lisp -n
+*** =markdown-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 ;; autoloads (from doom)
   ;;; Compilation handlers
 
@@ -5604,8 +5574,8 @@ Run this for any buffer you want to skewer."
     "M-l" '(markdown-demote-subtree :wk "demote subtree")
     "M-S-l" '(markdown-demote :wk "demote")))
 #+end_src
-*** =edit-indirect=
-#+begin_src emacs-lisp -n
+*** =edit-indirect= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package edit-indirect
   :ensure
   :after markdown-mode)
@@ -5625,8 +5595,8 @@ Run this for any buffer you want to skewer."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =python= :builtin:
-#+begin_src emacs-lisp -n
+*** =python= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package python
   :mode ("[./]flake8\\'" . conf-mode)
   :mode ("/Pipfile\\'" . conf-mode)
@@ -5695,8 +5665,8 @@ System Packages:
 - python-pyflakes
 - yapf
 Note: you don't have to install them all, only what you'll going to use.
-*** =pydoc=
-#+begin_src emacs-lisp -n
+*** =pydoc= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package pydoc
   :ensure
   :general
@@ -5704,8 +5674,8 @@ Note: you don't have to install them all, only what you'll going to use.
     :keymaps 'python-mode-map
     "C-c C-d" 'pydoc-at-point-no-jedi))
 #+end_src
-*** =ob-ipython=
-#+begin_src emacs-lisp -n
+*** =ob-ipython= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package ob-ipython
   :ensure
   :defer t
@@ -5716,16 +5686,16 @@ Note: you don't have to install them all, only what you'll going to use.
   (with-eval-after-load 'ob-async
     (add-to-list 'ob-async-no-async-languages-alist "ipython")))
 #+end_src
-*** =pip-requirements=
-#+begin_src emacs-lisp -n
+*** =pip-requirements= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package pip-requirements
   :ensure
   :defer t
   :config
   (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
 #+end_src
-*** =inferior-python-mode= :builtin:
-#+begin_src emacs-lisp -n
+*** =inferior-python-mode= :builtin:disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package inferior-python-mode
   :ensure nil
   :hook (inferior-python-mode . hide-mode-line-mode)
@@ -5734,8 +5704,8 @@ Note: you don't have to install them all, only what you'll going to use.
     :keymaps 'python-mode-map
     "r" '(run-python :wk "run python")))
 #+end_src
-*** =lsp-pyright=
-#+begin_src emacs-lisp -n
+*** =lsp-pyright= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package lsp-pyright
   :ensure
   :after lsp-mode
@@ -5749,8 +5719,8 @@ Note: you don't have to install them all, only what you'll going to use.
             (executable-find "python3")
           "python")))
 #+end_src
-*** =python-docstring=
-#+begin_src emacs-lisp -n
+*** =python-docstring= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package python-docstring
   :ensure
   :diminish
@@ -5760,8 +5730,8 @@ Note: you don't have to install them all, only what you'll going to use.
     :keymaps 'python-mode-map
     "dq" 'python-docstring-fill))
 #+end_src
-*** =pipenv=
-#+begin_src emacs-lisp -n
+*** =pipenv= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package pipenv
   :ensure
   :diminish
@@ -5777,16 +5747,16 @@ Note: you don't have to install them all, only what you'll going to use.
     :keymaps 'python-mode-map
     "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv")))
 #+end_src
-*** =flycheck-pycheckers=
-#+begin_src emacs-lisp -n
+*** =flycheck-pycheckers= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package flycheck-pycheckers
   :ensure
   :config
   (with-eval-after-load 'flycheck
     (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup)))
 #+end_src
-*** =ein=
-#+begin_src emacs-lisp -n
+*** =ein= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package ein
   :ensure t)
 #+end_src
@@ -5805,8 +5775,8 @@ Note: you don't have to install them all, only what you'll going to use.
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =rust-mode=
-#+begin_src emacs-lisp -n
+*** =rust-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 ;;;###autoload
 (defun +rust-cargo-project-p ()
   "Return t if this is a cargo project."
@@ -5826,8 +5796,8 @@ Note: you don't have to install them all, only what you'll going to use.
 
 (use-package rust-mode)
 #+end_src
-*** =rustic=
-#+begin_src emacs-lisp -n
+*** =rustic= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package rustic
   :ensure
                                         ;defer t
@@ -5853,8 +5823,8 @@ Note: you don't have to install them all, only what you'll going to use.
       :keymaps '(rustic-mode-map lsp-mode-map)
       "K" 'lsp-describe-thing-at-point)))
 #+end_src
-*** =flycheck-rust=
-#+begin_src emacs-lisp -n
+*** =flycheck-rust= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package flycheck-rust
   :ensure
   :after flycheck
@@ -5877,8 +5847,8 @@ Note: you don't have to install them all, only what you'll going to use.
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =ansible= package
-#+begin_src emacs-lisp -n
+*** =ansible= package :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package ansible
   :ensure
   :defer t
@@ -5898,8 +5868,8 @@ Note: you don't have to install them all, only what you'll going to use.
     "ad" 'ansible-decrypt-buffer
     "ae" 'ansible-encrypt-buffer))
 #+end_src
-*** =ansible-doc=
-#+begin_src emacs-lisp -n
+*** =ansible-doc= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package ansible-doc
   :after ansible
   :ensure
@@ -5923,8 +5893,8 @@ Note: you don't have to install them all, only what you'll going to use.
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =cperl-mode=
-#+begin_src emacs-lisp -n
+*** =cperl-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package cperl-mode
   :ensure
   :defer t
@@ -5945,8 +5915,8 @@ Note: you don't have to install them all, only what you'll going to use.
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =haskell-mode=
-#+begin_src emacs-lisp -n
+*** =haskell-mode= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 (use-package haskell-mode
   :ensure t
   :defer t
