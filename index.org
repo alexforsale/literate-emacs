@@ -1569,7 +1569,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
 ;;; Code:
 #+end_src
 ** =vertico= 
-#+begin_src emacs-lisp -n
+*** old configuration :noexport:
+#+begin_src emacs-lisp -n :tangle no
 ;; Enable vertico
 (use-package vertico
   :ensure
@@ -1610,8 +1611,78 @@ I have these builtin packages loaded, I would like to investigate them one by on
   :custom
   (xref-show-definitions-function 'xref-show-definitions-completing-read))
 #+end_src
-** =marginalia= 
+*** Basic configuration
 #+begin_src emacs-lisp -n
+(use-package vertico
+  :init
+  (vertico-mode)
+  ;; Different scroll margin
+  ;; (setq vertico-scroll-margin 0)
+  ;; Show more candidates
+  ;; (setq vertico-count 20)
+  ;; Grow and shrink the Vertico minibuffer
+  ;; (setq vertico-resize t)
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t)
+  )
+
+;; A few more useful configurations...
+(use-package emacs
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  ;; Support opening new minibuffers from inside existing minibuffers.
+  (setq enable-recursive-minibuffers t)
+  ;; Emacs 28 and newer: Hide commands in M-x which do not work in the current
+  ;; mode.  Vertico commands are hidden in normal buffers. This setting is
+  ;; useful beyond Vertico.
+  (setq read-extended-command-predicate #'command-completion-default-include-p))
+#+end_src
+**** Extensions
+***** =vertico-directory=
+#+begin_src emacs-lisp -n
+(use-package vertico-directory
+  :after vertico
+  :ensure nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+#+end_src
+***** =vertico-indexed= :disabled:
+#+begin_src emacs-lisp -n :tangle no
+(use-package vertico-indexed
+  :after vertico
+  :ensure nil
+  :config
+  (vertico-indexed-mode))
+#+end_src
+***** =vertico-quick=
+#+begin_src emacs-lisp -n
+(use-package vertico-quick
+  :after vertico
+  :ensure nil
+  :bind (:map vertico-map
+              ("M-q" . vertico-quick-insert)
+              ("C-q" . vertico-quick-exit)))
+#+end_src
+** =marginalia= :disabled:
+#+begin_src emacs-lisp -n :tangle no
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
   :ensure
@@ -1628,7 +1699,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
   :config
   (nerd-icons-completion-mode))
 #+end_src
-** =orderless= :disabled:
+** =orderless= 
+*** old configuration :noexport:
 #+begin_src emacs-lisp -n :tangle no
 (use-package orderless
   :ensure t
@@ -1636,6 +1708,17 @@ I have these builtin packages loaded, I would like to investigate them one by on
   (completion-styles '(orderless partial-completion basic))
   (completion-category-defaults nil)
   (completion-category-overrides '((file (styles partial-completion)))))
+#+end_src
+*** Basic Configuration
+#+begin_src emacs-lisp -n
+(use-package orderless
+  :init
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
 ** =consult= :disabled:
 #+begin_src emacs-lisp -n :tangle no
