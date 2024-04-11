@@ -572,6 +572,7 @@ Mostly copied from /doom/ or the official documentation[fn:1].
   (customize-set-variable 'evil-want-keybinding nil)
   (customize-set-variable 'evil-want-integration t)
   (customize-set-variable 'evil-undo-system 'undo-redo)
+  (customize-set-variable 'evil-want-C-i-jump nil) ;; fix TAB in terminal org-mode 
   (customize-set-variable 'evil-want-C-u-scroll t) ;; move universal arg to <leader> u
   (customize-set-variable 'evil-want-C-u-delete t) ;; delete back to indentation in insert state
   (customize-set-variable 'evil-want-C-g-bindings t)
