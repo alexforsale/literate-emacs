@@ -17,14 +17,23 @@
 #+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
 * About
-:PROPERTIES:
-:header-args: :tangle ./config.el
-:END:
 This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mode]] which allows me to create an actual configuration file (by /[[https://orgmode.org/manual/Extracting-Source-Code.html][tangling]]/ this one =org= file), automatically export it into /HTML/ (and also publish it to my [[https://alexforsale.github.io/literate-emacs/][github page]] using /[[https://github.com/features/actions][github-action]]/), and also makes it easier to maintain.
 
 #+caption: many /Emacs/ capabilities
 [[./assets/img/emacs.png][file:assets/img/emacs.png]]
 Since this file in /Emacs/ is considered to be a library, it should follow the [[https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Headers.html][convention]]. But this is not needed in the /HTML/ exported file, so every heading with the name =header= or =footer= will be tagged with the =noexport= tag and won't show in the /HTML/ page, it's' kind of repetitive anyway.
+
+* Wishlist
+** Use =bookmarks= and =registers=
+** Keybindings
+I'm using =[[id:6efb5563-5427-47a2-a47f-f8424b47a80f][evil-mode]]=. So there will be keybindings that only available in certain modes, at the same time, I try as much as possible not to mess with the default /Emacs/ keybindings.
+
+** Can be used as an IDE
+
+* Init
+:PROPERTIES:
+:header-args: :tangle ./config.el
+:END:
 ** header :noexport:
 #+begin_src emacs-lisp +n
 ;;; config --- Custom Configuration -*- lexical-binding: t -*-
