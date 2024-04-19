@@ -563,6 +563,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 * Evil
 :PROPERTIES:
 :header-args: :tangle ./modules/config-evil.el :mkdirp t
+:ID:       6efb5563-5427-47a2-a47f-f8424b47a80f
 :END:
 It's not like I hate the standard /Emacs/ keychord, I actually used it for a while, and most of the /shells/ default to /Emacs/ key. But I have to admit, using /vim/ keys allows me to type faster.
 ** header :noexport:
@@ -1694,8 +1695,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
               ("M-q" . vertico-quick-insert)
               ("C-q" . vertico-quick-exit)))
 #+end_src
-** =marginalia= :disabled:
-#+begin_src emacs-lisp -n :tangle no
+** =marginalia=
+#+begin_src emacs-lisp -n
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
   :ensure
@@ -1733,7 +1734,8 @@ I have these builtin packages loaded, I would like to investigate them one by on
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
-** =consult= :disabled:
+** =consult=
+*** old configuration :noexport:
 #+begin_src emacs-lisp -n :tangle no
 (use-package consult
   :ensure
@@ -1846,7 +1848,11 @@ I have these builtin packages loaded, I would like to investigate them one by on
   ;; (setq consult-project-function nil)
   )
 #+end_src
-** =corfu= :disabled:
+*** Basic Configuration
+#+begin_src emacs-lisp -n
+#+end_src
+** =corfu= 
+*** old configuration :noexport:
 #+begin_src emacs-lisp -n :tangle no
 (use-package corfu
   :ensure t
@@ -1882,6 +1888,19 @@ I have these builtin packages loaded, I would like to investigate them one by on
         ([tab] . corfu-next)
         ("S-TAB" . corfu-previous)
         ([backtab] . corfu-previous)))
+#+end_src
+*** Basic Configuration
+#+begin_src emacs-lisp
+(use-package corfu
+  :ensure
+  :custom
+  (corfu-cycle t)
+  (corfu-auto t)
+  (corfu-quit-no-match 'separator)
+  (corfu-preselect 'prompt)
+  (completion-cycle-threshold 3)
+  :init
+  (global-corfu-mode))
 #+end_src
 ** =nerd-icons-corfu= :disabled:
 #+begin_src emacs-lisp -n :tangle no
@@ -2635,6 +2654,60 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   :bind
   (:map lsp-mode-map
         ([remap xref-find-apropos] . consult-lsp-symbols)))
+#+end_src
+** =eglot= :builtin:
+*** configuration
+#+begin_src emacs-lisp
+(use-package eglot
+  :hook ((python-mode julia-mode) . eglot-ensure)
+  :bind (:map
+           eglot-mode-map
+           ("C-x c a" . eglot-code-actions)
+           ("C-x c o" . eglot-code-actions-organize-imports)
+           ("C-x c r" . eglot-rename)
+           ("C-x c f" . eglot-format)))
+#+end_src
+** =treesit= :builtin:
+#+begin_src emacs-lisp
+(use-package treesit
+  :ensure nil
+  :config
+  (setq treesit-language-source-alist
+        '((bash . ("git@github.com:tree-sitter/tree-sitter-bash.git"))
+          (c . ("git@github.com:tree-sitter/tree-sitter-c.git"))
+          (common-lisp . ("git@github.com:tree-sitter-grammars/tree-sitter-commonlisp.git"))
+          (cpp . ("git@github.com:tree-sitter/tree-sitter-cpp.git"))
+          (css . ("git@github.com:tree-sitter/tree-sitter-css.git"))
+          (elixir . ("git@github.com:elixir-lang/tree-sitter-elixir.git"))
+          (elisp . ("git@github.com:Wilfred/tree-sitter-elisp.git"))
+          (fish . ("git@github.com:ram02z/tree-sitter-fish.git"))
+          (gitignore . ("git@github.com:shunsambongi/tree-sitter-gitignore.git"))
+          (go . ("git@github.com:tree-sitter/tree-sitter-go.git"))
+          (haskell . ("git@github.com:tree-sitter/tree-sitter-haskell.git"))
+          (heex . ("git@github.com:phoenixframework/tree-sitter-heex.git"))
+          (html . ("git@github.com:tree-sitter/tree-sitter-html.git"))
+          (java. ("git@github.com:tree-sitter/tree-sitter-java.git"))
+          (javascript . ("git@github.com:tree-sitter/tree-sitter-javascript.git"))
+          (julia . ("git@github.com:tree-sitter/tree-sitter-julia.git"))
+          (json . ("git@github.com:tree-sitter/tree-sitter-json.git"))
+          (lua . ("git@github.com:Azganoth/tree-sitter-lua.git"))
+          (make . ("git@github.com:alemuller/tree-sitter-make.git"))
+          (markdown . ("git@github.com:tree-sitter-grammars/tree-sitter-markdown.git"))
+          (nix . ("git@github.com:nix-community/tree-sitter-nix.git"))
+          (ocaml . ("git@github.com:tree-sitter/tree-sitter-ocaml.git" "ocaml/src" "ocaml"))
+          (perl . ("git@github.com:ganezdragon/tree-sitter-perl.git"))
+          (python . ("git@github.com:tree-sitter/tree-sitter-python.git"))
+          (php . ("git@github.com:tree-sitter/tree-sitter-php.git"))
+          (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+          (typescript . ("git@github.com:tree-sitter/tree-sitter-typescript.git" "typescript/src" "typescript"))
+          (racket . ("git@github.com:6cdh/tree-sitter-racket.git"))
+          (ruby . ("git@github.com:tree-sitter/tree-sitter-ruby.git"))
+          (rust . ("git@github.com:tree-sitter/tree-sitter-rust.git"))
+          (scheme . ("git@github.com:6cdh/tree-sitter-scheme.git"))
+          (sql . ("git@github.com:m-novikov/tree-sitter-sql.git"))
+          (toml . ("git@github.com:tree-sitter/tree-sitter-toml.git"))
+          (yaml . ("git@github.com:ikatyang/tree-sitter-yaml.git"))
+          (zig . ("git@github.com:GrayJack/tree-sitter-zig.git")))))
 #+end_src
 ** footer :noexport:
 #+begin_src emacs-lisp -n
@@ -3908,9 +3981,10 @@ This is supposed to be a builtin package, but somehow I can not load it.
     "lp" 'lorem-ipsum-insert-paragraphs
     "ls" 'lorem-ipsum-insert-sentences))
 #+end_src
-** =vimrc-mode= :disabled:
+** =vimrc-mode= 
 Blasphemy, I know. But I still needs /vim/ for editing mostly in remote machine, and sometimes the connection is unreliable which makes my /Emacs/ hangs. For this situation, /vim/ + /screen/ or /tmux/ is more sensible.
-#+begin_src emacs-lisp -n :tangle no
+#+begin_src emacs-lisp -n
+(use-package vimrc-mode
   :defer t
   :config
   (add-to-list 'auto-mode-alist '("\\.vim\\(rc\\)?\\'" . vimrc-mode)))
@@ -5467,7 +5541,8 @@ Run this for any buffer you want to skewer."
 ;;; Commentary:
 ;;; Code:
 #+end_src
-*** =markdown-mode= :disabled:
+*** old configuration :noexport:
+**** =markdown-mode= :disabled:
 #+begin_src emacs-lisp -n :tangle no
 ;; autoloads (from doom)
   ;;; Compilation handlers
@@ -5670,13 +5745,28 @@ Run this for any buffer you want to skewer."
     "M-l" '(markdown-demote-subtree :wk "demote subtree")
     "M-S-l" '(markdown-demote :wk "demote")))
 #+end_src
-*** =edit-indirect= :disabled:
-#+begin_src emacs-lisp -n :tangle no
+*** Basic Configuration
+#+begin_src emacs-lisp -n
+(use-package markdown-mode
+  :ensure)
+
+(use-package markdown-ts-mode
+  :ensure
+  :init
+  (add-to-list 'major-mode-remap-alist '(markdown-mode . markdown-ts-mode)))
+
+(use-package poly-markdown
+  :ensure
+  :init :mode
+  (("README\\.md\\'" . gfm-mode)
+   ("\\.md$" . markdown-ts-mode)
+   ("\\.markdown$" . markdown-ts-mode)))
+
 (use-package edit-indirect
   :ensure
   :after markdown-mode)
 #+end_src
-*** footer :noexport:
+**** footer :noexport:
 #+begin_src emacs-lisp -n
 (provide 'config-markdown)
 ;;; config-markdown.el ends here
@@ -6035,10 +6125,12 @@ Note: you don't have to install them all, only what you'll going to use.
 ;;; config-haskell.el ends here
 #+end_src
 * EXWM
+For now, /EXWM/ only runs on /X11/.
 ** Script
 :PROPERTIES:
 :header-args: :tangle ~/.local/bin/startexwm :shebang #!/bin/sh :mkdirp t
 :END:
+This script will be called by the desktop file since I'm using a display manager. I put this in my ~~/.local/bin/~ directory, but if more than one users will be using /EXWM/, perhaps ~/usr/local/bin~ or even ~/usr/bin~ is better.
 *** Allow connection to the X server
 #+begin_src sh
 xhost +
@@ -6508,3 +6600,4 @@ Unless EXWM-WORKSPACE-CURRENT-INDEX is equal to +config-exwm--exwm-workspace-swi
 [fn:2] https://github.com/emacs-evil/evil-collection
 
 [fn:1] https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el
+
