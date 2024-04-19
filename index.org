@@ -212,12 +212,12 @@ More convenient key definitions in emacs[fn:12].
     :keymaps 'override
     :states  '(insert emacs normal hybrid motion visual operator)
     :prefix "SPC"
-    :non-normal-prefix "s-SPC")
+    :non-normal-prefix "C-c SPC")
   (general-create-definer +config/local-leader
     :keymaps 'override
     :states '(emacs normal hybrid motion visual operator)
-    :prefix "m"
-    :non-normal-prefix "s-m"
+    :prefix "SPC m"
+    :non-normal-prefix "C-c SPC m"
     "" '(:ignore t :which-key (lambda (arg) `(,(cadr (split-string (car arg) " ")) . ,(replace-regexp-in-string "-mode$" "" (symbol-name major-mode))))))
   ;; useful macro
   (defmacro +config/leader-menu! (name infix-key &rest body)
