@@ -649,12 +649,15 @@ For parts of /Emacs/ not covered by Evil[fn:2].
 #+end_src
 ** =evil-terminal-cursor-changer=
 Changing the cursor shape in terminal[fn:3].
-#+begin_src emacs-lisp -n
-(unless (display-graphic-p)
-  (use-package evil-terminal-cursor-changer
-    :ensure t
-    :config
-    (evil-terminal-cursor-changer-activate)))
+#+begin_src emacs-lisp -n 
+(use-package evil-terminal-cursor-changer
+  :ensure t
+  :unless (window-system)
+  :config
+  (defun +config/change-cursor-in-tty ()
+    (unless (display-graphic-p)
+      (evil-terminal-cursor-changer-activate)))
+  (add-hook 'server-after-make-frame-hook '+config/change-cursor-in-tty))
 #+end_src
 ** =evil-args=
 Motions and text objects for delimited arguments in Evil[fn:4].
