@@ -25,7 +25,8 @@
 (setq org-html-validation-link nil
       org-html-head-include-scripts nil
       org-html-include-default-style nil
-      org-src-fontify-natively t)
+      org-src-fontify-natively t
+      org-confirm-babel-evaluate nil)
 
 (setq org-publish-project-alist
       '(("literate-emacs"
