@@ -1394,37 +1394,38 @@ I still have a mixed feeling for this package, but it still easier to configure 
                                       (t (not (sp-point-in-string-or-comment))))))))
     (sp-with-modes '(html-mode sgml-mode nxml-mode web-mode)
       (sp-local-pair "<" ">"))
-    ;; (with-eval-after-load 'general
-    ;;   (general-define-key
-    ;;    :keymaps 'smartparens-mode-map
-    ;;    "C-M-f" 'sp-forward-sexp
-    ;;    "C-M-b" 'sp-backward-sexp
-    ;;    "C-M-d" 'sp-down-sexp
-    ;;    "C-M-a" 'sp-backward-down-sexp
-    ;;    "C-S-d" 'sp-beginning-of-sexp
-    ;;    "C-S-a" 'sp-end-of-sexp
-    ;;    "C-M-e" 'sp-up-sexp
-    ;;    "C-M-u" 'sp-backward-up-sexp
-    ;;    "C-M-t" 'sp-transpose-sexp
-    ;;    "C-M-k" 'sp-kill-sexp
-    ;;    "C-M-w" 'sp-copy-sexp
-    ;;    "M-<delete>" 'sp-unwrap-sexp
-    ;;    "M-<backspace>" 'sp-backward-unwrap-sexp
-    ;;    "C-<right>" 'sp-forward-slurp-sexp
-    ;;    "C-<left>" 'sp-forward-barf-sexp
-    ;;    "C-M-<left>" 'sp-backward-slurp-sexp
-    ;;    "C-M-<right>" 'sp-backward-barf-sexp
-    ;;    "M-D" 'sp-split-sexp
-    ;;    "C-M-<delete>" 'sp-splice-sexp-killing-forward
-    ;;    "C-M-<backspace>" 'sp-splice-sexp-killing-backward
-    ;;    "C-S-<backspace>" 'sp-splice-sexp-killing-around
-    ;;    "C-]" 'sp-select-next-thing-exchange
-    ;;    "C-<left_bracket>" 'sp-select-previous-thing
-    ;;    "C-M-]" 'sp-select-next-thing
-    ;;    "M-F" 'sp-forward-symbol
-    ;;    "M-B" 'sp-backward-symbol
-    ;;    "C-\"" 'sp-change-inner
-    ;;    "M-i" 'sp-change-enclosing))
+
+    (defun sp--markdown-skip-asterisk (ms mb me)
+      (save-excursion
+        (goto-char mb)
+        (save-match-data (looking-at "^\\* "))))
+
+    (sp-with-modes 'markdown-mode
+      (sp-local-pair "*" "*"
+                     :unless '(sp-point-after-word-p sp-point-at-bol-p)
+                     :skip-match 'sp--markdown-skip-asterisk)
+      (sp-local-pair "**" "**")
+      (sp-local-pair "_" "_" :unless '(sp-point-after-word-p)))
+
+    ;;; org-mode
+    (defun sp--org-skip-asterisk (ms mb me)
+      (or (and (= (line-beginning-position) mb)
+               (eq 32 (char-after (1+ mb))))
+          (and (= (1+ (line-beginning-position)) me)
+               (eq 32 (char-after me)))))
+    (defun sp--org-inside-LaTeX (id action context)
+      (org-inside-LaTeX-fragment-p))
+    (sp-with-modes 'org-mode
+      (sp-local-pair "*" "*"
+                     :unless '(sp-point-after-word-p sp--org-inside-LaTeX sp-point-at-bol-p)
+                     :skip-match 'sp--org-skip-asterisk)
+      (sp-local-pair "/" "/" :unless '(sp-point-after-word-p sp--org-inside-LaTeX))
+      (sp-local-pair "~" "~" :unless '(sp-point-after-word-p sp--org-inside-LaTeX))
+      (sp-local-pair "=" "=" :unless '(sp-point-after-word-p sp--org-inside-LaTeX))
+      (sp-local-pair "\\[" "\\]"))
+
+    ;; haskell
+    (add-to-list 'sp-no-reindent-after-kill-modes 'haskell-mode)
 
     ;; You're likely writing lisp in the minibuffer, therefore, disable these
     ;; quote pairs, which lisps doesn't use for strings:
