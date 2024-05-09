@@ -1,6 +1,7 @@
 ;;; init --- `Emacs' Initialization file -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
+
 (require 'ob-tangle)
 
 (when (file-exists-p (expand-file-name "index.org" user-emacs-directory))
