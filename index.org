@@ -559,7 +559,7 @@ I use this theme when I'm not using any external theme.
       :bind ([remap other-window] . ace-window))
 #+end_src
 ** =all-the-icons= :external:
-A utility package to collect various Icon Fonts and propertize them within Emacs[fn:14].
+A utility package to collect various Icon Fonts and propertize them within Emacs[fn:9].
 #+name: all-the-icons
 #+begin_src emacs-lisp -n
 (use-package all-the-icons
@@ -4180,6 +4180,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 * Footnotes
 
+[fn:9] https://github.com/domtronn/all-the-icons.el
 [fn:8] https://github.com/justbur/emacs-which-key
 [fn:7] https://orgmode.org/manual/Noweb-Reference-Syntax.html 
 [fn:6] https://github.com/emacs-evil/evil-collection
