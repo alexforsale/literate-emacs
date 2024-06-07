@@ -40,3 +40,4 @@ emms/
 persist/
 package-quickstart*
 *.bak
+session.*
