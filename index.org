@@ -1823,7 +1823,34 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   (:map lsp-mode-map
         ([remap xref-find-apropos] . consult-lsp-symbols)))
 #+end_src
+** gptel :external:
+#+name: gptel
+#+begin_src emacs-lisp -n
+  (use-package gptel
+    :ensure t
+    :config
+    (setq gptel-backend 
+          (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)))
+#+end_src
+An LLM client for /Emacs/, I'm trying it with google's /[[https://gemini.google.com/][gemini]]/. This package is already good on its own. But the other reason is I'm also trying out /[[https://github.com/armindarvish/consult-web][consult-web]]/, which integrates search results from various sources.
+** consult-web :external:
+This package looks promising, I'll wait until it mature a bit.
+[[https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/][The author already made a blog post explaining on why he created this package]]. Hopefully I can integrate this into my workflow.
+#+name: consult-web
+#+begin_src emacs-lisp :tangle no
+  ;; (when (file-directory-p (expand-file-name "site-lisp/consult-web" user-emacs-directory))
+  ;;   (add-to-list 'load-path (expand-file-name "site-lisp/consult-web" user-emacs-directory))
+  ;;   ;; (add-to-list 'load-path (expand-file-name "site-lisp/consult-web/sources" user-emacs-directory))
+  ;;   )
 
+  (use-package consult-web
+    :after consult
+    :load-path "site-lisp/consult-web"
+    :config
+    (require 'consult-web-gptel)
+    (setq consult-web-dynamic-sources "gptel")
+    (require 'consult-web-sources))
+#+end_src
 * Emacs org-mode
 ** org-mode core package
 #+name: org-mode
@@ -4170,6 +4197,8 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<git-link>>
   <<git-messenger>>
   <<git-timemachine>>
+  <<gptel>>
+  <<consult-web>>
   <<org-project-capture>>
   <<lsp-mode>>
 #+end_src

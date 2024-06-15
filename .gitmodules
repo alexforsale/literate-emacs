@@ -16,3 +16,6 @@
 [submodule "site-lisp/tempel-collection"]
 	path = site-lisp/tempel-collection
 	url = https://github.com/alexforsale/tempel-collection
+[submodule "site-lisp/consult-web"]
+	path = site-lisp/consult-web
+	url = git@github.com:armindarvish/consult-web.git
