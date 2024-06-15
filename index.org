@@ -732,10 +732,8 @@ Enable line highlighting in all buffers.
 in /archlinux/, these fonts is conveniently grouped in [[https://archlinux.org/groups/x86_64/nerd-fonts/][nerd-fonts]], which is needed for this and the =nerd-icons= package.
 #+name: nerd-fonts
 #+begin_src emacs-lisp -n
-(when (file-directory-p (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory))
-  (add-to-list 'load-path (expand-file-name "site-lisp/nerd-fonts" user-emacs-directory)))
-
-(use-package nerd-fonts)
+  (use-package nerd-fonts
+    :load-path "site-lisp/nerd-fonts")
 #+end_src
 ** paren
 #+name: paren
@@ -2828,13 +2826,13 @@ Needs an external package =fd=, or =fd-find=
 **** sly :external:
 #+name: sly
 #+begin_src emacs-lisp -n
-(use-package sly
-  :ensure
-  :commands sly-autoloads
-  :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
-         (lisp-mode . sly-editing-mode))
-  :config
-  (require 'sly-autoloads))
+  (use-package sly
+    :ensure
+    :commands sly-autoloads
+    :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
+           (lisp-mode . sly-editing-mode))
+    :config
+    (require 'sly-autoloads))
 #+end_src
 *** clojure
 **** cider :external:
