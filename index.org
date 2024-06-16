@@ -4205,6 +4205,21 @@ This file is already added in my git repositories for initial Emacs loading. But
   (provide 'config)
   ;;; config.el ends here
 #+end_src
+** Misc
+*** org-protocol desktop file
+:PROPERTIES:
+:header-args: :tangle .local/share/applications/org-protocol.desktop :mkdirp t
+:END:
+#+begin_src conf -n
+  [Desktop Entry]
+  Name=Org-Protocol
+  Exec=emacsclient -a emacs %u
+  Icon=emacs-icon
+  Type=Application
+  Terminal=false
+  MimeType=x-scheme-handler/org-protocol
+#+end_src
+
 * Footnotes
 
 [fn:9] https://github.com/domtronn/all-the-icons.el
