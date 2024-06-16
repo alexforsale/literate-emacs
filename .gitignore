@@ -41,3 +41,4 @@ persist/
 package-quickstart*
 *.bak
 session.*
+.local/
