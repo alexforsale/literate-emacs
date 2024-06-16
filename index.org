@@ -1831,7 +1831,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
           (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)))
 #+end_src
 An LLM client for /Emacs/, I'm trying it with google's /[[https://gemini.google.com/][gemini]]/. This package is already good on its own. But the other reason is I'm also trying out /[[https://github.com/armindarvish/consult-web][consult-web]]/, which integrates search results from various sources.
-** consult-web :external:
+** consult-web :external:disabled:
 This package looks promising, I'll wait until it mature a bit.
 [[https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/][The author already made a blog post explaining on why he created this package]]. Hopefully I can integrate this into my workflow.
 #+name: consult-web
