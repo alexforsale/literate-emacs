@@ -4006,20 +4006,27 @@ This file is already added in my git repositories for initial Emacs loading. But
 :END:
 *** header :noexport:
 *** The configuration
+**** variables and helper functions
 #+begin_src emacs-lisp -n
-  ;; Variables, and helper functions
   <<identity>>
   <<+config/user-modules-directory>>
   <<add-modules-to-load-path>>
   <<merge-list-to-list>>
   <<+config/org-directory>>
-  ;; keybindings
+#+end_src
+**** keybindings  
+#+begin_src emacs-lisp -n
   <<general.el>>
   <<keybindings>>
+#+end_src
+**** Evil stuffs
+#+begin_src emacs-lisp -n
   ;; evil
   <<evil>>
   <<evil-collection>>
-  ;; UI
+#+end_src
+**** UI
+#+begin_src emacs-lisp -n
   <<ace-window>>
   <<doom-themes>>
   <<doom-modeline>>
@@ -4034,7 +4041,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<nerd-icons>>
   <<nerd-fonts>>
   <<paren>>
-  ;; builtins
+#+end_src
+**** Builtin stuffs
+#+begin_src emacs-lisp -n
   <<base>>
   <<files>>
   <<saveplace>>
@@ -4047,7 +4056,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<tramp>>
   <<epg-config>>
   <<simple>>
-  ;; completion
+#+end_src
+**** Completion
+#+begin_src emacs-lisp -n
   <<vertico>>
   <<vertico-extensions>>
   <<marginalia>>
@@ -4056,7 +4067,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<orderless>>
   <<nerd-icons-corfu>>
   <<nerd-icons-completion>>
-  ;; shells
+#+end_src
+**** Shells
+#+begin_src emacs-lisp -n
   <<eshell>>
   <<eshell-syntax-highlighting>>
   <<esh-autosuggest>>
@@ -4065,7 +4078,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<multi-vterm>>
   <<vterm-toggle>>
   <<bash-completion>>
-  ;; editing
+#+end_src
+**** Editing
+#+begin_src emacs-lisp -n
   <<select>>
   <<transient-mark-mode>>
   <<delete-selection-mode>>
@@ -4073,8 +4088,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<text-mode>>
   <<ws-butler>>
   <<smartparens>>
-  ;; IDE stuffs
-  ;; org-mode
+#+end_src
+**** Org-mode
+#+begin_src emacs-lisp -n
   <<org-mode>>
   <<org-faces>>
   <<org-archive>>
@@ -4092,13 +4108,20 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<org-superstar>>
   <<org-fancy-priorities>>
   <<org-modern>>
-  ;; tools
+#+end_src
+**** Tools
+#+begin_src emacs-lisp -n
   <<make-mode>>
   <<executable>>
   <<pinentry>>
   <<pass>>
   <<rg>>
-  ;; dired
+  <<consult-web>>
+  <<gptel>>
+  <<ox-hugo>>
+#+end_src
+**** dired
+#+begin_src emacs-lisp -n
   <<dired>>
   <<image-dired>>
   <<dired-x>>
@@ -4107,6 +4130,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<dired-aux>>
   <<dired-rsync>>
   <<diredfl>>
+#+end_src
+**** Treemacs
+#+begin_src emacs-lisp -n
   ;; treemacs
   <<treemacs>>
   <<treemacs-projectile>>
@@ -4117,6 +4143,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<treemacs-perspective>>
   <<treemacs-tab-bar>>
   <<treemacs-nerd-icons>>
+#+end_src
+**** Mail
+#+begin_src emacs-lisp -n
   ;; mail
   <<notmuch>>
   <<notmuch-indicator>>
@@ -4125,6 +4154,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<notmuch-maildir>>
   <<message>>
   <<sendmail>>
+#+end_src
+**** Programming languages
+#+begin_src emacs-lisp -n
   ;; programming
   ;; <<lispy>>
   ;; <<lispyville>>
@@ -4148,7 +4180,6 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<web-mode>>
   <<emmet-mode>>
   <<skewer-mode>>
-  <<lsp-tailwindcss>>
   <<sass-mode>>
   <<css-eldoc>>
   <<com-css-sort>>
@@ -4173,32 +4204,40 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<ob-ipython>>
   <<pip-requirements>>
   <<inferior-python-mode>>
-  <<lsp-pyright>>
   <<python-docstring>>
   <<pipenv>>
   <<pyvenv>>
-  <<flycheck-pycheckers>>
   <<ein>>
   <<rust-mode>>
   <<rustic>>
-  <<flycheck-rust>>
   <<ansible>>
   <<ansible-doc>>
   <<cperl-mode>>
   <<haskell-mode>>
+#+end_src
+**** Lsp
+#+begin_src emacs-lisp -n
+  <<lsp-mode>>
   <<lsp-haskell>>
-  <<magit>>
+  <<lsp-pyright>>
+  <<lsp-tailwindcss>>
+#+end_src
+**** Project stuffs
+#+begin_src emacs-lisp -n
   <<projectile>>
-  <<diff-hl>>
+  <<org-project-capture>>
+  <<magit>>
   <<perspective>>
   <<persp-projectile>>
   <<git-link>>
   <<git-messenger>>
   <<git-timemachine>>
-  <<gptel>>
-  <<consult-web>>
-  <<org-project-capture>>
-  <<lsp-mode>>
+  <<diff-hl>>
+#+end_src
+**** Checkers
+#+begin_src emacs-lisp
+  <<flycheck-pycheckers>>
+  <<flycheck-rust>>
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp -n
