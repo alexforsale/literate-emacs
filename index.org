@@ -2301,6 +2301,14 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
   :defer t)
 #+end_src
 
+** ox-hugo
+Blogging tools
+#+name: ox-hugo
+#+begin_src emacs-lisp -n
+  (use-package ox-hugo
+    :ensure t
+    :after ox)
+#+end_src
 * Dired
 Stands for /Directory Editor/ (I guess), is a builtin file manager for /Emacs/.
 ** dired 
