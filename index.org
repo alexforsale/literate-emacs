@@ -12,7 +12,7 @@
 #+exclude_tags: noexport
 #+creator: Emacs 29.3 (Org mode 9.6.15)
 #+cite_export:
-#+startup: overview
+#+startup: content indent
 #+export_file_name: index.html
 #+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
@@ -68,7 +68,7 @@ Mostly copied from /doom/ or the official documentation[fn:1].
     (setq evil-normal-state-cursor 'box
 	  evil-insert-state-cursor 'bar
 	  evil-visual-state-cursor 'hollow)
-    (evil-select-search-module 'evil-search-module 'evil-search)
+    (evil-select-search-module 'evil-search-module 'isearch)
     (evil-mode 1)
     (with-eval-after-load 'eldoc
       (eldoc-add-command 'evil-normal-state
