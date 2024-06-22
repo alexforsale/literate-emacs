@@ -77,6 +77,8 @@ Mostly copied from /doom/ or the official documentation[fn:1].
 			 'evil-delete
 			 'evil-replace)))
 #+end_src
+Notes:
+- =evil-search-modules= :: I switched this to =isearch= since the default =evil-search= didn't search through collapsed headings in =org-mode=.
 ** evil-collection :external:
 For parts of /Emacs/ not covered by Evil[fn:6].
 #+name: evil-collection
