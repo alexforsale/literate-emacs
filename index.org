@@ -662,17 +662,18 @@ Emacs package that displays available keybindings in popup[fn:8]. This is one of
 Making /Emacs/ more colourful.
 #+name: rainbow-packages
 #+begin_src emacs-lisp -n
-(use-package rainbow-mode
-  :ensure t
-  :hook (prog-mode . rainbow-mode))
+  (use-package rainbow-mode
+    :ensure t
+    :hook (prog-mode . rainbow-mode))
 
-(use-package rainbow-identifiers
-  :ensure t
-  :hook (prog-mode . rainbow-identifiers-mode))
+  (use-package rainbow-identifiers
+    :ensure t
+    :hook (prog-mode . rainbow-identifiers-mode))
 
-(use-package rainbow-delimiters
-  :ensure t
-  :hook (prog-mode . rainbow-delimiters-mode))
+  (use-package rainbow-delimiters
+    :ensure (:wait t)
+    :demand t
+    :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
 ** helpful :external:
@@ -687,26 +688,26 @@ Since /Emacs/ is a self-documenting editor[fn:5]. It's certainly nice to have a 
 [[https://github.com/Wilfred/helpful/raw/master/screenshots/helpful_bindings.png]]
 #+name: helpful
 #+begin_src emacs-lisp -n
-(use-package helpful
-  :ensure
-  :bind
-  ("C-h f" . helpful-function)
-  ([remap describe-symbol] . helpful-symbol)
-  ([remap describe-variable] . helpful-variable)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-key] . helpful-key)
-  :custom
-  (helpful-max-buffers 2)
-  :config
-  (with-eval-after-load 'general
-    (general-define-key
-     "C-h F" 'helpful-function
-     :keymaps 'prog-mode-map
-     "C-c C-d" 'helpful-at-point)
-    (general-nvmap
-      :keymaps 'prog-mode-map
-      "K" '(helpful-at-point :wk "helpful at point")
-      "gr" '(helpful-update :wk "update"))))
+  (use-package helpful
+    :ensure t
+    :bind
+    ("C-h f" . helpful-function)
+    ([remap describe-symbol] . helpful-symbol)
+    ([remap describe-variable] . helpful-variable)
+    ([remap describe-command] . helpful-command)
+    ([remap describe-key] . helpful-key)
+    :custom
+    (helpful-max-buffers 2)
+    :config
+    (with-eval-after-load 'general
+      (general-define-key
+       "C-h F" 'helpful-function
+       :keymaps 'prog-mode-map
+       "C-c C-d" 'helpful-at-point)
+      (general-nvmap
+        :keymaps 'prog-mode-map
+        "K" '(helpful-at-point :wk "helpful at point")
+        "gr" '(helpful-update :wk "update"))))
 #+end_src
 
 ** hl-line
@@ -1448,18 +1449,18 @@ CLOSED: [2024-04-24 Wed 21:26]
 [[./assets/img/emacs-magit.png][file:assets/img/emacs-magit.png]]
 #+name: magit
 #+begin_src emacs-lisp -n
-(use-package magit
-  :ensure
-  :demand t
-  :config
-  (evil-set-initial-state #'git-commit-mode 'insert)
-  :custom
-  (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
-  (magit-diff-refine-hunk 'all)
-  (magit-log-arguments '("-n100" "--graph" "--decorate"))
-  :general
-  (+config/leader-go
-    "g" 'magit-status))
+  (use-package magit
+    :ensure (:wait t)
+    :demand t
+    :config
+    (evil-set-initial-state #'git-commit-mode 'insert)
+    :custom
+    (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
+    (magit-diff-refine-hunk 'all)
+    (magit-log-arguments '("-n100" "--graph" "--decorate"))
+    :general
+    (+config/leader-go
+      "g" 'magit-status))
 #+end_src
 
 ** projectile :external:
@@ -1506,24 +1507,24 @@ A project interaction library for /Emacs/, with little external dependency as po
 [[./assets/img/emacs-diff-hl-indicator.png][file:assets/img/emacs-diff-hl-indicator.png]]
 #+name: diff-hl
 #+begin_src emacs-lisp -n
-(use-package diff-hl
-  :ensure
-  :hook (find-file . diff-hl-mode)
-  :hook (vc-dir-mode . diff-hl-dir-mode)
-  :hook (dired-mode . diff-hl-dired-mode)
-  :hook (diff-hl-mode . diff-hl-flydiff-mode)
-  :hook (diff-hl-mode . diff-hl-show-hunk-mouse-mode)
-  :hook (magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
-  :hook (magit-post-refresh-hook . diff-hl-magit-post-refresh)
-  :init
-  (global-diff-hl-mode)
-  :custom
-  (vc-git-diff-switches '("--histogram")
-                        diff-hl-flydiff-delay 0.5
-                        diff-hl-show-staged-changes nil)
-  :config
-  (when (featurep 'flycheck)
-    (setq flycheck-indication-mode 'right-fringe)))
+  (use-package diff-hl
+    :ensure t
+    :hook (find-file . diff-hl-mode)
+    :hook (vc-dir-mode . diff-hl-dir-mode)
+    :hook (dired-mode . diff-hl-dired-mode)
+    :hook (diff-hl-mode . diff-hl-flydiff-mode)
+    :hook (diff-hl-mode . diff-hl-show-hunk-mouse-mode)
+    :hook (magit-pre-refresh-hook . diff-hl-magit-pre-refresh)
+    :hook (magit-post-refresh-hook . diff-hl-magit-post-refresh)
+    :init
+    (global-diff-hl-mode)
+    :custom
+    (vc-git-diff-switches '("--histogram")
+                          diff-hl-flydiff-delay 0.5
+                          diff-hl-show-staged-changes nil)
+    :config
+    (when (featurep 'flycheck)
+      (setq flycheck-indication-mode 'right-fringe)))
 #+end_src
 ** perspective :external:
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
@@ -1590,129 +1591,129 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 ** git-link :external:
 #+name: git-link
 #+begin_src emacs-lisp -n
-(use-package git-link
-  :demand
-  :ensure
-  :commands (git-link git-link-commit git-link-homepage)
-  :general
-  (+config/leader-go
-    "G" '(:ignore t :wk "git")
-    "Gl" 'git-link
-    "Gh" 'git-link-homepage
-    "Gc" 'git-link-commit))
+  (use-package git-link
+    :demand t
+    :ensure t
+    :commands (git-link git-link-commit git-link-homepage)
+    :general
+    (+config/leader-go
+      "G" '(:ignore t :wk "git")
+      "Gl" 'git-link
+      "Gh" 'git-link-homepage
+      "Gc" 'git-link-commit))
 #+end_src
 ** git-messenger :external:
 #+caption: /git messenger/ popup message
 [[./assets/img/emacs-git-messenger.png][file:assets/img/emacs-git-messenger.png]]
 #+name: git-messenger
 #+begin_src emacs-lisp -n
-(use-package git-messenger
-  :ensure
-  :config
-  (with-eval-after-load 'general
-    (+config/leader-go
-      "Gm" 'git-messenger:popup-message))
-  :custom
-  ;; Enable magit-show-commit instead of pop-to-buffer
-  (git-messenger:use-magit-popup t)
-  (git-messenger:show-detail t))
+  (use-package git-messenger
+    :ensure t
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-go
+        "Gm" 'git-messenger:popup-message))
+    :custom
+    ;; Enable magit-show-commit instead of pop-to-buffer
+    (git-messenger:use-magit-popup t)
+    (git-messenger:show-detail t))
 #+end_src
 ** git-timemachine :external:
 #+name: git-timemachine
 #+begin_src emacs-lisp -n
-(use-package git-timemachine
-  :ensure
-  :after magit
-  :general
-  (+config/leader-go
-    "Gt" 'git-timemachine-toggle))
+  (use-package git-timemachine
+    :ensure t
+    :after magit
+    :general
+    (+config/leader-go
+      "Gt" 'git-timemachine-toggle))
 #+end_src
 ** org-project-capture :external:
 #+name: org-project-capture
 #+begin_src emacs-lisp -n
-(use-package org-project-capture
-  :bind (("C-c n p" . org-project-capture-project-todo-completing-read))
-  :ensure t
-  :config
-  (progn
-    (setq org-project-capture-backend
-          (make-instance 'org-project-capture-projectile-backend))  ; Replace with your backend of choice
-    (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
-    (org-project-capture-single-file)))
+  (use-package org-project-capture
+    :bind (("C-c n p" . org-project-capture-project-todo-completing-read))
+    :ensure t
+    :config
+    (progn
+      (setq org-project-capture-backend
+            (make-instance 'org-project-capture-projectile-backend))  ; Replace with your backend of choice
+      (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
+      (org-project-capture-single-file)))
 #+end_src
 ** lsp :external:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
 *** old config :noexport:
 #+begin_src emacs-lisp -n :noweb no
-(use-package lsp-mode
-  :ensure
-  :diminish (lsp-lens-mode lsp-mode)
-  :commands lsp lsp-deferred
-  :init
-  (setq lsp-keymap-prefix "C-c C-l")
-  (defun my/orderless-dispatch-flex-first (_pattern index _total)
-    (and (eq index 0) 'orderless-flex))
-  (defun my/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless)))
-  (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
-  (when (featurep 'cape)
-    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
-  :hook
-  (lsp-mode . lsp-enable-which-key-integration)
-  (lsp-completion-mode . my/lsp-mode-setup-completion)
-  ((c-mode c++-mode xml-mode
-           yaml-mode toml-mode
-           lua-mode jinja2-mode
-           json-mode html-mode
-           web-mode html-mode-local-vars-hook
-           web-mode-local-vars-hook nxml-mode-local-vars-hook
-           scss-mode-local-vars css-mode-local-vars
-           less-css-mode-local-vars css-mode
-           typescript-mode javascript-mode
-           js2-mode typescript-tsx-mode) . lsp-deferred)
-  :config
-  (setq lsp-toml-command
-        (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
-            (expand-file-name ".cargo/bin/taplo" "~")
-          "taplo")
-        lsp-rust-rls-server-command "rls"
-        lsp-eldoc-render-all t
-        lsp-enable-snippet nil
-        lsp-enable-indentation nil
-        lsp-prefer-flymake nil
-        lsp-keep-workspace-alive nil
-        lsp-modeline-code-actions-segments '(count icon name))
-  :custom
-  (lsp-completion-provider :none)
-  :config
-  (when (featurep 'exwm)
-    (advice-add #'corfu--make-frame :around
-                (defun +corfu--make-frame-a (oldfun &rest args)
-                  (cl-letf (((symbol-function #'frame-parent)
-                             (lambda (frame)
-                               (or (frame-parameter frame 'parent-frame)
-                                   exwm-workspace--current))))
-                    (apply oldfun args))
-                  (when exwm--connection
-                    (set-frame-parameter corfu--frame 'parent-frame nil))))
+  (use-package lsp-mode
+    :ensure t
+    :diminish (lsp-lens-mode lsp-mode)
+    :commands lsp lsp-deferred
+    :init
+    (setq lsp-keymap-prefix "C-c C-l")
+    (defun my/orderless-dispatch-flex-first (_pattern index _total)
+      (and (eq index 0) 'orderless-flex))
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless)))
+    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+    (when (featurep 'cape)
+      (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+    :hook
+    (lsp-mode . lsp-enable-which-key-integration)
+    (lsp-completion-mode . my/lsp-mode-setup-completion)
+    ((c-mode c++-mode xml-mode
+             yaml-mode toml-mode
+             lua-mode jinja2-mode
+             json-mode html-mode
+             web-mode html-mode-local-vars-hook
+             web-mode-local-vars-hook nxml-mode-local-vars-hook
+             scss-mode-local-vars css-mode-local-vars
+             less-css-mode-local-vars css-mode
+             typescript-mode javascript-mode
+             js2-mode typescript-tsx-mode) . lsp-deferred)
+    :config
+    (setq lsp-toml-command
+          (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
+              (expand-file-name ".cargo/bin/taplo" "~")
+            "taplo")
+          lsp-rust-rls-server-command "rls"
+          lsp-eldoc-render-all t
+          lsp-enable-snippet nil
+          lsp-enable-indentation nil
+          lsp-prefer-flymake nil
+          lsp-keep-workspace-alive nil
+          lsp-modeline-code-actions-segments '(count icon name))
+    :custom
+    (lsp-completion-provider :none)
+    :config
+    (when (featurep 'exwm)
+      (advice-add #'corfu--make-frame :around
+                  (defun +corfu--make-frame-a (oldfun &rest args)
+                    (cl-letf (((symbol-function #'frame-parent)
+                               (lambda (frame)
+                                 (or (frame-parameter frame 'parent-frame)
+                                     exwm-workspace--current))))
+                      (apply oldfun args))
+                    (when exwm--connection
+                      (set-frame-parameter corfu--frame 'parent-frame nil))))
 
-    (advice-add #'corfu--popup-redirect-focus :override
-                (defun +corfu--popup-redirect-focus-a ()
-                  (redirect-frame-focus corfu--frame
-                                        (or (frame-parent corfu--frame)
-                                            exwm-workspace--current)))))
-  :general
-  (+config/leader-key
-    :keymaps 'lsp-mode-map
-    "l" (general-simulate-key "C-c C-l"
-          :name general-SPC-l-simulates-C-c-C-l
-          :docstring "Simulates C-c C-l"
-          :which-key "LSP"))
-  (general-nvmap
-    :keymaps 'lsp-mode-map
-    "K" '(lsp-describe-thing-at-point :wk "describe thing at point")))
+      (advice-add #'corfu--popup-redirect-focus :override
+                  (defun +corfu--popup-redirect-focus-a ()
+                    (redirect-frame-focus corfu--frame
+                                          (or (frame-parent corfu--frame)
+                                              exwm-workspace--current)))))
+    :general
+    (+config/leader-key
+      :keymaps 'lsp-mode-map
+      "l" (general-simulate-key "C-c C-l"
+            :name general-SPC-l-simulates-C-c-C-l
+            :docstring "Simulates C-c C-l"
+            :which-key "LSP"))
+    (general-nvmap
+      :keymaps 'lsp-mode-map
+      "K" '(lsp-describe-thing-at-point :wk "describe thing at point")))
 #+end_src
 *** Basic configuration
 :PROPERTIES:
@@ -1721,109 +1722,109 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 
 **** LSP
 #+begin_src emacs-lisp -n
-(use-package lsp-mode
-  :ensure
-  :init
-  (setq lsp-keymap-prefix "C-c C-l")
-  (defun my/orderless-dispatch-flex-first (_pattern index _total)
-    (and (eq index 0) 'orderless-flex))
-  (defun my/lsp-mode-setup-completion ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless)))
-  (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
-  (when (featurep 'cape)
-    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
-  :hook
-  (lsp-mode . lsp-enable-which-key-integration)
-  (lsp-completion-mode . my/lsp-mode-setup-completion)
-  ((c-mode c++-mode xml-mode python-mode
-           yaml-mode toml-mode python-mode-local-vars
-           lua-mode jinja2-mode
-           json-mode html-mode
-           web-mode html-mode-local-vars-hook
-           web-mode-local-vars-hook nxml-mode-local-vars-hook
-           scss-mode-local-vars css-mode-local-vars
-           less-css-mode-local-vars css-mode
-           typescript-mode javascript-mode
-           js2-mode typescript-tsx-mode) . lsp-deferred)
-  :config
-  (setq lsp-toml-command
-        (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
-            (expand-file-name ".cargo/bin/taplo" "~")
-          "taplo")
-        lsp-rust-rls-server-command "rls"
-        lsp-eldoc-render-all t
-        lsp-enable-snippet nil
-        lsp-enable-indentation nil
-        lsp-prefer-flymake nil
-        lsp-keep-workspace-alive nil
-        lsp-modeline-code-actions-segments '(count icon name))
-  (when (featurep 'exwm)
-    (advice-add #'corfu--make-frame :around
-                (defun +corfu--make-frame-a (oldfun &rest args)
-                  (cl-letf (((symbol-function #'frame-parent)
-                             (lambda (frame)
-                               (or (frame-parameter frame 'parent-frame)
-                                   exwm-workspace--current))))
-                    (apply oldfun args))
-                  (when exwm--connection
-                    (set-frame-parameter corfu--frame 'parent-frame nil))))
+  (use-package lsp-mode
+    :ensure t
+    :init
+    (setq lsp-keymap-prefix "C-c C-l")
+    (defun my/orderless-dispatch-flex-first (_pattern index _total)
+      (and (eq index 0) 'orderless-flex))
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless)))
+    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+    (when (featurep 'cape)
+      (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+    :hook
+    (lsp-mode . lsp-enable-which-key-integration)
+    (lsp-completion-mode . my/lsp-mode-setup-completion)
+    ((c-mode c++-mode xml-mode python-mode
+             yaml-mode toml-mode python-mode-local-vars
+             lua-mode jinja2-mode
+             json-mode html-mode
+             web-mode html-mode-local-vars-hook
+             web-mode-local-vars-hook nxml-mode-local-vars-hook
+             scss-mode-local-vars css-mode-local-vars
+             less-css-mode-local-vars css-mode
+             typescript-mode javascript-mode
+             js2-mode typescript-tsx-mode) . lsp-deferred)
+    :config
+    (setq lsp-toml-command
+          (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
+              (expand-file-name ".cargo/bin/taplo" "~")
+            "taplo")
+          lsp-rust-rls-server-command "rls"
+          lsp-eldoc-render-all t
+          lsp-enable-snippet nil
+          lsp-enable-indentation nil
+          lsp-prefer-flymake nil
+          lsp-keep-workspace-alive nil
+          lsp-modeline-code-actions-segments '(count icon name))
+    (when (featurep 'exwm)
+      (advice-add #'corfu--make-frame :around
+                  (defun +corfu--make-frame-a (oldfun &rest args)
+                    (cl-letf (((symbol-function #'frame-parent)
+                               (lambda (frame)
+                                 (or (frame-parameter frame 'parent-frame)
+                                     exwm-workspace--current))))
+                      (apply oldfun args))
+                    (when exwm--connection
+                      (set-frame-parameter corfu--frame 'parent-frame nil))))
 
-    (advice-add #'corfu--popup-redirect-focus :override
-                (defun +corfu--popup-redirect-focus-a ()
-                  (redirect-frame-focus corfu--frame
-                                        (or (frame-parent corfu--frame)
-                                            exwm-workspace--current)))))
-  :custom
-  (lsp-completion-provider :none)
-  :general
-  (+config/leader-key
-    :keymaps 'lsp-mode-map
-    "l" (general-simulate-key "C-c C-l"
-          :name general-SPC-l-simulates-C-c-C-l
-          :docstring "Simulates C-c C-l"
-          :which-key "LSP")))
+      (advice-add #'corfu--popup-redirect-focus :override
+                  (defun +corfu--popup-redirect-focus-a ()
+                    (redirect-frame-focus corfu--frame
+                                          (or (frame-parent corfu--frame)
+                                              exwm-workspace--current)))))
+    :custom
+    (lsp-completion-provider :none)
+    :general
+    (+config/leader-key
+      :keymaps 'lsp-mode-map
+      "l" (general-simulate-key "C-c C-l"
+            :name general-SPC-l-simulates-C-c-C-l
+            :docstring "Simulates C-c C-l"
+            :which-key "LSP")))
 #+end_src
 **** lsp-ui 
 #+begin_src emacs-lisp -n
-(use-package lsp-ui
-  :ensure
-  :defer t
-  :hook (lsp-mode . lsp-ui-mode)
-  :init
-  (setq lsp-ui-sideline-enable t
-        lsp-ui-sideline-update-mode 'line
-        lsp-ui-sideline-show-code-actions t
-        lsp-ui-sideline-show-hover t
-        lsp-ui-doc-enable t
-        lsp-ui-doc-include-signature t
-        lsp-ui-doc-show-with-cursor t
-        lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
-        lsp-ui-doc-position 'at-point
-        lsp-ui-imenu-enable t
-        lsp-ui-sideline-ignore-duplicate t
-        lsp-ui-peek-enable t)
-  :config
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
-  (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t)
-  :general
-  (general-define-key
-   :keymaps '(lsp-ui-mode-map)
-   [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
-   [remap xref-find-references] 'lsp-ui-peek-find-references
-   "M-." 'lsp-ui-peek-find-definitions
-   "M-?" 'lsp-ui-peek-find-references))
+  (use-package lsp-ui
+    :ensure (:wait t)
+    :defer t
+    :hook (lsp-mode . lsp-ui-mode)
+    :init
+    (setq lsp-ui-sideline-enable t
+          lsp-ui-sideline-update-mode 'line
+          lsp-ui-sideline-show-code-actions t
+          lsp-ui-sideline-show-hover t
+          lsp-ui-doc-enable t
+          lsp-ui-doc-include-signature t
+          lsp-ui-doc-show-with-cursor t
+          lsp-eldoc-enable-hover nil ; Disable eldoc displays in minibuffer
+          lsp-ui-doc-position 'at-point
+          lsp-ui-imenu-enable t
+          lsp-ui-sideline-ignore-duplicate t
+          lsp-ui-peek-enable t)
+    :config
+    (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+    (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
+    (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
+    (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t)
+    :general
+    (general-define-key
+     :keymaps '(lsp-ui-mode-map)
+     [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
+     [remap xref-find-references] 'lsp-ui-peek-find-references
+     "M-." 'lsp-ui-peek-find-definitions
+     "M-?" 'lsp-ui-peek-find-references))
 #+end_src
 **** consult-lsp 
 #+begin_src emacs-lisp -n
-(use-package consult-lsp
-  :ensure
-  :after consult lsp
-  :bind
-  (:map lsp-mode-map
-        ([remap xref-find-apropos] . consult-lsp-symbols)))
+  (use-package consult-lsp
+    :ensure t
+    :after consult lsp
+    :bind
+    (:map lsp-mode-map
+          ([remap xref-find-apropos] . consult-lsp-symbols)))
 #+end_src
 ** gptel :external:
 #+name: gptel
@@ -2302,9 +2303,9 @@ This package looks promising, I'll wait until it mature a bit.
     :config
     (pinentry-start))
 #+end_src
-** pass :disabled:
+** pass
 #+name: pass
-#+begin_src emacs-lisp -n :tangle no
+#+begin_src emacs-lisp -n
   (use-package password-store
     :ensure t
     :defer t
@@ -2312,7 +2313,7 @@ This package looks promising, I'll wait until it mature a bit.
     (setq password-store-password-length 12))
 
   (use-package password-store-otp
-    :ensure (:host github :repo "volrath/password-store-otp.el")
+    :ensure (:host github :repo "volrath/password-store-otp.el" :branch "master" :tag "0.1.5")
     :defer t
     :after password-store)
 
@@ -2637,7 +2638,7 @@ Needs an external package =fd=, or =fd-find=
 #+name: notmuch
 #+begin_src emacs-lisp -n
   (use-package notmuch
-    :ensure t
+    :ensure (:host github :repo "notmuch/notmuch" :tag "0.38.3")
     :if (executable-find "notmuch")
     :defer t
     :commands (notmuch)
@@ -2781,19 +2782,19 @@ Needs an external package =fd=, or =fd-find=
 *** lispy
 #+name: lispy
 #+begin_src emacs-lisp -n
-(use-package lispy
-  :ensure
-  :hook ((emacs-lisp-mode . lispy-mode)
-         (lisp-mode . lispy-mode)
-         (scheme-mode . lispy-mode)
-         (geiser-mode . lispy-mode)))
+  (use-package lispy
+    :ensure t
+    :hook ((emacs-lisp-mode . lispy-mode)
+           (lisp-mode . lispy-mode)
+           (scheme-mode . lispy-mode)
+           (geiser-mode . lispy-mode)))
 #+end_src
 *** lispyville
 #+name: lispyville
 #+begin_src emacs-lisp -n
-(use-package lispyville
-  :ensure
-  :hook (lispy-mode . lispyville-mode))
+  (use-package lispyville
+    :ensure t
+    :hook (lispy-mode . lispyville-mode))
 #+end_src
 
 *** Emacs-lisp
@@ -2849,11 +2850,11 @@ Needs an external package =fd=, or =fd-find=
 **** macrostep :external:
 #+name: macrostep
 #+begin_src emacs-lisp -n
-(use-package macrostep
-  :ensure
-  :defer t
-  :bind (:map emacs-lisp-mode-map
-              ("C-c e" . macrostep-expand)))
+  (use-package macrostep
+    :ensure t
+    :defer t
+    :bind (:map emacs-lisp-mode-map
+                ("C-c e" . macrostep-expand)))
 #+end_src
 *** Common lisp
 #+name: common-lisp
@@ -2876,7 +2877,7 @@ Needs an external package =fd=, or =fd-find=
 #+name: sly
 #+begin_src emacs-lisp -n
   (use-package sly
-    :ensure
+    :ensure t
     :commands sly-autoloads
     :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
            (lisp-mode . sly-editing-mode))
@@ -2887,335 +2888,338 @@ Needs an external package =fd=, or =fd-find=
 **** cider :external:
 #+name: cider
 #+begin_src emacs-lisp -n
-;;;; clojure
-(use-package cider
-  :ensure
-  :defer t)
+  ;;;; clojure
+  (use-package cider
+    :ensure t
+    :defer t)
 #+end_src
 **** clj-refactor :external:
 #+name: clj-refactor
 #+begin_src emacs-lisp -n
-(use-package clj-refactor
-  :ensure
-  :defer t
-  :hook (clojure-mode . +config/clojure-mode-hook)
-  :config
-  (defun +config/clojure-mode-hook ()
-    (clj-refactor-mode 1)
-    ;; This choice of keybinding leaves cider-macroexpand-1 unbound
-    (cljr-add-keybindings-with-prefix "C-c r")))
+  (use-package clj-refactor
+    :ensure (:host github :repo "clojure-emacs/clj-refactor.el" :branch "master" :tag "v3.12.0")
+    :defer t
+    :hook (clojure-mode . +config/clojure-mode-hook)
+    :config
+    (defun +config/clojure-mode-hook ()
+      (clj-refactor-mode 1)
+      ;; This choice of keybinding leaves cider-macroexpand-1 unbound
+      (cljr-add-keybindings-with-prefix "C-c r")))
 #+end_src
 
 *** Scheme
 **** geiser :external:
 #+name: geiser
 #+begin_src emacs-lisp -n
-;;;; scheme
-(use-package geiser
-  :ensure
-  :defer t
-  :diminish geiser-autodoc-mode
-  ;; :hook (geiser-repl-mode . turn-on-smartparens-strict-mode)
-  :init
-  (setq geiser-autodoc-identifier-format "%s → %s"
-        geiser-repl-per-project-p t
-        geiser-repl-history-filename (concat user-emacs-directory "geiser-history")))
+  ;;;; scheme
+  (use-package geiser
+    :ensure t
+    :defer t
+    :diminish geiser-autodoc-mode
+    ;; :hook (geiser-repl-mode . turn-on-smartparens-strict-mode)
+    :init
+    (setq geiser-autodoc-identifier-format "%s → %s"
+          geiser-repl-per-project-p t
+          geiser-repl-history-filename (concat user-emacs-directory "geiser-history")))
 #+end_src
 **** geiser-guile :external:
 #+name: geiser-guile
 #+begin_src emacs-lisp -n
-(use-package geiser-guile
-  :ensure
-  :defer t
-  :config
-  (let ((nonguix-path (expand-file-name "Projects/guix/nonguix"
-                                        (getenv "HOME")))
-        (personal-path (expand-file-name "Projects/guix/devel/src"
-                                         (getenv "HOME"))))
-    (when (file-directory-p nonguix-path)
-      (add-to-list 'geiser-guile-load-path nonguix-path))
-    (when (file-directory-p personal-path)
-      (add-to-list 'geiser-guile-load-path personal-path))))
+  (use-package geiser-guile
+    :ensure t
+    :defer t
+    :config
+    (let ((nonguix-path (expand-file-name "Projects/guix/nonguix"
+                                          (getenv "HOME")))
+          (personal-path (expand-file-name "Projects/guix/devel/src"
+                                           (getenv "HOME"))))
+      (when (file-directory-p nonguix-path)
+        (add-to-list 'geiser-guile-load-path nonguix-path))
+      (when (file-directory-p personal-path)
+        (add-to-list 'geiser-guile-load-path personal-path))))
 #+end_src
 **** macrostep-geiser :external:
 #+begin_src emacs-lisp -n
-(use-package macrostep-geiser
-  :ensure
-  :defer t
-  :after geiser-mode geiser-repl
-  :hook ((geiser-mode geiser-repl-mode) . macrostep-geiser-setup)
-  :bind (:map geiser-mode-map
-              ("C-c e" . macrostep-expand)))
+  (use-package macrostep-geiser
+    :ensure t
+    :defer t
+    :after geiser-mode geiser-repl
+    :hook ((geiser-mode geiser-repl-mode) . macrostep-geiser-setup)
+    :bind (:map geiser-mode-map
+                ("C-c e" . macrostep-expand)))
 #+end_src
 ** C and C++
 *** cc-mode :builtin:
 #+name: cc-mode
 #+begin_src emacs-lisp -n 
-(use-package cc-mode
-  :mode ("\\.mm\\'" . objc-mode)
-  :mode ("\\.h\\'" . +cc-c-c++-objc-mode)
-  :hook (c-mode-common . rainbow-delimiters-mode)
-  ;; :hook (c++-mode-local-vars . c++-ts-mode)
-  ;; :hook (c-mode-common . c-ts-base-mode)
-  ;; :hook (cmake-mode-local-vars . cmake-ts-mode)
-  :config
-  (setq c-basic-offset tab-width
-        c-backspace-function #'delete-backward-char)
-  (with-eval-after-load 'ffap
-    (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
+  (use-package cc-mode
+    :ensure nil
+    :mode ("\\.mm\\'" . objc-mode)
+    :mode ("\\.h\\'" . +cc-c-c++-objc-mode)
+    :hook (c-mode-common . rainbow-delimiters-mode)
+    ;; :hook (c++-mode-local-vars . c++-ts-mode)
+    ;; :hook (c-mode-common . c-ts-base-mode)
+    ;; :hook (cmake-mode-local-vars . cmake-ts-mode)
+    :config
+    (setq c-basic-offset tab-width
+          c-backspace-function #'delete-backward-char)
+    (with-eval-after-load 'ffap
+      (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
 #+end_src
 ** XML
 *** nxml-mode 
 #+name: nxml-mode
 #+begin_src emacs-lisp -n
-(use-package nxml-mode
-  :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
-  :mode "\\.xs\\(?:d\\|lt\\)\\'"   ; xslt, xsd
-  :mode "\\.rss\\'"
-  :config
-  (setq nxml-slash-auto-complete-flag t
-        nxml-auto-insert-xml-declaration-flag t))
+  (use-package nxml-mode
+    :ensure nil
+    :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
+    :mode "\\.xs\\(?:d\\|lt\\)\\'"   ; xslt, xsd
+    :mode "\\.rss\\'"
+    :config
+    (setq nxml-slash-auto-complete-flag t
+          nxml-auto-insert-xml-declaration-flag t))
 #+end_src
 ** YAML
 *** yaml-mode :external:
 #+name: yaml-mode
 #+begin_src emacs-lisp -n
-(use-package yaml-mode
-  :ensure
-  :config
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
-  (setq tab-width 2)
-  ;; (when (treesit-available-p)
-  ;;   (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode)))
-  :hook
-  ((yaml-mode . (lambda ()
-                  (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
-   (yaml-mode . (lambda ()
-                  (run-hooks 'prog-mode-hook)))))
+  (use-package yaml-mode
+    :ensure t
+    :config
+    (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+    (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+    (setq tab-width 2)
+    ;; (when (treesit-available-p)
+    ;;   (add-to-list 'major-mode-remap-alist '(yaml-mode . yaml-ts-mode)))
+    :hook
+    ((yaml-mode . (lambda ()
+                    (define-key yaml-mode-map "\C-m" 'newline-and-indent)))
+     (yaml-mode . (lambda ()
+                    (run-hooks 'prog-mode-hook)))))
 #+end_src
 ** TOML
 *** toml-mode :external:
 #+name: toml-mode
 #+begin_src emacs-lisp -n
-(use-package toml-mode
-  :ensure
-  :mode
-  ("\\.toml\\'" . toml-mode)
-  :config
-  ;; (when (treesit-available-p)
-  ;; 	(add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
-  (with-eval-after-load 'lsp-mode
-    (setq lsp-toml-command (executable-find "taplo")))
-  (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
+  (use-package toml-mode
+    :ensure t
+    :mode
+    ("\\.toml\\'" . toml-mode)
+    :config
+    ;; (when (treesit-available-p)
+    ;; 	(add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
+    (with-eval-after-load 'lsp-mode
+      (setq lsp-toml-command (executable-find "taplo")))
+    (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
 #+end_src
 ** Lua
 *** lua-mode :external:
 #+name: lua-mode
 #+begin_src emacs-lisp -n 
-(use-package lua-mode
-  :ensure
-  :defer t
-  :config
-  (with-eval-after-load 'lsp-mode
-    (setq lsp-lua-hint-enable t
-          lsp-lua-hint-set-type t)))
+  (use-package lua-mode
+    :ensure t
+    :defer t
+    :config
+    (with-eval-after-load 'lsp-mode
+      (setq lsp-lua-hint-enable t
+            lsp-lua-hint-set-type t)))
 #+end_src
 ** Jinja2
 *** jinja2-mode :external:
 #+name: jinja2-mode
 #+begin_src emacs-lisp -n
-(use-package jinja2-mode
-  :ensure
-  :defer t
-  :config
-  ;; The default behavior is to reindent the whole buffer on save. This is
-  ;; disruptive and imposing. There are indentation commands available; the user
-  ;; can decide when they want their code reindented.
-  (setq jinja2-enable-indent-on-save nil)
-  (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-  (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
+  (use-package jinja2-mode
+    :ensure t
+    :defer t
+    :config
+    ;; The default behavior is to reindent the whole buffer on save. This is
+    ;; disruptive and imposing. There are indentation commands available; the user
+    ;; can decide when they want their code reindented.
+    (setq jinja2-enable-indent-on-save nil)
+    (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+    (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
 #+end_src
 ** Json
 *** json-mode 
 #+name: json-mode
 #+begin_src emacs-lisp -n
-(use-package json-mode
-  :ensure)
+  (use-package json-mode
+    :ensure t)
 #+end_src
 ** Web
 *** web-mode :external:
 #+name: web-mode
 #+begin_src emacs-lisp -n
-(defun +config/django-web-mode ()
-  "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
-  (if (projectile-project-p)
-      (if (file-exists-p (concat (projectile-project-root) "manage.py"))
-          (web-mode-set-engine "django"))))
+  (defun +config/django-web-mode ()
+    "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
+    (if (projectile-project-p)
+        (if (file-exists-p (concat (projectile-project-root) "manage.py"))
+            (web-mode-set-engine "django"))))
 
-(defun +config/web-mode-fix-js-comment ()
-  "Fix comment handling in `web-mode' for JavaScript (from `doom')."
-  (when (member web-mode-content-type '("javascript" "jsx"))
-    ;; For some reason the default is to insert HTML comments even
-    ;; in JavaScript.
-    (setq-local comment-start "//")
-    (setq-local comment-end "")
-    ;; Needed since otherwise the default value generated by
-    ;; `comment-normalize-vars' will key off the syntax and think
-    ;; that a single "/" starts a comment, which completely borks
-    ;; auto-fill.
-    (setq-local comment-start-skip "// *")))
+  (defun +config/web-mode-fix-js-comment ()
+    "Fix comment handling in `web-mode' for JavaScript (from `doom')."
+    (when (member web-mode-content-type '("javascript" "jsx"))
+      ;; For some reason the default is to insert HTML comments even
+      ;; in JavaScript.
+      (setq-local comment-start "//")
+      (setq-local comment-end "")
+      ;; Needed since otherwise the default value generated by
+      ;; `comment-normalize-vars' will key off the syntax and think
+      ;; that a single "/" starts a comment, which completely borks
+      ;; auto-fill.
+      (setq-local comment-start-skip "// *")))
 
-(use-package web-mode
-  :ensure
-  :defer t
-  :mode "\\.[px]?html?\\'"
-  :mode "\\.\\(?:tpl\\|blade\\)\\(?:\\.php\\)?\\'"
-  :mode "\\.erb\\'"
-  :mode "\\.[lh]?eex\\'"
-  :mode "\\.jsp\\'"
-  :mode "\\.as[cp]x\\'"
-  :mode "\\.ejs\\'"
-  :mode "\\.hbs\\'"
-  :mode "\\.mustache\\'"
-  :mode "\\.svelte\\'"
-  :mode "\\.twig\\'"
-  :mode "\\.jinja2?\\'"
-  :mode "\\.eco\\'"
-  :mode "wp-content/themes/.+/.+\\.php\\'"
-  :mode "templates/.+\\.php\\'"
-  :init
-  ;; If the user has installed `vue-mode' then, by appending this to
-  ;; `auto-mode-alist' rather than prepending it, its autoload will have
-  ;; priority over this one.
-  (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode) 'append)
-  :mode "\\.vue\\'"
-  :config
-  (setq web-mode-markup-indent-offset 2
-        web-mode-enable-auto-closing t
-        web-mode-auto-close-style 1
-        web-mode-css-indent-offset 2
-        web-mode-code-indent-offset 2
-        web-mode-enable-auto-pairing nil
-        web-mode-enable-block-face t
-        web-mode-enable-comment-interpolation t
-        web-mode-enable-heredoc-fontification t
-        web-mode-enable-css-colorization t
-        web-mode-enable-part-face t
-        web-mode-enable-current-element-highlight t
-        web-mode-enable-current-column-highlight t
-        web-mode-style-padding 1
-        web-mode-script-padding 1
-        web-mode-block-padding 0
-        web-mode-comment-style 2
-        web-mode-enable-curly-brace-indentation t
-        web-mode-enable-auto-quoting nil
-        web-mode-engines-alist
-        '(("php" . "\\.phtml\\'")
-          ("blade" . "\\.blade\\'")
-          ("elixir" . "\\.eex\\'")
-          ("phoenix" . "\\.[lh]eex\\'")))
-  ;; web-mode-extra-auto-pairs
-  ;; '(("erb" . (("beg" "end")))
-  ;;   ("php" . (("beg" "end")))))
-  (with-eval-after-load 'smartparens
-    (sp-local-pair 'web-mode "<" nil :actions :rem)
-    (sp-local-pair 'web-mode "{%" " %}")
-    (sp-local-pair 'web-mode "{{" " }}")
-    (sp-local-pair 'web-mode "<!--" " -->")
-    )
-  (defun +config/web-mode-hook ()
-    "Hooks for Web mode."
-    (local-set-key (kbd "RET") 'newline-and-indent))
-  ;; Use // instead of /* as the default comment delimited in JS
-  (with-eval-after-load 'web-mode
-    (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
-          "//"))
-  :hook ((html-mode-local-vars-hook
-          mhtml-mode-local-vars-hook) . tree-sitter)
-  :hook (web-mode . +config/django-web-mode)
-  :general
-  (general-nvmap
-    :keymaps 'web-mode-map
-    "gn" 'web-mode-navigate)
-  (general-vmap
-   :keymaps 'web-mode-map
-    "gs" 'web-mode-surround))
+  (use-package web-mode
+    :ensure t
+    :defer t
+    :mode "\\.[px]?html?\\'"
+    :mode "\\.\\(?:tpl\\|blade\\)\\(?:\\.php\\)?\\'"
+    :mode "\\.erb\\'"
+    :mode "\\.[lh]?eex\\'"
+    :mode "\\.jsp\\'"
+    :mode "\\.as[cp]x\\'"
+    :mode "\\.ejs\\'"
+    :mode "\\.hbs\\'"
+    :mode "\\.mustache\\'"
+    :mode "\\.svelte\\'"
+    :mode "\\.twig\\'"
+    :mode "\\.jinja2?\\'"
+    :mode "\\.eco\\'"
+    :mode "wp-content/themes/.+/.+\\.php\\'"
+    :mode "templates/.+\\.php\\'"
+    :init
+    ;; If the user has installed `vue-mode' then, by appending this to
+    ;; `auto-mode-alist' rather than prepending it, its autoload will have
+    ;; priority over this one.
+    (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode) 'append)
+    :mode "\\.vue\\'"
+    :config
+    (setq web-mode-markup-indent-offset 2
+          web-mode-enable-auto-closing t
+          web-mode-auto-close-style 1
+          web-mode-css-indent-offset 2
+          web-mode-code-indent-offset 2
+          web-mode-enable-auto-pairing nil
+          web-mode-enable-block-face t
+          web-mode-enable-comment-interpolation t
+          web-mode-enable-heredoc-fontification t
+          web-mode-enable-css-colorization t
+          web-mode-enable-part-face t
+          web-mode-enable-current-element-highlight t
+          web-mode-enable-current-column-highlight t
+          web-mode-style-padding 1
+          web-mode-script-padding 1
+          web-mode-block-padding 0
+          web-mode-comment-style 2
+          web-mode-enable-curly-brace-indentation t
+          web-mode-enable-auto-quoting nil
+          web-mode-engines-alist
+          '(("php" . "\\.phtml\\'")
+            ("blade" . "\\.blade\\'")
+            ("elixir" . "\\.eex\\'")
+            ("phoenix" . "\\.[lh]eex\\'")))
+    ;; web-mode-extra-auto-pairs
+    ;; '(("erb" . (("beg" "end")))
+    ;;   ("php" . (("beg" "end")))))
+    (with-eval-after-load 'smartparens
+      (sp-local-pair 'web-mode "<" nil :actions :rem)
+      (sp-local-pair 'web-mode "{%" " %}")
+      (sp-local-pair 'web-mode "{{" " }}")
+      (sp-local-pair 'web-mode "<!--" " -->")
+      )
+    (defun +config/web-mode-hook ()
+      "Hooks for Web mode."
+      (local-set-key (kbd "RET") 'newline-and-indent))
+    ;; Use // instead of /* as the default comment delimited in JS
+    (with-eval-after-load 'web-mode
+      (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
+            "//"))
+    :hook ((html-mode-local-vars-hook
+            mhtml-mode-local-vars-hook) . tree-sitter)
+    :hook (web-mode . +config/django-web-mode)
+    :general
+    (general-nvmap
+      :keymaps 'web-mode-map
+      "gn" 'web-mode-navigate)
+    (general-vmap
+     :keymaps 'web-mode-map
+      "gs" 'web-mode-surround))
 #+end_src
 *** emmet-mode :external:
 #+name: emmet-mode
 #+begin_src emacs-lisp -n
-(use-package emmet-mode
-  :ensure
-  :defer t
-  :hook (css-mode web-mode html-mode haml-mode nxml-mode rjsx-mode reason-mode)
-  :config
-  (when (require 'yasnippet nil t)
-    (add-hook 'emmet-mode-hook #'yas-minor-mode-on))
-  (setq emmet-move-cursor-between-quotes t)
-  :general
-  (general-vmap
-    :keymaps 'emmet-mode-keymap
-    "TAB" 'emmet-wrap-with-markup)
-  (general-def
-    :keymaps 'emmet-mode-keymap
-    "M-E" 'emmet-expand-line))
+  (use-package emmet-mode
+    :ensure t
+    :defer t
+    :hook (css-mode web-mode html-mode haml-mode nxml-mode rjsx-mode reason-mode)
+    :config
+    (when (require 'yasnippet nil t)
+      (add-hook 'emmet-mode-hook #'yas-minor-mode-on))
+    (setq emmet-move-cursor-between-quotes t)
+    :general
+    (general-vmap
+      :keymaps 'emmet-mode-keymap
+      "TAB" 'emmet-wrap-with-markup)
+    (general-def
+      :keymaps 'emmet-mode-keymap
+      "M-E" 'emmet-expand-line))
 #+end_src
 *** skewer-mode :external:
 #+name: skewer-mode
 #+begin_src emacs-lisp -n :tangle no
-(use-package skewer-mode
-  :ensure
-  :defer t
-  :hook ((web-mode . skewer-html-mode)
-         (js2-mode . skewer-mode)))
+  (use-package skewer-mode
+    :ensure t
+    :defer t
+    :hook ((web-mode . skewer-html-mode)
+           (js2-mode . skewer-mode)))
 #+end_src
 *** lsp-tailwindcss :external:
 #+name: lsp-tailwindcss
 #+begin_src emacs-lisp -n :tangle no
-(use-package lsp-tailwindcss
-  :ensure
-  :init
-  (setq lsp-tailwindcss-add-on-mode t))
+  (use-package lsp-tailwindcss
+    :ensure t
+    :init
+    (setq lsp-tailwindcss-add-on-mode t))
 #+end_src
 *** sass-mode :external:
 #+name: sass-mode
 #+begin_src emacs-lisp -n 
-(use-package sass-mode
-  :ensure
-  :defer t
-  :hook (scss-mode . rainbow-mode))
+  (use-package sass-mode
+    :ensure t
+    :defer t
+    :hook (scss-mode . rainbow-mode))
 #+end_src
 *** css-eldoc :external:
 #+name: css-eldoc
 #+begin_src emacs-lisp -n
-(use-package css-eldoc
-  :ensure
-  :defer t
-  :commands turn-on-css-eldoc
-  ;;add a hook if you want always to see the selector options in the minibuffer
-  :config
-  (add-hook 'css-mode-hook 'turn-on-css-eldoc)
-  (add-hook 'scss-mode-hook 'turn-on-css-eldoc))
+  (use-package css-eldoc
+    :ensure t
+    :defer t
+    :commands turn-on-css-eldoc
+    ;;add a hook if you want always to see the selector options in the minibuffer
+    :config
+    (add-hook 'css-mode-hook 'turn-on-css-eldoc)
+    (add-hook 'scss-mode-hook 'turn-on-css-eldoc))
 #+end_src
 *** com-css-sort :external:
 #+begin_src emacs-lisp -n
-(use-package com-css-sort
-  :ensure
-  :defer t
-  :commands (com-css-sort com-css-sort-attributes-block com-css-sort-attributes-document)
-  :config
-  (setq com-css-sort-sort-type 'alphabetic-sort))
+  (use-package com-css-sort
+    :ensure t
+    :defer t
+    :commands (com-css-sort com-css-sort-attributes-block com-css-sort-attributes-document)
+    :config
+    (setq com-css-sort-sort-type 'alphabetic-sort))
 #+end_src
 *** css-mode
 #+begin_src emacs-lisp -n
-(use-package css-mode
-  :hook ((css-mode
-          stylus-mode) . rainbow-mode)
-  :hook (css-mode-local-vars . tree-sitter)
-  :config
-  (with-eval-after-load 'skewer-mode
-    (add-hook 'css-mode-hook 'skewer-css-mode)))
+  (use-package css-mode
+    :ensure nil
+    :hook ((css-mode
+            stylus-mode) . rainbow-mode)
+    :hook (css-mode-local-vars . tree-sitter)
+    :config
+    (with-eval-after-load 'skewer-mode
+      (add-hook 'css-mode-hook 'skewer-css-mode)))
 #+end_src
 *** javascript 
 #+name: javascript
@@ -3352,160 +3356,160 @@ Run this for any buffer you want to skewer."
 *** js2-mode :external:
 #+name: js2-mode
 #+begin_src emacs-lisp -n
-(use-package js2-mode
-  :ensure
-  :defer t
-  :interpreter ("node" . js2-mode)
-  :hook (js2-mode . rainbow-delimiters-mode)
-  :hook (js2-mode . js2-imenu-extras-mode)
-  :hook (js2-mode . (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
-  :config
-  (with-eval-after-load 'skewer-mode
-    (add-hook 'js2-mode 'skewer-mode))
-  (setq-default js2-basic-indent 2
-                js2-basic-offset 2
-                js2-auto-indent-p t
-                js2-cleanup-whitespace t
-                js2-enter-indents-newline t
-                js2-indent-on-enter-key t
-                js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$")))
+  (use-package js2-mode
+    :ensure t
+    :defer t
+    :interpreter ("node" . js2-mode)
+    :hook (js2-mode . rainbow-delimiters-mode)
+    :hook (js2-mode . js2-imenu-extras-mode)
+    :hook (js2-mode . (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
+    :config
+    (with-eval-after-load 'skewer-mode
+      (add-hook 'js2-mode 'skewer-mode))
+    (setq-default js2-basic-indent 2
+                  js2-basic-offset 2
+                  js2-auto-indent-p t
+                  js2-cleanup-whitespace t
+                  js2-enter-indents-newline t
+                  js2-indent-on-enter-key t
+                  js2-global-externs (list "window" "module" "require" "buster" "sinon" "assert" "refute" "setTimeout" "clearTimeout" "setInterval" "clearInterval" "location" "__dirname" "console" "JSON" "jQuery" "$")))
 #+end_src
 *** js2-refactor :external:
 #+name: js2-refactor
 #+begin_src emacs-lisp -n 
-(use-package js2-refactor
-  :ensure
-  :defer t
-  :hook (js2-mode . js2-refactor-mode)
-  :init
-  (js2r-add-keybindings-with-prefix "C-c C-r")
-  :config
-  (setq js2-skip-preprocessor-directives t)
-  :general
-  (general-nvmap
-    :keymap 'js2-refactor-mode-map
-    "zr" (general-simulate-key "C-c C-r"
-           :name general-z-r-simulates-C-c-C-r
-           :docstring "Simulates C-c C-r"
-           :which-key "JS2 Refactor")))
+  (use-package js2-refactor
+    :ensure t
+    :defer t
+    :hook (js2-mode . js2-refactor-mode)
+    :init
+    (js2r-add-keybindings-with-prefix "C-c C-r")
+    :config
+    (setq js2-skip-preprocessor-directives t)
+    :general
+    (general-nvmap
+      :keymap 'js2-refactor-mode-map
+      "zr" (general-simulate-key "C-c C-r"
+             :name general-z-r-simulates-C-c-C-r
+             :docstring "Simulates C-c C-r"
+             :which-key "JS2 Refactor")))
 #+end_src
 *** rjsx-mode :external:
 #+name: rjsx-mode
 #+begin_src emacs-lisp -n
-(use-package rjsx-mode
-  :ensure
-  :defer t
-  :mode "\\.[mc]?js\\'"
-  :mode "\\.es6\\'"
-  :mode "\\.pac\\'"
-  :hook (rjsx-mode . rainbow-delimiters-mode)
-  :hook (rjsx-mode . rainbow-mode)
-  :bind (([remap comment-dwim ] . rjsx-comment-dwim))
-  :init
-  (with-eval-after-load 'compilation
-    (add-to-list 'compilation-error-regexp-alist 'node)
-    (add-to-list 'compilation-error-regexp-alist-alist '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-                                                              2 3 4)))
-  :config
-  (with-eval-after-load 'compilation
-    (add-to-list 'compilation-error-regexp-alist 'node)
-    (add-to-list 'compilation-error-regexp-alist-alist
-                 '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
-                        2 3 4)))
-  (setq js-chain-indent t
-        ;; These have become standard in the JS community
-        js2-basic-offset 2
-        ;; Don't mishighlight shebang lines
-        js2-skip-preprocessor-directives t
-        ;; let flycheck handle this
-        js2-mode-show-parse-errors nil
-        js2-mode-show-strict-warnings nil
-        ;; Flycheck provides these features, so disable them: conflicting with
-        ;; the eslint settings.
-        js2-strict-missing-semi-warning nil
-        ;; maximum fontification
-        js2-highlight-level 3
-        js2-idle-timer-delay 0.15)
-  :general
-  (general-nvmap
-    :keymaps 'rjsx-mode-map
-    "'" 'rjsx-jump-tag
-    "gj" 'rjsx-jump-closing-tag
-    "gk" 'rjsx-jump-opening-tag
-    "gr" 'rjsx-rename-tag-at-point
-    "z>" 'rjsx-electric-gt
-    "z<" 'rjsx-electric-lt))
+  (use-package rjsx-mode
+    :ensure t
+    :defer t
+    :mode "\\.[mc]?js\\'"
+    :mode "\\.es6\\'"
+    :mode "\\.pac\\'"
+    :hook (rjsx-mode . rainbow-delimiters-mode)
+    :hook (rjsx-mode . rainbow-mode)
+    :bind (([remap comment-dwim ] . rjsx-comment-dwim))
+    :init
+    (with-eval-after-load 'compilation
+      (add-to-list 'compilation-error-regexp-alist 'node)
+      (add-to-list 'compilation-error-regexp-alist-alist '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+                                                                2 3 4)))
+    :config
+    (with-eval-after-load 'compilation
+      (add-to-list 'compilation-error-regexp-alist 'node)
+      (add-to-list 'compilation-error-regexp-alist-alist
+                   '(node "^[[:blank:]]*at \\(.*(\\|\\)\\(.+?\\):\\([[:digit:]]+\\):\\([[:digit:]]+\\)"
+                          2 3 4)))
+    (setq js-chain-indent t
+          ;; These have become standard in the JS community
+          js2-basic-offset 2
+          ;; Don't mishighlight shebang lines
+          js2-skip-preprocessor-directives t
+          ;; let flycheck handle this
+          js2-mode-show-parse-errors nil
+          js2-mode-show-strict-warnings nil
+          ;; Flycheck provides these features, so disable them: conflicting with
+          ;; the eslint settings.
+          js2-strict-missing-semi-warning nil
+          ;; maximum fontification
+          js2-highlight-level 3
+          js2-idle-timer-delay 0.15)
+    :general
+    (general-nvmap
+      :keymaps 'rjsx-mode-map
+      "'" 'rjsx-jump-tag
+      "gj" 'rjsx-jump-closing-tag
+      "gk" 'rjsx-jump-opening-tag
+      "gr" 'rjsx-rename-tag-at-point
+      "z>" 'rjsx-electric-gt
+      "z<" 'rjsx-electric-lt))
 #+end_src
 
 *** xref-js2 :external:
 #+name: xref-js2
 #+begin_src emacs-lisp -n
-(use-package xref-js2
-  :ensure
-  :defer t
-  :if (executable-find "ag") ; silver-searcher
-  :config
-  (add-hook 'js2-mode-hook (lambda ()
-                             (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+  (use-package xref-js2
+    :ensure t
+    :defer t
+    :if (executable-find "ag") ; silver-searcher
+    :config
+    (add-hook 'js2-mode-hook (lambda ()
+                               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 #+end_src
 *** typescript-mode :external:
 #+name: typescript-mode
 #+begin_src emacs-lisp -n 
-(use-package typescript-mode
-  :ensure
-  :defer t
-  :hook (typescript-mode . rainbow-delimiters-mode)
-  :hook (typescript-tsx-mode . rainbow-delimiters-mode)
-  :hook (typescript-mode . (lambda () (setq comment-line-break-function #'js2-line-break
-                                            typescript-indent-level (or (and (bound-and-true-p tide-mode)
-                                                                             (plist-get (tide-tsfmt-options) :indentSize))
-                                                                        typescript-indent-level)
-                                            emmet-expand-jsx-className? t)))
-  :init
-  (add-to-list 'auto-mode-alist
-               (cons "\\.tsx\\'" #'typescript-mode))
-  (with-eval-after-load 'flycheck
-    (flycheck-add-mode 'javascript-eslint 'web-mode)
-    (flycheck-add-mode 'javascript-eslint 'typescript-mode)
-    (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
-    (flycheck-add-mode 'typescript-tslint 'typescript-tsx-mode))
-  (defun +javascript-disable-tide-checkers-h ()
-    (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)
-    (add-to-list 'flycheck-disabled-checkers 'tsx-tide)
-    (add-to-list 'flycheck-disabled-checkers 'jsx-tide))
-  (add-hook 'typescript-tsx-mode-hook #'+javascript-disable-tide-checkers-h)
-  :config
-  (when (fboundp 'web-mode)
-    (define-derived-mode typescript-tsx-mode web-mode "TypeScript-TSX"))
-  (autoload 'js2-line-break "js2-mode" nil t))
+  (use-package typescript-mode
+    :ensure t
+    :defer t
+    :hook (typescript-mode . rainbow-delimiters-mode)
+    :hook (typescript-tsx-mode . rainbow-delimiters-mode)
+    :hook (typescript-mode . (lambda () (setq comment-line-break-function #'js2-line-break
+                                              typescript-indent-level (or (and (bound-and-true-p tide-mode)
+                                                                               (plist-get (tide-tsfmt-options) :indentSize))
+                                                                          typescript-indent-level)
+                                              emmet-expand-jsx-className? t)))
+    :init
+    (add-to-list 'auto-mode-alist
+                 (cons "\\.tsx\\'" #'typescript-mode))
+    (with-eval-after-load 'flycheck
+      (flycheck-add-mode 'javascript-eslint 'web-mode)
+      (flycheck-add-mode 'javascript-eslint 'typescript-mode)
+      (flycheck-add-mode 'javascript-eslint 'typescript-tsx-mode)
+      (flycheck-add-mode 'typescript-tslint 'typescript-tsx-mode))
+    (defun +javascript-disable-tide-checkers-h ()
+      (add-to-list 'flycheck-disabled-checkers 'javascript-jshint)
+      (add-to-list 'flycheck-disabled-checkers 'tsx-tide)
+      (add-to-list 'flycheck-disabled-checkers 'jsx-tide))
+    (add-hook 'typescript-tsx-mode-hook #'+javascript-disable-tide-checkers-h)
+    :config
+    (when (fboundp 'web-mode)
+      (define-derived-mode typescript-tsx-mode web-mode "TypeScript-TSX"))
+    (autoload 'js2-line-break "js2-mode" nil t))
 #+end_src
 *** tide :external:
 #+name: tide
 #+begin_src emacs-lisp -n
-(use-package tide
-  :ensure
-  :defer t
-  :hook (tide-mode . tide-hl-identifier-mode)
-  :config
-  (setq tide-completion-detailed t
-        tide-always-show-documentation t
-        tide-server-max-response-length 524288
-        tide-completion-setup-company-backend nil)
-  (add-hook 'tide-mode-hook (lambda () (add-hook 'kill-buffer-hook #'+javascript-cleanup-tide-processes-h nil 'local))))
+  (use-package tide
+    :ensure t
+    :defer t
+    :hook (tide-mode . tide-hl-identifier-mode)
+    :config
+    (setq tide-completion-detailed t
+          tide-always-show-documentation t
+          tide-server-max-response-length 524288
+          tide-completion-setup-company-backend nil)
+    (add-hook 'tide-mode-hook (lambda () (add-hook 'kill-buffer-hook #'+javascript-cleanup-tide-processes-h nil 'local))))
 #+end_src
 *** npm-mode :external:
 #+name: npm-mode
 #+begin_src emacs-lisp -n
-(use-package npm-mode
-  :ensure
-  :defer t)
+  (use-package npm-mode
+    :ensure t
+    :defer t)
 #+end_src
 *** nodejs-repl :external:
 #+name: nodejs-repl
 #+begin_src emacs-lisp -n
-(use-package nodejs-repl
-  :ensure
-  :defer t)
+  (use-package nodejs-repl
+    :ensure t
+    :defer t)
 #+end_src
 ** Latex
 *** auctex 
@@ -3552,15 +3556,16 @@ Run this for any buffer you want to skewer."
 *** bibtex 
 #+name: bibtex
 #+begin_src emacs-lisp -n 
-(use-package bibtex
-  :config
-  (setq bibtex-autokey-year-length 4
-        bibtex-autokey-name-year-separator "-"
-        bibtex-autokey-year-title-separator "-"
-        bibtex-autokey-titleword-separator "-"
-        bibtex-autokey-titlewords 2
-        bibtex-autokey-titlewords-stretch 1
-        bibtex-autokey-titleword-length 5))
+  (use-package bibtex
+    :ensure nil
+    :config
+    (setq bibtex-autokey-year-length 4
+          bibtex-autokey-name-year-separator "-"
+          bibtex-autokey-year-title-separator "-"
+          bibtex-autokey-titleword-separator "-"
+          bibtex-autokey-titlewords 2
+          bibtex-autokey-titlewords-stretch 1
+          bibtex-autokey-titleword-length 5))
 #+end_src
 *** LaTex 
 #+name: LaTex
@@ -3624,112 +3629,113 @@ Run this for any buffer you want to skewer."
 *** Basic Configuration
 #+name: markdown-mode
 #+begin_src emacs-lisp -n
-(use-package markdown-mode
-  :ensure)
+  (use-package markdown-mode
+    :ensure t)
 
-(use-package markdown-ts-mode
-  :ensure
-  :init
-  (add-to-list 'major-mode-remap-alist '(markdown-mode . markdown-ts-mode)))
+  (use-package markdown-ts-mode
+    :ensure t
+    :init
+    (add-to-list 'major-mode-remap-alist '(markdown-mode . markdown-ts-mode)))
 
-(use-package poly-markdown
-  :ensure
-  :init :mode
-  (("README\\.md\\'" . gfm-mode)
-   ("\\.md$" . markdown-ts-mode)
-   ("\\.markdown$" . markdown-ts-mode)))
+  (use-package poly-markdown
+    :ensure t
+    :init :mode
+    (("README\\.md\\'" . gfm-mode)
+     ("\\.md$" . markdown-ts-mode)
+     ("\\.markdown$" . markdown-ts-mode)))
 
-(use-package edit-indirect
-  :ensure
-  :after markdown-mode)
+  (use-package edit-indirect
+    :ensure t
+    :after markdown-mode)
 #+end_src
 ** Python
 *** Builtin python mode :builtin:
 #+name: python
 #+begin_src emacs-lisp -n
-(use-package python
-  :mode ("[./]flake8\\'" . conf-mode)
-  :mode ("/Pipfile\\'" . conf-mode)
-  :hook ((python-mode . lsp-deferred)
-         (python-mode . lsp-ui-mode)
-         (python-mode . lsp-ui-doc-mode)
-         ;; (python-mode . guess-style-guess-tab-mode)
-         (python-mode-local-vars . (lambda ()
-                                     (lsp-deferred)
-                                     (tree-sitter))))
-  :config
-  (if (executable-find "ipython")
-      (setq python-interpreter (executable-find "ipython"))
-    (setq python-interpreter (executable-find "python3")))
-  (when (featurep 'projectile)
-    (add-to-list 'projectile-globally-ignored-directories "^\\.venv$"))
-  (let ((directories `("/usr/bin/" "/usr/local/bin/" "/opt/bin" ,(expand-file-name ".local/bin/" (getenv "HOME")))))
-    (dolist (directory directories) (when (file-directory-p directory)(add-to-list 'python-shell-exec-path directory))))
-  (setq python-indent-guess-indent-offset nil
-        python-shell-completion-native-enable nil
-        python-shell-exec-path (list "/usr/bin/" "/usr/local/bin" (expand-file-name ".local/bin/" (getenv "HOME")))
-        python-indent-guess-indent-offset-verbose nil)
-  (when (featurep 'lsp-mode)
-    (setq lsp-pylsp-plugins-rope-completion-enabled t ; needs python-rope package
-          lsp-pylsp-plugins-mccabe-enabled t ; needs python-mccabe package
-          lsp-ruff-lsp-python-path (executable-find "python3")
-          )
-    (when (executable-find "black")
-      (setq lsp-pylsp-plugins-black-enabled t))
-    (when (executable-find "autopep8")
-      (setq lsp-pylsp-plugins-autopep8-enabled t))
-    (when (executable-find "flake8")
-      (setq lsp-pylsp-plugins-flake8-enabled t))
-    (when (executable-find "pycodestyle")
-      (setq lsp-pylsp-plugins-pycodestyle-enabled t))
-    (when (executable-find "pydocstyle")
-      (setq lsp-pylsp-plugins-pydocstyle-enabled t))
-    (when (executable-find "pylint")
-      (setq lsp-pylsp-plugins-pylint-enabled t))
-    (when (executable-find "pyflakes")
-      (setq lsp-pylsp-plugins-pyflakes-enabled t))
-    (when (executable-find "yapf")
-      (setq lsp-pylsp-plugins-yapf-enabled t)))
-  (when (featurep 'flycheck)
-    (setq flycheck-python-mypy-executable (executable-find "mypy")
-          flycheck-python-flake8-executable (executable-find "flake8")
-          flycheck-python-pylint-executable (executable-find "pylint")
-          flycheck-python-pyright-executable (executable-find "pyright")))
-  :general
-  (+config/local-leader
-    :keymaps 'python-mode-map
-    "d" '(:ignore t :wk "doc")))
+  (use-package python
+    :ensure nil
+    :mode ("[./]flake8\\'" . conf-mode)
+    :mode ("/Pipfile\\'" . conf-mode)
+    :hook ((python-mode . lsp-deferred)
+           (python-mode . lsp-ui-mode)
+           (python-mode . lsp-ui-doc-mode)
+           ;; (python-mode . guess-style-guess-tab-mode)
+           (python-mode-local-vars . (lambda ()
+                                       (lsp-deferred)
+                                       (tree-sitter))))
+    :config
+    (if (executable-find "ipython")
+        (setq python-interpreter (executable-find "ipython"))
+      (setq python-interpreter (executable-find "python3")))
+    (when (featurep 'projectile)
+      (add-to-list 'projectile-globally-ignored-directories "^\\.venv$"))
+    (let ((directories `("/usr/bin/" "/usr/local/bin/" "/opt/bin" ,(expand-file-name ".local/bin/" (getenv "HOME")))))
+      (dolist (directory directories) (when (file-directory-p directory)(add-to-list 'python-shell-exec-path directory))))
+    (setq python-indent-guess-indent-offset nil
+          python-shell-completion-native-enable nil
+          python-shell-exec-path (list "/usr/bin/" "/usr/local/bin" (expand-file-name ".local/bin/" (getenv "HOME")))
+          python-indent-guess-indent-offset-verbose nil)
+    (when (featurep 'lsp-mode)
+      (setq lsp-pylsp-plugins-rope-completion-enabled t ; needs python-rope package
+            lsp-pylsp-plugins-mccabe-enabled t ; needs python-mccabe package
+            lsp-ruff-lsp-python-path (executable-find "python3")
+            )
+      (when (executable-find "black")
+        (setq lsp-pylsp-plugins-black-enabled t))
+      (when (executable-find "autopep8")
+        (setq lsp-pylsp-plugins-autopep8-enabled t))
+      (when (executable-find "flake8")
+        (setq lsp-pylsp-plugins-flake8-enabled t))
+      (when (executable-find "pycodestyle")
+        (setq lsp-pylsp-plugins-pycodestyle-enabled t))
+      (when (executable-find "pydocstyle")
+        (setq lsp-pylsp-plugins-pydocstyle-enabled t))
+      (when (executable-find "pylint")
+        (setq lsp-pylsp-plugins-pylint-enabled t))
+      (when (executable-find "pyflakes")
+        (setq lsp-pylsp-plugins-pyflakes-enabled t))
+      (when (executable-find "yapf")
+        (setq lsp-pylsp-plugins-yapf-enabled t)))
+    (when (featurep 'flycheck)
+      (setq flycheck-python-mypy-executable (executable-find "mypy")
+            flycheck-python-flake8-executable (executable-find "flake8")
+            flycheck-python-pylint-executable (executable-find "pylint")
+            flycheck-python-pyright-executable (executable-find "pyright")))
+    :general
+    (+config/local-leader
+      :keymaps 'python-mode-map
+      "d" '(:ignore t :wk "doc")))
 #+end_src
 *** pydoc :external:
 #+begin_src emacs-lisp -n
-(use-package pydoc
-  :ensure
-  :general
-  (general-def
-    :keymaps 'python-mode-map
-    "C-c C-d" 'pydoc-at-point-no-jedi))
+  (use-package pydoc
+    :ensure t
+    :general
+    (general-def
+      :keymaps 'python-mode-map
+      "C-c C-d" 'pydoc-at-point-no-jedi))
 #+end_src
 *** ob-ipython 
 #+name: ob-ipython
 #+begin_src emacs-lisp -n
-(use-package ob-ipython
-  :ensure
-  :defer t
-  :init
-  (setq ob-ipython-resources-dir ".ob-ipython-resrc")
-  (with-eval-after-load 'org-src
-    (add-to-list 'org-src-lang-modes '("ipython" . python)))
-  (with-eval-after-load 'ob-async
-    (add-to-list 'ob-async-no-async-languages-alist "ipython")))
+  (use-package ob-ipython
+    :ensure t
+    :defer t
+    :init
+    (setq ob-ipython-resources-dir ".ob-ipython-resrc")
+    (with-eval-after-load 'org-src
+      (add-to-list 'org-src-lang-modes '("ipython" . python)))
+    (with-eval-after-load 'ob-async
+      (add-to-list 'ob-async-no-async-languages-alist "ipython")))
 #+end_src
 *** pip-requirements :external:
 #+name: pip-requirements
 #+begin_src emacs-lisp -n 
-(use-package pip-requirements
-  :ensure
-  :defer t
-  :config
-  (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
+  (use-package pip-requirements
+    :ensure t
+    :defer t
+    :config
+    (add-hook 'pip-requirements-mode-hook #'pip-requirements-auto-complete-setup))
 #+end_src
 *** inferior-python-mode :builtin:
 #+name: inferiore-python-mode
@@ -3745,48 +3751,48 @@ Run this for any buffer you want to skewer."
 *** lsp-pyright :external:
 #+name: lsp-pyright
 #+begin_src emacs-lisp -n
-(use-package lsp-pyright
-  :ensure
-  :after lsp-mode
-  :hook (python-mode . (lambda ()
-                         (lsp-deferred)
-                         (lsp-ui-mode)
-                         (lsp-ui-doc-mode)))
-  :config
-  (setq lsp-pyright-python-executable-cmd
-        (if (executable-find "python3")
-            (executable-find "python3")
-          "python")))
+  (use-package lsp-pyright
+    :ensure t
+    :after lsp-mode
+    :hook (python-mode . (lambda ()
+                           (lsp-deferred)
+                           (lsp-ui-mode)
+                           (lsp-ui-doc-mode)))
+    :config
+    (setq lsp-pyright-python-executable-cmd
+          (if (executable-find "python3")
+              (executable-find "python3")
+            "python")))
 #+end_src
 *** python-docstring :external:
 #+name: python-docstring
 #+begin_src emacs-lisp -n 
-(use-package python-docstring
-  :ensure
-  :diminish
-  :hook (python-mode . python-docstring-mode)
-  :general
-  (+config/local-leader
-    :keymaps 'python-mode-map
-    "dq" 'python-docstring-fill))
+  (use-package python-docstring
+    :ensure t
+    :diminish
+    :hook (python-mode . python-docstring-mode)
+    :general
+    (+config/local-leader
+      :keymaps 'python-mode-map
+      "dq" 'python-docstring-fill))
 #+end_src
 *** pipenv :external:
 #+name: pipenv
 #+begin_src emacs-lisp -n
-(use-package pipenv
-  :ensure
-  :diminish
-  :after python
-  :commands pipenv-project-p
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq pipenv-projectile-after-switch-function
-        #'pipenv-projectile-after-switch-extended
-        pipenv-executable (executable-find "pipenv"))
-  :general
-  (+config/local-leader
-    :keymaps 'python-mode-map
-    "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv")))
+  (use-package pipenv
+    :ensure t
+    :diminish
+    :after python
+    :commands pipenv-project-p
+    :hook (python-mode . pipenv-mode)
+    :init
+    (setq pipenv-projectile-after-switch-function
+          #'pipenv-projectile-after-switch-extended
+          pipenv-executable (executable-find "pipenv"))
+    :general
+    (+config/local-leader
+      :keymaps 'python-mode-map
+      "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv")))
 #+end_src
 *** pyvenv :external:
 #+begin_src emacs-lisp -n
@@ -3805,7 +3811,7 @@ Run this for any buffer you want to skewer."
 *** flycheck-pycheckers :external:
 #+begin_src emacs-lisp -n
   (use-package flycheck-pycheckers
-    :ensure
+    :ensure t
     :after flycheck
     :config
     (with-eval-after-load 'flycheck
@@ -3814,130 +3820,129 @@ Run this for any buffer you want to skewer."
 *** ein :external:
 #+name: ein
 #+begin_src emacs-lisp -n
-(use-package ein
-  :ensure t)
+  (use-package ein
+    :ensure t)
 #+end_src
 ** Rust
 *** rust-mode 
 #+name: rust-mode
 #+begin_src emacs-lisp -n
-;;;###autoload
-(defun +rust-cargo-project-p ()
-  "Return t if this is a cargo project."
-  (locate-dominating-file buffer-file-name "Cargo.toml"))
+  ;;;###autoload
+  (defun +rust-cargo-project-p ()
+    "Return t if this is a cargo project."
+    (locate-dominating-file buffer-file-name "Cargo.toml"))
 
-;;; Custom Cargo commands
+  ;;; Custom Cargo commands
 
-(autoload 'rustic-run-cargo-command "rustic-cargo")
-;;;###autoload
-(defun +rust/cargo-audit ()
-  "Run 'cargo audit' for the current project."
-  (interactive)
-  (rustic-run-cargo-command "cargo audit"))
+  (autoload 'rustic-run-cargo-command "rustic-cargo")
+  ;;;###autoload
+  (defun +rust/cargo-audit ()
+    "Run 'cargo audit' for the current project."
+    (interactive)
+    (rustic-run-cargo-command "cargo audit"))
 
-(with-eval-after-load 'projectile
-  (add-to-list 'projectile-project-root-files "Cargo.toml"))
+  (with-eval-after-load 'projectile
+    (add-to-list 'projectile-project-root-files "Cargo.toml"))
 
-(use-package rust-mode)
+  (use-package rust-mode :ensure t)
 #+end_src
 *** rustic :external:
 #+name: rustic
 #+begin_src emacs-lisp -n 
-(use-package rustic
-  :ensure
-  :mode ("\\.rs$" . rustic-mode)
-  :init
-  (with-eval-after-load 'rustic-flycheck
-    (remove-hook 'rustic-mode-hook #'flycheck-mode)
-    (remove-hook 'rustic-mode-hook #'flymake-mode-off)
-    (remove-hook 'flycheck-mode-hook #'rustic-flycheck-setup))
-  (with-eval-after-load 'org-src
-    (defalias 'org-babel-execute:rust #'org-babel-execute:rustic))
-  :config
-  (add-hook 'rustic-mode-hook #'rainbow-delimiters-mode)
-  (setq rustic-indent-method-chain t
-        rustic-lsp-client 'lsp-mode)
-  (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
-  (add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
-  ;; (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append)
-  (with-eval-after-load 'lsp
-    (setq lsp-rust-analyzer-display-parameter-hints t)))
+  (use-package rustic
+    :ensure t
+    :mode ("\\.rs$" . rustic-mode)
+    :init
+    (with-eval-after-load 'rustic-flycheck
+      (remove-hook 'rustic-mode-hook #'flycheck-mode)
+      (remove-hook 'rustic-mode-hook #'flymake-mode-off)
+      (remove-hook 'flycheck-mode-hook #'rustic-flycheck-setup))
+    (with-eval-after-load 'org-src
+      (defalias 'org-babel-execute:rust #'org-babel-execute:rustic))
+    :config
+    (add-hook 'rustic-mode-hook #'rainbow-delimiters-mode)
+    (setq rustic-indent-method-chain t
+          rustic-lsp-client 'lsp-mode)
+    (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
+    (add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
+    ;; (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append)
+    (with-eval-after-load 'lsp
+      (setq lsp-rust-analyzer-display-parameter-hints t)))
 #+end_src
 *** flycheck-rust :external:
 #+name: flycheck-rust
 #+begin_src emacs-lisp -n 
-(use-package flycheck-rust
-  :ensure
-  :after flycheck
-  :config
-  (with-eval-after-load 'rustic
-    (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
+  (use-package flycheck-rust
+    :ensure t
+    :after flycheck
+    :config
+    (with-eval-after-load 'rustic
+      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
 ** Ansible
 *** ansible :external:
 #+name: ansible
 #+begin_src emacs-lisp -n 
-(use-package ansible
-  :ensure
-  :defer t
-  :if (executable-find "ansible")
-  :ensure
-  :commands ansible-auto-decrypt-encrypt
-  :hook (ansible . 'ansible-auto-decrypt-encrypt)
-  :init
-  (put 'ansible-vault-password-file 'safe-local-variable #'stringp)
-  :config
-  (setq ansible-section-face 'font-lock-variable-name-face
-        ansible-task-label-face 'font-lock-doc-face)
-  :general
-  (+config/local-leader
-    :keymaps 'yaml-mode-map
-    "a" '(:ignore t :wk ansible)
-    "ad" 'ansible-decrypt-buffer
-    "ae" 'ansible-encrypt-buffer))
+  (use-package ansible
+    :ensure t
+    :defer t
+    :if (executable-find "ansible")
+    :commands ansible-auto-decrypt-encrypt
+    :hook (ansible . 'ansible-auto-decrypt-encrypt)
+    :init
+    (put 'ansible-vault-password-file 'safe-local-variable #'stringp)
+    :config
+    (setq ansible-section-face 'font-lock-variable-name-face
+          ansible-task-label-face 'font-lock-doc-face)
+    :general
+    (+config/local-leader
+      :keymaps 'yaml-mode-map
+      "a" '(:ignore t :wk ansible)
+      "ad" 'ansible-decrypt-buffer
+      "ae" 'ansible-encrypt-buffer))
 #+end_src
 *** ansible-doc :external:
 #+name: ansible-doc
 #+begin_src emacs-lisp -n
-(use-package ansible-doc
-  :after ansible
-  :ensure
-  :hook (yaml-mode . ansible-doc-mode)
-  :config
-  (when (featurep 'evil)
-    (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
+  (use-package ansible-doc
+    :after ansible
+    :ensure t
+    :hook (yaml-mode . ansible-doc-mode)
+    :config
+    (when (featurep 'evil)
+      (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
 #+end_src
 ** Perl
 *** cperl-mode :external:
 #+name: cperl-mode
 #+begin_src emacs-lisp -n
-(use-package cperl-mode
-  :ensure
-  :defer t
-  :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
+  (use-package cperl-mode
+    :ensure (:host github :repo "jrockway/cperl-mode")
+    :defer t
+    :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 #+end_src
 ** Haskell
 *** haskell-mode :external:
 #+name: haskell-mode
 #+begin_src emacs-lisp -n
-(use-package haskell-mode
-  :ensure t
-  :defer t
-  :init
-  (setq flymake-allowed-file-name-masks nil)
-  :custom
-  (haskell-process-load-or-reload-prompt t)
-  (haskell-process-auto-import-loaded-modules t)
-  (haskell-process-log t)
-  (haskell-tags-on-save t))
+  (use-package haskell-mode
+    :ensure t
+    :defer t
+    :init
+    (setq flymake-allowed-file-name-masks nil)
+    :custom
+    (haskell-process-load-or-reload-prompt t)
+    (haskell-process-auto-import-loaded-modules t)
+    (haskell-process-log t)
+    (haskell-tags-on-save t))
 #+end_src
 *** lsp-haskell :external:
 #+name: lsp-haskell
 #+begin_src emacs-lisp 
-(use-package lsp-haskell
-  :ensure t
-  :defer t
-  :after lsp)
+  (use-package lsp-haskell
+    :ensure t
+    :defer t
+    :after lsp)
 #+end_src
 * The Configuration
 ** early-init.el
@@ -4257,87 +4262,86 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** Programming languages
 #+begin_src emacs-lisp -n
-  ;; programming
-  ;; <<lispy>>
-  ;; <<lispyville>>
-  ;; <<elisp-mode>>
-  ;; <<ielm>>
-  ;; <<macrostep>>
-  ;; <<common-lisp>>
-  ;; <<sly>>
-  ;; <<cider>>
-  ;; <<clj-refactor>>
-  ;; <<geiser>>
-  ;; <<geiser-guile>>
-  ;; <<macrostep-geiser>>
-  ;; <<cc-mode>>
-  ;; <<nxml-mode>>
-  ;; <<yaml-mode>>
-  ;; <<toml-mode>>
-  ;; <<lua-mode>>
-  ;; <<jinja2-mode>>
-  ;; <<json-mode>>
-  ;; <<web-mode>>
-  ;; <<emmet-mode>>
-  ;; <<skewer-mode>>
-  ;; <<sass-mode>>
-  ;; <<css-eldoc>>
-  ;; <<com-css-sort>>
-  ;; <<css-mode>>
-  ;; <<javascript>>
-  ;; <<js2-mode>>
-  ;; <<xref-js2>>
-  ;; <<js2-refactor>>
-  ;; <<rjsx-mode>>
-  ;; <<typescript-mode>>
-  ;; <<tide>>
-  ;; <<npm-mode>>
-  ;; <<nodejs-repl>>
-  ;; <<auctex>>
-  ;; <<preview>>
-  ;; <<reftex>>
-  ;; <<bibtex>>
-  ;; <<LaTex>>
-  ;; <<markdown-mode>>
-  ;; <<python>>
-  ;; <<pydoc>>
-  ;; <<ob-ipython>>
-  ;; <<pip-requirements>>
-  ;; <<inferior-python-mode>>
-  ;; <<python-docstring>>
-  ;; <<pipenv>>
-  ;; <<pyvenv>>
-  ;; <<ein>>
-  ;; <<rust-mode>>
-  ;; <<rustic>>
-  ;; <<ansible>>
-  ;; <<ansible-doc>>
-  ;; <<cperl-mode>>
-  ;; <<haskell-mode>>
+  <<lispy>>
+  <<lispyville>>
+  <<elisp-mode>>
+  <<ielm>>
+  <<macrostep>>
+  <<common-lisp>>
+  <<sly>>
+  <<cider>>
+  <<clj-refactor>>
+  <<geiser>>
+  <<geiser-guile>>
+  <<macrostep-geiser>>
+  <<cc-mode>>
+  <<nxml-mode>>
+  <<yaml-mode>>
+  <<toml-mode>>
+  <<lua-mode>>
+  <<jinja2-mode>>
+  <<json-mode>>
+  <<web-mode>>
+  <<emmet-mode>>
+  <<skewer-mode>>
+  <<sass-mode>>
+  <<css-eldoc>>
+  <<com-css-sort>>
+  <<css-mode>>
+  <<javascript>>
+  <<js2-mode>>
+  <<xref-js2>>
+  <<js2-refactor>>
+  <<rjsx-mode>>
+  <<typescript-mode>>
+  <<tide>>
+  <<npm-mode>>
+  <<nodejs-repl>>
+  <<auctex>>
+  <<preview>>
+  <<reftex>>
+  <<bibtex>>
+  <<LaTex>>
+  <<markdown-mode>>
+  <<python>>
+  <<pydoc>>
+  <<ob-ipython>>
+  <<pip-requirements>>
+  <<inferior-python-mode>>
+  <<python-docstring>>
+  <<pipenv>>
+  <<pyvenv>>
+  <<ein>>
+  <<rust-mode>>
+  <<rustic>>
+  <<ansible>>
+  <<ansible-doc>>
+  <<cperl-mode>>
+  <<haskell-mode>>
 #+end_src
 **** Lsp
 #+begin_src emacs-lisp -n
-  ;; <<lsp-mode>>
-  ;; <<lsp-haskell>>
-  ;; <<lsp-pyright>>
-  ;; <<lsp-tailwindcss>>
+  <<lsp-mode>>
+  <<lsp-haskell>>
+  <<lsp-pyright>>
+  <<lsp-tailwindcss>>
 #+end_src
 **** Project stuffs
 #+begin_src emacs-lisp -n
   <<projectile>>
-  ;; <<org-project-capture>>
-  ;; <<magit>>
+  <<org-project-capture>>
+  <<magit>>
   <<perspective>>
   <<persp-projectile>>
-  ;; <<git-link>>
-  ;; <<git-messenger>>
-  ;; <<git-timemachine>>
-  ;; <<diff-hl>>
+  <<git-link>>
+  <<git-messenger>>
+  <<git-timemachine>>
+  <<diff-hl>>
 #+end_src
 **** Checkers
 #+begin_src emacs-lisp
-  ;; <<flycheck-pycheckers>>
-  ;; <<flycheck-rust>>
+  <<flycheck-pycheckers>>
+  <<flycheck-rust>>
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp -n
