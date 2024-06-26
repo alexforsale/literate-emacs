@@ -1830,10 +1830,24 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :ensure t
     :config
     (setq gptel-backend 
-          (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)))
+          (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)
+          gptel-default-mode #'org-mode))
 #+end_src
 An LLM client for /Emacs/, I'm trying it with google's /[[https://gemini.google.com/][gemini]]/. This package is already good on its own. But the other reason is I'm also trying out /[[https://github.com/armindarvish/consult-web][consult-web]]/, which integrates search results from various sources.
-** consult-web :external:disabled:
+** magit-gptcommit
+Magit commit with the help of gpt[fn:10].
+#+begin_src emacs-lisp
+  (use-package magit-gptcommit
+    :ensure t
+    :demand t
+    :after gptel magit
+    :config
+    (magit-gptcommit-mode 1)
+    (magit-gptcommit-status-buffer-setup)
+    :bind (:map git-commit-mode-map
+                ("C-c C-g" . magit-gptcommit-commit-accept)))
+#+end_src
+** consult-web :external:disabled:noexport:
 This package looks promising, I'll wait until it mature a bit.
 [[https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/][The author already made a blog post explaining on why he created this package]]. Hopefully I can integrate this into my workflow.
 #+name: consult-web
@@ -4126,7 +4140,7 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<pinentry>>
   <<pass>>
   <<rg>>
-  <<consult-web>>
+  ;; <<consult-web>>
   <<gptel>>
   <<ox-hugo>>
 #+end_src
@@ -4270,6 +4284,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 
 * Footnotes
+[fn:10] https://github.com/douo/magit-gptcommit 
 
 [fn:9] https://github.com/domtronn/all-the-icons.el
 [fn:8] https://github.com/justbur/emacs-which-key
