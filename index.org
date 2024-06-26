@@ -530,7 +530,7 @@ A fancy and fast mode-line inspired by minimalism design[fn:3]. I'm using their 
 #+name: doom-modeline
 #+begin_src emacs-lisp -n
   (use-package doom-modeline
-    :ensure
+    :ensure t
     :init
     (doom-modeline-mode 1)
     :config
@@ -550,7 +550,7 @@ I use this theme when I'm not using any external theme.
 #+name: ace-window
 #+begin_src emacs-lisp
     (use-package ace-window
-      :ensure
+      :ensure t
       :config
       (setq aw-keys '(?q ?w ?e ?r ?t ?a ?s ?d ?f ?z ?x ?c ?v)
             aw-background nil
@@ -565,7 +565,7 @@ A utility package to collect various Icon Fonts and propertize them within Emacs
 #+name: all-the-icons
 #+begin_src emacs-lisp -n
 (use-package all-the-icons
-  :ensure
+  :ensure t
   :if (display-graphic-p))
 #+end_src
 This needs a manual intervention from the user to install the fonts (by running the =all-the-icons-install-fonts= command).
@@ -623,7 +623,7 @@ Emacs package that displays available keybindings in popup[fn:8]. This is one of
 #+name: which-key
 #+begin_src emacs-lisp -n
 (use-package which-key
-  :ensure
+  :ensure t
   :demand t
   :custom
   (which-key-lighter "")
@@ -663,15 +663,15 @@ Making /Emacs/ more colourful.
 #+name: rainbow-packages
 #+begin_src emacs-lisp -n
 (use-package rainbow-mode
-  :ensure
+  :ensure t
   :hook (prog-mode . rainbow-mode))
 
 (use-package rainbow-identifiers
-  :ensure
+  :ensure t
   :hook (prog-mode . rainbow-identifiers-mode))
 
 (use-package rainbow-delimiters
-  :ensure
+  :ensure t
   :hook (prog-mode . rainbow-delimiters-mode))
 #+end_src
 
@@ -4098,20 +4098,20 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** UI
 #+begin_src emacs-lisp -n
-  ;; <<ace-window>>
-  ;; <<doom-themes>>
-  ;; <<doom-modeline>>
-  ;; <<dashboard>>
-  ;; <<all-the-icons>>
-  ;; <<which-key>>
-  ;; <<fonts>>
-  ;; <<font-core>>
-  ;; <<rainbow-packages>>
-  ;; <<helpful>>
-  ;; <<hl-line>>
-  ;; <<nerd-icons>>
-  ;; <<nerd-fonts>>
-  ;; <<paren>>
+  <<ace-window>>
+  <<doom-themes>>
+  <<doom-modeline>>
+  <<dashboard>>
+  <<all-the-icons>>
+  <<which-key>>
+  <<fonts>>
+  <<font-core>>
+  <<rainbow-packages>>
+  <<helpful>>
+  <<hl-line>>
+  <<nerd-icons>>
+  <<nerd-fonts>>
+  <<paren>>
 #+end_src
 **** Builtin stuffs
 #+begin_src emacs-lisp -n
