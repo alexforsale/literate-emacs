@@ -2280,57 +2280,60 @@ This package looks promising, I'll wait until it mature a bit.
 ** make-mode
 #+name: make-mode
 #+begin_src emacs-lisp -n
-(use-package make-mode
-  :config
-  (add-hook 'makefile-mode-hook 'indent-tabs-mode))
+  (use-package make-mode
+    :ensure nil
+    :config
+    (add-hook 'makefile-mode-hook 'indent-tabs-mode))
 #+end_src
 ** executable
 #+name: executable
 #+begin_src emacs-lisp -n
-(use-package executable
-  :hook
-  (after-save . executable-make-buffer-file-executable-if-script-p))
+  (use-package executable
+    :ensure nil
+    :hook
+    (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
 ** pinentry
 #+name: pinentry
 #+begin_src emacs-lisp -n
-(use-package pinentry
-  :ensure
-  :defer t
-  :config
-  (pinentry-start))
+  (use-package pinentry
+    :ensure t
+    :defer t
+    :config
+    (pinentry-start))
 #+end_src
 ** pass
 #+name: pass
 #+begin_src emacs-lisp -n
-(use-package password-store
-  :ensure
-  :defer t
-  :config
-  (setq password-store-password-length 12))
+  (use-package password-store
+    :ensure t
+    :defer t
+    :config
+    (setq password-store-password-length 12))
 
-(use-package password-store-otp
-  :ensure
-  :defer t
-  :after password-store)
+  (use-package password-store-otp
+    :ensure t
+    :defer t
+    :after password-store)
 
-(use-package pass
-  :ensure
-  :defer t)
+  (use-package pass
+    :ensure t
+    :defer t)
 
-(use-package auth-source-pass
-  :init
-  (auth-source-pass-enable))
+  (use-package auth-source-pass
+    :ensure nil
+    :init
+    (auth-source-pass-enable))
 #+end_src
-
+/Elpaca/ complains about different of /pass/ version installed. But it installed just fine.
 ** rg
 Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the executable not found.
 #+name: rg
 #+begin_src emacs-lisp -n
-(use-package rg
-  :if (executable-find "rg")
-  :ensure
-  :defer t)
+  (use-package rg
+    :if (executable-find "rg")
+    :ensure t
+    :defer t)
 #+end_src
 
 ** ox-hugo
@@ -4204,14 +4207,14 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** Tools
 #+begin_src emacs-lisp -n
-  ;; <<make-mode>>
-  ;; <<executable>>
-  ;; <<pinentry>>
-  ;; <<pass>>
-  ;; <<rg>>
-  ;; <<consult-web>>
-  ;; <<gptel>>
-  ;; <<ox-hugo>>
+  <<make-mode>>
+  <<executable>>
+  <<pinentry>>
+  <<pass>>
+  <<rg>>
+  <<consult-web>>
+  <<gptel>>
+  <<ox-hugo>>
 #+end_src
 **** dired
 #+begin_src emacs-lisp -n
