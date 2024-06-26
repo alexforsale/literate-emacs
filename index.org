@@ -2349,100 +2349,104 @@ Stands for /Directory Editor/ (I guess), is a builtin file manager for /Emacs/.
 ** dired 
 #+name: dired
 #+begin_src emacs-lisp -n
-(use-package dired
-  :commands dired-jump
-  :init
-  (setq dired-dwim-target t ; guess a default target directory
-        dired-hide-details-hide-symlink-targets nil ; don't hide symbolic link targets
-        dired-auto-revert-buffer #'dired-buffer-stale-p ; revert stale only
-        dired-recursive-copies 'always ; always copy recursively
-        dired-recursive-deletes 'top ; ask only for top-level
-        dired-create-destination-dirs 'ask
-        dired-clean-confirm-killing-deleted-buffers nil))
+  (use-package dired
+    :ensure nil
+    :commands dired-jump
+    :init
+    (setq dired-dwim-target t ; guess a default target directory
+          dired-hide-details-hide-symlink-targets nil ; don't hide symbolic link targets
+          dired-auto-revert-buffer #'dired-buffer-stale-p ; revert stale only
+          dired-recursive-copies 'always ; always copy recursively
+          dired-recursive-deletes 'top ; ask only for top-level
+          dired-create-destination-dirs 'ask
+          dired-clean-confirm-killing-deleted-buffers nil))
 #+end_src
 ** image-dired
 #+name: image-dired
 #+begin_src emacs-lisp -n
-(use-package image-dired
-  :config
-  (setq image-dired-thumb-size 150))
+  (use-package image-dired
+    :ensure nil
+    :config
+    (setq image-dired-thumb-size 150))
 #+end_src
 ** dired-x
 #+name: dired-x
 #+begin_src emacs-lisp -n
-(use-package dired-x
-  :hook (dired-mode . dired-omit-mode)
-  :config
-  (setq dired-omit-files
-        (concat dired-omit-files
-                "\\|^\\.DS_Store\\'"
-                "\\|^\\.project\\(?:ile\\)?\\'"
-                "\\|^\\.\\(?:svn\\|git\\)\\'"
-                "\\|^\\.ccls-cache\\'"
-                "\\|\\(?:\\.js\\)?\\.meta\\'"
-                "\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'"))
-  ;; Disable the prompt about whether I want to kill the Dired buffer for a
-  ;; deleted directory. Of course I do!
-  (setq dired-clean-confirm-killing-deleted-buffers nil)
-  (let ((cmd "xdg-open"))
-    (setq dired-guess-shell-alist-user
-          `(("\\.\\(?:docx\\|pdf\\|djvu\\|eps\\)\\'" ,cmd)
-            ("\\.\\(?:jpe?g\\|png\\|gif\\|xpm\\)\\'" ,cmd)
-            ("\\.\\(?:xcf\\)\\'" ,cmd)
-            ("\\.csv\\'" ,cmd)
-            ("\\.tex\\'" ,cmd)
-            ("\\.\\(?:mp4\\|mkv\\|avi\\|flv\\|rm\\|rmvb\\|ogv\\)\\(?:\\.part\\)?\\'" ,cmd)
-            ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
-            ("\\.html?\\'" ,cmd)
-            ("\\.md\\'" ,cmd)))))
+  (use-package dired-x
+    :ensure nil
+    :hook (dired-mode . dired-omit-mode)
+    :config
+    (setq dired-omit-files
+          (concat dired-omit-files
+                  "\\|^\\.DS_Store\\'"
+                  "\\|^\\.project\\(?:ile\\)?\\'"
+                  "\\|^\\.\\(?:svn\\|git\\)\\'"
+                  "\\|^\\.ccls-cache\\'"
+                  "\\|\\(?:\\.js\\)?\\.meta\\'"
+                  "\\|\\.\\(?:elc\\|o\\|pyo\\|swp\\|class\\)\\'"))
+    ;; Disable the prompt about whether I want to kill the Dired buffer for a
+    ;; deleted directory. Of course I do!
+    (setq dired-clean-confirm-killing-deleted-buffers nil)
+    (let ((cmd "xdg-open"))
+      (setq dired-guess-shell-alist-user
+            `(("\\.\\(?:docx\\|pdf\\|djvu\\|eps\\)\\'" ,cmd)
+              ("\\.\\(?:jpe?g\\|png\\|gif\\|xpm\\)\\'" ,cmd)
+              ("\\.\\(?:xcf\\)\\'" ,cmd)
+              ("\\.csv\\'" ,cmd)
+              ("\\.tex\\'" ,cmd)
+              ("\\.\\(?:mp4\\|mkv\\|avi\\|flv\\|rm\\|rmvb\\|ogv\\)\\(?:\\.part\\)?\\'" ,cmd)
+              ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
+              ("\\.html?\\'" ,cmd)
+              ("\\.md\\'" ,cmd)))))
 #+end_src
 ** fd-dired :external:
 Needs an external package =fd=, or =fd-find=
 #+name: fd-dired
 #+begin_src emacs-lisp -n
-(use-package fd-dired
-  :ensure
-  :if (executable-find "fd")
-  :defer t
-  :init
-  (global-set-key [remap find-dired] #'fd-dired))
+  (use-package fd-dired
+    :ensure t
+    :if (executable-find "fd")
+    :defer t
+    :init
+    (global-set-key [remap find-dired] #'fd-dired))
 #+end_src
 ** dired-git-info
 #+name: dired-git-info
 #+begin_src emacs-lisp -n
-(use-package dired-git-info
-  :ensure
-  :defer t
-  ;; :hook
-  ;; (dired-after-readin . dired-git-info-auto-enable)
-  :config
-  ;; (setq +dired--git-info-p (bound-and-true-p dired-git-info-mode))
-  ;; (when +dired--git-info-p
-  ;;   (dired-git-info-mode -1))
-  (setq dgi-auto-hide-details-p nil))
+  (use-package dired-git-info
+    :ensure t
+    :defer t
+    ;; :hook
+    ;; (dired-after-readin . dired-git-info-auto-enable)
+    :config
+    ;; (setq +dired--git-info-p (bound-and-true-p dired-git-info-mode))
+    ;; (when +dired--git-info-p
+    ;;   (dired-git-info-mode -1))
+    (setq dgi-auto-hide-details-p nil))
 #+end_src
 ** dired-aux
 #+name: dired-aux
 #+begin_src emacs-lisp -n
-(use-package dired-aux
-  :config
-  (setq dired-create-destination-dirs 'ask
-        dired-vc-rename-file t))
+  (use-package dired-aux
+    :ensure nil
+    :config
+    (setq dired-create-destination-dirs 'ask
+          dired-vc-rename-file t))
 #+end_src
 ** dired-rsync
 #+name: dired-rsync
 #+begin_src emacs-lisp -n
-(use-package dired-rsync
-  :ensure
-  :defer t)
+  (use-package dired-rsync
+    :ensure t
+    :defer t)
 #+end_src
 ** diredfl
 #+name: diredfl
 #+begin_src emacs-lisp -n
-(use-package diredfl
-  :ensure
-  :defer t
-  :hook (dired-mode . diredfl-global-mode))
+  (use-package diredfl
+    :ensure t
+    :defer t
+    :hook (dired-mode . diredfl-global-mode))
 #+end_src
 * TODO Treemacs
 :LOGBOOK:
@@ -4218,14 +4222,14 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** dired
 #+begin_src emacs-lisp -n
-  ;; <<dired>>
-  ;; <<image-dired>>
-  ;; <<dired-x>>
-  ;; <<fd-dired>>
-  ;; <<dired-git-info>>
-  ;; <<dired-aux>>
-  ;; <<dired-rsync>>
-  ;; <<diredfl>>
+  <<dired>>
+  <<image-dired>>
+  <<dired-x>>
+  <<fd-dired>>
+  <<dired-git-info>>
+  <<dired-aux>>
+  <<dired-rsync>>
+  <<diredfl>>
 #+end_src
 **** Treemacs
 #+begin_src emacs-lisp -n
