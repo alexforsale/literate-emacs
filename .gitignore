@@ -42,3 +42,4 @@ package-quickstart*
 *.bak
 session.*
 .local/
+elpaca/

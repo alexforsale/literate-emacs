@@ -137,7 +137,7 @@ Keybindings in /Emacs/ is always been my struggle, my brain isn't big enough to 
 #+name: general.el
 #+begin_src emacs-lisp -n
 (use-package general
-  :ensure t
+  :ensure (:wait t)
   :init
   (general-evil-setup t)
   (general-auto-unbind-keys)
@@ -3968,16 +3968,63 @@ The =custom-file= is used to save customization settings for future use.
   (when (file-exists-p custom-file)
     (load custom-file))
 #+end_src
-*** Setup =package=
-Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/.
+*** Elpaca
 #+begin_src emacs-lisp -n
-  (require 'package)
-  ;; Add `melpa` to `package-archives`.
-  (add-to-list 'package-archives
-	       '("melpa" . "https://melpa.org/packages/"))
-  ;; gnu-devel
-  (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/"))
-  (setq package-quickstart t)
+  (defvar elpaca-installer-version 0.7)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (< emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                 ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                 ,@(when-let ((depth (plist-get order :depth)))
+                                                     (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                 ,(plist-get order :repo) ,repo))))
+                 ((zerop (call-process "git" nil buffer t "checkout"
+                                       (or (plist-get order :ref) "--"))))
+                 (emacs (concat invocation-directory invocation-name))
+                 ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                       "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                 ((require 'elpaca))
+                 ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (load "./elpaca-autoloads")))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+#+end_src
+*** use-package integration
+#+begin_src emacs-lisp -n
+  (elpaca elpaca-use-package
+    (elpaca-use-package-mode))
+#+end_src
+*** Setup =package=
+Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/. Currently disabled in favor for /Elpaca/.
+#+begin_src emacs-lisp -n
+  ;; (require 'package)
+  ;; ;; Add `melpa` to `package-archives`.
+  ;; (add-to-list 'package-archives
+  ;; 	     '("melpa" . "https://melpa.org/packages/"))
+  ;; ;; gnu-devel
+  ;; (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/"))
+  ;; (setq package-quickstart t)
+  (setq package-enable-at-startup nil)
 #+end_src
 *** use-package
 #+begin_src emacs-lisp -n
@@ -4041,30 +4088,30 @@ This file is already added in my git repositories for initial Emacs loading. But
 **** keybindings  
 #+begin_src emacs-lisp -n
   <<general.el>>
-  <<keybindings>>
+  ;; <<keybindings>>
 #+end_src
 **** Evil stuffs
 #+begin_src emacs-lisp -n
   ;; evil
-  <<evil>>
-  <<evil-collection>>
+  ;; <<evil>>
+  ;; <<evil-collection>>
 #+end_src
 **** UI
 #+begin_src emacs-lisp -n
-  <<ace-window>>
-  <<doom-themes>>
-  <<doom-modeline>>
-  <<dashboard>>
-  <<all-the-icons>>
-  <<which-key>>
-  <<fonts>>
-  <<font-core>>
-  <<rainbow-packages>>
-  <<helpful>>
-  <<hl-line>>
-  <<nerd-icons>>
-  <<nerd-fonts>>
-  <<paren>>
+  ;; <<ace-window>>
+  ;; <<doom-themes>>
+  ;; <<doom-modeline>>
+  ;; <<dashboard>>
+  ;; <<all-the-icons>>
+  ;; <<which-key>>
+  ;; <<fonts>>
+  ;; <<font-core>>
+  ;; <<rainbow-packages>>
+  ;; <<helpful>>
+  ;; <<hl-line>>
+  ;; <<nerd-icons>>
+  ;; <<nerd-fonts>>
+  ;; <<paren>>
 #+end_src
 **** Builtin stuffs
 #+begin_src emacs-lisp -n
@@ -4083,185 +4130,185 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** Completion
 #+begin_src emacs-lisp -n
-  <<vertico>>
-  <<vertico-extensions>>
-  <<marginalia>>
-  <<corfu>>
-  <<consult>>
-  <<orderless>>
-  <<nerd-icons-corfu>>
-  <<nerd-icons-completion>>
+  ;; <<vertico>>
+  ;; <<vertico-extensions>>
+  ;; <<marginalia>>
+  ;; <<corfu>>
+  ;; <<consult>>
+  ;; <<orderless>>
+  ;; <<nerd-icons-corfu>>
+  ;; <<nerd-icons-completion>>
 #+end_src
 **** Shells
 #+begin_src emacs-lisp -n
-  <<eshell>>
-  <<eshell-syntax-highlighting>>
-  <<esh-autosuggest>>
-  <<sh-script>>
-  <<vterm>>
-  <<multi-vterm>>
-  <<vterm-toggle>>
-  <<bash-completion>>
+  ;; <<eshell>>
+  ;; <<eshell-syntax-highlighting>>
+  ;; <<esh-autosuggest>>
+  ;; <<sh-script>>
+  ;; <<vterm>>
+  ;; <<multi-vterm>>
+  ;; <<vterm-toggle>>
+  ;; <<bash-completion>>
 #+end_src
 **** Editing
 #+begin_src emacs-lisp -n
-  <<select>>
-  <<transient-mark-mode>>
-  <<delete-selection-mode>>
-  <<subword>>
-  <<text-mode>>
-  <<ws-butler>>
-  <<smartparens>>
+  ;; <<select>>
+  ;; <<transient-mark-mode>>
+  ;; <<delete-selection-mode>>
+  ;; <<subword>>
+  ;; <<text-mode>>
+  ;; <<ws-butler>>
+  ;; <<smartparens>>
 #+end_src
 **** Org-mode
 #+begin_src emacs-lisp -n
-  <<org-mode>>
-  <<org-faces>>
-  <<org-archive>>
-  <<org-capture>>
-  <<org-refile>>
-  <<org-num>>
-  <<org-fold>>
-  <<org-id>>
-  <<org-crypt>>
-  <<org-attach>>
-  <<org-clock>>
-  <<org-agenda>>
-  <<org-timer>>
-  <<org-eldoc>>
-  <<org-superstar>>
-  <<org-fancy-priorities>>
-  <<org-modern>>
+  ;; <<org-mode>>
+  ;; <<org-faces>>
+  ;; <<org-archive>>
+  ;; <<org-capture>>
+  ;; <<org-refile>>
+  ;; <<org-num>>
+  ;; <<org-fold>>
+  ;; <<org-id>>
+  ;; <<org-crypt>>
+  ;; <<org-attach>>
+  ;; <<org-clock>>
+  ;; <<org-agenda>>
+  ;; <<org-timer>>
+  ;; <<org-eldoc>>
+  ;; <<org-superstar>>
+  ;; <<org-fancy-priorities>>
+  ;; <<org-modern>>
 #+end_src
 **** Tools
 #+begin_src emacs-lisp -n
-  <<make-mode>>
-  <<executable>>
-  <<pinentry>>
-  <<pass>>
-  <<rg>>
+  ;; <<make-mode>>
+  ;; <<executable>>
+  ;; <<pinentry>>
+  ;; <<pass>>
+  ;; <<rg>>
   ;; <<consult-web>>
-  <<gptel>>
-  <<ox-hugo>>
+  ;; <<gptel>>
+  ;; <<ox-hugo>>
 #+end_src
 **** dired
 #+begin_src emacs-lisp -n
-  <<dired>>
-  <<image-dired>>
-  <<dired-x>>
-  <<fd-dired>>
-  <<dired-git-info>>
-  <<dired-aux>>
-  <<dired-rsync>>
-  <<diredfl>>
+  ;; <<dired>>
+  ;; <<image-dired>>
+  ;; <<dired-x>>
+  ;; <<fd-dired>>
+  ;; <<dired-git-info>>
+  ;; <<dired-aux>>
+  ;; <<dired-rsync>>
+  ;; <<diredfl>>
 #+end_src
 **** Treemacs
 #+begin_src emacs-lisp -n
   ;; treemacs
-  <<treemacs>>
-  <<treemacs-projectile>>
-  <<treemacs-icons-dired>>
-  <<treemacs-magit>>
-  <<treemacs-evil>>
-  <<lsp-treemacs>>
-  <<treemacs-perspective>>
-  <<treemacs-tab-bar>>
-  <<treemacs-nerd-icons>>
+  ;; <<treemacs>>
+  ;; <<treemacs-projectile>>
+  ;; <<treemacs-icons-dired>>
+  ;; <<treemacs-magit>>
+  ;; <<treemacs-evil>>
+  ;; <<lsp-treemacs>>
+  ;; <<treemacs-perspective>>
+  ;; <<treemacs-tab-bar>>
+  ;; <<treemacs-nerd-icons>>
 #+end_src
 **** Mail
 #+begin_src emacs-lisp -n
   ;; mail
-  <<notmuch>>
-  <<notmuch-indicator>>
-  <<consult-notmuch>>
-  <<ol-notmuch>>
-  <<notmuch-maildir>>
-  <<message>>
-  <<sendmail>>
+  ;; <<notmuch>>
+  ;; <<notmuch-indicator>>
+  ;; <<consult-notmuch>>
+  ;; <<ol-notmuch>>
+  ;; <<notmuch-maildir>>
+  ;; <<message>>
+  ;; <<sendmail>>
 #+end_src
 **** Programming languages
 #+begin_src emacs-lisp -n
   ;; programming
   ;; <<lispy>>
   ;; <<lispyville>>
-  <<elisp-mode>>
-  <<ielm>>
-  <<macrostep>>
-  <<common-lisp>>
-  <<sly>>
-  <<cider>>
-  <<clj-refactor>>
-  <<geiser>>
-  <<geiser-guile>>
-  <<macrostep-geiser>>
-  <<cc-mode>>
-  <<nxml-mode>>
-  <<yaml-mode>>
-  <<toml-mode>>
-  <<lua-mode>>
-  <<jinja2-mode>>
-  <<json-mode>>
-  <<web-mode>>
-  <<emmet-mode>>
-  <<skewer-mode>>
-  <<sass-mode>>
-  <<css-eldoc>>
-  <<com-css-sort>>
-  <<css-mode>>
-  <<javascript>>
-  <<js2-mode>>
-  <<xref-js2>>
-  <<js2-refactor>>
-  <<rjsx-mode>>
-  <<typescript-mode>>
-  <<tide>>
-  <<npm-mode>>
-  <<nodejs-repl>>
-  <<auctex>>
-  <<preview>>
-  <<reftex>>
-  <<bibtex>>
-  <<LaTex>>
-  <<markdown-mode>>
-  <<python>>
-  <<pydoc>>
-  <<ob-ipython>>
-  <<pip-requirements>>
-  <<inferior-python-mode>>
-  <<python-docstring>>
-  <<pipenv>>
-  <<pyvenv>>
-  <<ein>>
-  <<rust-mode>>
-  <<rustic>>
-  <<ansible>>
-  <<ansible-doc>>
-  <<cperl-mode>>
-  <<haskell-mode>>
+  ;; <<elisp-mode>>
+  ;; <<ielm>>
+  ;; <<macrostep>>
+  ;; <<common-lisp>>
+  ;; <<sly>>
+  ;; <<cider>>
+  ;; <<clj-refactor>>
+  ;; <<geiser>>
+  ;; <<geiser-guile>>
+  ;; <<macrostep-geiser>>
+  ;; <<cc-mode>>
+  ;; <<nxml-mode>>
+  ;; <<yaml-mode>>
+  ;; <<toml-mode>>
+  ;; <<lua-mode>>
+  ;; <<jinja2-mode>>
+  ;; <<json-mode>>
+  ;; <<web-mode>>
+  ;; <<emmet-mode>>
+  ;; <<skewer-mode>>
+  ;; <<sass-mode>>
+  ;; <<css-eldoc>>
+  ;; <<com-css-sort>>
+  ;; <<css-mode>>
+  ;; <<javascript>>
+  ;; <<js2-mode>>
+  ;; <<xref-js2>>
+  ;; <<js2-refactor>>
+  ;; <<rjsx-mode>>
+  ;; <<typescript-mode>>
+  ;; <<tide>>
+  ;; <<npm-mode>>
+  ;; <<nodejs-repl>>
+  ;; <<auctex>>
+  ;; <<preview>>
+  ;; <<reftex>>
+  ;; <<bibtex>>
+  ;; <<LaTex>>
+  ;; <<markdown-mode>>
+  ;; <<python>>
+  ;; <<pydoc>>
+  ;; <<ob-ipython>>
+  ;; <<pip-requirements>>
+  ;; <<inferior-python-mode>>
+  ;; <<python-docstring>>
+  ;; <<pipenv>>
+  ;; <<pyvenv>>
+  ;; <<ein>>
+  ;; <<rust-mode>>
+  ;; <<rustic>>
+  ;; <<ansible>>
+  ;; <<ansible-doc>>
+  ;; <<cperl-mode>>
+  ;; <<haskell-mode>>
 #+end_src
 **** Lsp
 #+begin_src emacs-lisp -n
-  <<lsp-mode>>
-  <<lsp-haskell>>
-  <<lsp-pyright>>
-  <<lsp-tailwindcss>>
+  ;; <<lsp-mode>>
+  ;; <<lsp-haskell>>
+  ;; <<lsp-pyright>>
+  ;; <<lsp-tailwindcss>>
 #+end_src
 **** Project stuffs
 #+begin_src emacs-lisp -n
-  <<projectile>>
-  <<org-project-capture>>
-  <<magit>>
-  <<perspective>>
-  <<persp-projectile>>
-  <<git-link>>
-  <<git-messenger>>
-  <<git-timemachine>>
-  <<diff-hl>>
+  ;; <<projectile>>
+  ;; <<org-project-capture>>
+  ;; <<magit>>
+  ;; <<perspective>>
+  ;; <<persp-projectile>>
+  ;; <<git-link>>
+  ;; <<git-messenger>>
+  ;; <<git-timemachine>>
+  ;; <<diff-hl>>
 #+end_src
 **** Checkers
 #+begin_src emacs-lisp
-  <<flycheck-pycheckers>>
-  <<flycheck-rust>>
+  ;; <<flycheck-pycheckers>>
+  ;; <<flycheck-rust>>
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp -n
