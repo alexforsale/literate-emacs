@@ -2302,9 +2302,9 @@ This package looks promising, I'll wait until it mature a bit.
     :config
     (pinentry-start))
 #+end_src
-** pass
+** pass :disabled:
 #+name: pass
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp -n :tangle no
   (use-package password-store
     :ensure t
     :defer t
@@ -2312,7 +2312,7 @@ This package looks promising, I'll wait until it mature a bit.
     (setq password-store-password-length 12))
 
   (use-package password-store-otp
-    :ensure t
+    :ensure (:host github :repo "volrath/password-store-otp.el")
     :defer t
     :after password-store)
 
@@ -2455,181 +2455,181 @@ Needs an external package =fd=, or =fd-find=
 ** treemacs core package
 #+name: treemacs
 #+begin_src emacs-lisp -n
-(use-package treemacs
-  :ensure
-  :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
-  :config
-  (setq treemacs-hide-gitignored-files-mode t
-        treemacs-no-png-images t
-        treemacs-silent-refresh t
-        treemacs-sorting 'mod-time-desc
-        treemacs-python-executable (executable-find "python3")
-        treemacs-collapse-dirs (if treemacs-python-executable 3 0)
-        treemacs-deferred-git-apply-delay 0.5
-        treemacs-directory-name-transformer #'identity
-        treemacs-display-in-side-window t
-        treemacs-eldoc-display 'simple
-        treemacs-file-event-delay 2000
-        treemacs-file-extension-regex treemacs-last-period-regex-value
-        treemacs-file-follow-delay 0.2
-        treemacs-file-name-transformer #'identity
-        treemacs-follow-after-init t
-        treemacs-expand-after-init t
-        treemacs-find-workspace-method 'find-for-file-or-pick-first
-        treemacs-git-command-pipe ""
-        treemacs-goto-tag-strategy 'refetch-index
-        treemacs-header-scroll-indicators '(nil . "^^^^^^")
-        treemacs-hide-dot-git-directory t
-        treemacs-indentation 2
-        treemacs-indentation-string " "
-        treemacs-is-never-other-window nil
-        treemacs-max-git-entries 5000
-        treemacs-missing-project-action 'ask
-        treemacs-move-forward-on-expand nil
-        treemacs-no-delete-other-windows t
-        treemacs-project-follow-cleanup nil
-        treemacs-persist-file (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
-        treemacs-position 'left
-        treemacs-read-string-input 'from-child-frame
-        treemacs-recenter-distance 0.1
-        treemacs-recenter-after-file-follow nil
-        treemacs-recenter-after-tag-follow nil
-        treemacs-recenter-after-project-jump 'always
-        treemacs-recenter-after-project-expand 'on-distance
-        treemacs-litter-directories '("/node_modules" "/.venv" "/.cask")
-        treemacs-project-follow-into-home nil
-        treemacs-show-cursor nil
-        treemacs-show-hidden-files t
-        treemacs-silent-filewatch t
-        treemacs-select-when-already-in-treemacs 'move-back
-        treemacs-space-between-root-nodes t
-        treemacs-tag-follow-cleanup t
-        treemacs-tag-follow-delay 1.5
-        treemacs-text-scale nil
-        treemacs-user-mode-line-format nil
-        treemacs-user-header-line-format nil
-        treemacs-wide-toggle-width 70
-        treemacs-width 35
-        treemacs-width-increment 1
-        treemacs-width-is-initially-locked t
-        treemacs-workspace-switch-cleanup nil)
-  (treemacs-peek-mode 1)
-  (treemacs-filewatch-mode t)
-  (treemacs-follow-mode t)
-  (treemacs-fringe-indicator-mode 'always)
-  (when treemacs-python-executable
-    (treemacs-git-commit-diff-mode t))
-  (pcase (cons (not (null (executable-find "git")))
-               (not (null treemacs-python-executable)))
-    (`(t . t)
-     (treemacs-git-mode 'deferred))
-    (`(t . _)
-     (treemacs-git-mode 'simple)))
-  :bind
-  (:map global-map
-        ("M-0"       . treemacs-select-window)
-        ("C-x t 1"   . treemacs-delete-other-windows)
-        ("C-x t t"   . treemacs)
-        ("C-x t d"   . treemacs-select-directory)
-        ("C-x t B"   . treemacs-bookmark)
-        ("C-x t C-t" . treemacs-find-file)
-        ("C-x t M-t" . treemacs-find-tag))
-  :general
-  (+config/leader-tree
-    "t" 'treemacs
-    "p" 'treemacs-add-and-display-current-project-exclusively)
+  (use-package treemacs
+    :ensure t
+    :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
+    :config
+    (setq treemacs-hide-gitignored-files-mode t
+          treemacs-no-png-images t
+          treemacs-silent-refresh t
+          treemacs-sorting 'mod-time-desc
+          treemacs-python-executable (executable-find "python3")
+          treemacs-collapse-dirs (if treemacs-python-executable 3 0)
+          treemacs-deferred-git-apply-delay 0.5
+          treemacs-directory-name-transformer #'identity
+          treemacs-display-in-side-window t
+          treemacs-eldoc-display 'simple
+          treemacs-file-event-delay 2000
+          treemacs-file-extension-regex treemacs-last-period-regex-value
+          treemacs-file-follow-delay 0.2
+          treemacs-file-name-transformer #'identity
+          treemacs-follow-after-init t
+          treemacs-expand-after-init t
+          treemacs-find-workspace-method 'find-for-file-or-pick-first
+          treemacs-git-command-pipe ""
+          treemacs-goto-tag-strategy 'refetch-index
+          treemacs-header-scroll-indicators '(nil . "^^^^^^")
+          treemacs-hide-dot-git-directory t
+          treemacs-indentation 2
+          treemacs-indentation-string " "
+          treemacs-is-never-other-window nil
+          treemacs-max-git-entries 5000
+          treemacs-missing-project-action 'ask
+          treemacs-move-forward-on-expand nil
+          treemacs-no-delete-other-windows t
+          treemacs-project-follow-cleanup nil
+          treemacs-persist-file (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+          treemacs-position 'left
+          treemacs-read-string-input 'from-child-frame
+          treemacs-recenter-distance 0.1
+          treemacs-recenter-after-file-follow nil
+          treemacs-recenter-after-tag-follow nil
+          treemacs-recenter-after-project-jump 'always
+          treemacs-recenter-after-project-expand 'on-distance
+          treemacs-litter-directories '("/node_modules" "/.venv" "/.cask")
+          treemacs-project-follow-into-home nil
+          treemacs-show-cursor nil
+          treemacs-show-hidden-files t
+          treemacs-silent-filewatch t
+          treemacs-select-when-already-in-treemacs 'move-back
+          treemacs-space-between-root-nodes t
+          treemacs-tag-follow-cleanup t
+          treemacs-tag-follow-delay 1.5
+          treemacs-text-scale nil
+          treemacs-user-mode-line-format nil
+          treemacs-user-header-line-format nil
+          treemacs-wide-toggle-width 70
+          treemacs-width 35
+          treemacs-width-increment 1
+          treemacs-width-is-initially-locked t
+          treemacs-workspace-switch-cleanup nil)
+    (treemacs-peek-mode 1)
+    (treemacs-filewatch-mode t)
+    (treemacs-follow-mode t)
+    (treemacs-fringe-indicator-mode 'always)
+    (when treemacs-python-executable
+      (treemacs-git-commit-diff-mode t))
+    (pcase (cons (not (null (executable-find "git")))
+                 (not (null treemacs-python-executable)))
+      (`(t . t)
+       (treemacs-git-mode 'deferred))
+      (`(t . _)
+       (treemacs-git-mode 'simple)))
+    :bind
+    (:map global-map
+          ("M-0"       . treemacs-select-window)
+          ("C-x t 1"   . treemacs-delete-other-windows)
+          ("C-x t t"   . treemacs)
+          ("C-x t d"   . treemacs-select-directory)
+          ("C-x t B"   . treemacs-bookmark)
+          ("C-x t C-t" . treemacs-find-file)
+          ("C-x t M-t" . treemacs-find-tag))
+    :general
+    (+config/leader-tree
+      "t" 'treemacs
+      "p" 'treemacs-add-and-display-current-project-exclusively)
 
-  (general-define-key
-   :keymaps 'treemacs-mode-map
-   "[mouse-1]" 'treemacs-single-click-expand-action)
+    (general-define-key
+     :keymaps 'treemacs-mode-map
+     "[mouse-1]" 'treemacs-single-click-expand-action)
 
-  (general-nvmap
-    :keymaps 'treemacs-mode-map
-    "gr" '(treemacs-refresh :wk "refresh tree")
-    "zm" '(:ignore t :wk "move")
-    "zmf" '(treemacs-move-file :wk "move file")
-    "zmd" '(treemacs-move-project-down :wk "move project down")
-    "zmu" '(treemacs-move-project-up :wk "move project up")
-    "zr" '(:ignore t :wk "rename")
-    "zrf" '(treemacs-rename-file :wk "rename file")
-    "zrp" '(treemacs-rename-project :wk "rename project")
-    "zrw" '(treemacs-rename-workspace :wk "rename workspace")
-    "zc" '(:ignore t :wk "create/clean")
-    "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
-    "zcd" '(treemacs-create-dir :wk "create directory")
-    "zcf" '(treemacs-create-file :wk "create file")
-    "zd" '(treemacs-delete-file :wk "delete file")))
+    (general-nvmap
+      :keymaps 'treemacs-mode-map
+      "gr" '(treemacs-refresh :wk "refresh tree")
+      "zm" '(:ignore t :wk "move")
+      "zmf" '(treemacs-move-file :wk "move file")
+      "zmd" '(treemacs-move-project-down :wk "move project down")
+      "zmu" '(treemacs-move-project-up :wk "move project up")
+      "zr" '(:ignore t :wk "rename")
+      "zrf" '(treemacs-rename-file :wk "rename file")
+      "zrp" '(treemacs-rename-project :wk "rename project")
+      "zrw" '(treemacs-rename-workspace :wk "rename workspace")
+      "zc" '(:ignore t :wk "create/clean")
+      "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
+      "zcd" '(treemacs-create-dir :wk "create directory")
+      "zcf" '(treemacs-create-file :wk "create file")
+      "zd" '(treemacs-delete-file :wk "delete file")))
 #+end_src
 ** treemacs-projectile 
 #+name: treemacs-projectile
 #+begin_src emacs-lisp -n 
-(use-package treemacs-projectile
-  :ensure
-  :after treemacs)
+  (use-package treemacs-projectile
+    :ensure t
+    :after treemacs)
 #+end_src
 ** treemacs-icons-dired 
 #+name: treemacs-icons-dired
 #+begin_src emacs-lisp -n 
-(use-package treemacs-icons-dired
-  :ensure
-  :after treemacs
-  :hook (dired-mode . treemacs-icons-dired-enable-once))
+  (use-package treemacs-icons-dired
+    :ensure t
+    :after treemacs
+    :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
 ** treemacs-magit 
 #+name: treemacs-magit
 #+begin_src emacs-lisp -n 
-(use-package treemacs-magit
-  :ensure
-  :after treemacs magit)
+  (use-package treemacs-magit
+    :ensure t
+    :after treemacs magit)
 #+end_src
 ** treemacs-evil 
 #+name: treemacs-evil
 #+begin_src emacs-lisp -n 
-(use-package treemacs-evil
-  :ensure
-  :after treemacs evil)
+  (use-package treemacs-evil
+    :ensure t
+    :after treemacs evil)
 #+end_src
 ** lsp-treemacs 
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+name: lsp-treemacs
 #+begin_src emacs-lisp -n
-(use-package lsp-treemacs
-  :ensure
-  :after treemacs lsp
-  :config
-  (lsp-treemacs-sync-mode 1)
-  :general
-  (general-define-key
-   :keymaps 'treemacs-mode-map
-   "S" 'lsp-treemacs-symbols
-   "X" 'lsp-treemacs-errors-list
-   "Y" 'lsp-treemacs-call-hierarchy))
+  (use-package lsp-treemacs
+    :ensure t
+    :after treemacs lsp
+    :config
+    (lsp-treemacs-sync-mode 1)
+    :general
+    (general-define-key
+     :keymaps 'treemacs-mode-map
+     "S" 'lsp-treemacs-symbols
+     "X" 'lsp-treemacs-errors-list
+     "Y" 'lsp-treemacs-call-hierarchy))
 #+end_src
 ** treemacs-perspective 
 #+name: treemacs-perspective
 #+begin_src emacs-lisp -n
-(use-package treemacs-perspective
-  :ensure
-  :after treemacs perspective
-  :config
-  (treemacs-set-scope-type 'Perspectives))
+  (use-package treemacs-perspective
+    :ensure t
+    :after treemacs perspective
+    :config
+    (treemacs-set-scope-type 'Perspectives))
 #+end_src
 ** treemacs-tab-bar 
 #+name: treemacs-tab-bar
 #+begin_src emacs-lisp -n 
-(use-package treemacs-tab-bar
-  :ensure
-  :after treemacs)
+  (use-package treemacs-tab-bar
+    :ensure t
+    :after treemacs)
 #+end_src
 ** treemacs-nerd-icons 
 #+name: treemacs-nerd-icons
 #+begin_src emacs-lisp -n 
-(use-package treemacs-nerd-icons
-  :ensure
-  :after treemacs
-  :config
-  (treemacs-load-theme "nerd-icons"))
+  (use-package treemacs-nerd-icons
+    :ensure t
+    :after treemacs
+    :config
+    (treemacs-load-theme "nerd-icons"))
 #+end_src
 
 * Mail
@@ -4233,16 +4233,15 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** Treemacs
 #+begin_src emacs-lisp -n
-  ;; treemacs
-  ;; <<treemacs>>
-  ;; <<treemacs-projectile>>
-  ;; <<treemacs-icons-dired>>
-  ;; <<treemacs-magit>>
-  ;; <<treemacs-evil>>
-  ;; <<lsp-treemacs>>
-  ;; <<treemacs-perspective>>
-  ;; <<treemacs-tab-bar>>
-  ;; <<treemacs-nerd-icons>>
+  <<treemacs>>
+  <<treemacs-projectile>>
+  <<treemacs-icons-dired>>
+  <<treemacs-magit>>
+  <<treemacs-evil>>
+  <<lsp-treemacs>>
+  <<treemacs-perspective>>
+  <<treemacs-tab-bar>>
+  <<treemacs-nerd-icons>>
 #+end_src
 **** Mail
 #+begin_src emacs-lisp -n
