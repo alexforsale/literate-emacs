@@ -1314,9 +1314,10 @@ A shell-like command interpreter implemented in Emacs Lisp.
 ** select
 #+name: select
 #+begin_src emacs-lisp -n
-(use-package select
-  :custom
-  (select-enable-clipboard t))
+  (use-package select
+    :ensure nil
+    :custom
+    (select-enable-clipboard t))
 #+end_src
 ** transient-mark-mode
 Highlight region.
@@ -1333,9 +1334,10 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 ** subword
 #+name: subword
 #+begin_src emacs-lisp -n
-(use-package subword
-  :init
-  (global-subword-mode 1))
+  (use-package subword
+    :ensure nil
+    :init
+    (global-subword-mode 1))
 #+end_src
 ** text-mode 
 #+name: text-mode
@@ -1350,7 +1352,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 #+name: ws-butler
 #+begin_src emacs-lisp
     (use-package ws-butler
-      :ensure
+      :ensure t
       :hook (prog-mode . ws-butler-mode))
 #+end_src
 ** smartparens
@@ -1359,7 +1361,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp -n
   ;; smartparens
   (use-package smartparens
-    :ensure
+    :ensure t
     :demand t
     :init
     (smartparens-global-mode)
@@ -4152,13 +4154,13 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** Editing
 #+begin_src emacs-lisp -n
-  ;; <<select>>
-  ;; <<transient-mark-mode>>
-  ;; <<delete-selection-mode>>
-  ;; <<subword>>
-  ;; <<text-mode>>
-  ;; <<ws-butler>>
-  ;; <<smartparens>>
+  <<select>>
+  <<transient-mark-mode>>
+  <<delete-selection-mode>>
+  <<subword>>
+  <<text-mode>>
+  <<ws-butler>>
+  <<smartparens>>
 #+end_src
 **** Org-mode
 #+begin_src emacs-lisp -n
