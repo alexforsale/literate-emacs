@@ -983,7 +983,7 @@ I call this framework since usually these packages are what people use together,
 #+name: vertico
 #+begin_src emacs-lisp -n
 (use-package vertico
-  :ensure
+  :ensure t
   :init
   (vertico-mode)
   ;; Different scroll margin
@@ -1052,7 +1052,7 @@ I call this framework since usually these packages are what people use together,
 #+begin_src emacs-lisp -n
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
-  :ensure
+  :ensure t
   :bind (:map minibuffer-local-map
               ("M-A" . marginalia-cycle))
   :init
@@ -1063,7 +1063,7 @@ I call this framework since usually these packages are what people use together,
 #+name: corfu
 #+begin_src emacs-lisp
 (use-package corfu
-  :ensure
+  :ensure t
   :custom
   (corfu-cycle t)
   (corfu-auto t)
@@ -1074,11 +1074,11 @@ I call this framework since usually these packages are what people use together,
   (global-corfu-mode))
 #+end_src
 *** consult
-*** Basic Configuration
+**** Basic Configuration
 #+name: consult
 #+begin_src emacs-lisp -n
   (use-package consult
-    :ensure
+    :ensure t
     :hook (completion-list-mode . consult-preview-at-point-mode)
     :init
     ;; Optionally configure the register formatting. This improves the register
@@ -1138,7 +1138,7 @@ I call this framework since usually these packages are what people use together,
 #+name: orderless
 #+begin_src emacs-lisp -n
 (use-package orderless
-  :ensure
+  :ensure t
   :init
   ;; Configure a custom style dispatcher (see the Consult wiki)
   ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
@@ -1151,7 +1151,7 @@ I call this framework since usually these packages are what people use together,
 #+name: nerd-icons-corfu
 #+begin_src emacs-lisp -n 
 (use-package nerd-icons-corfu
-  :ensure
+  :ensure t
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
   (setq nerd-icons-corfu-mapping
@@ -1164,7 +1164,7 @@ I call this framework since usually these packages are what people use together,
 #+name: nerd-icons-completion
 #+begin_src emacs-lisp -n 
 (use-package nerd-icons-completion
-  :ensure
+  :ensure t
   :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
   :config
   (nerd-icons-completion-mode))
@@ -4130,14 +4130,14 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** Completion
 #+begin_src emacs-lisp -n
-  ;; <<vertico>>
-  ;; <<vertico-extensions>>
-  ;; <<marginalia>>
-  ;; <<corfu>>
-  ;; <<consult>>
-  ;; <<orderless>>
-  ;; <<nerd-icons-corfu>>
-  ;; <<nerd-icons-completion>>
+  <<vertico>>
+  <<vertico-extensions>>
+  <<marginalia>>
+  <<corfu>>
+  <<consult>>
+  <<orderless>>
+  <<nerd-icons-corfu>>
+  <<nerd-icons-completion>>
 #+end_src
 **** Shells
 #+begin_src emacs-lisp -n
