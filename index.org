@@ -2636,143 +2636,145 @@ Needs an external package =fd=, or =fd-find=
 ** notmuch :external:
 #+name: notmuch
 #+begin_src emacs-lisp -n
-(use-package notmuch
-  :ensure
-  :if (executable-find "notmuch")
-  :defer t
-  :commands (notmuch)
-  :hook
-  (message-setup . mml-secure-sign-pgpmime)
-  :config
-  (global-set-key (kbd "<XF86Mail>") 'notmuch)
-  (setq notmuch-fcc-dirs nil
-        notmuch-search-result-format
-        '(("date" . "%12s ")
-          ("count" . "%-7s ")
-          ("authors" . "%-30s ")
-          ("subject" . "%-72s ")
-          ("tags" . "(%s)"))
-        notmuch-tag-formats
-        '(("unread"
-           (propertize tag 'face 'notmuch-tag-unread))
-          ("flagged"
-           (propertize tag 'face 'notmuch-tag-flagged)
-           (notmuch-tag-format-image-data tag
-                                          (notmuch-tag-star-icon))))
-        notmuch-tagging-keys
-        '(("a" notmuch-archive-tags "Archive")
-          ("u" notmuch-show-mark-read-tags "Mark read")
-          ("f" ("+flagged") "Flag")
-          ("s" ("+spam" "-inbox") "Mark as spam")
-          ("d" ("+deleted" "-inbox") "Delete"))
-        notmuch-saved-searches
-        '((:name "flagged" :query "tag:flagged" :key "f")
-          (:name "sent" :query "tag:sent" :key "s")
-          (:name "drafts"  :query "tag:draft" :key "d")
-          (:name "all mail" :query "*" :key "a")
-          (:name "unread" :query "tag:unread" :key "u")
-          (:name "zum" :query "tag:zum" :key "z")
-          (:name "mkn" :query "tag:mkn" :key "c")
-          (:name "gmail" :query "tag:gmail" :key "g")
-          (:name "hotmail" :query "tag:hotmail" :key "h")
-          (:name "yahoo" :query "tag:yahoo" :key "h")
-          (:name "ymail" :query "tag:ymail" :key "m")
-          (:name "Today"
-                 :query "date:today AND NOT tag:spam AND NOT tag:bulk"
-                 :key "T"
-                 :search-type 'tree
-                 :sort-order 'newest-first)
-          (:name "This Week"
-                 :query "date:weeks AND NOT tag:spam AND NOT tag:bulk"
-                 :key "W"
-                 :search-type 'tree
-                 :sort-order 'newest-first)
-          (:name "This Month"
-                 :query "date:months AND NOT tag:spam AND NOT tag:bulk"
-                 :key "M"
-                 :search-type 'tree
-                 :sort-order 'newest-first)
-          (:name "flagged"
-                 :query "tag:flagged AND NOT tag:spam AND NOT tag:bulk"
-                 :key "f"
-                 :search-type 'tree
-                 :sort-order 'newest-first)
-          (:name "spam" :query "tag:spam"))
-        notmuch-archive-tags '("-inbox" "-unread"))
-  (setq-default notmuch-search-oldest-first nil)
-  (if (executable-find "gpg2")
-      (setq notmuch-crypto-gpg-program "gpg2")
-    (setq notmuch-crypto-gpg-program "gpg"))
-  (setq notmuch-crypto-process-mime t
-        mml-secure-openpgp-sign-with-sender t)
-  (define-key notmuch-show-mode-map "S"
-              (lambda ()
-                "Mark message as spam"
-                (interactive)
-                (notmuch-show-tag (list +spam -new))))
-  :general
-  (+config/leader-menu! "mail" "M-m"
-    "m" '(notmuch :wk "Notmuch Mail"))
+  (use-package notmuch
+    :ensure t
+    :if (executable-find "notmuch")
+    :defer t
+    :commands (notmuch)
+    :hook
+    (message-setup . mml-secure-sign-pgpmime)
+    :config
+    (global-set-key (kbd "<XF86Mail>") 'notmuch)
+    (setq notmuch-fcc-dirs nil
+          notmuch-search-result-format
+          '(("date" . "%12s ")
+            ("count" . "%-7s ")
+            ("authors" . "%-30s ")
+            ("subject" . "%-72s ")
+            ("tags" . "(%s)"))
+          notmuch-tag-formats
+          '(("unread"
+             (propertize tag 'face 'notmuch-tag-unread))
+            ("flagged"
+             (propertize tag 'face 'notmuch-tag-flagged)
+             (notmuch-tag-format-image-data tag
+                                            (notmuch-tag-star-icon))))
+          notmuch-tagging-keys
+          '(("a" notmuch-archive-tags "Archive")
+            ("u" notmuch-show-mark-read-tags "Mark read")
+            ("f" ("+flagged") "Flag")
+            ("s" ("+spam" "-inbox") "Mark as spam")
+            ("d" ("+deleted" "-inbox") "Delete"))
+          notmuch-saved-searches
+          '((:name "flagged" :query "tag:flagged" :key "f")
+            (:name "sent" :query "tag:sent" :key "s")
+            (:name "drafts"  :query "tag:draft" :key "d")
+            (:name "all mail" :query "*" :key "a")
+            (:name "unread" :query "tag:unread" :key "u")
+            (:name "zum" :query "tag:zum" :key "z")
+            (:name "mkn" :query "tag:mkn" :key "c")
+            (:name "gmail" :query "tag:gmail" :key "g")
+            (:name "hotmail" :query "tag:hotmail" :key "h")
+            (:name "yahoo" :query "tag:yahoo" :key "h")
+            (:name "ymail" :query "tag:ymail" :key "m")
+            (:name "Today"
+                   :query "date:today AND NOT tag:spam AND NOT tag:bulk"
+                   :key "T"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "This Week"
+                   :query "date:weeks AND NOT tag:spam AND NOT tag:bulk"
+                   :key "W"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "This Month"
+                   :query "date:months AND NOT tag:spam AND NOT tag:bulk"
+                   :key "M"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "flagged"
+                   :query "tag:flagged AND NOT tag:spam AND NOT tag:bulk"
+                   :key "f"
+                   :search-type 'tree
+                   :sort-order 'newest-first)
+            (:name "spam" :query "tag:spam"))
+          notmuch-archive-tags '("-inbox" "-unread"))
+    (setq-default notmuch-search-oldest-first nil)
+    (if (executable-find "gpg2")
+        (setq notmuch-crypto-gpg-program "gpg2")
+      (setq notmuch-crypto-gpg-program "gpg"))
+    (setq notmuch-crypto-process-mime t
+          mml-secure-openpgp-sign-with-sender t)
+    (define-key notmuch-show-mode-map "S"
+                (lambda ()
+                  "Mark message as spam"
+                  (interactive)
+                  (notmuch-show-tag (list +spam -new))))
+    :general
+    (+config/leader-menu! "mail" "M-m"
+      "m" '(notmuch :wk "Notmuch Mail"))
 
-  (+config/leader-mail
-    "m" '(notmuch :wk "open notmuch mail")
-    "M" '(compose-mail :wk "new mail"))
+    (+config/leader-mail
+      "m" '(notmuch :wk "open notmuch mail")
+      "M" '(compose-mail :wk "new mail"))
 
-  (general-nmap 'notmuch-common-keymap
-    "gr" 'notmuch-refresh-this-buffer
-    "gR" 'notmuch-poll-and-refresh-this-buffer))
+    (general-nmap 'notmuch-common-keymap
+      "gr" 'notmuch-refresh-this-buffer
+      "gR" 'notmuch-poll-and-refresh-this-buffer))
 #+end_src
 
 ** notmuch-indicator :external:
 #+name: notmuch-indicator
 #+begin_src emacs-lisp -n
-(use-package notmuch-indicator
-  :ensure
-  :config
-  (setq notmuch-indicator-args
-        '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
-  (notmuch-indicator-mode))
+  (use-package notmuch-indicator
+    :ensure t
+    :config
+    (setq notmuch-indicator-args
+          '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
+    (notmuch-indicator-mode))
 #+end_src
 ** consult-notmuch :external:
 #+name: consult-notmuch
 #+begin_src emacs-lisp -n
-(use-package consult-notmuch
-  :ensure
-  :after consult
-  :config
-  (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
+  (use-package consult-notmuch
+    :ensure t
+    :after consult
+    :config
+    (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
 #+end_src
 ** ol-notmuch :external:
 #+name: ol-notmuch
 #+begin_src emacs-lisp -n
-(use-package ol-notmuch
-  :ensure)
+  (use-package ol-notmuch
+    :ensure t)
 #+end_src
 ** notmuch-maildir :external:
 #+name: notmuch-maildir
 #+begin_src emacs-lisp -n
-(use-package notmuch-maildir
-  :ensure
-  :config
-  (notmuch-maildir-inject-section))
+  (use-package notmuch-maildir
+    :ensure t
+    :config
+    (notmuch-maildir-inject-section))
 #+end_src
 ** message 
 #+name: message
 #+begin_src emacs-lisp -n
-(use-package message
-  :custom
-  (message-directory (expand-file-name ".mail" (getenv "HOME")))
-  (message-sendmail-envelope-from 'header))
+  (use-package message
+    :ensure nil
+    :custom
+    (message-directory (expand-file-name ".mail" (getenv "HOME")))
+    (message-sendmail-envelope-from 'header))
 #+end_src
 ** sendmail 
 #+name: sendmail
 #+begin_src emacs-lisp -n
-(use-package sendmail
-  :custom
-  (mail-specify-envelope-from t)
-  (mail-envelope-from 'header)
-  (send-mail-function 'sendmail-send-it)
-  (sendmail-program (executable-find "msmtp")))
+  (use-package sendmail
+    :ensure nil
+    :custom
+    (mail-specify-envelope-from t)
+    (mail-envelope-from 'header)
+    (send-mail-function 'sendmail-send-it)
+    (sendmail-program (executable-find "msmtp")))
 #+end_src
 * Programming languages
 ** Lisp
@@ -4245,14 +4247,13 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 **** Mail
 #+begin_src emacs-lisp -n
-  ;; mail
-  ;; <<notmuch>>
-  ;; <<notmuch-indicator>>
-  ;; <<consult-notmuch>>
-  ;; <<ol-notmuch>>
-  ;; <<notmuch-maildir>>
-  ;; <<message>>
-  ;; <<sendmail>>
+  <<notmuch>>
+  <<notmuch-indicator>>
+  <<consult-notmuch>>
+  <<ol-notmuch>>
+  <<notmuch-maildir>>
+  <<message>>
+  <<sendmail>>
 #+end_src
 **** Programming languages
 #+begin_src emacs-lisp -n
