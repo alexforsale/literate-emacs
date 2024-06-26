@@ -4093,8 +4093,8 @@ This file is already added in my git repositories for initial Emacs loading. But
 **** Evil stuffs
 #+begin_src emacs-lisp -n
   ;; evil
-  ;; <<evil>>
-  ;; <<evil-collection>>
+  <<evil>>
+  <<evil-collection>>
 #+end_src
 **** UI
 #+begin_src emacs-lisp -n
