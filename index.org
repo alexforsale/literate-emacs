@@ -4119,7 +4119,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 **** keybindings  
 #+begin_src emacs-lisp -n
   <<general.el>>
-  ;; <<keybindings>>
+  <<keybindings>>
 #+end_src
 **** Evil stuffs
 #+begin_src emacs-lisp -n
