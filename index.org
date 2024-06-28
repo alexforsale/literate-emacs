@@ -40,7 +40,6 @@ I also learned that tangling too many /codeblocks/ took a while. Now I use =nowe
 /init.el/ is for the essential configurations, everything else goes to /config.el/.
 ** Try to minimize the use of external packages
 More dependencies means more bloats, avoid it when possible.
-*** External packages I can't live without
 * Emacs with Vim keybindings.
 ** evil :external:
 Mostly copied from /doom/ or the official documentation[fn:1].
@@ -91,44 +90,6 @@ For parts of /Emacs/ not covered by Evil[fn:6].
   :custom
   (evil-collection-setup-minibuffer t)
   (evil-collection-calendar-want-org-bindings t))
-#+end_src
-
-* Variables and helper functions
-** Identity
-#+name: identity
-#+begin_src emacs-lisp -n
-  (setq user-mail-address "alexforsale@yahoo.com"
-	user-full-name "Kristian Alexander P")
-#+end_src
-
-** +config/user-modules-directory
-This variable is needed in order for /Emacs/ to locate this configuration files.
-#+name: +config/user-modules-directory
-#+begin_src emacs-lisp -n
-  (defvar +config/user-modules-directory (expand-file-name "modules/" user-emacs-directory)
-    "User modules directory.")
-#+end_src
-** add module directory to load-path
-#+name: add-modules-to-load-path
-#+begin_src emacs-lisp -n
-  (when (file-directory-p +config/user-modules-directory)
-    (add-to-list 'load-path +config/user-modules-directory))
-#+end_src
-** merge-list-to-list function
-This function is just a wrapper to easily merge lists.
-#+name: merge-list-to-list
-#+begin_src emacs-lisp -n
-  ;;; From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048
-  (defun merge-list-to-list (dst src)
-    "Merges content of the 2nd list with the 1st one"
-    (set dst
-	 (append (eval dst) src)))
-#+end_src
-** define +config/org-directory variable
-#+name: +config/org-directory
-#+begin_src emacs-lisp -n
-(when (file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
-  (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
 #+end_src
 
 * Keybindings
@@ -499,6 +460,44 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   ;;; config-keybindings.el ends.here
 #+end_src
 
+* Variables and helper functions
+** Identity
+#+name: identity
+#+begin_src emacs-lisp -n
+  (setq user-mail-address "alexforsale@yahoo.com"
+	user-full-name "Kristian Alexander P")
+#+end_src
+
+** +config/user-modules-directory
+This variable is needed in order for /Emacs/ to locate this configuration files.
+#+name: +config/user-modules-directory
+#+begin_src emacs-lisp -n
+  (defvar +config/user-modules-directory (expand-file-name "modules/" user-emacs-directory)
+    "User modules directory.")
+#+end_src
+** add module directory to load-path
+#+name: add-modules-to-load-path
+#+begin_src emacs-lisp -n
+  (when (file-directory-p +config/user-modules-directory)
+    (add-to-list 'load-path +config/user-modules-directory))
+#+end_src
+** merge-list-to-list function
+This function is just a wrapper to easily merge lists.
+#+name: merge-list-to-list
+#+begin_src emacs-lisp -n
+  ;;; From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048
+  (defun merge-list-to-list (dst src)
+    "Merges content of the 2nd list with the 1st one"
+    (set dst
+	 (append (eval dst) src)))
+#+end_src
+** define +config/org-directory variable
+#+name: +config/org-directory
+#+begin_src emacs-lisp -n
+(when (file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
+  (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
+#+end_src
+
 * UI
 I suppose here is the most external packages used.
 ** Doom themes and modelines
@@ -530,7 +529,6 @@ A fancy and fast mode-line inspired by minimalism design[fn:3]. I'm using their 
 #+name: doom-modeline
 #+begin_src emacs-lisp -n
   (use-package doom-modeline
-    :after nerd-icons
     :ensure t
     :init
     (doom-modeline-mode 1)
@@ -660,6 +658,17 @@ Emacs package that displays available keybindings in popup[fn:8]. This is one of
   :init
   (global-font-lock-mode t))
 #+end_src
+*** [[https://github.com/mohkale/all-the-icons-nerd-fonts][all-the-icons-nerd-fonts]]
+Nerd font integration for all-the-icons.
+#+name: all-the-icons-nerd-fonts
+#+begin_src emacs-lisp
+  (use-package all-the-icons-nerd-fonts
+    :ensure (:host github :repo "mohkale/all-the-icons-nerd-fonts")
+    :after all-the-icons
+    :demand t
+    :config
+    (all-the-icons-nerd-fonts-prefer))
+#+end_src
 ** rainbow-mode, rainbow-identifiers, and rainbow-delimiters :external:
 Making /Emacs/ more colourful.
 #+name: rainbow-packages
@@ -723,13 +732,13 @@ Enable line highlighting in all buffers.
 ** nerd-icons :external:
 #+name: nerd-icons
 #+begin_src emacs-lisp
-(use-package nerd-icons
-  :ensure t
-  :custom
-  ;; The Nerd Font you want to use in GUI
-  ;; "Symbols Nerd Font Mono" is the default and is recommended
-  ;; but you can use any other Nerd Font if you want
-  (nerd-icons-font-family "Symbols Nerd Font Mono"))
+  (use-package nerd-icons
+    :ensure t
+    :custom
+    ;; The Nerd Font you want to use in GUI
+    ;; "Symbols Nerd Font Mono" is the default and is recommended
+    ;; but you can use any other Nerd Font if you want
+    (nerd-icons-font-family "Symbols Nerd Font Mono"))
 #+end_src
 
 ** nerd-fonts :external:
@@ -1243,36 +1252,38 @@ A shell-like command interpreter implemented in Emacs Lisp.
 ** vterm 
 #+name: vterm
 #+begin_src emacs-lisp -n
-(use-package vterm
-  :ensure t
-  :defer t
-  :commands vterm-mode
-  :config
-  (add-hook 'vterm-mode-hook
-            (lambda ()
-              (setq-local global-hl-line-mode nil)
-              (setq-local hscroll-margin 0)))
-  (setq vterm-kill-buffer-on-exit t)
-  :general
-  (+config/leader-menu! "vterm"
-      "tv"
-    "RET" 'vterm-toggle
-    "v" 'vterm))
+  (use-package vterm
+    :ensure t
+    :defer t
+    :commands vterm-mode
+    :config
+    (add-hook 'vterm-mode-hook
+              (lambda ()
+                (setq-local global-hl-line-mode nil)
+                (setq-local hscroll-margin 0)))
+    (setq vterm-kill-buffer-on-exit t)
+    ;; :general
+    ;; (+config/leader-menu! "vterm"
+    ;;     "tv"
+    ;;   "RET" 'vterm-toggle
+    ;;   "v" 'vterm)
+    )
 #+end_src
 ** multi-vterm 
 #+name: multi-vterm
 #+begin_src emacs-lisp -n :tangle no
-(use-package multi-vterm
-  :ensure t
-  :defer t
-  :after vterm
-  :general
-  (general-iemap
-    :keymaps 'vterm-mode-map
-    "C-SPC" '(:ignore t :wk "multi vterm")
-    "C-SPC a" '(multi-vterm :wk "new vterm buffer")
-    "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
-    "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer")))
+  (use-package multi-vterm
+    :ensure t
+    :defer t
+    :after vterm
+    ;; :general
+    ;; (general-iemap
+    ;;   :keymaps 'vterm-mode-map
+    ;;   "C-SPC" '(:ignore t :wk "multi vterm")
+    ;;   "C-SPC a" '(multi-vterm :wk "new vterm buffer")
+    ;;   "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
+    ;;   "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer"))
+    )
 #+end_src
 ** vterm-toggle :disabled:
 #+name: vterm-toggle
@@ -1460,48 +1471,50 @@ CLOSED: [2024-04-24 Wed 21:26]
     (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     (magit-diff-refine-hunk 'all)
     (magit-log-arguments '("-n100" "--graph" "--decorate"))
-    :general
-    (+config/leader-go
-      "g" 'magit-status))
+    ;; :general
+    ;; (+config/leader-go
+    ;;   "g" 'magit-status)
+    )
 #+end_src
 
 ** projectile :external:
 A project interaction library for /Emacs/, with little external dependency as possible.
 #+name: projectile
 #+begin_src emacs-lisp -n
-(use-package projectile
-  :ensure t
-  :demand t
-  :bind (([remap evil-jump-to-tag] . projectile-find-tag)
-         ([remap find-tag] . projectile-find-tag))
-  :hook (dired-before-readin . projectile-track-known-projects-find-file-hook)
-  :custom
-  (projectile-cache-file (expand-file-name ".projects" user-emacs-directory))
-  (projectile-auto-discover nil)
-  (projectile-enable-caching (not noninteractive))
-  (projectile-globally-ignored-files '("DS_Store" "TAGS"))
-  (projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o"))
-  (projectile-kill-buffers-filter 'kill-only-files)
-  (projectile-known-projects-file (expand-file-name ".projectile_projects.eld" user-emacs-directory))
-  (projectile-ignored-projects '("~/"))
-  (projectile-project-root-files-bottom-up
-   (append '(".projectile" ".project" ".git")
-           (when (executable-find "hg")
-             '(".hg"))
-           (when (executable-find "bzr")
-             '(".bzr"))))
-  (projectile-project-root-files-top-down-recurring '("Makefile"))
-  (compilation-buffer-name-function #'projectile-compilation-buffer-name)
-  (compilation-save-buffers-predicate #'projectile-current-project-buffer-p)
-  (projectile-git-submodule-command nil)
-  (projectile-indexing-method 'hybrid)
-  :config
-  (projectile-mode +1)
-  (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
-  :general
-  (+config/leader-key
-    "SPC" 'projectile-find-file
-    "p" '(:keymap projectile-command-map :package projectile :wk "projectile")))
+  (use-package projectile
+    :ensure t
+    :demand t
+    :bind (([remap evil-jump-to-tag] . projectile-find-tag)
+           ([remap find-tag] . projectile-find-tag))
+    :hook (dired-before-readin . projectile-track-known-projects-find-file-hook)
+    :custom
+    (projectile-cache-file (expand-file-name ".projects" user-emacs-directory))
+    (projectile-auto-discover nil)
+    (projectile-enable-caching (not noninteractive))
+    (projectile-globally-ignored-files '("DS_Store" "TAGS"))
+    (projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o"))
+    (projectile-kill-buffers-filter 'kill-only-files)
+    (projectile-known-projects-file (expand-file-name ".projectile_projects.eld" user-emacs-directory))
+    (projectile-ignored-projects '("~/"))
+    (projectile-project-root-files-bottom-up
+     (append '(".projectile" ".project" ".git")
+             (when (executable-find "hg")
+               '(".hg"))
+             (when (executable-find "bzr")
+               '(".bzr"))))
+    (projectile-project-root-files-top-down-recurring '("Makefile"))
+    (compilation-buffer-name-function #'projectile-compilation-buffer-name)
+    (compilation-save-buffers-predicate #'projectile-current-project-buffer-p)
+    (projectile-git-submodule-command nil)
+    (projectile-indexing-method 'hybrid)
+    :config
+    (projectile-mode +1)
+    (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
+    ;; :general
+    ;; (+config/leader-key
+    ;;   "SPC" 'projectile-find-file
+    ;;   "p" '(:keymap projectile-command-map :package projectile :wk "projectile"))
+    )
 #+end_src
 
 ** diff-hl :external:
@@ -1532,63 +1545,65 @@ A project interaction library for /Emacs/, with little external dependency as po
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
 #+name: perspective
 #+begin_src emacs-lisp -n
-(use-package perspective
-  :ensure t
-  :config
-  (setq persp-initial-frame-name "Main"
-        persp-suppress-no-prefix-key-warning t)
-  (if (featurep 'no-littering)
-      (setq persp-state-default-file (expand-file-name ".perspective-state" no-littering-var-directory))
-    (setq persp-state-default-file (expand-file-name ".perspective-state" user-emacs-directory)))
-  (global-set-key [remap switch-to-buffer] #'persp-switch-to-buffer*)
-  (when (featurep 'consult)
-    (require 'consult)
-    (unless (boundp 'persp-consult-source)
-      (defvar persp-consult-source
-        (list :name     "Perspective"
-              :narrow   ?s
-              :category 'buffer
-              :state    #'consult--buffer-state
-              :history  'buffer-name-history
-              :default  t
-              :items
-              #'(lambda () (consult--buffer-query :sort 'visibility
-                                                  :predicate '(lambda (buf) (persp-is-current-buffer buf t))
-                                                  :as #'buffer-name)))))
-    (consult-customize consult--source-buffer :hidden t :default nil)
-    (add-to-list 'consult-buffer-sources persp-consult-source))
-  :init
-  (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
-  (unless (equal persp-mode t)
-    (persp-mode 1))
-  :bind (([remap switch-to-buffer] . persp-switch-to-buffer*)
-         ([remap kill-buffer] . persp-kill-buffer*))
-  :hook (kill-emacs . persp-state-save)
-  :general
-  (general-def
-    :keymaps 'perspective-map
-    "TAB" '(persp-switch-last :wk "switch to last perspective")
-    "P" 'projectile-persp-switch-project)
-  (+config/leader-key
-    "TAB" (general-simulate-key "C-c TAB"
-            :state '(normal visual)
-            :name general-SPC-h-simulates-C-c-TAB
-            :docstring "Simulates C-c TAB in normal and visual mode."
-            :which-key "Perspective"))
-  (+config/leader-key
-    "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer")))
+  (use-package perspective
+    :ensure t
+    :config
+    (setq persp-initial-frame-name "Main"
+          persp-suppress-no-prefix-key-warning t)
+    (if (featurep 'no-littering)
+        (setq persp-state-default-file (expand-file-name ".perspective-state" no-littering-var-directory))
+      (setq persp-state-default-file (expand-file-name ".perspective-state" user-emacs-directory)))
+    (global-set-key [remap switch-to-buffer] #'persp-switch-to-buffer*)
+    (when (featurep 'consult)
+      (require 'consult)
+      (unless (boundp 'persp-consult-source)
+        (defvar persp-consult-source
+          (list :name     "Perspective"
+                :narrow   ?s
+                :category 'buffer
+                :state    #'consult--buffer-state
+                :history  'buffer-name-history
+                :default  t
+                :items
+                #'(lambda () (consult--buffer-query :sort 'visibility
+                                                    :predicate '(lambda (buf) (persp-is-current-buffer buf t))
+                                                    :as #'buffer-name)))))
+      (consult-customize consult--source-buffer :hidden t :default nil)
+      (add-to-list 'consult-buffer-sources persp-consult-source))
+    :init
+    (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
+    (unless (equal persp-mode t)
+      (persp-mode 1))
+    :bind (([remap switch-to-buffer] . persp-switch-to-buffer*)
+           ([remap kill-buffer] . persp-kill-buffer*))
+    :hook (kill-emacs . persp-state-save)
+    ;; :general
+    ;; (general-def
+    ;;   :keymaps 'perspective-map
+    ;;   "TAB" '(persp-switch-last :wk "switch to last perspective")
+    ;;   "P" 'projectile-persp-switch-project)
+    ;; (+config/leader-key
+    ;;   "TAB" (general-simulate-key "C-c TAB"
+    ;;           :state '(normal visual)
+    ;;           :name general-SPC-h-simulates-C-c-TAB
+    ;;           :docstring "Simulates C-c TAB in normal and visual mode."
+    ;;           :which-key "Perspective"))
+    ;; (+config/leader-key
+    ;;   "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer"))
+    )
 #+end_src
 ** persp-projectile :external:
 #+name: persp-projectile
 #+begin_src emacs-lisp -n
-(use-package persp-projectile
-  :ensure t
-  :after perspective
-  :commands projectile-persp-switch-project
-  :general
-  (general-def
-    :keymaps 'perspective-map
-    "P" 'projectile-persp-switch-project))
+  (use-package persp-projectile
+    :ensure t
+    :after perspective
+    :commands projectile-persp-switch-project
+    ;; :general
+    ;; (general-def
+    ;;   :keymaps 'perspective-map
+    ;;   "P" 'projectile-persp-switch-project)
+    )
 #+end_src
 ** git-link :external:
 #+name: git-link
@@ -1597,12 +1612,13 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :demand t
     :ensure t
     :commands (git-link git-link-commit git-link-homepage)
-    :general
-    (+config/leader-go
-      "G" '(:ignore t :wk "git")
-      "Gl" 'git-link
-      "Gh" 'git-link-homepage
-      "Gc" 'git-link-commit))
+    ;; :general
+    ;; (+config/leader-go
+    ;;   "G" '(:ignore t :wk "git")
+    ;;   "Gl" 'git-link
+    ;;   "Gh" 'git-link-homepage
+    ;;   "Gc" 'git-link-commit)
+    )
 #+end_src
 ** git-messenger :external:
 #+caption: /git messenger/ popup message
@@ -1626,9 +1642,10 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   (use-package git-timemachine
     :ensure t
     :after magit
-    :general
-    (+config/leader-go
-      "Gt" 'git-timemachine-toggle))
+    ;; :general
+    ;; (+config/leader-go
+    ;;   "Gt" 'git-timemachine-toggle)
+    )
 #+end_src
 ** org-project-capture :external:
 #+name: org-project-capture
@@ -1706,16 +1723,17 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                     (redirect-frame-focus corfu--frame
                                           (or (frame-parent corfu--frame)
                                               exwm-workspace--current)))))
-    :general
-    (+config/leader-key
-      :keymaps 'lsp-mode-map
-      "l" (general-simulate-key "C-c C-l"
-            :name general-SPC-l-simulates-C-c-C-l
-            :docstring "Simulates C-c C-l"
-            :which-key "LSP"))
-    (general-nvmap
-      :keymaps 'lsp-mode-map
-      "K" '(lsp-describe-thing-at-point :wk "describe thing at point")))
+    ;; :general
+    ;; (+config/leader-key
+    ;;   :keymaps 'lsp-mode-map
+    ;;   "l" (general-simulate-key "C-c C-l"
+    ;;         :name general-SPC-l-simulates-C-c-C-l
+    ;;         :docstring "Simulates C-c C-l"
+    ;;         :which-key "LSP"))
+    ;; (general-nvmap
+    ;;   :keymaps 'lsp-mode-map
+    ;;   "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))
+    )
 #+end_src
 *** Basic configuration
 :PROPERTIES:
@@ -1741,7 +1759,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (lsp-completion-mode . my/lsp-mode-setup-completion)
     ((c-mode c++-mode xml-mode python-mode
              yaml-mode toml-mode python-mode-local-vars
-             lua-mode jinja2-mode
+             lua-mode jinja2-mode markdown-mode
              json-mode html-mode
              web-mode html-mode-local-vars-hook
              web-mode-local-vars-hook nxml-mode-local-vars-hook
@@ -1779,13 +1797,14 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                                               exwm-workspace--current)))))
     :custom
     (lsp-completion-provider :none)
-    :general
-    (+config/leader-key
-      :keymaps 'lsp-mode-map
-      "l" (general-simulate-key "C-c C-l"
-            :name general-SPC-l-simulates-C-c-C-l
-            :docstring "Simulates C-c C-l"
-            :which-key "LSP")))
+    ;; :general
+    ;; (+config/leader-key
+    ;;   :keymaps 'lsp-mode-map
+    ;;   "l" (general-simulate-key "C-c C-l"
+    ;;         :name general-SPC-l-simulates-C-c-C-l
+    ;;         :docstring "Simulates C-c C-l"
+    ;;         :which-key "LSP"))
+    )
 #+end_src
 **** lsp-ui 
 #+begin_src emacs-lisp -n
@@ -1811,13 +1830,14 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
     (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
     (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t)
-    :general
-    (general-define-key
-     :keymaps '(lsp-ui-mode-map)
-     [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
-     [remap xref-find-references] 'lsp-ui-peek-find-references
-     "M-." 'lsp-ui-peek-find-definitions
-     "M-?" 'lsp-ui-peek-find-references))
+    ;; :general
+    ;; (general-define-key
+    ;;  :keymaps '(lsp-ui-mode-map)
+    ;;  [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
+    ;;  [remap xref-find-references] 'lsp-ui-peek-find-references
+    ;;  "M-." 'lsp-ui-peek-find-definitions
+    ;;  "M-?" 'lsp-ui-peek-find-references)
+    )
 #+end_src
 **** consult-lsp 
 #+begin_src emacs-lisp -n
@@ -2537,31 +2557,32 @@ Needs an external package =fd=, or =fd-find=
           ("C-x t B"   . treemacs-bookmark)
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag))
-    :general
-    (+config/leader-tree
-      "t" 'treemacs
-      "p" 'treemacs-add-and-display-current-project-exclusively)
+    ;; :general
+    ;; (+config/leader-tree
+    ;;   "t" 'treemacs
+    ;;   "p" 'treemacs-add-and-display-current-project-exclusively)
 
-    (general-define-key
-     :keymaps 'treemacs-mode-map
-     "[mouse-1]" 'treemacs-single-click-expand-action)
+    ;; (general-define-key
+    ;;  :keymaps 'treemacs-mode-map
+    ;;  "[mouse-1]" 'treemacs-single-click-expand-action)
 
-    (general-nvmap
-      :keymaps 'treemacs-mode-map
-      "gr" '(treemacs-refresh :wk "refresh tree")
-      "zm" '(:ignore t :wk "move")
-      "zmf" '(treemacs-move-file :wk "move file")
-      "zmd" '(treemacs-move-project-down :wk "move project down")
-      "zmu" '(treemacs-move-project-up :wk "move project up")
-      "zr" '(:ignore t :wk "rename")
-      "zrf" '(treemacs-rename-file :wk "rename file")
-      "zrp" '(treemacs-rename-project :wk "rename project")
-      "zrw" '(treemacs-rename-workspace :wk "rename workspace")
-      "zc" '(:ignore t :wk "create/clean")
-      "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
-      "zcd" '(treemacs-create-dir :wk "create directory")
-      "zcf" '(treemacs-create-file :wk "create file")
-      "zd" '(treemacs-delete-file :wk "delete file")))
+    ;; (general-nvmap
+    ;;   :keymaps 'treemacs-mode-map
+    ;;   "gr" '(treemacs-refresh :wk "refresh tree")
+    ;;   "zm" '(:ignore t :wk "move")
+    ;;   "zmf" '(treemacs-move-file :wk "move file")
+    ;;   "zmd" '(treemacs-move-project-down :wk "move project down")
+    ;;   "zmu" '(treemacs-move-project-up :wk "move project up")
+    ;;   "zr" '(:ignore t :wk "rename")
+    ;;   "zrf" '(treemacs-rename-file :wk "rename file")
+    ;;   "zrp" '(treemacs-rename-project :wk "rename project")
+    ;;   "zrw" '(treemacs-rename-workspace :wk "rename workspace")
+    ;;   "zc" '(:ignore t :wk "create/clean")
+    ;;   "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
+    ;;   "zcd" '(treemacs-create-dir :wk "create directory")
+    ;;   "zcf" '(treemacs-create-file :wk "create file")
+    ;;   "zd" '(treemacs-delete-file :wk "delete file"))
+    )
 #+end_src
 ** treemacs-projectile 
 #+name: treemacs-projectile
@@ -2602,12 +2623,13 @@ Needs an external package =fd=, or =fd-find=
     :after treemacs lsp
     :config
     (lsp-treemacs-sync-mode 1)
-    :general
-    (general-define-key
-     :keymaps 'treemacs-mode-map
-     "S" 'lsp-treemacs-symbols
-     "X" 'lsp-treemacs-errors-list
-     "Y" 'lsp-treemacs-call-hierarchy))
+    ;; :general
+    ;; (general-define-key
+    ;;  :keymaps 'treemacs-mode-map
+    ;;  "S" 'lsp-treemacs-symbols
+    ;;  "X" 'lsp-treemacs-errors-list
+    ;;  "Y" 'lsp-treemacs-call-hierarchy)
+    )
 #+end_src
 ** treemacs-perspective 
 #+name: treemacs-perspective
@@ -2713,17 +2735,18 @@ Needs an external package =fd=, or =fd-find=
                   "Mark message as spam"
                   (interactive)
                   (notmuch-show-tag (list +spam -new))))
-    :general
-    (+config/leader-menu! "mail" "M-m"
-      "m" '(notmuch :wk "Notmuch Mail"))
+    ;; :general
+    ;; (+config/leader-menu! "mail" "M-m"
+    ;;   "m" '(notmuch :wk "Notmuch Mail"))
 
-    (+config/leader-mail
-      "m" '(notmuch :wk "open notmuch mail")
-      "M" '(compose-mail :wk "new mail"))
+    ;; (+config/leader-mail
+    ;;   "m" '(notmuch :wk "open notmuch mail")
+    ;;   "M" '(compose-mail :wk "new mail"))
 
-    (general-nmap 'notmuch-common-keymap
-      "gr" 'notmuch-refresh-this-buffer
-      "gR" 'notmuch-poll-and-refresh-this-buffer))
+    ;; (general-nmap 'notmuch-common-keymap
+    ;;   "gr" 'notmuch-refresh-this-buffer
+    ;;   "gR" 'notmuch-poll-and-refresh-this-buffer)
+    )
 #+end_src
 
 ** notmuch-indicator :external:
@@ -3139,13 +3162,14 @@ Needs an external package =fd=, or =fd-find=
     :hook ((html-mode-local-vars-hook
             mhtml-mode-local-vars-hook) . tree-sitter)
     :hook (web-mode . +config/django-web-mode)
-    :general
-    (general-nvmap
-      :keymaps 'web-mode-map
-      "gn" 'web-mode-navigate)
-    (general-vmap
-     :keymaps 'web-mode-map
-      "gs" 'web-mode-surround))
+    ;; :general
+    ;; (general-nvmap
+    ;;   :keymaps 'web-mode-map
+    ;;   "gn" 'web-mode-navigate)
+    ;; (general-vmap
+    ;;  :keymaps 'web-mode-map
+    ;;   "gs" 'web-mode-surround)
+    )
 #+end_src
 *** emmet-mode :external:
 #+name: emmet-mode
@@ -3158,13 +3182,14 @@ Needs an external package =fd=, or =fd-find=
     (when (require 'yasnippet nil t)
       (add-hook 'emmet-mode-hook #'yas-minor-mode-on))
     (setq emmet-move-cursor-between-quotes t)
-    :general
-    (general-vmap
-      :keymaps 'emmet-mode-keymap
-      "TAB" 'emmet-wrap-with-markup)
-    (general-def
-      :keymaps 'emmet-mode-keymap
-      "M-E" 'emmet-expand-line))
+    ;; :general
+    ;; (general-vmap
+    ;;   :keymaps 'emmet-mode-keymap
+    ;;   "TAB" 'emmet-wrap-with-markup)
+    ;; (general-def
+    ;;   :keymaps 'emmet-mode-keymap
+    ;;   "M-E" 'emmet-expand-line)
+    )
 #+end_src
 *** skewer-mode :external:
 #+name: skewer-mode
@@ -3387,13 +3412,14 @@ Run this for any buffer you want to skewer."
     (js2r-add-keybindings-with-prefix "C-c C-r")
     :config
     (setq js2-skip-preprocessor-directives t)
-    :general
-    (general-nvmap
-      :keymap 'js2-refactor-mode-map
-      "zr" (general-simulate-key "C-c C-r"
-             :name general-z-r-simulates-C-c-C-r
-             :docstring "Simulates C-c C-r"
-             :which-key "JS2 Refactor")))
+    ;; :general
+    ;; (general-nvmap
+    ;;   :keymap 'js2-refactor-mode-map
+    ;;   "zr" (general-simulate-key "C-c C-r"
+    ;;          :name general-z-r-simulates-C-c-C-r
+    ;;          :docstring "Simulates C-c C-r"
+    ;;          :which-key "JS2 Refactor"))
+    )
 #+end_src
 *** rjsx-mode :external:
 #+name: rjsx-mode
@@ -3432,15 +3458,16 @@ Run this for any buffer you want to skewer."
           ;; maximum fontification
           js2-highlight-level 3
           js2-idle-timer-delay 0.15)
-    :general
-    (general-nvmap
-      :keymaps 'rjsx-mode-map
-      "'" 'rjsx-jump-tag
-      "gj" 'rjsx-jump-closing-tag
-      "gk" 'rjsx-jump-opening-tag
-      "gr" 'rjsx-rename-tag-at-point
-      "z>" 'rjsx-electric-gt
-      "z<" 'rjsx-electric-lt))
+    ;; :general
+    ;; (general-nvmap
+    ;;   :keymaps 'rjsx-mode-map
+    ;;   "'" 'rjsx-jump-tag
+    ;;   "gj" 'rjsx-jump-closing-tag
+    ;;   "gk" 'rjsx-jump-opening-tag
+    ;;   "gr" 'rjsx-rename-tag-at-point
+    ;;   "z>" 'rjsx-electric-gt
+    ;;   "z<" 'rjsx-electric-lt)
+    )
 #+end_src
 
 *** xref-js2 :external:
@@ -3703,19 +3730,21 @@ Run this for any buffer you want to skewer."
             flycheck-python-flake8-executable (executable-find "flake8")
             flycheck-python-pylint-executable (executable-find "pylint")
             flycheck-python-pyright-executable (executable-find "pyright")))
-    :general
-    (+config/local-leader
-      :keymaps 'python-mode-map
-      "d" '(:ignore t :wk "doc")))
+    ;; :general
+    ;; (+config/local-leader
+    ;;   :keymaps 'python-mode-map
+    ;;   "d" '(:ignore t :wk "doc"))
+    )
 #+end_src
 *** pydoc :external:
 #+begin_src emacs-lisp -n
   (use-package pydoc
     :ensure t
-    :general
-    (general-def
-      :keymaps 'python-mode-map
-      "C-c C-d" 'pydoc-at-point-no-jedi))
+    ;; :general
+    ;; (general-def
+    ;;   :keymaps 'python-mode-map
+    ;;   "C-c C-d" 'pydoc-at-point-no-jedi)
+    )
 #+end_src
 *** ob-ipython 
 #+name: ob-ipython
@@ -3773,10 +3802,11 @@ Run this for any buffer you want to skewer."
     :ensure t
     :diminish
     :hook (python-mode . python-docstring-mode)
-    :general
-    (+config/local-leader
-      :keymaps 'python-mode-map
-      "dq" 'python-docstring-fill))
+    ;; :general
+    ;; (+config/local-leader
+    ;;   :keymaps 'python-mode-map
+    ;;   "dq" 'python-docstring-fill)
+    )
 #+end_src
 *** pipenv :external:
 #+name: pipenv
@@ -3791,10 +3821,11 @@ Run this for any buffer you want to skewer."
     (setq pipenv-projectile-after-switch-function
           #'pipenv-projectile-after-switch-extended
           pipenv-executable (executable-find "pipenv"))
-    :general
-    (+config/local-leader
-      :keymaps 'python-mode-map
-      "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv")))
+    ;; :general
+    ;; (+config/local-leader
+    ;;   :keymaps 'python-mode-map
+    ;;   "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv"))
+    )
 #+end_src
 *** pyvenv :external:
 #+begin_src emacs-lisp -n
@@ -3896,12 +3927,13 @@ Run this for any buffer you want to skewer."
     :config
     (setq ansible-section-face 'font-lock-variable-name-face
           ansible-task-label-face 'font-lock-doc-face)
-    :general
-    (+config/local-leader
-      :keymaps 'yaml-mode-map
-      "a" '(:ignore t :wk ansible)
-      "ad" 'ansible-decrypt-buffer
-      "ae" 'ansible-encrypt-buffer))
+    ;; :general
+    ;; (+config/local-leader
+    ;;   :keymaps 'yaml-mode-map
+    ;;   "a" '(:ignore t :wk ansible)
+    ;;   "ad" 'ansible-decrypt-buffer
+    ;;   "ae" 'ansible-encrypt-buffer)
+    )
 #+end_src
 *** ansible-doc :external:
 #+name: ansible-doc
@@ -4114,6 +4146,11 @@ This file is already added in my git repositories for initial Emacs loading. But
 :header-args: :tangle ./config.el :noweb yes
 :END:
 *** header :noexport:
+#+begin_src emacs-lisp -n
+  ;;; config --- `Emacs' Custom initialization file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+#+end_src
 *** The configuration
 **** variables and helper functions
 #+begin_src emacs-lisp -n
@@ -4124,6 +4161,7 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<+config/org-directory>>
 #+end_src
 **** keybindings  
+***** General.el
 #+begin_src emacs-lisp -n
   <<general.el>>
   <<keybindings>>
@@ -4135,20 +4173,52 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<evil-collection>>
 #+end_src
 **** UI
+***** ace-window
 #+begin_src emacs-lisp -n
   <<ace-window>>
+#+end_src
+***** doom UI
+#+begin_src emacs-lisp -n
   <<doom-themes>>
   <<doom-modeline>>
+#+end_src
+***** dashboard
+#+begin_src emacs-lisp -n
   <<dashboard>>
+#+end_src
+***** all-the-icons
+#+begin_src emacs-lisp -n
   <<all-the-icons>>
+  <<all-the-icons-nerd-fonts>>
+#+end_src
+***** which-key
+#+begin_src emacs-lisp -n
   <<which-key>>
+#+end_src
+***** fonts
+#+begin_src emacs-lisp -n
   <<fonts>>
   <<font-core>>
+#+end_src
+***** rainbow packages
+#+begin_src emacs-lisp -n
   <<rainbow-packages>>
+#+end_src
+***** helpful
+#+begin_src emacs-lisp -n
   <<helpful>>
+#+end_src
+***** hl-line
+#+begin_src emacs-lisp -n
   <<hl-line>>
+#+end_src
+***** nerd icons/fonts
+#+begin_src emacs-lisp -n
   <<nerd-icons>>
   <<nerd-fonts>>
+#+end_src
+***** parentheses
+#+begin_src emacs-lisp -n
   <<paren>>
 #+end_src
 **** Builtin stuffs
@@ -4357,7 +4427,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 ***** Rust
 #+begin_src emacs-lisp -n
-  ;; <<rust-mode>>
+  <<rust-mode>>
   <<rustic>>
 #+end_src
 
