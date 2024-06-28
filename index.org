@@ -530,6 +530,7 @@ A fancy and fast mode-line inspired by minimalism design[fn:3]. I'm using their 
 #+name: doom-modeline
 #+begin_src emacs-lisp -n
   (use-package doom-modeline
+    :after nerd-icons
     :ensure t
     :init
     (doom-modeline-mode 1)
@@ -579,6 +580,7 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
 #+begin_src emacs-lisp -n
   ;; use-package with package.el:
   (use-package dashboard
+    :after nerd-icons
     :ensure t
     :demand t
     :init
@@ -2566,7 +2568,7 @@ Needs an external package =fd=, or =fd-find=
 #+begin_src emacs-lisp -n 
   (use-package treemacs-projectile
     :ensure t
-    :after treemacs)
+    :after treemacs projectile)
 #+end_src
 ** treemacs-icons-dired 
 #+name: treemacs-icons-dired
