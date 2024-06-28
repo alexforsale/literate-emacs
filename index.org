@@ -3846,7 +3846,7 @@ Run this for any buffer you want to skewer."
   (with-eval-after-load 'projectile
     (add-to-list 'projectile-project-root-files "Cargo.toml"))
 
-  (use-package rust-mode :ensure t)
+  ;; (use-package rust-mode :ensure t)
 #+end_src
 *** rustic :external:
 #+name: rustic
@@ -4263,6 +4263,7 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<sendmail>>
 #+end_src
 **** Programming languages
+***** Lisp and family
 #+begin_src emacs-lisp -n
   <<lispy>>
   <<lispyville>>
@@ -4276,13 +4277,37 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<geiser>>
   <<geiser-guile>>
   <<macrostep-geiser>>
+#+end_src
+***** C / C++
+#+begin_src emacs-lisp -n
   <<cc-mode>>
+#+end_src
+***** XML
+#+begin_src emacs-lisp -n
   <<nxml-mode>>
+#+end_src
+***** YAML
+#+begin_src emacs-lisp -n
   <<yaml-mode>>
+#+end_src
+***** TOML
+#+begin_src emacs-lisp -n
   <<toml-mode>>
+#+end_src
+***** Lua
+#+begin_src emacs-lisp -n
   <<lua-mode>>
+#+end_src
+***** Jinja2 
+#+begin_src emacs-lisp -n
   <<jinja2-mode>>
+#+end_src
+***** JSON
+#+begin_src emacs-lisp -n
   <<json-mode>>
+#+end_src
+***** Web
+#+begin_src emacs-lisp -n
   <<web-mode>>
   <<emmet-mode>>
   <<skewer-mode>>
@@ -4290,6 +4315,9 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<css-eldoc>>
   <<com-css-sort>>
   <<css-mode>>
+#+end_src
+***** Javascript / Typescript
+#+begin_src emacs-lisp -n
   <<javascript>>
   <<js2-mode>>
   <<xref-js2>>
@@ -4297,14 +4325,26 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<rjsx-mode>>
   <<typescript-mode>>
   <<tide>>
+#+end_src
+***** Node
+#+begin_src emacs-lisp -n
   <<npm-mode>>
   <<nodejs-repl>>
+#+end_src
+***** *Tex
+#+begin_src emacs-lisp -n
   <<auctex>>
   <<preview>>
   <<reftex>>
   <<bibtex>>
   <<LaTex>>
+#+end_src
+***** Markdown
+#+begin_src emacs-lisp -n
   <<markdown-mode>>
+#+end_src
+***** Python
+#+begin_src emacs-lisp -n
   <<python>>
   <<pydoc>>
   <<ob-ipython>>
@@ -4314,11 +4354,24 @@ This file is already added in my git repositories for initial Emacs loading. But
   <<pipenv>>
   <<pyvenv>>
   <<ein>>
-  <<rust-mode>>
+#+end_src
+***** Rust
+#+begin_src emacs-lisp -n
+  ;; <<rust-mode>>
   <<rustic>>
+#+end_src
+
+***** Ansible
+#+begin_src emacs-lisp -n
   <<ansible>>
   <<ansible-doc>>
+#+end_src
+***** Perl
+#+begin_src emacs-lisp -n
   <<cperl-mode>>
+#+end_src
+***** Haskell
+#+begin_src emacs-lisp -n
   <<haskell-mode>>
 #+end_src
 **** Lsp
