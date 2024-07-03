@@ -2168,6 +2168,7 @@ Magit commit with the help of gpt.
     :demand t
     :after gptel magit
     :config
+    (setq magit-gptcommit-llm-provider `(make-llm-gemini :key ,(password-store-get "google.com/gemini_api_key")))
     (magit-gptcommit-mode 1)
     (magit-gptcommit-status-buffer-setup)
     :bind (:map git-commit-mode-map
