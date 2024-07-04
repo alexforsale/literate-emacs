@@ -5,7 +5,24 @@
 #+options: timestamp:t title:t toc:t todo:t |:t
 #+title: alexforsale's literate Emacs configuration
 #+date: <2024-04-20 Sat>
-#+author:  a certain package is enough, don't add more. So this configuration is constantly changing, sometimes something gets added, only to be removed after a while when I don't use it anymore (or when I don't know how to use it).
+#+author: Kristian Alexander P
+#+email: alexforsale@yahoo.com
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 29.3 (Org mode 9.6.15)
+#+cite_export:
+#+startup: content indent
+#+export_file_name: index.html
+#+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+
+This repository is my personal /Emacs/ configuration. In case you don't know what /Emacs/ is, I won't be the one explaining. To me /Emacs/ is crucial and should exists in all of my machines, including the proprietary ones. In fact, this repository is the first one that I clone into my new machines (with my dotfiles being the second one).
+
+* The Goal
+I used to blindly copying and pasting every snippets of /Emacs/ configuration I found over the internet. The result usually is me having to mix and match them into one configuration, which is fine until it broke, and I start from scratch again and the cycle repeats.
+** Keep it simple
+If the default configuration for a certain package is enough, don't add more.
+a certain package is enough, don't add more. So this configuration is constantly changing, sometimes something gets added, only to be removed after a while when I don't use it anymore (or when I don't know how to use it).
 ** Reproducible
 :PROPERTIES:
 :ID:       908e8e2a-6bcb-4726-9605-c17398440184
