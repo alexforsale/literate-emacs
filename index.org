@@ -753,21 +753,21 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
     :demand t
     :config
     (setq initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name))
-          dashboard-startup-banner 'logo
-          dashboard-center-content t
-          dashboard-vertically-center-content t
-          dashboard-navigation-cycle t
-          dashboard-icon-type 'all-the-icons
-          dashboard-heading-icons '((recents   . "history")
-                                    (bookmarks . "bookmark")
-                                    (agenda    . "calendar")
-                                    (projects  . "rocket")
-                                    (registers . "database"))
-          (dashboard-items '((recents . 3)
-                       (bookmarks . 2)
-                       (projects . 5)
-                       (agenda . 8)
-                       (registers . 2))))
+                                 dashboard-startup-banner 'logo
+                                 dashboard-center-content t
+                                 dashboard-vertically-center-content t
+                                 dashboard-navigation-cycle t
+                                 dashboard-icon-type 'all-the-icons
+                                 dashboard-heading-icons '((recents   . "history")
+                                                           (bookmarks . "bookmark")
+                                                           (agenda    . "calendar")
+                                                           (projects  . "rocket")
+                                                           (registers . "database"))
+                                 dashboard-items '((recents . 3)
+                                                   (bookmarks . 2)
+                                                   (projects . 5)
+                                                   (agenda . 8)
+                                                   (registers . 2)))
     (with-eval-after-load 'nerd-icons
       (setq dashboard-icon-type 'nerd-icons))
     (with-eval-after-load 'projectile 
