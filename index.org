@@ -100,7 +100,7 @@ The =custom-file= is used to save customization settings for future use.
     (load custom-file))
 #+end_src
 ** Setup =package=
-Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/. Currently disabled in favor for /Elpaca/.
+Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/.
 #+begin_src emacs-lisp
   (require 'package)
   ;; Add `melpa` to `package-archives`.
@@ -1828,10 +1828,10 @@ A project interaction library for /Emacs/, with little external dependency as po
     :config
     (projectile-mode +1)
     (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
-    ;; :general
-    ;; (+config/leader-key
-    ;;   "SPC" 'projectile-find-file
-    ;;   "p" '(:keymap projectile-command-map :package projectile :wk "projectile"))
+    (with-eval-after-load 'general
+      (+config/leader-key
+      "SPC" 'projectile-find-file
+      "p" '(:keymap projectile-command-map :package projectile :wk "projectile")))
     )
 #+end_src
 
@@ -1888,6 +1888,19 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                                                     :as #'buffer-name)))))
       (consult-customize consult--source-buffer :hidden t :default nil)
       (add-to-list 'consult-buffer-sources persp-consult-source))
+    (with-eval-after-load 'general
+      (general-def
+        :keymaps 'perspective-map
+        "TAB" '(persp-switch-last :wk "switch to last perspective")
+        "P" 'projectile-persp-switch-project)
+      (+config/leader-key
+        "TAB" (general-simulate-key "C-c TAB"
+                :state '(normal visual)
+                :name general-SPC-h-simulates-C-c-TAB
+                :docstring "Simulates C-c TAB in normal and visual mode."
+                :which-key "Perspective"))
+      (+config/leader-key
+        "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer")))
     :init
     (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
     (unless (equal persp-mode t)
@@ -1895,19 +1908,6 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :bind (([remap switch-to-buffer] . persp-switch-to-buffer*)
            ([remap kill-buffer] . persp-kill-buffer*))
     :hook (kill-emacs . persp-state-save)
-    ;; :general
-    ;; (general-def
-    ;;   :keymaps 'perspective-map
-    ;;   "TAB" '(persp-switch-last :wk "switch to last perspective")
-    ;;   "P" 'projectile-persp-switch-project)
-    ;; (+config/leader-key
-    ;;   "TAB" (general-simulate-key "C-c TAB"
-    ;;           :state '(normal visual)
-    ;;           :name general-SPC-h-simulates-C-c-TAB
-    ;;           :docstring "Simulates C-c TAB in normal and visual mode."
-    ;;           :which-key "Perspective"))
-    ;; (+config/leader-key
-    ;;   "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer"))
     )
 #+end_src
 *** persp-projectile :external:
