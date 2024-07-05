@@ -1775,6 +1775,14 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
   ;;; Commentary:
   ;;; Code:
 #+end_src
+*** eldoc
+#+begin_src emacs-lisp
+  (use-package eldoc
+    :ensure t
+    :hook ((emacs-lisp-mode
+            lisp-interaction-mode
+            ielm-mode) . eldoc-mode))
+#+end_src
 *** magit :external:
 #+caption: /Emacs magit/
 [[./assets/img/emacs-magit.png][file:assets/img/emacs-magit.png]]

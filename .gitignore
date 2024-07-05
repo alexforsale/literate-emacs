@@ -43,3 +43,5 @@ package-quickstart*
 session.*
 .local/
 elpaca/
+init.el
+early-init.el
