@@ -1357,15 +1357,15 @@ I call this framework since usually these packages are what people use together,
 ***** Basic Configuration
 #+name: orderless
 #+begin_src emacs-lisp
-(use-package orderless
-  :ensure t
-  :init
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
-  ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-  (setq completion-styles '(orderless basic)
-        completion-category-defaults nil
-        completion-category-overrides '((file (styles partial-completion)))))
+  (use-package orderless
+    :ensure t
+    :init
+    ;; Configure a custom style dispatcher (see the Consult wiki)
+    ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
+    ;;       orderless-component-separator #'orderless-escapable-split-on-space)
+    (setq completion-styles '(orderless basic)
+          completion-category-defaults nil
+          completion-category-overrides nil))
 #+end_src
 **** embark
 #+begin_src emacs-lisp
@@ -1384,7 +1384,7 @@ I call this framework since usually these packages are what people use together,
     ;; jarring since the message shown in the minibuffer can be more
     ;; than one line, causing the modeline to move up and down:
 
-    (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
+    ;; (add-hook 'eldoc-documentation-functions #'embark-eldoc-first-target)
     ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
     :config
@@ -1395,7 +1395,7 @@ I call this framework since usually these packages are what people use together,
                    nil
                    (window-parameters (mode-line-format . none)))))
 #+end_src
-**** embark-consult
+**** embark-consult :archive:
 #+begin_src emacs-lisp
   (use-package embark-consult
     :ensure t ; only need to install it, embark loads it after consult if found
@@ -3219,7 +3219,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Code:
 #+end_src
 *** Lisp
-**** lispy
+**** lispy :disabled:archive:
 #+name: lispy
 #+begin_src emacs-lisp
   (use-package lispy
@@ -3229,7 +3229,7 @@ Needs an external package =fd=, or =fd-find=
            (scheme-mode . lispy-mode)
            (geiser-mode . lispy-mode)))
 #+end_src
-**** lispyville
+**** lispyville :disabled:archive:
 #+name: lispyville
 #+begin_src emacs-lisp
   (use-package lispyville
