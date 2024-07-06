@@ -1489,6 +1489,9 @@ I call this framework since usually these packages are what people use together,
   )
 #+end_src
 **** nerd-icons-corfu :disabled:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: nerd-icons-corfu
 #+begin_src emacs-lisp
 (use-package nerd-icons-corfu
@@ -1501,6 +1504,9 @@ I call this framework since usually these packages are what people use together,
           (t :style "cod" :icon "code" :face font-lock-warning-face))))
 #+end_src
 **** nerd-icons-completion :disabled:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: nerd-icons-completion
 #+begin_src emacs-lisp
 (use-package nerd-icons-completion
@@ -3058,6 +3064,9 @@ Needs an external package =fd=, or =fd-find=
   ;;; Code:
 #+end_src
 *** notmuch :external:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: notmuch
 #+begin_src emacs-lisp
   (use-package notmuch
@@ -3148,6 +3157,9 @@ Needs an external package =fd=, or =fd-find=
 #+end_src
 
 *** notmuch-indicator :external:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: notmuch-indicator
 #+begin_src emacs-lisp
   (use-package notmuch-indicator
@@ -3157,6 +3169,9 @@ Needs an external package =fd=, or =fd-find=
     (notmuch-indicator-mode))
 #+end_src
 *** consult-notmuch :external:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: consult-notmuch
 #+begin_src emacs-lisp
   (use-package consult-notmuch
@@ -3165,11 +3180,17 @@ Needs an external package =fd=, or =fd-find=
     (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
 #+end_src
 *** ol-notmuch :external:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: ol-notmuch
 #+begin_src emacs-lisp
   (use-package ol-notmuch)
 #+end_src
 *** notmuch-maildir :external:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: notmuch-maildir
 #+begin_src emacs-lisp
   (use-package notmuch-maildir
@@ -3177,6 +3198,9 @@ Needs an external package =fd=, or =fd-find=
     (notmuch-maildir-inject-section))
 #+end_src
 *** message :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: message
 #+begin_src emacs-lisp
   (use-package message
@@ -3186,6 +3210,9 @@ Needs an external package =fd=, or =fd-find=
     (message-sendmail-envelope-from 'header))
 #+end_src
 *** sendmail :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: sendmail
 #+begin_src emacs-lisp
   (use-package sendmail
@@ -3212,6 +3239,9 @@ Needs an external package =fd=, or =fd-find=
   ;;; Code:
 #+end_src
 *** Lisp :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** lispy :disabled:archive:
 #+name: lispy
 #+begin_src emacs-lisp
@@ -3366,6 +3396,9 @@ Needs an external package =fd=, or =fd-find=
                 ("C-c e" . macrostep-expand)))
 #+end_src
 *** C and C++ :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** cc-mode :builtin:
 #+name: cc-mode
 #+begin_src emacs-lisp 
@@ -3384,6 +3417,9 @@ Needs an external package =fd=, or =fd-find=
       (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
 #+end_src
 *** XML :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** nxml-mode 
 #+name: nxml-mode
 #+begin_src emacs-lisp
@@ -3397,6 +3433,9 @@ Needs an external package =fd=, or =fd-find=
           nxml-auto-insert-xml-declaration-flag t))
 #+end_src
 *** YAML :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** yaml-mode :external:
 #+name: yaml-mode
 #+begin_src emacs-lisp
@@ -3414,6 +3453,9 @@ Needs an external package =fd=, or =fd-find=
                     (run-hooks 'prog-mode-hook)))))
 #+end_src
 *** TOML :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** toml-mode :external:
 #+name: toml-mode
 #+begin_src emacs-lisp
@@ -3428,6 +3470,9 @@ Needs an external package =fd=, or =fd-find=
     (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
 #+end_src
 *** Lua :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** lua-mode :external:
 #+name: lua-mode
 #+begin_src emacs-lisp
@@ -3439,6 +3484,9 @@ Needs an external package =fd=, or =fd-find=
             lsp-lua-hint-set-type t)))
 #+end_src
 *** Jinja2 :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** jinja2-mode :external:
 #+name: jinja2-mode
 #+begin_src emacs-lisp
@@ -3453,12 +3501,18 @@ Needs an external package =fd=, or =fd-find=
     (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
 #+end_src
 *** Json :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** json-mode 
 #+name: json-mode
 #+begin_src emacs-lisp
   (use-package json-mode)
 #+end_src
 *** Web :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** web-mode :external:
 #+name: web-mode
 #+begin_src emacs-lisp
@@ -3913,6 +3967,9 @@ Run this for any buffer you want to skewer."
     :defer t)
 #+end_src
 *** Latex :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** auctex 
 #+name: auctex
 #+begin_src emacs-lisp
@@ -4027,6 +4084,9 @@ Run this for any buffer you want to skewer."
     fname-or-url))
 #+end_src
 *** Markdown :external:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** Basic Configuration
 #+name: markdown-mode
 #+begin_src emacs-lisp
@@ -4046,6 +4106,9 @@ Run this for any buffer you want to skewer."
     :after markdown-mode)
 #+end_src
 *** Python :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** Builtin python mode :builtin:
 #+name: python
 #+begin_src emacs-lisp
@@ -4216,6 +4279,9 @@ Run this for any buffer you want to skewer."
   (use-package ein)
 #+end_src
 *** Rust :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** rust-mode 
 #+name: rust-mode
 #+begin_src emacs-lisp
@@ -4269,6 +4335,9 @@ Run this for any buffer you want to skewer."
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
 *** Ansible :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** ansible :external:
 #+name: ansible
 #+begin_src emacs-lisp
@@ -4301,6 +4370,9 @@ Run this for any buffer you want to skewer."
       (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
 #+end_src
 *** Perl :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** cperl-mode :external:
 #+name: cperl-mode
 #+begin_src emacs-lisp
@@ -4309,6 +4381,9 @@ Run this for any buffer you want to skewer."
     :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 #+end_src
 *** Haskell :archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 **** haskell-mode :external:
 #+name: haskell-mode
 #+begin_src emacs-lisp
