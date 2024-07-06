@@ -2234,6 +2234,9 @@ Magit commit with the help of gpt.
                 ("C-c C-g" . magit-gptcommit-commit-accept)))
 #+end_src
 *** consult-web :external:disabled:noexport:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 This package looks promising, I'll wait until it mature a bit.
 [[https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/][The author already made a blog post explaining on why he created this package]]. Hopefully I can integrate this into my workflow.
 #+name: consult-web
@@ -2250,6 +2253,31 @@ This package looks promising, I'll wait until it mature a bit.
     (require 'consult-web-gptel)
     (setq consult-web-dynamic-sources "gptel")
     (require 'consult-web-sources))
+#+end_src
+*** [[https://www.flycheck.org/][flycheck]] 
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :init
+    (global-flycheck-mode)
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-key "!"
+        (general-simulate-key "C-c !"
+          :state '(normal visual)
+          :name general-SPC-!-simulates-C-c-!
+          :docstring "Simulates C-c ! in normal and visual mode."
+          :which-key "flycheck"))))
+#+end_src
+**** [[https://github.com/flycheck/flycheck-color-mode-line][flycheck-color-mode-line]]
+#+begin_src emacs-lisp
+  (use-package flycheck-color-mode-line
+    :hook (flycheck-mode . flycheck-color-mode-line-mode))
+#+end_src
+**** [[https://github.com/flycheck/flycheck-pos-tip][flycheck-pos-tip]]
+#+begin_src emacs-lisp
+  (use-package flycheck-pos-tip
+    :init
+    (flycheck-pos-tip-mode))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
