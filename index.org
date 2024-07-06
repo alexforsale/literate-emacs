@@ -1395,7 +1395,7 @@ I call this framework since usually these packages are what people use together,
                    nil
                    (window-parameters (mode-line-format . none)))))
 #+end_src
-**** embark-consult :archive:
+**** embark-consult
 #+begin_src emacs-lisp
   (use-package embark-consult
     :ensure t ; only need to install it, embark loads it after consult if found
@@ -1481,7 +1481,7 @@ I call this framework since usually these packages are what people use together,
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** eshell 
+*** eshell
 #+caption: /eshell/ in action
 [[./assets/img/emacs-eshell.png][file:assets/img/emacs-eshell.png]]
 
@@ -1498,7 +1498,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
   (eshell-destroy-buffer-when-process-dies t)
   (eshell-prompt-regexp "^[^\)]*[\)] "))
 #+end_src
-*** eshell-syntax-highlighting 
+*** eshell-syntax-highlighting :archive:
 #+name: eshell-syntax-highlighting
 #+begin_src emacs-lisp 
 (use-package eshell-syntax-highlighting
@@ -1508,7 +1508,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
   :config
   (eshell-syntax-highlighting-global-mode +1))
 #+end_src
-*** esh-autosuggest 
+*** esh-autosuggest :archive:
 #+name: esh-autosuggest
 #+begin_src emacs-lisp
 (use-package esh-autosuggest
@@ -1543,7 +1543,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
     (with-eval-after-load 'smartparens
       (sp-local-pair 'sh-mode "`" "`" :unless '(sp-point-before-word-p sp-point-before-same-p))))
 #+end_src
-*** vterm 
+*** vterm :archive:
 #+name: vterm
 #+begin_src emacs-lisp
   (use-package vterm
@@ -1843,7 +1843,7 @@ A project interaction library for /Emacs/, with little external dependency as po
     )
 #+end_src
 
-*** diff-hl :external:
+*** diff-hl :external:archive:
 #+caption: highlighted uncommited changes
 [[./assets/img/emacs-diff-hl-indicator.png][file:assets/img/emacs-diff-hl-indicator.png]]
 #+name: diff-hl
@@ -1931,7 +1931,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     ;;   "P" 'projectile-persp-switch-project)
     )
 #+end_src
-*** git-link :external:
+*** git-link :external:archive:
 #+name: git-link
 #+begin_src emacs-lisp -n
   (use-package git-link
@@ -1946,7 +1946,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     ;;   "Gc" 'git-link-commit)
     )
 #+end_src
-*** git-messenger :external:
+*** git-messenger :external:archive:
 #+caption: /git messenger/ popup message
 [[./assets/img/emacs-git-messenger.png][file:assets/img/emacs-git-messenger.png]]
 #+name: git-messenger
@@ -1962,7 +1962,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (git-messenger:use-magit-popup t)
     (git-messenger:show-detail t))
 #+end_src
-*** git-timemachine :external:
+*** git-timemachine :external:archive:
 #+name: git-timemachine
 #+begin_src emacs-lisp -n
   (use-package git-timemachine
@@ -1986,7 +1986,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
       (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
       (org-project-capture-single-file)))
 #+end_src
-*** lsp :external:
+*** lsp :external:archive:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
 **** old config :noexport:
@@ -2199,7 +2199,7 @@ Magit commit with the help of gpt.
     :bind (:map git-commit-mode-map
                 ("C-c C-g" . magit-gptcommit-commit-accept)))
 #+end_src
-*** consult-web :external:disabled:noexport:
+*** consult-web :external:disabled:noexport:archive:
 This package looks promising, I'll wait until it mature a bit.
 [[https://www.armindarvish.com/post/web_omni_search_in_emacs_with_consult-web/][The author already made a blog post explaining on why he created this package]]. Hopefully I can integrate this into my workflow.
 #+name: consult-web
@@ -2711,7 +2711,7 @@ This package looks promising, I'll wait until it mature a bit.
     (auth-source-pass-enable))
 #+end_src
 /Elpaca/ complains about different of /pass/ version installed. But it installed just fine.
-*** rg
+*** rg :archive:
 Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the executable not found.
 #+name: rg
 #+begin_src emacs-lisp
@@ -2721,7 +2721,7 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
     :defer t)
 #+end_src
 
-*** ox-hugo
+*** ox-hugo :archive:
 Blogging tools
 #+name: ox-hugo
 #+begin_src emacs-lisp
@@ -2862,7 +2862,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** treemacs core package
+*** treemacs core package :archive:
 #+name: treemacs
 #+begin_src emacs-lisp
   (use-package treemacs
@@ -2971,14 +2971,14 @@ Needs an external package =fd=, or =fd-find=
     ;;   "zd" '(treemacs-delete-file :wk "delete file"))
     )
 #+end_src
-*** treemacs-projectile 
+*** treemacs-projectile :archive:
 #+name: treemacs-projectile
 #+begin_src emacs-lisp
   (use-package treemacs-projectile
     :ensure t
     :after treemacs projectile)
 #+end_src
-*** treemacs-icons-dired 
+*** treemacs-icons-dired :archive:
 #+name: treemacs-icons-dired
 #+begin_src emacs-lisp
   (use-package treemacs-icons-dired
@@ -2986,21 +2986,21 @@ Needs an external package =fd=, or =fd-find=
     :after treemacs
     :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
-*** treemacs-magit 
+*** treemacs-magit :archive:
 #+name: treemacs-magit
 #+begin_src emacs-lisp
   (use-package treemacs-magit
     :ensure t
     :after treemacs magit)
 #+end_src
-*** treemacs-evil 
+*** treemacs-evil :archive:
 #+name: treemacs-evil
 #+begin_src emacs-lisp
   (use-package treemacs-evil
     :ensure t
     :after treemacs evil)
 #+end_src
-*** lsp-treemacs 
+*** lsp-treemacs :archive:
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+name: lsp-treemacs
@@ -3018,7 +3018,7 @@ Needs an external package =fd=, or =fd-find=
     ;;  "Y" 'lsp-treemacs-call-hierarchy)
     )
 #+end_src
-*** treemacs-perspective 
+*** treemacs-perspective :archive:
 #+name: treemacs-perspective
 #+begin_src emacs-lisp
   (use-package treemacs-perspective
@@ -3027,7 +3027,7 @@ Needs an external package =fd=, or =fd-find=
     :config
     (treemacs-set-scope-type 'Perspectives))
 #+end_src
-*** treemacs-tab-bar 
+*** treemacs-tab-bar :archive:
 #+name: treemacs-tab-bar
 #+begin_src emacs-lisp
   (use-package treemacs-tab-bar
@@ -3059,7 +3059,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** notmuch :external:
+*** notmuch :external:archive:
 #+name: notmuch
 #+begin_src emacs-lisp
   (use-package notmuch
@@ -3150,7 +3150,7 @@ Needs an external package =fd=, or =fd-find=
     )
 #+end_src
 
-*** notmuch-indicator :external:
+*** notmuch-indicator :external:archive:
 #+name: notmuch-indicator
 #+begin_src emacs-lisp
   (use-package notmuch-indicator
@@ -3160,7 +3160,7 @@ Needs an external package =fd=, or =fd-find=
           '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
     (notmuch-indicator-mode))
 #+end_src
-*** consult-notmuch :external:
+*** consult-notmuch :external:archive:
 #+name: consult-notmuch
 #+begin_src emacs-lisp
   (use-package consult-notmuch
@@ -3169,13 +3169,13 @@ Needs an external package =fd=, or =fd-find=
     :config
     (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
 #+end_src
-*** ol-notmuch :external:
+*** ol-notmuch :external:archive:
 #+name: ol-notmuch
 #+begin_src emacs-lisp
   (use-package ol-notmuch
     :ensure t)
 #+end_src
-*** notmuch-maildir :external:
+*** notmuch-maildir :external:archive:
 #+name: notmuch-maildir
 #+begin_src emacs-lisp
   (use-package notmuch-maildir
@@ -3183,7 +3183,7 @@ Needs an external package =fd=, or =fd-find=
     :config
     (notmuch-maildir-inject-section))
 #+end_src
-*** message 
+*** message :archive:
 #+name: message
 #+begin_src emacs-lisp
   (use-package message
@@ -3192,7 +3192,7 @@ Needs an external package =fd=, or =fd-find=
     (message-directory (expand-file-name ".mail" (getenv "HOME")))
     (message-sendmail-envelope-from 'header))
 #+end_src
-*** sendmail 
+*** sendmail :archive:
 #+name: sendmail
 #+begin_src emacs-lisp
   (use-package sendmail
@@ -3218,7 +3218,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** Lisp
+*** Lisp :archive:
 **** lispy :disabled:archive:
 #+name: lispy
 #+begin_src emacs-lisp
@@ -3381,7 +3381,7 @@ Needs an external package =fd=, or =fd-find=
     :bind (:map geiser-mode-map
                 ("C-c e" . macrostep-expand)))
 #+end_src
-*** C and C++
+*** C and C++ :archive:
 **** cc-mode :builtin:
 #+name: cc-mode
 #+begin_src emacs-lisp 
@@ -3399,7 +3399,7 @@ Needs an external package =fd=, or =fd-find=
     (with-eval-after-load 'ffap
       (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
 #+end_src
-*** XML
+*** XML :archive:
 **** nxml-mode 
 #+name: nxml-mode
 #+begin_src emacs-lisp
@@ -3412,7 +3412,7 @@ Needs an external package =fd=, or =fd-find=
     (setq nxml-slash-auto-complete-flag t
           nxml-auto-insert-xml-declaration-flag t))
 #+end_src
-*** YAML
+*** YAML :archive:
 **** yaml-mode :external:
 #+name: yaml-mode
 #+begin_src emacs-lisp
@@ -3430,7 +3430,7 @@ Needs an external package =fd=, or =fd-find=
      (yaml-mode . (lambda ()
                     (run-hooks 'prog-mode-hook)))))
 #+end_src
-*** TOML
+*** TOML :archive:
 **** toml-mode :external:
 #+name: toml-mode
 #+begin_src emacs-lisp
@@ -3445,7 +3445,7 @@ Needs an external package =fd=, or =fd-find=
       (setq lsp-toml-command (executable-find "taplo")))
     (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
 #+end_src
-*** Lua
+*** Lua :archive:
 **** lua-mode :external:
 #+name: lua-mode
 #+begin_src emacs-lisp
@@ -3457,7 +3457,7 @@ Needs an external package =fd=, or =fd-find=
       (setq lsp-lua-hint-enable t
             lsp-lua-hint-set-type t)))
 #+end_src
-*** Jinja2
+*** Jinja2 :archive:
 **** jinja2-mode :external:
 #+name: jinja2-mode
 #+begin_src emacs-lisp
@@ -3472,14 +3472,14 @@ Needs an external package =fd=, or =fd-find=
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
     (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
 #+end_src
-*** Json
+*** Json :archive:
 **** json-mode 
 #+name: json-mode
 #+begin_src emacs-lisp
   (use-package json-mode
     :ensure t)
 #+end_src
-*** Web
+*** Web :archive:
 **** web-mode :external:
 #+name: web-mode
 #+begin_src emacs-lisp
@@ -3948,7 +3948,7 @@ Run this for any buffer you want to skewer."
     :ensure t
     :defer t)
 #+end_src
-*** Latex
+*** Latex :archive:
 **** auctex 
 #+name: auctex
 #+begin_src emacs-lisp
@@ -4062,7 +4062,7 @@ Run this for any buffer you want to skewer."
       (substring fname-or-url 7)
     fname-or-url))
 #+end_src
-*** Markdown :external:
+*** Markdown :external:archive:
 **** Basic Configuration
 #+name: markdown-mode
 #+begin_src emacs-lisp
@@ -4085,7 +4085,7 @@ Run this for any buffer you want to skewer."
     :ensure t
     :after markdown-mode)
 #+end_src
-*** Python
+*** Python :archive:
 **** Builtin python mode :builtin:
 #+name: python
 #+begin_src emacs-lisp
@@ -4264,7 +4264,7 @@ Run this for any buffer you want to skewer."
   (use-package ein
     :ensure t)
 #+end_src
-*** Rust
+*** Rust :archive:
 **** rust-mode 
 #+name: rust-mode
 #+begin_src emacs-lisp
@@ -4320,7 +4320,7 @@ Run this for any buffer you want to skewer."
     (with-eval-after-load 'rustic
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
-*** Ansible
+*** Ansible :archive:
 **** ansible :external:
 #+name: ansible
 #+begin_src emacs-lisp
@@ -4354,7 +4354,7 @@ Run this for any buffer you want to skewer."
     (when (featurep 'evil)
       (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
 #+end_src
-*** Perl
+*** Perl :archive:
 **** cperl-mode :external:
 #+name: cperl-mode
 #+begin_src emacs-lisp
@@ -4363,7 +4363,7 @@ Run this for any buffer you want to skewer."
     :defer t
     :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 #+end_src
-*** Haskell
+*** Haskell :archive:
 **** haskell-mode :external:
 #+name: haskell-mode
 #+begin_src emacs-lisp
