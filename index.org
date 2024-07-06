@@ -1603,11 +1603,11 @@ A shell-like command interpreter implemented in Emacs Lisp.
                 (setq-local global-hl-line-mode nil)
                 (setq-local hscroll-margin 0)))
     (setq vterm-kill-buffer-on-exit t)
-    ;; :general
-    ;; (+config/leader-menu! "vterm"
-    ;;     "tv"
-    ;;   "RET" 'vterm-toggle
-    ;;   "v" 'vterm)
+    (with-eval-after-load 'general
+      (+config/leader-menu! "vterm"
+          "tv"
+        "RET" 'vterm-toggle
+        "v" 'vterm))
     )
 #+end_src
 *** multi-vterm :disabled:archive:
@@ -1616,13 +1616,14 @@ A shell-like command interpreter implemented in Emacs Lisp.
   (use-package multi-vterm
     :defer t
     :after vterm
-    ;; :general
-    ;; (general-iemap
-    ;;   :keymaps 'vterm-mode-map
-    ;;   "C-SPC" '(:ignore t :wk "multi vterm")
-    ;;   "C-SPC a" '(multi-vterm :wk "new vterm buffer")
-    ;;   "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
-    ;;   "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer"))
+    :config
+    (with-eval-after-load 'general
+      (general-iemap
+        :keymaps 'vterm-mode-map
+        "C-SPC" '(:ignore t :wk "multi vterm")
+        "C-SPC a" '(multi-vterm :wk "new vterm buffer")
+        "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
+        "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer")))
     )
 #+end_src
 *** vterm-toggle :disabled:archive:
@@ -1834,14 +1835,13 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
     :demand t
     :config
     (evil-set-initial-state #'git-commit-mode 'insert)
+    (with-eval-after-load 'general 
+      (+config/leader-go
+        "g" 'magit-status))
     :custom
     (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     (magit-diff-refine-hunk 'all)
-    (magit-log-arguments '("-n100" "--graph" "--decorate"))
-    ;; :general
-    ;; (+config/leader-go
-    ;;   "g" 'magit-status)
-    )
+    (magit-log-arguments '("-n100" "--graph" "--decorate")))
 #+end_src
 
 *** projectile :external:
@@ -1962,10 +1962,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   (use-package persp-projectile
     :after perspective
     :commands projectile-persp-switch-project
-    ;; :general
-    ;; (general-def
-    ;;   :keymaps 'perspective-map
-    ;;   "P" 'projectile-persp-switch-project)
+    :config
+    (with-eval-after-load 'general
+      (general-def
+        :keymaps 'perspective-map
+        "P" 'projectile-persp-switch-project))
     )
 #+end_src
 *** git-link :external:archive:
@@ -1974,12 +1975,13 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   (use-package git-link
     :demand t
     :commands (git-link git-link-commit git-link-homepage)
-    ;; :general
-    ;; (+config/leader-go
-    ;;   "G" '(:ignore t :wk "git")
-    ;;   "Gl" 'git-link
-    ;;   "Gh" 'git-link-homepage
-    ;;   "Gc" 'git-link-commit)
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-go
+        "G" '(:ignore t :wk "git")
+        "Gl" 'git-link
+        "Gh" 'git-link-homepage
+        "Gc" 'git-link-commit))
     )
 #+end_src
 *** git-messenger :external:archive:
@@ -2002,9 +2004,10 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+begin_src emacs-lisp -n
   (use-package git-timemachine
     :after magit
-    ;; :general
-    ;; (+config/leader-go
-    ;;   "Gt" 'git-timemachine-toggle)
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-go
+        "Gt" 'git-timemachine-toggle))
     )
 #+end_src
 *** org-project-capture :external:
@@ -2081,16 +2084,16 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                     (redirect-frame-focus corfu--frame
                                           (or (frame-parent corfu--frame)
                                               exwm-workspace--current)))))
-    ;; :general
-    ;; (+config/leader-key
-    ;;   :keymaps 'lsp-mode-map
-    ;;   "l" (general-simulate-key "C-c C-l"
-    ;;         :name general-SPC-l-simulates-C-c-C-l
-    ;;         :docstring "Simulates C-c C-l"
-    ;;         :which-key "LSP"))
-    ;; (general-nvmap
-    ;;   :keymaps 'lsp-mode-map
-    ;;   "K" '(lsp-describe-thing-at-point :wk "describe thing at point"))
+    (with-eval-after-load 'general
+      (+config/leader-key
+        :keymaps 'lsp-mode-map
+        "l" (general-simulate-key "C-c C-l"
+              :name general-SPC-l-simulates-C-c-C-l
+              :docstring "Simulates C-c C-l"
+              :which-key "LSP"))
+      (general-nvmap
+        :keymaps 'lsp-mode-map
+        "K" '(lsp-describe-thing-at-point :wk "describe thing at point")))
     )
 #+end_src
 **** Basic configuration
@@ -2152,15 +2155,15 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                     (redirect-frame-focus corfu--frame
                                           (or (frame-parent corfu--frame)
                                               exwm-workspace--current)))))
+    (with-eval-after-load 'general
+      (+config/leader-key
+        :keymaps 'lsp-mode-map
+        "l" (general-simulate-key "C-c C-l"
+              :name general-SPC-l-simulates-C-c-C-l
+              :docstring "Simulates C-c C-l"
+              :which-key "LSP")))
     :custom
     (lsp-completion-provider :none)
-    ;; :general
-    ;; (+config/leader-key
-    ;;   :keymaps 'lsp-mode-map
-    ;;   "l" (general-simulate-key "C-c C-l"
-    ;;         :name general-SPC-l-simulates-C-c-C-l
-    ;;         :docstring "Simulates C-c C-l"
-    ;;         :which-key "LSP"))
     )
 #+end_src
 ***** lsp-ui 
@@ -2186,13 +2189,13 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
     (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
     (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t)
-    ;; :general
-    ;; (general-define-key
-    ;;  :keymaps '(lsp-ui-mode-map)
-    ;;  [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
-    ;;  [remap xref-find-references] 'lsp-ui-peek-find-references
-    ;;  "M-." 'lsp-ui-peek-find-definitions
-    ;;  "M-?" 'lsp-ui-peek-find-references)
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps '(lsp-ui-mode-map)
+       [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
+       [remap xref-find-references] 'lsp-ui-peek-find-references
+       "M-." 'lsp-ui-peek-find-definitions
+       "M-?" 'lsp-ui-peek-find-references))
     )
 #+end_src
 ***** consult-lsp 
@@ -2956,31 +2959,30 @@ Needs an external package =fd=, or =fd-find=
           ("C-x t B"   . treemacs-bookmark)
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag))
-    ;; :general
-    ;; (+config/leader-tree
-    ;;   "t" 'treemacs
-    ;;   "p" 'treemacs-add-and-display-current-project-exclusively)
-
-    ;; (general-define-key
-    ;;  :keymaps 'treemacs-mode-map
-    ;;  "[mouse-1]" 'treemacs-single-click-expand-action)
-
-    ;; (general-nvmap
-    ;;   :keymaps 'treemacs-mode-map
-    ;;   "gr" '(treemacs-refresh :wk "refresh tree")
-    ;;   "zm" '(:ignore t :wk "move")
-    ;;   "zmf" '(treemacs-move-file :wk "move file")
-    ;;   "zmd" '(treemacs-move-project-down :wk "move project down")
-    ;;   "zmu" '(treemacs-move-project-up :wk "move project up")
-    ;;   "zr" '(:ignore t :wk "rename")
-    ;;   "zrf" '(treemacs-rename-file :wk "rename file")
-    ;;   "zrp" '(treemacs-rename-project :wk "rename project")
-    ;;   "zrw" '(treemacs-rename-workspace :wk "rename workspace")
-    ;;   "zc" '(:ignore t :wk "create/clean")
-    ;;   "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
-    ;;   "zcd" '(treemacs-create-dir :wk "create directory")
-    ;;   "zcf" '(treemacs-create-file :wk "create file")
-    ;;   "zd" '(treemacs-delete-file :wk "delete file"))
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-tree
+        "t" 'treemacs
+        "p" 'treemacs-add-and-display-current-project-exclusively)
+      (general-define-key
+       :keymaps 'treemacs-mode-map
+       "[mouse-1]" 'treemacs-single-click-expand-action)
+      (general-nvmap
+        :keymaps 'treemacs-mode-map
+        "gr" '(treemacs-refresh :wk "refresh tree")
+        "zm" '(:ignore t :wk "move")
+        "zmf" '(treemacs-move-file :wk "move file")
+        "zmd" '(treemacs-move-project-down :wk "move project down")
+        "zmu" '(treemacs-move-project-up :wk "move project up")
+        "zr" '(:ignore t :wk "rename")
+        "zrf" '(treemacs-rename-file :wk "rename file")
+        "zrp" '(treemacs-rename-project :wk "rename project")
+        "zrw" '(treemacs-rename-workspace :wk "rename workspace")
+        "zc" '(:ignore t :wk "create/clean")
+        "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
+        "zcd" '(treemacs-create-dir :wk "create directory")
+        "zcf" '(treemacs-create-file :wk "create file")
+        "zd" '(treemacs-delete-file :wk "delete file")))
     )
 #+end_src
 *** treemacs-projectile :archive:
@@ -3017,12 +3019,12 @@ Needs an external package =fd=, or =fd-find=
     :after treemacs lsp
     :config
     (lsp-treemacs-sync-mode 1)
-    ;; :general
-    ;; (general-define-key
-    ;;  :keymaps 'treemacs-mode-map
-    ;;  "S" 'lsp-treemacs-symbols
-    ;;  "X" 'lsp-treemacs-errors-list
-    ;;  "Y" 'lsp-treemacs-call-hierarchy)
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'treemacs-mode-map
+       "S" 'lsp-treemacs-symbols
+       "X" 'lsp-treemacs-errors-list
+       "Y" 'lsp-treemacs-call-hierarchy))
     )
 #+end_src
 *** treemacs-perspective :archive:
@@ -3142,17 +3144,17 @@ Needs an external package =fd=, or =fd-find=
                   "Mark message as spam"
                   (interactive)
                   (notmuch-show-tag (list +spam -new))))
-    ;; :general
-    ;; (+config/leader-menu! "mail" "M-m"
-    ;;   "m" '(notmuch :wk "Notmuch Mail"))
+    (with-eval-after-load 'general
+      (+config/leader-menu! "mail" "M-m"
+        "m" '(notmuch :wk "Notmuch Mail"))
 
-    ;; (+config/leader-mail
-    ;;   "m" '(notmuch :wk "open notmuch mail")
-    ;;   "M" '(compose-mail :wk "new mail"))
+      (+config/leader-mail
+        "m" '(notmuch :wk "open notmuch mail")
+        "M" '(compose-mail :wk "new mail"))
 
-    ;; (general-nmap 'notmuch-common-keymap
-    ;;   "gr" 'notmuch-refresh-this-buffer
-    ;;   "gR" 'notmuch-poll-and-refresh-this-buffer)
+      (general-nmap 'notmuch-common-keymap
+        "gr" 'notmuch-refresh-this-buffer
+        "gR" 'notmuch-poll-and-refresh-this-buffer))
     )
 #+end_src
 
@@ -3592,6 +3594,13 @@ Needs an external package =fd=, or =fd-find=
       (sp-local-pair 'web-mode "{{" " }}")
       (sp-local-pair 'web-mode "<!--" " -->")
       )
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'web-mode-map
+        "gn" 'web-mode-navigate)
+      (general-vmap
+        :keymaps 'web-mode-map
+        "gs" 'web-mode-surround))
     (defun +config/web-mode-hook ()
       "Hooks for Web mode."
       (local-set-key (kbd "RET") 'newline-and-indent))
@@ -3602,13 +3611,6 @@ Needs an external package =fd=, or =fd-find=
     :hook ((html-mode-local-vars-hook
             mhtml-mode-local-vars-hook) . tree-sitter)
     :hook (web-mode . +config/django-web-mode)
-    ;; :general
-    ;; (general-nvmap
-    ;;   :keymaps 'web-mode-map
-    ;;   "gn" 'web-mode-navigate)
-    ;; (general-vmap
-    ;;  :keymaps 'web-mode-map
-    ;;   "gs" 'web-mode-surround)
     )
 #+end_src
 **** emmet-mode :external:
@@ -3621,13 +3623,13 @@ Needs an external package =fd=, or =fd-find=
     (when (require 'yasnippet nil t)
       (add-hook 'emmet-mode-hook #'yas-minor-mode-on))
     (setq emmet-move-cursor-between-quotes t)
-    ;; :general
-    ;; (general-vmap
-    ;;   :keymaps 'emmet-mode-keymap
-    ;;   "TAB" 'emmet-wrap-with-markup)
-    ;; (general-def
-    ;;   :keymaps 'emmet-mode-keymap
-    ;;   "M-E" 'emmet-expand-line)
+    (with-eval-after-load 'general
+      (general-vmap
+        :keymaps 'emmet-mode-keymap
+        "TAB" 'emmet-wrap-with-markup)
+      (general-def
+        :keymaps 'emmet-mode-keymap
+        "M-E" 'emmet-expand-line))
     )
 #+end_src
 **** skewer-mode :external:
@@ -3844,13 +3846,13 @@ Run this for any buffer you want to skewer."
     (js2r-add-keybindings-with-prefix "C-c C-r")
     :config
     (setq js2-skip-preprocessor-directives t)
-    ;; :general
-    ;; (general-nvmap
-    ;;   :keymap 'js2-refactor-mode-map
-    ;;   "zr" (general-simulate-key "C-c C-r"
-    ;;          :name general-z-r-simulates-C-c-C-r
-    ;;          :docstring "Simulates C-c C-r"
-    ;;          :which-key "JS2 Refactor"))
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymap 'js2-refactor-mode-map
+        "zr" (general-simulate-key "C-c C-r"
+               :name general-z-r-simulates-C-c-C-r
+               :docstring "Simulates C-c C-r"
+               :which-key "JS2 Refactor")))
     )
 #+end_src
 **** rjsx-mode :external:
@@ -3889,15 +3891,15 @@ Run this for any buffer you want to skewer."
           ;; maximum fontification
           js2-highlight-level 3
           js2-idle-timer-delay 0.15)
-    ;; :general
-    ;; (general-nvmap
-    ;;   :keymaps 'rjsx-mode-map
-    ;;   "'" 'rjsx-jump-tag
-    ;;   "gj" 'rjsx-jump-closing-tag
-    ;;   "gk" 'rjsx-jump-opening-tag
-    ;;   "gr" 'rjsx-rename-tag-at-point
-    ;;   "z>" 'rjsx-electric-gt
-    ;;   "z<" 'rjsx-electric-lt)
+    (with-eval-after-load 'general
+      (general-nvmap
+        :keymaps 'rjsx-mode-map
+        "'" 'rjsx-jump-tag
+        "gj" 'rjsx-jump-closing-tag
+        "gk" 'rjsx-jump-opening-tag
+        "gr" 'rjsx-rename-tag-at-point
+        "z>" 'rjsx-electric-gt
+        "z<" 'rjsx-electric-lt))
     )
 #+end_src
 
@@ -4161,19 +4163,20 @@ Run this for any buffer you want to skewer."
             flycheck-python-flake8-executable (executable-find "flake8")
             flycheck-python-pylint-executable (executable-find "pylint")
             flycheck-python-pyright-executable (executable-find "pyright")))
-    ;; :general
-    ;; (+config/local-leader
-    ;;   :keymaps 'python-mode-map
-    ;;   "d" '(:ignore t :wk "doc"))
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "d" '(:ignore t :wk "doc")))
     )
 #+end_src
 **** pydoc :external:
 #+begin_src emacs-lisp
   (use-package pydoc
-    ;; :general
-    ;; (general-def
-    ;;   :keymaps 'python-mode-map
-    ;;   "C-c C-d" 'pydoc-at-point-no-jedi)
+    :config
+    (with-eval-after-load 'general
+      (general-def
+        :keymaps 'python-mode-map
+        "C-c C-d" 'pydoc-at-point-no-jedi))
     )
 #+end_src
 **** ob-ipython 
@@ -4228,10 +4231,11 @@ Run this for any buffer you want to skewer."
   (use-package python-docstring
     :diminish
     :hook (python-mode . python-docstring-mode)
-    ;; :general
-    ;; (+config/local-leader
-    ;;   :keymaps 'python-mode-map
-    ;;   "dq" 'python-docstring-fill)
+    :config
+    (with-eval-after-load 'general 
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "dq" 'python-docstring-fill))
     )
 #+end_src
 **** pipenv :external:
@@ -4246,10 +4250,11 @@ Run this for any buffer you want to skewer."
     (setq pipenv-projectile-after-switch-function
           #'pipenv-projectile-after-switch-extended
           pipenv-executable (executable-find "pipenv"))
-    ;; :general
-    ;; (+config/local-leader
-    ;;   :keymaps 'python-mode-map
-    ;;   "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv"))
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv")))
     )
 #+end_src
 **** pyvenv :external:
@@ -4351,12 +4356,12 @@ Run this for any buffer you want to skewer."
     :config
     (setq ansible-section-face 'font-lock-variable-name-face
           ansible-task-label-face 'font-lock-doc-face)
-    ;; :general
-    ;; (+config/local-leader
-    ;;   :keymaps 'yaml-mode-map
-    ;;   "a" '(:ignore t :wk ansible)
-    ;;   "ad" 'ansible-decrypt-buffer
-    ;;   "ae" 'ansible-encrypt-buffer)
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'yaml-mode-map
+        "a" '(:ignore t :wk ansible)
+        "ad" 'ansible-decrypt-buffer
+        "ae" 'ansible-encrypt-buffer))
     )
 #+end_src
 **** ansible-doc :external:
