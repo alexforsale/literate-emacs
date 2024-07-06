@@ -1282,7 +1282,8 @@ I call this framework since usually these packages are what people use together,
     (setq vertico-multiform-commands
           `((describe-symbol (vertico-sort-function . vertico-sort-alpha))
             (consult-outline buffer ,(lambda (_) (text-scale-set -1)))
-            (persp-switch-to-buffer* reverse)))
+            (persp-switch-to-buffer* reverse)
+            (org-ctrl-c-ctrl-c flat)))
 
     (defun sort-directories-first (files)
       (setq files (vertico-sort-history-length-alpha files))
