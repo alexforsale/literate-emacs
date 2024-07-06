@@ -1003,6 +1003,8 @@ Usually configuration that defined at the /C source code/.
     (inhibit-startup-screen t)
     :config
     (setq completion-ignore-case t
+          read-file-name-completion-ignore-case t
+          read-buffer-completion-ignore-case t
           load-prefer-newer t
           auto-window-vscroll nil
           inhibit-compacting-font-caches t
