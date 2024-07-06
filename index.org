@@ -1409,10 +1409,11 @@ I call this framework since usually these packages are what people use together,
     ;; Configure a custom style dispatcher (see the Consult wiki)
     ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
     ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-    (setq completion-styles '(orderless basic)
+    (setq completion-styles '(basic substring partial-completion flex)
           completion-category-defaults nil
-          completion-category-overrides nil))
+          completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
+=partial-completion= and =flex= are built-ins completion-styles.
 **** embark
 #+begin_src emacs-lisp
   (use-package embark
