@@ -1886,7 +1886,7 @@ A project interaction library for /Emacs/, with little external dependency as po
     )
 #+end_src
 
-*** diff-hl :external:archive:
+*** diff-hl :external:
 #+caption: highlighted uncommited changes
 [[./assets/img/emacs-diff-hl-indicator.png][file:assets/img/emacs-diff-hl-indicator.png]]
 #+name: diff-hl
@@ -1972,7 +1972,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
         "P" 'projectile-persp-switch-project))
     )
 #+end_src
-*** git-link :external:archive:
+*** git-link :external:
 #+name: git-link
 #+begin_src emacs-lisp -n
   (use-package git-link
@@ -1987,7 +1987,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
         "Gc" 'git-link-commit))
     )
 #+end_src
-*** git-messenger :external:archive:
+*** git-messenger :external:
 #+caption: /git messenger/ popup message
 [[./assets/img/emacs-git-messenger.png][file:assets/img/emacs-git-messenger.png]]
 #+name: git-messenger
@@ -2002,7 +2002,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (git-messenger:use-magit-popup t)
     (git-messenger:show-detail t))
 #+end_src
-*** git-timemachine :external:archive:
+*** git-timemachine :external:
 #+name: git-timemachine
 #+begin_src emacs-lisp -n
   (use-package git-timemachine
@@ -2025,7 +2025,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
       (setq org-project-capture-projects-file (expand-file-name "projects.org" org-directory))
       (org-project-capture-single-file)))
 #+end_src
-*** lsp :external:archive:
+*** lsp :external:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
 **** old config :noexport:
