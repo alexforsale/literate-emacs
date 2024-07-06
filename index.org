@@ -1320,27 +1320,22 @@ I call this framework since usually these packages are what people use together,
     (corfu-preselect 'prompt)
     (completion-cycle-threshold 3)
     :config
-    (defun corfu-enable-in-minibuffer ()
-      "Enable Corfu in the minibuffer."
-      (when (local-variable-p 'completion-at-point-functions)
-        ;; (setq-local corfu-auto nil) ;; Enable/disable auto completion
-        (setq-local corfu-echo-delay nil ;; Disable automatic echo and popup
-                    corfu-popupinfo-delay nil)
-        (corfu-mode 1)))
-    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
-    (add-hook 'eshell-mode-hook
-              (lambda ()
-                (setq-local corfu-auto nil)
-                (corfu-mode)))
-    (defun corfu-send-shell (&rest _)
-      "Send completion candidate when inside comint/eshell."
-      (cond
-       ((and (derived-mode-p 'eshell-mode) (fboundp 'eshell-send-input))
-        (eshell-send-input))
-       ((and (derived-mode-p 'comint-mode)  (fboundp 'comint-send-input))
-        (comint-send-input))))
+    (with-eval-after-load exwm
+      (advice-add #'corfu--make-frame :around
+                  (defun +corfu--make-frame-a (oldfun &rest args)
+                    (cl-letf (((symbol-function #'frame-parent)
+                               (lambda (frame)
+                                 (or (frame-parameter frame 'parent-frame)
+                                     exwm-workspace--current))))
+                      (apply oldfun args))
+                    (when exwm--connection
+                      (set-frame-parameter corfu--frame 'parent-frame nil))))
 
-    (advice-add #'corfu-insert :after #'corfu-send-shell)
+      (advice-add #'corfu--popup-redirect-focus :override
+                  (defun +corfu--popup-redirect-focus-a ()
+                    (redirect-frame-focus corfu--frame
+                                          (or (frame-parent corfu--frame)
+                                              exwm-workspace--current)))))
     :init
     (global-corfu-mode))
 #+end_src
