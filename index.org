@@ -2864,6 +2864,12 @@ Needs an external package =fd=, or =fd-find=
     :defer t
     :hook (dired-mode . diredfl-global-mode))
 #+end_src
+*** [[https://github.com/jtbm37/all-the-icons-dired][all-the-icons-dired]]
+#+begin_src emacs-lisp
+  (use-package all-the-icons-dired
+    :after all-the-icons
+    :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-dired)
