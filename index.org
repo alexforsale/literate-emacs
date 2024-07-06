@@ -2879,7 +2879,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** treemacs core package :archive:
+*** treemacs core package
 #+name: treemacs
 #+begin_src emacs-lisp
   (use-package treemacs
@@ -2986,32 +2986,32 @@ Needs an external package =fd=, or =fd-find=
         "zd" '(treemacs-delete-file :wk "delete file")))
     )
 #+end_src
-*** treemacs-projectile :archive:
+*** treemacs-projectile
 #+name: treemacs-projectile
 #+begin_src emacs-lisp
   (use-package treemacs-projectile
     :after treemacs projectile)
 #+end_src
-*** treemacs-icons-dired :archive:
+*** treemacs-icons-dired
 #+name: treemacs-icons-dired
 #+begin_src emacs-lisp
   (use-package treemacs-icons-dired
     :after treemacs
     :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
-*** treemacs-magit :archive:
+*** treemacs-magit
 #+name: treemacs-magit
 #+begin_src emacs-lisp
   (use-package treemacs-magit
     :after treemacs magit)
 #+end_src
-*** treemacs-evil :archive:
+*** treemacs-evil
 #+name: treemacs-evil
 #+begin_src emacs-lisp
   (use-package treemacs-evil
     :after treemacs evil)
 #+end_src
-*** lsp-treemacs :archive:
+*** lsp-treemacs
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+name: lsp-treemacs
@@ -3028,7 +3028,7 @@ Needs an external package =fd=, or =fd-find=
        "Y" 'lsp-treemacs-call-hierarchy))
     )
 #+end_src
-*** treemacs-perspective :archive:
+*** treemacs-perspective
 #+name: treemacs-perspective
 #+begin_src emacs-lisp
   (use-package treemacs-perspective
@@ -3036,17 +3036,17 @@ Needs an external package =fd=, or =fd-find=
     :config
     (treemacs-set-scope-type 'Perspectives))
 #+end_src
-*** treemacs-tab-bar :archive:
+*** treemacs-tab-bar
 #+name: treemacs-tab-bar
 #+begin_src emacs-lisp
   (use-package treemacs-tab-bar
-    :after treemacs)
+    :after treemacs tab-bar)
 #+end_src
-*** treemacs-nerd-icons :disabled:archive:
+*** treemacs-nerd-icons
 #+name: treemacs-nerd-icons
 #+begin_src emacs-lisp
   (use-package treemacs-nerd-icons
-    :after treemacs
+    :after treemacs nerd-icons
     :config
     (treemacs-load-theme "nerd-icons"))
 #+end_src
@@ -3066,10 +3066,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** notmuch :external:archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** notmuch
 #+name: notmuch
 #+begin_src emacs-lisp
   (use-package notmuch
@@ -3159,10 +3156,7 @@ Needs an external package =fd=, or =fd-find=
     )
 #+end_src
 
-*** notmuch-indicator :external:archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** notmuch-indicator
 #+name: notmuch-indicator
 #+begin_src emacs-lisp
   (use-package notmuch-indicator
@@ -3171,10 +3165,7 @@ Needs an external package =fd=, or =fd-find=
           '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
     (notmuch-indicator-mode))
 #+end_src
-*** consult-notmuch :external:archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** consult-notmuch
 #+name: consult-notmuch
 #+begin_src emacs-lisp
   (use-package consult-notmuch
@@ -3182,28 +3173,19 @@ Needs an external package =fd=, or =fd-find=
     :config
     (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
 #+end_src
-*** ol-notmuch :external:archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** ol-notmuch
 #+name: ol-notmuch
 #+begin_src emacs-lisp
   (use-package ol-notmuch)
 #+end_src
-*** notmuch-maildir :external:archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** notmuch-maildir
 #+name: notmuch-maildir
 #+begin_src emacs-lisp
   (use-package notmuch-maildir
     :config
     (notmuch-maildir-inject-section))
 #+end_src
-*** message :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** message
 #+name: message
 #+begin_src emacs-lisp
   (use-package message
@@ -3212,10 +3194,7 @@ Needs an external package =fd=, or =fd-find=
     (message-directory (expand-file-name ".mail" (getenv "HOME")))
     (message-sendmail-envelope-from 'header))
 #+end_src
-*** sendmail :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** sendmail
 #+name: sendmail
 #+begin_src emacs-lisp
   (use-package sendmail
@@ -3241,11 +3220,11 @@ Needs an external package =fd=, or =fd-find=
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** Lisp :archive:
+*** Lisp
+**** lispy :disabled:archive:
 :PROPERTIES:
 :header-args: :tangle no
 :END:
-**** lispy :disabled:archive:
 #+name: lispy
 #+begin_src emacs-lisp
   (use-package lispy
@@ -3255,6 +3234,9 @@ Needs an external package =fd=, or =fd-find=
            (geiser-mode . lispy-mode)))
 #+end_src
 **** lispyville :disabled:archive:
+:PROPERTIES:
+:header-args: :tangle no
+:END:
 #+name: lispyville
 #+begin_src emacs-lisp
   (use-package lispyville
@@ -3398,10 +3380,7 @@ Needs an external package =fd=, or =fd-find=
     :bind (:map geiser-mode-map
                 ("C-c e" . macrostep-expand)))
 #+end_src
-*** C and C++ :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** C and C++
 **** cc-mode :builtin:
 #+name: cc-mode
 #+begin_src emacs-lisp 
@@ -3419,10 +3398,7 @@ Needs an external package =fd=, or =fd-find=
     (with-eval-after-load 'ffap
       (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
 #+end_src
-*** XML :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** XML
 **** nxml-mode 
 #+name: nxml-mode
 #+begin_src emacs-lisp
@@ -3435,10 +3411,7 @@ Needs an external package =fd=, or =fd-find=
     (setq nxml-slash-auto-complete-flag t
           nxml-auto-insert-xml-declaration-flag t))
 #+end_src
-*** YAML :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** YAML
 **** yaml-mode :external:
 #+name: yaml-mode
 #+begin_src emacs-lisp
@@ -3455,10 +3428,7 @@ Needs an external package =fd=, or =fd-find=
      (yaml-mode . (lambda ()
                     (run-hooks 'prog-mode-hook)))))
 #+end_src
-*** TOML :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** TOML
 **** toml-mode :external:
 #+name: toml-mode
 #+begin_src emacs-lisp
@@ -3472,10 +3442,7 @@ Needs an external package =fd=, or =fd-find=
       (setq lsp-toml-command (executable-find "taplo")))
     (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
 #+end_src
-*** Lua :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Lua
 **** lua-mode :external:
 #+name: lua-mode
 #+begin_src emacs-lisp
@@ -3486,10 +3453,7 @@ Needs an external package =fd=, or =fd-find=
       (setq lsp-lua-hint-enable t
             lsp-lua-hint-set-type t)))
 #+end_src
-*** Jinja2 :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Jinja2
 **** jinja2-mode :external:
 #+name: jinja2-mode
 #+begin_src emacs-lisp
@@ -3503,19 +3467,13 @@ Needs an external package =fd=, or =fd-find=
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
     (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
 #+end_src
-*** Json :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Json
 **** json-mode 
 #+name: json-mode
 #+begin_src emacs-lisp
   (use-package json-mode)
 #+end_src
-*** Web :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Web
 **** web-mode :external:
 #+name: web-mode
 #+begin_src emacs-lisp
@@ -3969,10 +3927,7 @@ Run this for any buffer you want to skewer."
   (use-package nodejs-repl
     :defer t)
 #+end_src
-*** Latex :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Latex
 **** auctex 
 #+name: auctex
 #+begin_src emacs-lisp
@@ -4086,10 +4041,7 @@ Run this for any buffer you want to skewer."
       (substring fname-or-url 7)
     fname-or-url))
 #+end_src
-*** Markdown :external:archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Markdown
 **** Basic Configuration
 #+name: markdown-mode
 #+begin_src emacs-lisp
@@ -4108,10 +4060,7 @@ Run this for any buffer you want to skewer."
   (use-package edit-indirect
     :after markdown-mode)
 #+end_src
-*** Python :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Python
 **** Builtin python mode :builtin:
 #+name: python
 #+begin_src emacs-lisp
@@ -4284,10 +4233,7 @@ Run this for any buffer you want to skewer."
 #+begin_src emacs-lisp
   (use-package ein)
 #+end_src
-*** Rust :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Rust
 **** rust-mode 
 #+name: rust-mode
 #+begin_src emacs-lisp
@@ -4340,10 +4286,7 @@ Run this for any buffer you want to skewer."
     (with-eval-after-load 'rustic
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
-*** Ansible :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Ansible
 **** ansible :external:
 #+name: ansible
 #+begin_src emacs-lisp
@@ -4375,10 +4318,7 @@ Run this for any buffer you want to skewer."
     (when (featurep 'evil)
       (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
 #+end_src
-*** Perl :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Perl
 **** cperl-mode :external:
 #+name: cperl-mode
 #+begin_src emacs-lisp
@@ -4386,10 +4326,7 @@ Run this for any buffer you want to skewer."
     :defer t
     :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 #+end_src
-*** Haskell :archive:
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+*** Haskell
 **** haskell-mode :external:
 #+name: haskell-mode
 #+begin_src emacs-lisp
