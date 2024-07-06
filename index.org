@@ -1242,7 +1242,11 @@ I call this framework since usually these packages are what people use together,
        :keymaps 'vertico-map
        "?" 'minibuffer-completion-help
        "M-RET" 'minibuffer-force-complete-and-exit
-       "M-TAB" 'minibuffer-complete)))
+       "M-TAB" 'minibuffer-complete
+       "<tab>" 'vertico-insert
+       "<escape>" 'minibuffer-keyboard-quit
+       "C-M-n" 'vertico-next-group
+       "C-M-p" 'vertico-previous-group)))
 
 #+end_src
 ***** Extensions
