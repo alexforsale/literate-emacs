@@ -127,6 +127,8 @@ Now much more simpler since =[[https://github.com/jwiegley/use-package][use-pack
 #+end_src
 ** straight.el
 #+begin_src emacs-lisp
+  (customize-set-variable 'straight-use-package-by-default t)
+
   (defvar bootstrap-version)
   (let ((bootstrap-file
          (expand-file-name
@@ -142,8 +144,6 @@ Now much more simpler since =[[https://github.com/jwiegley/use-package][use-pack
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
-
-  (setq straight-use-package-by-default t)
 
   (straight-register-package
    '(org :depth 1))
