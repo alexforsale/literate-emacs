@@ -2172,6 +2172,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 ***** lsp-ui 
 #+begin_src emacs-lisp -n
   (use-package lsp-ui
+    :after lsp-mode
     :defer t
     :hook (lsp-mode . lsp-ui-mode)
     :init
