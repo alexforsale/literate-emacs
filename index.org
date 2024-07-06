@@ -1272,7 +1272,28 @@ I call this framework since usually these packages are what people use together,
               ("M-q" . vertico-quick-insert)
               ("C-q" . vertico-quick-exit)))
 #+end_src
+****** vertico-multiform
+#+begin_src emacs-lisp
+  (use-package vertico-multiform
+    :straight nil
+    :init
+    (vertico-multiform-mode)
+    :config
+    (setq vertico-multiform-commands
+          `((describe-symbol (vertico-sort-function . vertico-sort-alpha))
+            (consult-outline buffer ,(lambda (_) (text-scale-set -1)))
+            (persp-switch-to-buffer* reverse)))
 
+    (defun sort-directories-first (files)
+      (setq files (vertico-sort-history-length-alpha files))
+      (nconc (seq-filter (lambda (x) (string-suffix-p "/" x)) files)
+             (seq-remove (lambda (x) (string-suffix-p "/" x)) files)))
+
+    (setq vertico-multiform-categories
+          '((symbol (vertico-sort-function . vertico-sort-alpha))
+            (file (vertico-sort-function . sort-directories-first))))
+    )
+#+end_src
 **** marginalia
 #+name: marginalia
 #+begin_src emacs-lisp
