@@ -834,9 +834,10 @@ Emacs package that displays available keybindings in popup. This is one of the t
 *** Fonts
 #+name: fonts
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono")
-  (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono")
+  (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 130)
+  (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 130)
 #+end_src
+the =:height= value is 1/10 pt.
 **** font-core
 #+name: font-core
 #+begin_src emacs-lisp
