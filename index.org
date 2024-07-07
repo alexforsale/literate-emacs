@@ -100,7 +100,7 @@ The =custom-file= is used to save customization settings for future use.
     (load custom-file))
 #+end_src
 ** Setup =package=
-Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/.
+Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/. It's actually not used since I'm using =straight.el=.
 #+begin_src emacs-lisp
   (require 'package)
   ;; Add `melpa` to `package-archives`.
@@ -151,6 +151,7 @@ Now much more simpler since =[[https://github.com/jwiegley/use-package][use-pack
   (straight-use-package 'org)
   (straight-use-package 'use-package)
 #+end_src
+I use =straight-register-package= for =org-mode= since full cloning the repository would take too much time.
 ** Tangle this org-file
 This file is already added in my git repositories for initial Emacs loading. But I also include it here to make sure there's no changes made.
 #+begin_src emacs-lisp
@@ -169,7 +170,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+end_src
 
 *** merge-list-to-list function
-This function is just a wrapper to easily merge lists.
+This function is just a wrapper to easily merge lists. I don't think I need it anymore.
 #+name: merge-list-to-list
 #+begin_src emacs-lisp -n
   ;;; From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048
@@ -186,6 +187,7 @@ This function is just a wrapper to easily merge lists.
 #+end_src
 ** Load each modular configuration file.
 *** evil 
+All =evil-mode= specific configuration and =evil= related packages goes here.
 #+begin_src emacs-lisp
   (require 'config-evil (expand-file-name "modules/config-evil.el" user-emacs-directory) t)
 #+end_src
@@ -193,54 +195,67 @@ This function is just a wrapper to easily merge lists.
 #+begin_src emacs-lisp
   (require 'config-general (expand-file-name "modules/config-general.el" user-emacs-directory) t)
 #+end_src
+All =general= keybindings are in this file.
 *** UI
 #+begin_src emacs-lisp
   (require 'config-ui (expand-file-name "modules/config-ui.el" user-emacs-directory) t)
 #+end_src
+Configuration for /Emacs/'s looks and feels.
 *** builtins
 #+begin_src emacs-lisp
   (require 'config-builtins (expand-file-name "modules/config-builtins.el" user-emacs-directory) t)
 #+end_src
+The more I understand the meat inside /Emacs/ the less external packages I'll use (hopefully).
 *** completion
 #+begin_src emacs-lisp
   (require 'config-completion (expand-file-name "modules/config-completion.el" user-emacs-directory) t)
 #+end_src
+For now this is for vertico and friends.
 *** shells
 #+begin_src emacs-lisp
   (require 'config-shells (expand-file-name "modules/config-shells.el" user-emacs-directory) t)
 #+end_src
+Mostly =vterm= configurations. =Eshell= looks promising, but still hard to configure.
 *** editing
 #+begin_src emacs-lisp
   (require 'config-editing (expand-file-name "modules/config-editing.el" user-emacs-directory) t)
 #+end_src
+Tweaks to make my editing experience nicer.
 *** IDE
 #+begin_src emacs-lisp
   (require 'config-ide (expand-file-name "modules/config-ide.el" user-emacs-directory) t)
 #+end_src
+All of =LSP=, =git=, =flycheck=, and =projectile= configuration.
 *** org
 #+begin_src emacs-lisp
   (require 'config-org (expand-file-name "modules/config-org.el" user-emacs-directory) t)
 #+end_src
+Most of my changes are in here, the more configurable =org-mode=, the more unusable to me.
 *** tools
 #+begin_src emacs-lisp
   (require 'config-tools (expand-file-name "modules/config-tools.el" user-emacs-directory) t)
 #+end_src
+Small packages that helps /Emacs/ interacts with its surrounding. I have =direnv=, =exec-path-from-shell= for, you guess it, shells. There's also =ox-hugo= for blogging with /hugo/.
 *** dired
 #+begin_src emacs-lisp
   (require 'config-dired (expand-file-name "modules/config-dired.el" user-emacs-directory) t)
 #+end_src
+I don't use =dired= that much, but when I do, I at least know my way around.
 *** treemacs
 #+begin_src emacs-lisp
   (require 'config-treemacs (expand-file-name "modules/config-treemacs.el" user-emacs-directory) t)
 #+end_src
+It's like /NERDtree/ in /vim/, but in /Emacs/, I kinda understand why /vim/ need this functionality. ~C-x C-f~ with =vertico= and =marginalia= already do the same in /Emacs/. So it's not important to me, but still nice to have.
 *** mail
 #+begin_src emacs-lisp
   (require 'config-mail (expand-file-name "modules/config-mail.el" user-emacs-directory) t)
 #+end_src
+Email in /Emacs/ with the help of /notmuch/, /offlineimap/, /afew/, and /davmail/ for my /Exchange/ mails.
 *** programming modes
 #+begin_src emacs-lisp
   (require 'config-progmodes (expand-file-name "modules/config-progmodes.el" user-emacs-directory) t)
 #+end_src
+Doing stuffs in /linux/ will eventually makes you edit files from various programming languages. This here is just to make me read them comfortly.
 *** local overrides
 #+begin_src emacs-lisp
   (require 'config-overrides (expand-file-name "modules/config-overrides.el" user-emacs-directory) t)
@@ -298,6 +313,7 @@ Mostly copied from /doom/ or the [[https://evil.readthedocs.io/en/latest/overvie
 Notes:
 - =evil-search-modules= :: I switched this to =isearch= since the default =evil-search= didn't search through collapsed headings in =org-mode=.
 
+Why is this the first? My right hand fingers always land on =h=, =j=, =k=, =l=. You can't teach old dog new tricks.
 *** [[https://github.com/emacs-evil/evil-collection][evil-collection]]
 This is a collection of Evil bindings for the parts of Emacs that Evil does not cover properly by default, such as /help-mode/, /M-x calendar/, /Eshell/ and more.
 #+begin_src emacs-lisp
@@ -365,62 +381,68 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 *** Packages keybindings
 **** First level menu
 #+begin_src emacs-lisp
-;; First level menu
-(+config/leader-menu! "activities" "C-a")
-(+config/leader-menu! "buffer" "b")
-(+config/leader-menu! "files" "f")
-(+config/leader-menu! "find" "gf")
-(+config/leader-menu! "go" "g")
-(+config/leader-menu! "insert" "i")
-(+config/leader-menu! "mail" "M-m")
-(+config/leader-menu! "mark" "m")
-(+config/leader-menu! "notes" "n")
-(+config/leader-menu! "open" "o")
-(+config/leader-menu! "quit" "q")
-(+config/leader-menu! "register" "gr")
-(+config/leader-menu! "tree" "t")
-(+config/leader-menu! "tab" "t TAB")
-(+config/leader-menu! "vterm" "tv")
-(+config/leader-menu! "window" "w")
-(+config/leader-menu! "search" "/")
+  ;; First level menu
+  (+config/leader-menu! "activities" "C-a")
+  (+config/leader-menu! "buffer" "b")
+  (+config/leader-menu! "files" "f")
+  (+config/leader-menu! "go" "g")
+  (+config/leader-menu! "insert" "i")
+  (+config/leader-menu! "mail" "M-m")
+  (+config/leader-menu! "mark" "m")
+  (+config/leader-menu! "notes" "n")
+  (+config/leader-menu! "open" "o")
+  (+config/leader-menu! "quit" "q")
+  (+config/leader-menu! "register" "gr")
+  (+config/leader-menu! "tree" "t")
+  (+config/leader-menu! "tab" "t TAB")
+  (+config/leader-menu! "vterm" "tv")
+  (+config/leader-menu! "window" "w")
+  (+config/leader-menu! "search" "/")
 #+end_src
+This is the immediate menu after pressing =SPC= in normal and visual mode. and also =C-c SPC= in insert mode. Mostly inspired by =Doomemacs=.
 **** First level keybinding
 #+begin_src emacs-lisp
-;; keybindings
-(+config/leader-key
-  ";" 'pp-eval-expression
-  ":" 'execute-extended-command
-  "^" '(subword-capitalize :wk "Capitalize subword")
-  "u" 'universal-argument)
+  ;; keybindings
+  (+config/leader-key
+    ";" 'pp-eval-expression
+    ":" 'execute-extended-command
+    "^" '(subword-capitalize :wk "Capitalize subword")
+    "u" 'universal-argument)
 #+end_src
+These are the commands I used often.
 **** buffer
 #+begin_src emacs-lisp
-;; buffer
-(+config/leader-buffer
-  "[" '(previous-buffer :wk "previous buffer")
-  "]" '(next-buffer :wk "next buffer")
-  "TAB" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
-  "b" '(switch-to-buffer :wk "switch to buffer")
-  "s" '(basic-save-buffer :wk "save buffer")
-  "c" '(clone-indirect-buffer :wk "clone buffer")
-  "C" '(clone-indirect-buffer-other-window :wk "clone buffer other window")
-  "d" '(kill-current-buffer :wk "kill current buffer")
-  "i" 'ibuffer
-  "k" '(kill-buffer :wk "kill buffer")
-  "l" '(evil-switch-to-windows-last-buffer :wk "Switch to last open buffer")
-  "m" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :wk "switch to messages buffer")
-  "n" '(next-buffer :wk "next buffer")
-  "N" '(evil-buffer-new :wk "New unnamed buffer")
-  "p" '(previous-buffer :wk "previous buffer")
-  "o" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
-  "r" '(revert-buffer-quick :wk "revert buffer")
-  "R" '(rename-buffer :wk "rename buffer")
-  "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
-  "z" '(bury-buffer :wk "bury buffer"))
+  ;; buffer
+  (+config/leader-buffer
+    "C-b" 'consult-buffer
+    "[" '(previous-buffer :wk "previous buffer")
+    "]" '(next-buffer :wk "next buffer")
+    "TAB" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+    "b" '(switch-to-buffer :wk "switch to buffer")
+    "s" '(basic-save-buffer :wk "save buffer")
+    "c" '(clone-indirect-buffer :wk "clone buffer")
+    "C" '(clone-indirect-buffer-other-window :wk "clone buffer other window")
+    "d" '(kill-current-buffer :wk "kill current buffer")
+    "i" 'ibuffer
+    "k" '(kill-buffer :wk "kill buffer")
+    "l" '(evil-switch-to-windows-last-buffer :wk "Switch to last open buffer")
+    "m" '((lambda () (interactive) (switch-to-buffer "*Messages*")) :wk "switch to messages buffer")
+    "n" '(next-buffer :wk "next buffer")
+    "N" '(evil-buffer-new :wk "New unnamed buffer")
+    "p" '(previous-buffer :wk "previous buffer")
+    "o" '((lambda () (interactive) (switch-to-buffer nil)) :wk "other-buffer")
+    "r" '(revert-buffer-quick :wk "revert buffer")
+    "R" '(rename-buffer :wk "rename buffer")
+    "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
+    "z" '(bury-buffer :wk "bury buffer"))
 #+end_src
+Buffer-related keybindings. Some I don't use that much, like =ibuffer=, it's like dired for buffers.
+
+There are some keybindings that are bound to functions, like switching to /Messages/ or /scratch/ buffer.
 **** consult
 Consult have too many commands it warrants a special heading in this keybindings.
 ***** global
+This is for temporary, ideally, it should go into separate categories.
 #+begin_src emacs-lisp
   (with-eval-after-load 'consult
     (general-define-key
@@ -440,6 +462,7 @@ Consult have too many commands it warrants a special heading in this keybindings
       "M-g b" 'consult-bookmark))
 #+end_src
 ***** search
+I'm trying to learn a more complex searching in /Emacs/, for faster navigation.
 #+begin_src emacs-lisp
   (with-eval-after-load 'consult
     (+config/leader-search
@@ -449,13 +472,14 @@ Consult have too many commands it warrants a special heading in this keybindings
       "4 b" 'consult-buffer-other-window
       "5" '(:ignore t :wk "other frame")
       "5 b" 'consult-buffer-other-frame
-      "b" 'consult-buffer
       "B" 'consult-project-buffer
       "g" 'consult-goto-line
+      "G" 'consult-grep
       "m" '(:ignore t :wk "imenu")
       "m" 'consult-imenu
       "M" 'consult-imenu-multi
       "M-g" 'consult-goto-line
+      "o" 'consult-outline
       "l" 'consult-line
       "L" 'consult-line-multi
       "k" 'consult-keep-lines
@@ -467,6 +491,27 @@ Consult have too many commands it warrants a special heading in this keybindings
       "M-s" 'consult-history
       "M-r" 'consult-history))
 #+end_src
+
+If I happened to have the =fd= binary, also add this keybindings.
+#+begin_src emacs-lisp
+  (when (executable-find "fd")
+    (+config/leader-search
+      "f" 'consult-fd))
+#+end_src
+
+Also if I have =ripgrep=:
+#+begin_src emacs-lisp
+    (when (executable-find "rg")
+      (+config/leader-search
+        "R" 'consult-ripgrep))
+
+#+end_src
+In =org-mode= add this keybindings for navigating through headings.
+#+begin_src emacs-lisp
+  (+config/leader-search
+    :keymaps 'org-mode-map
+    "O" 'consult-org-heading)
+#+end_src
 ***** bookmark
 #+begin_src emacs-lisp
   (with-eval-after-load 'consult
@@ -476,6 +521,7 @@ Consult have too many commands it warrants a special heading in this keybindings
       "bk" 'consult-global-mark
       "bm" 'consult-mark))
 #+end_src
+Also for the goal of faster text navigation. I think it's a feature I should use more.
 ***** register
 #+begin_src emacs-lisp
   (with-eval-after-load 'consult
@@ -484,6 +530,7 @@ Consult have too many commands it warrants a special heading in this keybindings
       "r #" '(consult-register :wk "consult-register") ;; require `consult' package
       ))
 #+end_src
+Still wrapping my head around the concept of registers. But I do hope to use this more.
 ***** isearch
 #+begin_src emacs-lisp
   (with-eval-after-load 'consult
@@ -494,6 +541,7 @@ Consult have too many commands it warrants a special heading in this keybindings
      "M-s l" 'consult-line
      "M-s L" 'consult-line-multi))
 #+end_src
+It's just normal /Isearch/ wrapped in /consult/.
 **** Editing
 ***** smartparens
 #+begin_src emacs-lisp
@@ -508,40 +556,42 @@ Consult have too many commands it warrants a special heading in this keybindings
      :keymaps 'smartparens-mode-map
      "M-DEL" 'sp-unwrap-sexp))
 #+end_src
+/Smartparens/ is a wonderful package, once you know how to use it.
 **** dired
 #+begin_src emacs-lisp
-(general-nvmap
-  'dired-mode-map
-  "g$" 'dired-hide-subdir
-  "g?" 'dired-summary
-  "gG" 'dired-do-chgrp
-  "gj" 'dired-next-dirline
-  "gk" 'dired-prev-dirline
-  "go" 'dired-view-file
-  "gO" 'dired-find-file-other-window
-  "gy" 'dired-show-file-type)
+  (general-nvmap
+    'dired-mode-map
+    "g$" 'dired-hide-subdir
+    "g?" 'dired-summary
+    "gG" 'dired-do-chgrp
+    "gj" 'dired-next-dirline
+    "gk" 'dired-prev-dirline
+    "go" 'dired-view-file
+    "gO" 'dired-find-file-other-window
+    "gy" 'dired-show-file-type)
 #+end_src
+Is this even needed?
 **** files
 #+begin_src emacs-lisp
-;; files
-(+config/leader-files
-  "D" 'dired
-  "d" 'dired-jump
-  "f" '(find-file :wk "find file")
-  "F" '(find-file-other-frame :wk "find file other frame")
-  "k" 'delete-frame
-  "r" 'recentf
-  "S" '(write-file :wk "save file")
-  "s" '(save-buffer :wk "save buffer")
-  "w" '(find-file-other-window :wk "find file other window"))
+  ;; files
+  (+config/leader-files
+    "D" 'dired
+    "d" 'dired-jump
+    "f" '(find-file :wk "find file")
+    "F" '(find-file-other-frame :wk "find file other frame")
+    "k" 'delete-frame
+    "r" 'recentf
+    "S" '(write-file :wk "save file")
+    "s" '(save-buffer :wk "save buffer")
+    "w" '(find-file-other-window :wk "find file other window"))
 #+end_src
-**** find
+Most of this is built-in, but some packages offer a much more better experience, like =consult-recent-file=:
 #+begin_src emacs-lisp
-;; find
-(+config/leader-find
-  "g" 'grep
-  "r" '(rgrep :wk "recursive grep"))
+  (with-eval-after-load 'consult
+    (+config/leader-files
+      "r" 'consult-recent-file))
 #+end_src
+Which have a preview-mode when navigating through files.
 **** help
 #+begin_src emacs-lisp
 ;; help
@@ -552,198 +602,210 @@ Consult have too many commands it warrants a special heading in this keybindings
         :docstring "Simulates C-h in normal and visual mode."
         :which-key "Help"))
 #+end_src
+This command is a wrapper for the actual ~C-h~.
 **** insert
 #+begin_src emacs-lisp
 ;; insert
 (+config/leader-insert
   "u" '(insert-char :wk "insert character"))
 #+end_src
+for inserting special characters or symbols.
 **** mark
 #+begin_src emacs-lisp
-;; mark
-(+config/leader-mark
-  "m" '(bookmark-set :wk "set bookmark")
-  "b" '(bookmark-jump :wk "jump to bookmark")
-  "B" '(bookmark-jump-other-window :wk "jump to bookmark other window")
-  "C-c b" '(bookmark-jump-other-frame :wk "jump to bookmark other frame")
-  "c" '(consult-bookmark :wk "consult bookmark") ;; require `consult' package
-  "l" '(bookmark-bmenu-list :wk "list bookmarks")
-  "L" '(bookmark-load :wk "load bookmark")
-  "d" '(bookmark-delete :wk "delete bookmark")
-  "D" '(bookmark-delete-all :wk "delete all bookmarks")
-  "s" '(bookmark-save :wk "save bookmark")
-  "r" '(bookmark-rename :wk "rename bookmark"))
+  ;; mark
+  (+config/leader-search
+    "bB" '(bookmark-jump-other-window :wk "jump to bookmark other window")
+    "b C-c b" '(bookmark-jump-other-frame :wk "jump to bookmark other frame")
+    "bc" '(consult-bookmark :wk "consult bookmark") ;; require `consult' package
+    "bl" '(bookmark-bmenu-list :wk "list bookmarks")
+    "bL" '(bookmark-load :wk "load bookmark")
+    "bd" '(bookmark-delete :wk "delete bookmark")
+    "bD" '(bookmark-delete-all :wk "delete all bookmarks")
+    "bs" '(bookmark-save :wk "save bookmark")
+    "br" '(bookmark-rename :wk "rename bookmark"))
 #+end_src
+Continuation from the bookmark section in /consult/ earlier.
 **** open
 #+begin_src emacs-lisp
-;; open
-(+config/leader-open
-  "i" '((lambda () (interactive) (find-file user-init-file)) :wk "open Emacs configuration file"))
+  ;; open
+  (+config/leader-open
+    "i" '((lambda () (interactive)
+            (if (not chemacs-profile)
+                (find-file user-init-file)
+              (find-file
+               (expand-file-name "init.el" user-emacs-directory)))) :wk "open Emacs configuration file"))
+#+end_src
+Right now just for opening /Emacs/ init file. And I'm tangling it from an org-file so it needs another addition.
+#+begin_src emacs-lisp
+  (+config/leader-open
+    "I" '((lambda () (interactive)
+            (find-file
+             (expand-file-name "index.org" user-emacs-directory))) :wk "open Emacs configuration file"))
 #+end_src
 **** org-mode
+This is the global keybidings.
 #+begin_src emacs-lisp
-(general-define-key
- :keymaps 'override
- "C-c l" '(org-store-link :wk "Store link")
- "C-c a" '(org-agenda :wk "Org Agenda")
- "C-c c" '(org-capture :wk "Org Capture")
- "C-c C-s" 'org-schedule)
+  (general-define-key
+   :keymaps 'override
+   "C-c l" '(org-store-link :wk "Store link")
+   "C-c a" '(org-agenda :wk "Org Agenda")
+   "C-c c" '(org-capture :wk "Org Capture")
+   "C-c C-s" 'org-schedule)
+#+end_src
+For notes-related keybindings.
+#+begin_src emacs-lisp
+  (+config/leader-notes
+    "a" 'org-agenda
+    "c" 'org-capture
+    "C" 'org-capture-goto-last-stored
+    "r" 'org-refile-goto-last-stored)
+#+end_src
 
-(+config/leader-notes
-  "a" 'org-agenda
-  "c" 'org-capture
-  "C" 'org-capture-goto-last-stored
-  "r" 'org-refile-goto-last-stored)
-
-;; (+config/local-leader
-;;   :major-modes 'org-mode
-;;   :keymaps 'org-mode-map
-;;   "a" '(:ignore t :wk "action")
-;;   "s" '(:ignore t :wk "search"))
-
-(+config/local-leader
-  :keymaps 'org-mode-map
-  "C-a" 'org-attach
-  "C-b" 'org-backward-heading-same-level
-  "C-c" 'org-ctrl-c-ctrl-c
-  "C-d" 'org-deadline
-  "C-e" 'org-export-dispatch
-  "C-f" 'org-forward-heading-same-level
-  "C-j" 'org-goto
-  "C-k" 'org-kill-note-or-show-branches
-  "C-l" 'org-insert-link
-  "C-n" 'org-next-visible-heading
-  "C-o" 'org-open-at-point
-  "C-p" 'org-previous-visible-heading
-  "C-q" 'org-set-tags-command
-  "C-r" 'org-fold-reveal
-  "C-s" 'org-schedule
-  "C-t" 'org-todo
-  "C-w" 'org-refile
-  "C-y" 'org-evaluate-time-range
-  "C-z" 'org-add-note
-  "M-b" 'org-previous-block
-  "M-f" 'org-next-block
-  "M-l" 'org-insert-last-stored-link
-  "M-w" 'org-refile-copy
-  "C-^" 'org-up-element
-  "C-_" 'org-down-element
-  "C-<" 'org-promote-subtree
-  "C->" 'org-demote-subtree
-  "C-," 'org-insert-structure-template
-  "C-*" 'org-list-make-subtree
-  "{" 'org-table-toggle-formula-debugger
-  "}" 'org-table-toggle-coordinate-overlays
-  "`" 'org-table-edit-field
-  "\\" 'org-match-sparse-tree
-  "^" 'org-sort
-  "[" 'org-agenda-file-to-front
-  "]" 'org-remove-file
-  "@" 'org-mark-subtree
-  "?" 'org-table-field-info
-  "=" 'org-table-eval-formula
-  ">" 'org-goto-calendar
-  "+" 'org-table-sum
-  "<" 'org-date-from-calendar
-  ";" 'org-toggle-comment
-  ":" 'org-toggle-fixed-width
-  "/" 'org-sparse-tree
-  "," 'org-priority
-  "." 'org-timestamp
-  "*" 'org-ctrl-c-star
-  "-" 'org-ctrl-c-minus
-  "#" 'org-update-statistics-cookies
-  "$" 'org-archive-subtree
-  "%" 'org-mark-ring-push
-  "'" 'org-edit-special
-  "TAB" '(org-clock-in :wk "clock-in")
-  "!" '(org-reload :wk "reload org")
-  "[" '(org-mark-ring-goto :wk "Jump to previous position in the mark ring")
-  "b" '(:ignore t :wk "buffer")
-  "bs" '(org-save-all-org-buffers :wk "save all org buffer")
-  "f" '(:ignore t :wk "files")
-  "fs" '(org-save-all-org-buffers :wk "save all org buffer")
-  "s" '(org-schedule :wk "org schedule")
-  "i" '(:ignore t :wk "insert")
-  "id" '(org-insert-drawer :wk "insert drawer")
-  "i@" '(org-cite-insert :wk "insert citation")
-  "if" '(org-footnote-action :wk "footnote")
-  "i C-f" '(org-emphasize :wk "insert emphasize")
-  "il" '(org-insert-link :wk "insert link")
-  "iD" '(org-deadline :wk "insert deadline")
-  "is" '(org-schedule :wk "insert schedule")
-  "ip" '(org-set-property :wk "insert property")
-  "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
+The keybindings under local leader (~SPC m~), honestly this is too much and I needs to reorganize this.
+#+begin_src emacs-lisp
+  (+config/local-leader
+    :keymaps 'org-mode-map
+    "C-a" 'org-attach
+    "C-b" 'org-backward-heading-same-level
+    "C-c" 'org-ctrl-c-ctrl-c
+    "C-d" 'org-deadline
+    "C-e" 'org-export-dispatch
+    "C-f" 'org-forward-heading-same-level
+    "C-j" 'org-goto
+    "C-k" 'org-kill-note-or-show-branches
+    "C-l" 'org-insert-link
+    "C-n" 'org-next-visible-heading
+    "C-o" 'org-open-at-point
+    "C-p" 'org-previous-visible-heading
+    "C-q" 'org-set-tags-command
+    "C-r" 'org-fold-reveal
+    "C-s" 'org-schedule
+    "C-t" 'org-todo
+    "C-w" 'org-refile
+    "C-y" 'org-evaluate-time-range
+    "C-z" 'org-add-note
+    "M-b" 'org-previous-block
+    "M-f" 'org-next-block
+    "M-l" 'org-insert-last-stored-link
+    "M-w" 'org-refile-copy
+    "C-^" 'org-up-element
+    "C-_" 'org-down-element
+    "C-<" 'org-promote-subtree
+    "C->" 'org-demote-subtree
+    "C-," 'org-insert-structure-template
+    "C-*" 'org-list-make-subtree
+    "{" 'org-table-toggle-formula-debugger
+    "}" 'org-table-toggle-coordinate-overlays
+    "`" 'org-table-edit-field
+    "\\" 'org-match-sparse-tree
+    "^" 'org-sort
+    "[" 'org-agenda-file-to-front
+    "]" 'org-remove-file
+    "@" 'org-mark-subtree
+    "?" 'org-table-field-info
+    "=" 'org-table-eval-formula
+    ">" 'org-goto-calendar
+    "+" 'org-table-sum
+    "<" 'org-date-from-calendar
+    ";" 'org-toggle-comment
+    ":" 'org-toggle-fixed-width
+    "/" 'org-sparse-tree
+    "," 'org-priority
+    "." 'org-timestamp
+    "*" 'org-ctrl-c-star
+    "-" 'org-ctrl-c-minus
+    "#" 'org-update-statistics-cookies
+    "$" 'org-archive-subtree
+    "%" 'org-mark-ring-push
+    "'" 'org-edit-special
+    "TAB" '(org-clock-in :wk "clock-in")
+    "!" '(org-reload :wk "reload org")
+    "[" '(org-mark-ring-goto :wk "Jump to previous position in the mark ring")
+    "b" '(:ignore t :wk "buffer")
+    "bs" '(org-save-all-org-buffers :wk "save all org buffer")
+    "f" '(:ignore t :wk "files")
+    "fs" '(org-save-all-org-buffers :wk "save all org buffer")
+    "s" '(org-schedule :wk "org schedule")
+    "i" '(:ignore t :wk "insert")
+    "id" '(org-insert-drawer :wk "insert drawer")
+    "i@" '(org-cite-insert :wk "insert citation")
+    "if" '(org-footnote-action :wk "footnote")
+    "i C-f" '(org-emphasize :wk "insert emphasize")
+    "il" '(org-insert-link :wk "insert link")
+    "iD" '(org-deadline :wk "insert deadline")
+    "is" '(org-schedule :wk "insert schedule")
+    "ip" '(org-set-property :wk "insert property")
+    "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
 #+end_src
 **** quit
+For quitting /Emacs/.
 #+begin_src emacs-lisp
-;; quit
-(+config/leader-quit
-  "q" '(save-buffers-kill-terminal :wk "quit and save")
-  "R" '(restart-emacs :wk "restart Emacs"))
+  (+config/leader-quit
+    "q" '(save-buffers-kill-terminal :wk "quit and save")
+    "R" '(restart-emacs :wk "restart Emacs"))
 #+end_src
 **** register
+Not quite /register/ since I moved most of it. Also ~SPC g r~ is just too many keystrokes.
 #+begin_src emacs-lisp
-;; register
-(+config/leader-register
-  "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
-  "c" '(clear-rectangle :wk "blank out region-rectangle")
-  "d" '(delete-rectangle :wk "delete region-rectangle")
-  "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
-  "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
-  "m" '(bookmark-set :wk "set bookmark")
-  "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
-  "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
-  "o" '(open-rectangle :wk "blank out region-rectangle")
-  "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
-  "t" '(string-rectangle :wk "replace rectangle with string")
-  "w" '(window-configuration-to-register :wk "store window configuration to register")
-  "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
+  (+config/leader-register
+    "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
+    "c" '(clear-rectangle :wk "blank out region-rectangle")
+    "d" '(delete-rectangle :wk "delete region-rectangle")
+    "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
+    "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
+    "m" '(bookmark-set :wk "set bookmark")
+    "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
+    "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
+    "o" '(open-rectangle :wk "blank out region-rectangle")
+    "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
+    "t" '(string-rectangle :wk "replace rectangle with string")
+    "w" '(window-configuration-to-register :wk "store window configuration to register")
+    "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
 #+end_src
 **** window
-#+begin_src emacs-lisp -n
-;; window
-(+config/leader-window
-  "C-o" '(delete-other-windows :wk "delete other windows")
-  "[" '(evil-window-left :wk "left window")
-  "]" '(evil-window-right :wk "right window")
-  "+" '(enlarge-window :wk "enlarge window")
-  "-" '(shrink-window :wk "shrink window")
-  "}" '(enlarge-window-horizontally :wk "enlarge window horizontally")
-  "{" '(shrink-window-horizontally :wk "shrink window horizontally")
-  "+" 'evil-window-increase-height
-  "-" 'evil-window-decrease-height
-  ":" 'evil-ex
-  "<" 'evil-window-decrease-width
-  "=" 'balance-windows
-  ">" 'evil-window-increase-height
-  "_" 'evil-window-set-height
-  "b" 'evil-window-bottom-right
-  "c" 'evil-window-delete
-  "d" '(delete-window :wk "delete window")
-  "h" 'evil-window-left
-  "f" '(ffap-other-window :wk "ffap other window")
-  "j" 'evil-window-down
-  "k" 'evil-window-up
-  "l" 'evil-window-right
-  "n" 'evil-window-new
-  "p" 'evil-window-mru
-  "q" 'evil-quit
-  "r" 'evil-window-rotate-downwards
-  "R" 'evil-window-rotate-upwards
-  "s" 'evil-window-split
-  "T" '(tear-off-window :wk "tear off window")
-  "t" 'evil-window-top-left
-  "u" 'winner-undo
-  "v" 'evil-window-vsplit
-  "w" '(other-window :wk "other window")
-  "W" 'evil-window-prev
-  "x" 'evil-window-exchange
-  "|" 'evil-window-set-width
-  "<left>" 'evil-window-left
-  "<right>" 'evil-window-right
-  "<down>" 'evil-window-down
-  "<up>" 'evil-win-up)
+For window navigation.
+#+begin_src emacs-lisp
+  (+config/leader-window
+    "C-o" '(delete-other-windows :wk "delete other windows")
+    "[" '(evil-window-left :wk "left window")
+    "]" '(evil-window-right :wk "right window")
+    "+" '(enlarge-window :wk "enlarge window")
+    "-" '(shrink-window :wk "shrink window")
+    "}" '(enlarge-window-horizontally :wk "enlarge window horizontally")
+    "{" '(shrink-window-horizontally :wk "shrink window horizontally")
+    "+" 'evil-window-increase-height
+    "-" 'evil-window-decrease-height
+    ":" 'evil-ex
+    "<" 'evil-window-decrease-width
+    "=" 'balance-windows
+    ">" 'evil-window-increase-height
+    "_" 'evil-window-set-height
+    "b" 'evil-window-bottom-right
+    "c" 'evil-window-delete
+    "d" '(delete-window :wk "delete window")
+    "h" 'evil-window-left
+    "f" '(ffap-other-window :wk "ffap other window")
+    "j" 'evil-window-down
+    "k" 'evil-window-up
+    "l" 'evil-window-right
+    "n" 'evil-window-new
+    "p" 'evil-window-mru
+    "q" 'evil-quit
+    "r" 'evil-window-rotate-downwards
+    "R" 'evil-window-rotate-upwards
+    "s" 'evil-window-split
+    "T" '(tear-off-window :wk "tear off window")
+    "t" 'evil-window-top-left
+    "u" 'winner-undo
+    "v" 'evil-window-vsplit
+    "w" '(other-window :wk "other window")
+    "W" 'evil-window-prev
+    "x" 'evil-window-exchange
+    "|" 'evil-window-set-width
+    "<left>" 'evil-window-left
+    "<right>" 'evil-window-right
+    "<down>" 'evil-window-down
+    "<up>" 'evil-win-up)
 #+end_src
 
 ***** footer :noexport:
@@ -769,14 +831,6 @@ Consult have too many commands it warrants a special heading in this keybindings
     "r SPC" '(point-to-register :wk "store current point to register")
     )
 #+end_src
-
-***** ripgrep
-#+begin_src emacs-lisp
-  (with-eval-after-load 'rg
-    (+config/leader-search
-     "R" 'consult-ripgrep))
-#+end_src
-
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-general)
@@ -798,28 +852,28 @@ I suppose here is the most external packages used.
 A megapack of [[https://github.com/doomemacs/themes][themes for GNU Emacs]]. I'm not the kind of guy who enjoys /[[https://wiki.installgentoo.com/index.php/GNU/Linux_ricing][ricing]]/, I look every once in a while for a nice colorscheme and then I just stick it everywhere else. Been a /solarized/ fans most of the time, now I'm trying /[[https://www.nordtheme.com/][nord]]/.
 #+name: doom-themes
 #+begin_src emacs-lisp
-(use-package doom-themes
-  :demand t
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-nord t)
+  (use-package doom-themes
+    :demand t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    (load-theme 'doom-nord t)
 
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  ;; (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
-  (doom-themes-treemacs-config)
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
+    ;; Enable custom neotree theme (all-the-icons must be installed!)
+    ;; (doom-themes-neotree-config)
+    ;; or for treemacs users
+    (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+    (doom-themes-treemacs-config)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
 #+end_src
 **** [[https://github.com/seagle0128/doom-modeline][doom-modeline]] :external:
 A fancy and fast mode-line inspired by [[https://github.com/seagle0128/doom-modeline][minimalism design]]. I'm using their themes, why not the modeline as well? I used mostly the default settings apart from project detection and indent info for showing the current indentation style (useful when editing yaml files).
 #+name: doom-modeline
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package doom-modeline
     :init
     (doom-modeline-mode 1)
@@ -829,10 +883,10 @@ A fancy and fast mode-line inspired by [[https://github.com/seagle0128/doom-mode
     (setq doom-modeline-indent-info t))
 
 #+end_src
-**** modus-vivendi :disabled:archive:
+**** modus-vivendi :disabled:archive:noexport:
 I use this theme when I'm not using any external theme.
 #+name: modus-vivendi
-#+begin_src emacs-lisp -n :tangle no :noweb no
+#+begin_src emacs-lisp :tangle no :noweb no
   (use-package custom
     :straight nil
     :init
@@ -841,22 +895,24 @@ I use this theme when I'm not using any external theme.
 *** [[https://github.com/abo-abo/ace-window][ace-window]] :external:
 #+name: ace-window
 #+begin_src emacs-lisp
-    (use-package ace-window
-      :config
-      (setq aw-keys '(?q ?w ?e ?r ?t ?a ?s ?d ?f ?z ?x ?c ?v)
-            aw-background nil
-            aw-frame-size 2)
-      (custom-set-faces
-       '(aw-leading-char-face
-         ((t (:inherit ace-jump-face-foreground :height 4.0)))))
-      :bind ([remap other-window] . ace-window))
+  (use-package ace-window
+    :config
+    (setq aw-keys '(?q ?w ?e ?r ?t ?a ?s ?d ?f ?z ?x ?c ?v)
+          aw-background nil
+          aw-scope 'frame
+          aw-frame-size 2)
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 4.0)))))
+    :bind ([remap other-window] . ace-window))
 #+end_src
+Setting =aw-scope= to =frame= so it doesn't select other frames.
 *** [[https://github.com/domtronn/all-the-icons.el][all-the-icons]] :external:
 A utility package to collect various Icon Fonts and propertize them within Emacs.
 #+name: all-the-icons
 #+begin_src emacs-lisp 
-(use-package all-the-icons
-  :if (display-graphic-p))
+  (use-package all-the-icons
+    :if (display-graphic-p))
 #+end_src
 This needs a manual intervention from the user to install the fonts (by running the =all-the-icons-install-fonts= command).
 *** [[https://github.com/purcell/page-break-lines][page-break-lines]]
@@ -870,8 +926,7 @@ An extensible emacs[[https://github.com/emacs-dashboard/emacs-dashboard][ dashbo
 
 My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer/ each time I opened a new /Emacs/ frame.
 #+name: dashboard
-#+begin_src emacs-lisp -n
-  ;; use-package with package.el:
+#+begin_src emacs-lisp
   (use-package dashboard
     :demand t
     :config
@@ -902,28 +957,29 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
 *** [[https://github.com/justbur/emacs-which-key][which-key]] :external:
 Emacs package that displays available keybindings in popup. This is one of the top /Emacs/ packages that I must have in my configuration.
 #+name: which-key
-#+begin_src emacs-lisp -n
-(use-package which-key
-  :demand t
-  :custom
-  (which-key-lighter "")
-  (which-key-sort-order #'which-key-key-order-alpha)
-  (which-key-sort-uppercase-first nil)
-  (which-key-add-column-padding 1)
-  (which-key-max-display-columns nil)
-  (which-key-min-display-lines 6)
-  (which-key-compute-remaps t)
-  (which-key-side-window-slot -10)
-  (which-key-separator " → ")
-  (which-key-allow-evil-operators t)
-  (which-key-use-C-h-commands t)
-  (which-key-show-remaining-keys t)
-  (which-key-show-prefix 'bottom)
-  :config
-  (which-key-mode)
-  (which-key-setup-side-window-bottom)
-  (which-key-setup-minibuffer)
-  (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
+#+begin_src emacs-lisp
+  (use-package which-key
+    :demand t
+    :custom
+    (which-key-lighter "")
+    (which-key-sort-order #'which-key-key-order-alpha)
+    (which-key-sort-uppercase-first nil)
+    (which-key-add-column-padding 1)
+    (which-key-max-display-columns nil)
+    (which-key-min-display-lines 6)
+    (which-key-compute-remaps t)
+    (which-key-side-window-slot -10)
+    (which-key-separator " → ")
+    (which-key-allow-evil-operators t)
+    (which-key-use-C-h-commands t)
+    (which-key-show-remaining-keys t)
+    (which-key-show-prefix 'bottom)
+    (which-key-show-operator-state-maps t)
+    :config
+    (which-key-mode)
+    (which-key-setup-side-window-bottom)
+    (which-key-setup-minibuffer)
+    (define-key which-key-mode-map (kbd "C-x <f5>") 'which-key-C-h-dispatch))
 #+end_src
 *** Fonts
 #+name: fonts
@@ -940,7 +996,7 @@ the =:height= value is 1/10 pt.
     :init
     (global-font-lock-mode t))
 #+end_src
-**** [[https://github.com/mohkale/all-the-icons-nerd-fonts][all-the-icons-nerd-fonts]] :archive:disabled:
+**** [[https://github.com/mohkale/all-the-icons-nerd-fonts][all-the-icons-nerd-fonts]] :archive:disabled:noexport:
 Nerd font integration for all-the-icons.
 #+name: all-the-icons-nerd-fonts
 #+begin_src emacs-lisp :tangle no
@@ -1001,14 +1057,14 @@ Since /Emacs/ is a [[https://www.emacswiki.org/emacs/SelfDocumentation][self-doc
 *** hl-line :builtin:
 Enable line highlighting in all buffers.
 #+name: hl-line
-#+begin_src emacs-lisp -n
-(use-package hl-line
-  :config
-  (global-hl-line-mode 1))
-#+end_src
-*** nerd-icons :external:archive:
-#+name: nerd-icons
 #+begin_src emacs-lisp
+  (use-package hl-line
+    :config
+    (global-hl-line-mode 1))
+#+end_src
+*** nerd-icons :external:archive:disabled:noexport:
+#+name: nerd-icons
+#+begin_src emacs-lisp :tangle no
   (use-package nerd-icons
     :custom
     ;; The Nerd Font you want to use in GUI
@@ -1017,7 +1073,7 @@ Enable line highlighting in all buffers.
     (nerd-icons-font-family "Symbols Nerd Font Mono"))
 #+end_src
 
-*** nerd-fonts :external:archive:
+*** nerd-fonts :external:archive:noexport:disabled:
 [[https://github.com/twlz0ne/nerd-fonts.el/][This package]] still not available at /Melpa/, so I have to clone it as a submodule.
 in /archlinux/, these fonts is conveniently grouped in [[https://archlinux.org/groups/x86_64/nerd-fonts/][nerd-fonts]], which is needed for this and the =nerd-icons= package.
 #+name: nerd-fonts
@@ -1026,6 +1082,7 @@ in /archlinux/, these fonts is conveniently grouped in [[https://archlinux.org/g
     :load-path "site-lisp/nerd-fonts")
 #+end_src
 *** paren :builtin:
+This built-in package is necessary when dealing with /Emacs lisp/.
 #+name: paren
 #+begin_src emacs-lisp
 (use-package paren
@@ -1145,6 +1202,7 @@ Usually configurations related to file manipulations.
     (require-final-newline t))
 #+end_src
 *** saveplace
+When closing a file (like when exiting /Emacs/ or killing a buffer), the point (or cursor) in that buffer will be saved. I find this a must-have feature.
 #+name: saveplace
 #+begin_src emacs-lisp
   (use-package saveplace
@@ -1154,6 +1212,7 @@ Usually configurations related to file manipulations.
     (save-place-file (expand-file-name "places" user-emacs-directory)))
 #+end_src
 *** autorevert
+Here I'm using =global-auto-revert-mode= to automatically revert all opened buffer.
 #+name: autorevert
 #+begin_src emacs-lisp
 (use-package autorevert
@@ -1166,22 +1225,24 @@ Usually configurations related to file manipulations.
   (auto-revert-stop-on-user-input t))
 #+end_src
 *** savehist
+Saving the /minibuffer/ history.
 #+name: savehist
 #+begin_src emacs-lisp
-(use-package savehist
-  :init
-  (savehist-mode 1)
-  :custom
-  (savehist-file (expand-file-name "history" user-emacs-directory))
-  (savehist-coding-system 'utf-8)
-  (savehist-additional-variables
-   '(evil-jumps-history
-     kill-ring
-     register-alist
-     mark-ring
-     global-mark-ring
-     search-ring
-     regexp-search-ring)))
+  (use-package savehist
+    :init
+    (savehist-mode 1)
+    :custom
+    (savehist-file (expand-file-name "history" user-emacs-directory))
+    (savehist-coding-system 'utf-8)
+    (savehist-additional-variables
+     '(evil-jumps-history
+       command-history
+       kill-ring
+       register-alist
+       mark-ring
+       global-mark-ring
+       search-ring
+       regexp-search-ring)))
 #+end_src
 *** recentf
 #+name: recentf
@@ -1207,14 +1268,15 @@ Usually configurations related to file manipulations.
      "^/\\(?:ssh\\|su\\|sudo\\)?:" ;; ignore tramp/ssh files
      (concat "^" (regexp-quote (or (getenv "XDG_RUNTIME_DIR")))))))
 #+end_src
+Even though I use /consult-find-file/ the actual /recentf/ package is still used (I think).
 *** server
 #+name: server
 #+begin_src emacs-lisp
-(use-package server
-  :config
-  (unless (server-running-p)
-    (server-start))
-  (require 'org-protocol))
+  (use-package server
+    :config
+    (unless (server-running-p)
+      (server-start))
+    (require 'org-protocol))
 #+end_src
 *** prog-mode
 #+name: prog-mode
@@ -1227,30 +1289,54 @@ Usually configurations related to file manipulations.
            )
     :config
     (setq prettify-symbols-alist
-          '(("|>" . "▷")
-            ("<|" . "◁")
+          '(("|>" . "▷ ")
+            ("<|" . "◁ ")
             ("->>" . "↠  ")
-            ("->" . "→ ")
-            ("<-" . "← ")
-            ("=>" . "⇒"))))
+            ("->" . "→  ")
+            ("<-" . "←  ")
+            ("=>" . "⇒ ")
+            ("<=" . "≤")
+            (">=" . "≥"))))
 #+end_src
+Basically, in =prog-mode=, some combination of characters will look different.
 *** bookmark 
 #+name: bookmark
 #+begin_src emacs-lisp
-(use-package bookmark
-  :custom
-  (bookmark-save-flag 1)
-  (bookmark-default-file (expand-file-name ".bookmark" user-emacs-directory)))
+  (use-package bookmark
+    :custom
+    (bookmark-save-flag 1)
+    (bookmark-default-file (expand-file-name ".bookmark" user-emacs-directory)))
+#+end_src
+The configuration for /bookmark/.
+*** proced
+#+begin_src emacs-lisp
+  (use-package proced
+    :straight nil
+    :config
+    (setq proced-enable-color-flag t
+          proced-auto-update-interval 3
+          proced-sort 'pmem))
 #+end_src
 *** tramp
 #+name: tramp
 #+begin_src emacs-lisp
   (use-package tramp
     :straight nil
+    :config
+    (setq tramp-remote-path
+          (append '("~/.guix-profile/bin" "~/.guix-profile/sbin"
+                    "~/.config/guix/current/bin" "~/.config/guix/current/sbin"
+                    "/run/current-system/profile/bin"
+                    "/run/current-system/profile/sbin")
+                  tramp-remote-path))
+    (connection-local-set-profile-variables
+     'guix-system
+     '((tramp-remote-path . (tramp-own-remote-path))))
     :custom
     (tramp-backup-directory-alist backup-directory-alist)
     (tramp-auto-save-directory (expand-file-name ".tramp-autosave/" user-emacs-directory)))
 #+end_src
+I'm still figuring out how to do a proper /TRAMP/ connection into a /guix-system/ machine.
 *** epg-config
 #+name: epg-config
 #+begin_src emacs-lisp
@@ -1259,6 +1345,7 @@ Usually configurations related to file manipulations.
     :custom
     (epg-pinentry-mode 'loopback))
 #+end_src
+This is for /Gnupg/.
 *** simple
 #+name: simple
 #+begin_src emacs-lisp
@@ -1277,6 +1364,7 @@ Usually configurations related to file manipulations.
     (with-eval-after-load 'evil
       (evil-set-initial-state #'message-mode 'insert)))
 #+end_src
+The important part is the /Evil/ integration, which is should be handled already by /evil-collection/.
 *** vc-hooks
 By default visiting / opening symlinked file will ask if we want to visit the actual file.
 #+begin_src emacs-lisp
@@ -1430,9 +1518,18 @@ I call this framework since usually these packages are what people use together,
                     (redirect-frame-focus corfu--frame
                                           (or (frame-parent corfu--frame)
                                               exwm-workspace--current)))))
+    (defun corfu-enable-in-minibuffer ()
+      "Enable Corfu in the minibuffer."
+      (when (local-variable-p 'completion-at-point-functions)
+        ;; (setq-local corfu-auto nil) ;; Enable/disable auto completion
+        (setq-local corfu-echo-delay nil ;; Disable automatic echo and popup
+                    corfu-popupinfo-delay nil)
+        (corfu-mode 1)))
+    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
     :init
     (global-corfu-mode))
 #+end_src
+This is the basic configuration, with the addition of enabling corfu in the minibuffer.
 **** consult
 ***** Basic Configuration
 #+name: consult
@@ -1490,8 +1587,8 @@ I call this framework since usually these packages are what people use together,
   ;;;; 5. No project support
     ;; (setq consult-project-function nil))
   )
-
 #+end_src
+Apart from the =consult-projectile-function=, this is pretty much the default.
 
 **** orderless
 ***** Basic Configuration
@@ -1534,12 +1631,14 @@ I call this framework since usually these packages are what people use together,
                    nil
                    (window-parameters (mode-line-format . none)))))
 #+end_src
+This is a package that I should learn more, but the configuration is overwhealming.
 **** embark-consult
 #+begin_src emacs-lisp
   (use-package embark-consult
     :hook
     (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
+/consult/ integration for /embark/.
 **** cape
 #+begin_src emacs-lisp
   (use-package cape
@@ -1581,7 +1680,7 @@ I call this framework since usually these packages are what people use together,
     ;;(add-hook 'completion-at-point-functions #'cape-line)
   )
 #+end_src
-**** nerd-icons-corfu :disabled:archive:
+**** nerd-icons-corfu :disabled:archive:noexport:
 :PROPERTIES:
 :header-args: :tangle no
 :END:
@@ -1596,7 +1695,7 @@ I call this framework since usually these packages are what people use together,
           ;; ...
           (t :style "cod" :icon "code" :face font-lock-warning-face))))
 #+end_src
-**** nerd-icons-completion :disabled:archive:
+**** nerd-icons-completion :disabled:archive:noexport:
 :PROPERTIES:
 :header-args: :tangle no
 :END:
@@ -1649,7 +1748,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
   :config
   (eshell-syntax-highlighting-global-mode +1))
 #+end_src
-*** esh-autosuggest :disabled:archive:
+*** esh-autosuggest :disabled:archive:noexport:
 #+name: esh-autosuggest
 #+begin_src emacs-lisp :tangle no
 (use-package esh-autosuggest
@@ -1766,13 +1865,6 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :init
     (unless (display-graphic-p)
       (corfu-terminal-mode +1)))
-#+end_src
-*** exec-path-from-shell
-#+begin_src emacs-lisp
-  (use-package exec-path-from-shell
-    :config
-    (when (memq window-system '(mac ns x))
-      (exec-path-from-shell-initialize)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
@@ -1932,7 +2024,6 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
 *** eldoc
 #+begin_src emacs-lisp
   (use-package eldoc
-    :ensure t
     :hook ((emacs-lisp-mode
             lisp-interaction-mode
             ielm-mode) . eldoc-mode))
@@ -2333,11 +2424,20 @@ Magit commit with the help of gpt.
 #+begin_src emacs-lisp
   (use-package magit-gptcommit
     :demand t
+    :hook (gptel-mode . visual-line-mode)
     :after gptel magit
     :config
     (setq magit-gptcommit-llm-provider `(make-llm-gemini :key ,(password-store-get "google.com/gemini_api_key")))
     (magit-gptcommit-mode 1)
     (magit-gptcommit-status-buffer-setup)
+    (with-eval-after-load 'general
+      (+config/leader-go
+        "c" '(:ignore t :wk "chat")
+        "cm" 'gptel-menu
+        "cc" 'gptel
+        "cs" 'gptel-send
+        "ca" 'gptel-add-context
+        "cA" 'gptel-abort))
     :bind (:map git-commit-mode-map
                 ("C-c C-g" . magit-gptcommit-commit-accept)))
 #+end_src
@@ -2492,6 +2592,7 @@ This package looks promising, I'll wait until it mature a bit.
       (push '("[ ]" . "☐") prettify-symbols-alist)
       (push '("[X]" . "☑") prettify-symbols-alist)
       (prettify-symbols-mode))
+    (require 'org-tempo)
     :custom
     (org-replace-disputed-keys t)
     (org-indirect-buffer-display 'current-window)
@@ -2890,12 +2991,19 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
     :defer t)
 #+end_src
 *** direnv
-*** ox-hugo :archive:
+*** ox-hugo
 Blogging tools
 #+name: ox-hugo
 #+begin_src emacs-lisp
   (use-package ox-hugo
     :after ox)
+#+end_src
+*** exec-path-from-shell
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :config
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
@@ -4248,8 +4356,7 @@ Run this for any buffer you want to skewer."
            (python-mode . lsp-ui-doc-mode)
            ;; (python-mode . guess-style-guess-tab-mode)
            (python-mode-local-vars . (lambda ()
-                                       (lsp-deferred)
-                                       (tree-sitter))))
+                                       (lsp-deferred))))
     :config
     (if (executable-find "ipython")
         (setq python-interpreter (executable-find "ipython"))
@@ -4257,7 +4364,7 @@ Run this for any buffer you want to skewer."
     (when (featurep 'projectile)
       (add-to-list 'projectile-globally-ignored-directories "^\\.venv$"))
     (let ((directories `("/usr/bin/" "/usr/local/bin/" "/opt/bin" ,(expand-file-name ".local/bin/" (getenv "HOME")))))
-      (dolist (directory directories) (when (file-directory-p directory)(add-to-list 'python-shell-exec-path directory))))
+      (dolist (directory directories) (when (file-directory-p directory) (add-to-list 'python-shell-exec-path directory))))
     (setq python-indent-guess-indent-offset nil
           python-shell-completion-native-enable nil
           python-shell-exec-path (list "/usr/bin/" "/usr/local/bin" (expand-file-name ".local/bin/" (getenv "HOME")))
@@ -4346,7 +4453,7 @@ Run this for any buffer you want to skewer."
                            (lsp-ui-doc-mode)))
     :config
     (setq lsp-pyright-python-executable-cmd
-          (if (executable-find "python3")
+          (if (executable-find "python3.12")
               (executable-find "python3")
             "python")))
 #+end_src
@@ -4372,9 +4479,7 @@ Run this for any buffer you want to skewer."
     :commands pipenv-project-p
     :hook (python-mode . pipenv-mode)
     :init
-    (setq pipenv-projectile-after-switch-function
-          #'pipenv-projectile-after-switch-extended
-          pipenv-executable (executable-find "pipenv"))
+    (setq pipenv-executable (executable-find "pipenv"))
     :config
     (with-eval-after-load 'general
       (+config/local-leader
