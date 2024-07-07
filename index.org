@@ -1410,7 +1410,7 @@ I call this framework since usually these packages are what people use together,
     (corfu-preselect 'prompt)
     (completion-cycle-threshold 3)
     :config
-    (with-eval-after-load exwm
+    (with-eval-after-load 'exwm
       (advice-add #'corfu--make-frame :around
                   (defun +corfu--make-frame-a (oldfun &rest args)
                     (cl-letf (((symbol-function #'frame-parent)
