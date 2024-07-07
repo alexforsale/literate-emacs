@@ -29,6 +29,15 @@
 [[./assets/img/emacs.png][file:assets/img/emacs.png]]
 
 This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mode]] which allows me to create an actual configuration file (by /[[https://orgmode.org/manual/Extracting-Source-Code.html][tangling]]/ this one =org= file), automatically export it into /HTML/ (and also publish it to my [[https://alexforsale.github.io/literate-emacs/][github page]] using /[[https://github.com/features/actions][github-action]]/), and also makes it easier to maintain.
+
+I mainly use this configuration in /[[https://archlinux.org/][archlinux]]/, as per this writing, the default /Emacs/ [[https://archlinux.org/packages/extra/x86_64/emacs/][package]] uses this configuration options:
+#+begin_src emacs-lisp :exports both
+  system-configuration-options
+#+end_src
+
+#+RESULTS:
+: --sysconfdir=/etc --prefix=/usr --libexecdir=/usr/lib --with-tree-sitter --localstatedir=/var --with-cairo --disable-build-details --with-harfbuzz --with-libsystemd --with-modules --with-x-toolkit=gtk3 'CFLAGS=-march=x86-64 -mtune=generic -O2 -pipe -fno-plt -fexceptions         -Wp,-D_FORTIFY_SOURCE=3 -Wformat -Werror=format-security         -fstack-clash-protection -fcf-protection         -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -g -ffile-prefix-map=/build/emacs/src=/usr/src/debug/emacs -flto=auto' 'LDFLAGS=-Wl,-O1 -Wl,--sort-common -Wl,--as-needed -Wl,-z,relro -Wl,-z,now          -Wl,-z,pack-relative-relocs -flto=auto'
+
 * How to use this configuration
 - clone this repository locally (usually in =~/.config/emacs= directory).
 - First time only: open the [[file:./index.org/]] file once with /Emacs/ and run the command =org-babel-tangle= (or using the ~C-c C-v t~ keybinding).
