@@ -360,7 +360,7 @@ What I'm doing before is setting the /general/ keybindings inside their respecti
 I prefer to have the keybindings inside the /use-package/ declaration, this way if I decided not to use the package(s), their custom keybindings will also be removed. The other way for this is to use the =:demand t= keyword, with the down side of having a longer initialization time.
 *** Packages keybindings
 **** First level menu
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; First level menu
 (+config/leader-menu! "activities" "C-a")
 (+config/leader-menu! "buffer" "b")
@@ -380,7 +380,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 (+config/leader-menu! "window" "w")
 #+end_src
 **** First level keybinding
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; keybindings
 (+config/leader-key
   ";" 'pp-eval-expression
@@ -389,7 +389,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   "u" 'universal-argument)
 #+end_src
 **** buffer
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; buffer
 (+config/leader-buffer
   "[" '(previous-buffer :wk "previous buffer")
@@ -415,7 +415,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 #+end_src
 **** Editing
 ***** smartparens
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (with-eval-after-load 'smartparens
     (general-nvmap
      :keymaps 'smartparens-mode-map
@@ -428,7 +428,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
      "M-DEL" 'sp-unwrap-sexp))
 #+end_src
 **** dired
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 (general-nvmap
   'dired-mode-map
   "g$" 'dired-hide-subdir
@@ -441,7 +441,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   "gy" 'dired-show-file-type)
 #+end_src
 **** files
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; files
 (+config/leader-files
   "D" 'dired
@@ -455,14 +455,14 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   "w" '(find-file-other-window :wk "find file other window"))
 #+end_src
 **** find
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; find
 (+config/leader-find
   "g" 'grep
   "r" '(rgrep :wk "recursive grep"))
 #+end_src
 **** help
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; help
 (+config/leader-key
   "h" (general-simulate-key "C-h"
@@ -472,13 +472,13 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
         :which-key "Help"))
 #+end_src
 **** insert
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; insert
 (+config/leader-insert
   "u" '(insert-char :wk "insert character"))
 #+end_src
 **** mark
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; mark
 (+config/leader-mark
   "m" '(bookmark-set :wk "set bookmark")
@@ -494,13 +494,13 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   "r" '(bookmark-rename :wk "rename bookmark"))
 #+end_src
 **** open
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; open
 (+config/leader-open
   "i" '((lambda () (interactive) (find-file user-init-file)) :wk "open Emacs configuration file"))
 #+end_src
 **** org-mode
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 (general-define-key
  :keymaps 'override
  "C-c l" '(org-store-link :wk "Store link")
@@ -595,14 +595,14 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   "it" '(org-insert-time-stamp :wk "insert time-stamp at point"))
 #+end_src
 **** quit
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; quit
 (+config/leader-quit
   "q" '(save-buffers-kill-terminal :wk "quit and save")
   "R" '(restart-emacs :wk "restart Emacs"))
 #+end_src
 **** register
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 ;; register
 (+config/leader-register
   ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
@@ -2772,7 +2772,7 @@ This package looks promising, I'll wait until it mature a bit.
     (auth-source-pass-enable))
 #+end_src
 /Elpaca/ complains about different of /pass/ version installed. But it installed just fine.
-*** rg :archive:
+*** rg
 Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the executable not found.
 #+name: rg
 #+begin_src emacs-lisp
