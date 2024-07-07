@@ -378,6 +378,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 (+config/leader-menu! "tab" "t TAB")
 (+config/leader-menu! "vterm" "tv")
 (+config/leader-menu! "window" "w")
+(+config/leader-menu! "search" "/")
 #+end_src
 **** First level keybinding
 #+begin_src emacs-lisp
@@ -412,6 +413,82 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   "R" '(rename-buffer :wk "rename buffer")
   "x" '((lambda () (interactive) (switch-to-buffer "*scratch*")) :wk "switch to scratch buffer")
   "z" '(bury-buffer :wk "bury buffer"))
+#+end_src
+**** consult
+Consult have too many commands it warrants a special heading in this keybindings.
+***** global
+#+begin_src emacs-lisp
+  (with-eval-after-load 'consult
+    (general-define-key
+     [remap Info-search] 'consult-info
+     [remap yank-pop] 'consult-yank-pop)
+
+    (+config/leader-key
+      "M-g" '(:ignore t :wk "consult")
+      "M-g M-:" 'consult-mode-command
+      "M-g e" 'consult-compile-error
+      "M-g G" 'consult-git-grep
+      "M-g h" 'consult-history
+      "M-g k" 'consult-kmacro
+      "M-g m" 'consult-man
+      "M-g i" 'consult-info
+      "M-g :" 'consult-complex-command
+      "M-g b" 'consult-bookmark))
+#+end_src
+***** search
+#+begin_src emacs-lisp
+  (with-eval-after-load 'consult
+    (+config/leader-search
+      "c" 'consult-locate
+      "d" 'consult-find
+      "4" '(:ignore t :wk "other window")
+      "4 b" 'consult-buffer-other-window
+      "5" '(:ignore t :wk "other frame")
+      "5 b" 'consult-buffer-other-frame
+      "b" 'consult-buffer
+      "B" 'consult-project-buffer
+      "g" 'consult-goto-line
+      "m" '(:ignore t :wk "imenu")
+      "m" 'consult-imenu
+      "M" 'consult-imenu-multi
+      "M-g" 'consult-goto-line
+      "l" 'consult-line
+      "L" 'consult-line-multi
+      "k" 'consult-keep-lines
+      "s" '(:ignore t :wk "isearch")
+      "e" 'consult-isearch-history
+      "u" 'consult-focus-lines)
+    (general-define-key
+      :keymaps 'minibuffer-local-map
+      "M-s" 'consult-history
+      "M-r" 'consult-history))
+#+end_src
+***** bookmark
+#+begin_src emacs-lisp
+  (with-eval-after-load 'consult
+    (+config/leader-search
+      "b" '(:ignore t :wk "bookmark")
+      "bb" 'consult-bookmark
+      "bk" 'consult-global-mark
+      "bm" 'consult-mark))
+#+end_src
+***** register
+#+begin_src emacs-lisp
+  (with-eval-after-load 'consult
+    (+config/leader-search
+      "r" '(:ignore t :wk "register")
+      "r #" '(consult-register :wk "consult-register") ;; require `consult' package
+      ))
+#+end_src
+***** isearch
+#+begin_src emacs-lisp
+  (with-eval-after-load 'consult
+    (general-define-key
+     :keymaps 'isearch-mode-map
+     "M-e" 'consult-isearch-history
+     "M-s e" 'consult-isearch-history
+     "M-s l" 'consult-line
+     "M-s L" 'consult-line-multi))
 #+end_src
 **** Editing
 ***** smartparens
@@ -605,29 +682,17 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 #+begin_src emacs-lisp
 ;; register
 (+config/leader-register
-  ;; "#" '(consult-register :wk "consult-register") ;; require `consult' package
-  "+" '(increment-register :wk "augment content of register")
-  "C-@" '(point-to-register :wk "store current point to register")
-  "C-SPC" '(point-to-register :wk "store current point to register")
   "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
-  "SPC" '(point-to-register :wk "store current point to register")
   "c" '(clear-rectangle :wk "blank out region-rectangle")
   "d" '(delete-rectangle :wk "delete region-rectangle")
-  "f" '(frameset-to-register :wk "store frameset to register")
-  "g" '(insert-register :wk "insert register")
-  "i" '(insert-register :wk "insert register")
-  "j" '(jump-to-register :wk "jump to register")
   "k" '(kill-rectangle :wk "cut rectangle into killed-rectangle")
   "l" '(bookmark-bmenu-list :wk "display existing bookmarks")
   "m" '(bookmark-set :wk "set bookmark")
   "M" '(bookmark-set-no-overwrite :wk "set bookmark no overwrite")
-  "n" '(number-to-register :wk "store a number in a register")
   "N" '(rectangle-number-lines :wk "insert number in front of region-rectangle")
   "o" '(open-rectangle :wk "blank out region-rectangle")
   "r" '(copy-rectangle-to-register :wk "copy rectangle-region to register")
-  "s" '(copy-to-register :wk "copy region to register")
   "t" '(string-rectangle :wk "replace rectangle with string")
-  "x" '(copy-to-register :wk "copy region to register")
   "w" '(window-configuration-to-register :wk "store window configuration to register")
   "y" '(yank-rectangle :wk "yank last killed rectangle with upper left corner at point"))
 #+end_src
@@ -681,6 +746,31 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 #+begin_src emacs-lisp -n
   (provide 'config-keybindings)
   ;;; config-keybindings.el ends.here
+#+end_src
+
+**** search
+#+begin_src emacs-lisp
+  (+config/leader-search
+    "r" '(:ignore t :wk "register")
+    "rf" '(frameset-to-register :wk "store frameset to register")
+    "rg" '(insert-register :wk "insert register")
+    "ri" '(insert-register :wk "insert register")
+    "rj" '(jump-to-register :wk "jump to register")
+    "rn" '(number-to-register :wk "store a number in a register")
+    "rs" '(copy-to-register :wk "copy region to register")
+    "rx" '(copy-to-register :wk "copy region to register")
+    "r+" '(increment-register :wk "augment content of register")
+    "r C-@" '(point-to-register :wk "store current point to register")
+    "r C-SPC" '(point-to-register :wk "store current point to register")
+    "r SPC" '(point-to-register :wk "store current point to register")
+    )
+#+end_src
+
+***** ripgrep
+#+begin_src emacs-lisp
+  (with-eval-after-load 'rg
+    (+config/leader-search
+     "R" 'consult-ripgrep))
 #+end_src
 
 *** footer :noexport:
@@ -2285,6 +2375,14 @@ This package looks promising, I'll wait until it mature a bit.
   (use-package flycheck-pos-tip
     :init
     (flycheck-pos-tip-mode))
+#+end_src
+**** [[https://github.com/minad/consult-flycheck][consult-flycheck]]
+#+begin_src emacs-lisp
+  (use-package consult-flycheck
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-search
+        "f" 'consult-flycheck)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
