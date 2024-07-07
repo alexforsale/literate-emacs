@@ -237,7 +237,7 @@ This function is just a wrapper to easily merge lists.
 #+begin_src emacs-lisp
   (require 'config-mail (expand-file-name "modules/config-mail.el" user-emacs-directory) t)
 #+end_src
-*** mail
+*** programming modes
 #+begin_src emacs-lisp
   (require 'config-progmodes (expand-file-name "modules/config-progmodes.el" user-emacs-directory) t)
 #+end_src
