@@ -1767,6 +1767,13 @@ A shell-like command interpreter implemented in Emacs Lisp.
     (unless (display-graphic-p)
       (corfu-terminal-mode +1)))
 #+end_src
+*** exec-path-from-shell
+#+begin_src emacs-lisp
+  (use-package exec-path-from-shell
+    :config
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-shells)
@@ -2881,7 +2888,7 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
     :if (executable-find "rg")
     :defer t)
 #+end_src
-
+*** direnv
 *** ox-hugo :archive:
 Blogging tools
 #+name: ox-hugo
@@ -4376,16 +4383,16 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** pyvenv :external:
 #+begin_src emacs-lisp
-(use-package pyvenv
-  :config
-  (pyvenv-mode t)
-  ;; Set correct Python interpreter
-  (setq pyvenv-post-activate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter (concat pyvenv-virtual-env ".venv/bin/python3")))))
-  (setq pyvenv-post-deactivate-hooks
-        (list (lambda ()
-                (setq python-shell-interpreter "python3")))))
+  (use-package pyvenv
+    :config
+    (pyvenv-mode t)
+    ;; Set correct Python interpreter
+    (setq pyvenv-post-activate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter (concat pyvenv-virtual-env ".venv/bin/python3")))))
+    (setq pyvenv-post-deactivate-hooks
+          (list (lambda ()
+                  (setq python-shell-interpreter "python3")))))
 #+end_src
 **** flycheck-pycheckers :external:
 #+begin_src emacs-lisp
