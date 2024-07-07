@@ -1966,13 +1966,14 @@ A project interaction library for /Emacs/, with little external dependency as po
     :hook (dired-before-readin . projectile-track-known-projects-find-file-hook)
     :custom
     (projectile-cache-file (expand-file-name ".projects" user-emacs-directory))
-    (projectile-auto-discover nil)
+    (projectile-auto-discover t)
     (projectile-enable-caching (not noninteractive))
     (projectile-globally-ignored-files '("DS_Store" "TAGS"))
     (projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o"))
     (projectile-kill-buffers-filter 'kill-only-files)
     (projectile-known-projects-file (expand-file-name ".projectile_projects.eld" user-emacs-directory))
     (projectile-ignored-projects '("~/"))
+    (projectile-project-search-path `(,(expand-file-name "Projects" (getenv "HOME"))))
     (projectile-project-root-files-bottom-up
      (append '(".projectile" ".project" ".git")
              (when (executable-find "hg")
