@@ -34,7 +34,7 @@ This is the configuration for /Emacs/, written in [[https://orgmode.org/][org-mo
 - First time only: open the [[file:./index.org/]] file once with /Emacs/ and run the command =org-babel-tangle= (or using the ~C-c C-v t~ keybinding).
 - restart /Emacs/ and let the initialization process finished (will take some time for the first initialization).
 * Creating overrides
-If needed, create a file named =config-overrides= inside the =modules/= directory, to satisfy =flycheck=, use this template:
+If needed, create a file named =config-overrides.el= inside the =modules/= directory, to satisfy =flycheck=, use this template:
 #+begin_src emacs-lisp
   ;;; config-override --- various configuration overrides -*- lexical-binding: t -*-
   ;;; Commentary: your code goes here
