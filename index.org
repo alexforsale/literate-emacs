@@ -2090,7 +2090,7 @@ A project interaction library for /Emacs/, with little external dependency as po
 #+caption: highlighted uncommited changes
 [[./assets/img/emacs-diff-hl-indicator.png][file:assets/img/emacs-diff-hl-indicator.png]]
 #+name: diff-hl
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package diff-hl
     :hook (find-file . diff-hl-mode)
     :hook (vc-dir-mode . diff-hl-dir-mode)
@@ -2112,7 +2112,7 @@ A project interaction library for /Emacs/, with little external dependency as po
 *** perspective :external:
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
 #+name: perspective
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package perspective
     :config
     (setq persp-initial-frame-name "Main"
@@ -2161,7 +2161,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 *** persp-projectile :external:
 #+name: persp-projectile
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package persp-projectile
     :after perspective
     :commands projectile-persp-switch-project
@@ -2174,7 +2174,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 *** git-link :external:
 #+name: git-link
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package git-link
     :demand t
     :commands (git-link git-link-commit git-link-homepage)
@@ -2191,7 +2191,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+caption: /git messenger/ popup message
 [[./assets/img/emacs-git-messenger.png][file:assets/img/emacs-git-messenger.png]]
 #+name: git-messenger
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package git-messenger
     :config
     (with-eval-after-load 'general
@@ -2204,7 +2204,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 *** git-timemachine :external:
 #+name: git-timemachine
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package git-timemachine
     :after magit
     :config
@@ -2215,7 +2215,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 *** org-project-capture :external:
 #+name: org-project-capture
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package org-project-capture
     :bind (("C-c n p" . org-project-capture-project-todo-completing-read))
     :config
@@ -2300,10 +2300,6 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     )
 #+end_src
 **** Basic configuration
-:PROPERTIES:
-:header-args: :noweb-ref lsp-mode
-:END:
-
 ***** LSP
 #+begin_src emacs-lisp
   (use-package lsp-mode
@@ -2411,7 +2407,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 *** gptel :external:
 #+name: gptel
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package gptel
     :config
     (setq gptel-backend 
