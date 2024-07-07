@@ -2129,7 +2129,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 *** lsp :external:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
-**** old config :noexport:
+**** old config :noexport:archive:
 #+begin_src emacs-lisp -n :noweb no
   (use-package lsp-mode
     :diminish (lsp-lens-mode lsp-mode)
@@ -2206,7 +2206,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 :END:
 
 ***** LSP
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package lsp-mode
     :init
     (setq lsp-keymap-prefix "C-c C-l")
@@ -2270,12 +2270,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (lsp-completion-provider :none)
     )
 #+end_src
-***** lsp-ui 
-#+begin_src emacs-lisp -n
+**** lsp-ui 
+#+begin_src emacs-lisp
   (use-package lsp-ui
-    :after lsp-mode
-    :defer t
     :hook (lsp-mode . lsp-ui-mode)
+    :demand t
     :init
     (setq lsp-ui-sideline-enable t
           lsp-ui-sideline-update-mode 'line
@@ -2303,8 +2302,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
        "M-?" 'lsp-ui-peek-find-references))
     )
 #+end_src
-***** consult-lsp 
-#+begin_src emacs-lisp -n
+**** consult-lsp 
+#+begin_src emacs-lisp
   (use-package consult-lsp
     :after consult lsp
     :bind
@@ -2359,7 +2358,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+begin_src emacs-lisp
   (use-package flycheck
     :init
-    (global-flycheck-mode)
+    (global-flycheck-mode +1)
     :config
     (with-eval-after-load 'general
       (+config/leader-key "!"
