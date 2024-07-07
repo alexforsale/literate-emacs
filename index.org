@@ -2907,7 +2907,7 @@ Stands for /Directory Editor/ (I guess), is a builtin file manager for /Emacs/.
 #+begin_src emacs-lisp
   (use-package dired
     :straight nil
-    :commands dired-jump
+    :commands (dired dired-jump)
     :init
     (setq dired-dwim-target t ; guess a default target directory
           dired-hide-details-hide-symlink-targets nil ; don't hide symbolic link targets
@@ -2916,7 +2916,9 @@ Stands for /Directory Editor/ (I guess), is a builtin file manager for /Emacs/.
           dired-recursive-deletes 'top ; ask only for top-level
           dired-create-destination-dirs 'ask
           dired-listing-switches "-AGFhl --group-directories-first --time-style=long-iso"
-          dired-clean-confirm-killing-deleted-buffers nil))
+          dired-clean-confirm-killing-deleted-buffers nil)
+    :config
+    (setq dired-mouse-drag-files t))
 #+end_src
 The arguments for =dired-listing-switches= are:
 - =-A= :: Show hidden files (“dotfiles”), such as =.bashrc=, but omit the implied =.== and =..= targets. The latter two refer to the present and parent directory, respectively.
@@ -2932,7 +2934,9 @@ The arguments for =dired-listing-switches= are:
   (use-package image-dired
     :straight nil
     :config
-    (setq image-dired-thumb-size 150))
+    (setq image-dired-thumb-size 150
+          image-dired-thumbnail-storage 'standard
+          image-dired-external-viewer "xdg-open"))
 #+end_src
 *** dired-x
 #+name: dired-x
@@ -2964,6 +2968,7 @@ The arguments for =dired-listing-switches= are:
               ("\\.html?\\'" ,cmd)
               ("\\.md\\'" ,cmd)))))
 #+end_src
+The =dired-guess-shell-alist-user= expect us to have =xdg-open= (which is always available in my system anyway).
 *** fd-dired :external:
 Needs an external package =fd=, or =fd-find=
 #+name: fd-dired
@@ -2994,7 +2999,9 @@ Needs an external package =fd=, or =fd-find=
     :straight nil
     :config
     (setq dired-create-destination-dirs 'ask
-          dired-vc-rename-file t))
+          dired-vc-rename-file t
+          dired-isearch-filenames 'dwim
+          dired-create-destination-dirs-on-trailing-dirsep t))
 #+end_src
 *** dired-rsync
 #+name: dired-rsync
@@ -3014,6 +3021,12 @@ Needs an external package =fd=, or =fd-find=
   (use-package all-the-icons-dired
     :after all-the-icons
     :hook (dired-mode . all-the-icons-dired-mode))
+#+end_src
+*** wdired
+#+begin_src emacs-lisp
+  (use-package wdired
+    :straight nil
+    :commands (wdired-change-to-wdired-mode))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
