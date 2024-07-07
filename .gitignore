@@ -45,3 +45,4 @@ session.*
 elpaca/
 init.el
 early-init.el
+straight/
