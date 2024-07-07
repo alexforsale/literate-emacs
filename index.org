@@ -4435,6 +4435,16 @@ Run this for any buffer you want to skewer."
 #+begin_src emacs-lisp
   (use-package rustic
     :mode ("\\.rs$" . rustic-mode)
+    :bind
+    (:map rustic-mode-map
+          ("M-j" . lsp-ui-menu)
+          ("M-?" . lsp-find-references)
+          ("C-c C-c l" . flycheck-list-errors)
+                ("C-c C-c a" . lsp-execute-code-action)
+                ("C-c C-c r" . lsp-rename)
+                ("C-c C-c q" . lsp-workspace-restart)
+                ("C-c C-c Q" . lsp-workspace-shutdown)
+                ("C-c C-c s" . lsp-rust-analyzer-status))
     :init
     (with-eval-after-load 'rustic-flycheck
       (remove-hook 'rustic-mode-hook #'flycheck-mode)
@@ -4444,13 +4454,25 @@ Run this for any buffer you want to skewer."
       (defalias 'org-babel-execute:rust #'org-babel-execute:rustic))
     :config
     (add-hook 'rustic-mode-hook #'rainbow-delimiters-mode)
-    (setq rustic-indent-method-chain t
-          rustic-lsp-client 'lsp-mode)
+    (setq rustic-indent-method-chain t)
     (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
     (add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
     ;; (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append)
-    (with-eval-after-load 'lsp
-      (setq lsp-rust-analyzer-display-parameter-hints t)))
+    (when (executable-find "rustup")
+      (setq rustic-analyzer-command
+            `(,(executable-find "rustup")
+              "run"
+              "stable"
+              "rust-analyzer")))
+    ;; (with-eval-after-load 'lsp-mode
+    ;;   (setq lsp-rust-analyzer-display-parameter-hints t)
+    ;;   ;; (when (executable-find "rls")
+    ;;   ;;   (setq lsp-rust-rls-server-command (executable-find "rls")))
+    ;;   (when (executable-find "rust-analyzer")
+    ;;     (setq rustic-lsp-server (executable-find "rust-analyzer")
+    ;;           lsp-rust-server nil
+    ;;           lsp-rust-analyzer-server-command `(,(executable-find "rust-analyzer")))))
+    )
 #+end_src
 **** flycheck-rust :external:
 #+name: flycheck-rust
