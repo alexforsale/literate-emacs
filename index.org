@@ -241,6 +241,10 @@ This function is just a wrapper to easily merge lists.
 #+begin_src emacs-lisp
   (require 'config-progmodes (expand-file-name "modules/config-progmodes.el" user-emacs-directory) t)
 #+end_src
+*** local overrides
+#+begin_src emacs-lisp
+  (require 'config-overrides (expand-file-name "modules/config-overrides.el" user-emacs-directory) t)
+#+end_src
 ** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'init)

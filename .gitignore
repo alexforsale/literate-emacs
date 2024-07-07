@@ -30,6 +30,7 @@ geiser-history
 org-roam.db
 url/
 modules/
+modules/config-overrides.el
 config.el
 init.el
 early-init.el
