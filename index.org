@@ -4444,6 +4444,7 @@ Run this for any buffer you want to skewer."
   (use-package lsp-pyright
     :after lsp-mode
     :hook (python-mode . (lambda ()
+                           (require 'lsp-pyright)
                            (lsp-deferred)
                            (lsp-ui-mode)
                            (lsp-ui-doc-mode)))
@@ -4485,16 +4486,40 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** pyvenv :external:
 #+begin_src emacs-lisp
+  ;; (use-package pyvenv
+  ;;   :config
+  ;;   (pyvenv-mode +1)
+  ;;   (defun +config/set-venv-python-interpreter-and-directories ()
+  ;;     "Set correct Python interpreter and libraries."
+  ;;     (interactive)
+  ;;     (progn
+  ;;       (setq python-shell-interpreter (concat pyvenv-virtual-env ".venv/bin/python3"))
+  ;;       (add-to-list 'lsp-clients-python-library-directories (concat pyvenv-virtual-env ".venv/"))))
+
+  ;;   (defun +config/unset-venv-python-interpreter-and-directories ()
+  ;;     "Reset back Python interpreter and libraries"
+  ;;     (interactive
+  ;;      (progn
+  ;;        (setq python-shell-interpreter (executable-find "python"))
+  ;;        (setq 'lsp-clients-python-library-directories '("/usr")))))
+  ;;   :hook ((pyvenv-post-activate . +config/set-venv-python-interpreter-and-directories)
+  ;;          (pyvenv-post-deactivate . +config/unset-venv-python-interpreter-and-directories)))
+
   (use-package pyvenv
+    :after python
+    :demand t
+    :init
+    (pyvenv-mode +1)
     :config
-    (pyvenv-mode t)
     ;; Set correct Python interpreter
     (setq pyvenv-post-activate-hooks
           (list (lambda ()
-                  (setq python-shell-interpreter (concat pyvenv-virtual-env ".venv/bin/python3")))))
+                  (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")
+                        lsp-pyright-venv-path pyvenv-virtual-env))))
     (setq pyvenv-post-deactivate-hooks
           (list (lambda ()
-                  (setq python-shell-interpreter "python3")))))
+                  (setq python-shell-interpreter "python3"
+                        lsp-pyright-venv-path nil)))))
 #+end_src
 **** flycheck-pycheckers :external:
 #+begin_src emacs-lisp
