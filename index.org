@@ -3815,7 +3815,7 @@ Needs an external package =fd=, or =fd-find=
           web-mode-style-padding 1
           web-mode-script-padding 1
           web-mode-block-padding 0
-          web-mode-comment-style 2
+          web-mode-comment-style 1
           web-mode-enable-curly-brace-indentation t
           web-mode-enable-auto-quoting nil
           web-mode-engines-alist
