@@ -1391,6 +1391,21 @@ By default visiting / opening symlinked file will ask if we want to visit the ac
     :custom
     (vc-follow-symlinks t))
 #+end_src
+*** dabbrev
+This is part of /corfu/ configuration.
+#+begin_src emacs-lisp
+  ;; Use Dabbrev with Corfu!
+  (use-package dabbrev
+    ;; Swap M-/ and C-M-/
+    :bind (("M-/" . dabbrev-completion)
+           ("C-M-/" . dabbrev-expand))
+    :config
+    (add-to-list 'dabbrev-ignored-buffer-regexps "\\` ")
+    ;; Since 29.1, use `dabbrev-ignored-buffer-regexps' on older.
+    (add-to-list 'dabbrev-ignored-buffer-modes 'doc-view-mode)
+    (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
+    (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-builtins)
@@ -1519,6 +1534,7 @@ I call this framework since usually these packages are what people use together,
     (corfu-quit-no-match 'separator)
     (corfu-preselect 'prompt)
     (completion-cycle-threshold 3)
+    (text-mode-ispell-word-completion nil)
     :config
     (with-eval-after-load 'exwm
       (advice-add #'corfu--make-frame :around
@@ -1536,14 +1552,16 @@ I call this framework since usually these packages are what people use together,
                     (redirect-frame-focus corfu--frame
                                           (or (frame-parent corfu--frame)
                                               exwm-workspace--current)))))
-    (defun corfu-enable-in-minibuffer ()
-      "Enable Corfu in the minibuffer."
-      (when (local-variable-p 'completion-at-point-functions)
+    (defun corfu-enable-always-in-minibuffer ()
+      "Enable Corfu in the minibuffer if Vertico/Mct are not active."
+      (unless (or (bound-and-true-p mct--active)
+                  (bound-and-true-p vertico--input)
+                  (eq (current-local-map) read-passwd-map))
         ;; (setq-local corfu-auto nil) ;; Enable/disable auto completion
         (setq-local corfu-echo-delay nil ;; Disable automatic echo and popup
                     corfu-popupinfo-delay nil)
         (corfu-mode 1)))
-    (add-hook 'minibuffer-setup-hook #'corfu-enable-in-minibuffer)
+    (add-hook 'minibuffer-setup-hook #'corfu-enable-always-in-minibuffer 1)
     :init
     (global-corfu-mode))
 #+end_src
@@ -1617,7 +1635,7 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
     ;; Configure a custom style dispatcher (see the Consult wiki)
     ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
     ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-    (setq completion-styles '(orderless basic substring partial-completion flex)
+    (setq completion-styles '(orderless basic)
           completion-category-defaults nil
           completion-category-overrides '((file (styles partial-completion)))))
 #+end_src
@@ -1642,6 +1660,12 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
     ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
     :config
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'override
+       "C-." 'embark-act
+       "C-;" 'embark-dwim
+       "C-h B" 'embark-bindings))
 
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
@@ -1880,9 +1904,9 @@ A shell-like command interpreter implemented in Emacs Lisp.
      :repo "https://codeberg.org/akib/emacs-corfu-terminal.git"))
 
   (use-package corfu-terminal
+    :unless (display-graphic-p)
     :init
-    (unless (display-graphic-p)
-      (corfu-terminal-mode +1)))
+    (corfu-terminal-mode +1))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
