@@ -1178,14 +1178,17 @@ Usually configurations related to file manipulations.
           (set-buffer buf)
           (if (and (buffer-file-name) (buffer-modified-p))
               (basic-save-buffer)))))
-    (add-hook 'auto-save-hook 'full-auto-save)
+    (add-hook 'auto-save-visited-mode-hook 'full-auto-save)
     (nconc
      auto-mode-alist
      '(("/LICENSE\\'" . text-mode)
        ("\\.log\\'" . text-mode)
        ("rc\\'" . conf-mode)
        ("\\.\\(?:hex\\|nes\\)\\'" . hexl-mode)))
+    :hook
+    ((prog-mode text-mode) . auto-save-visited-mode)
     :custom
+    (auto-save-visited-interval 10)
     (confirm-kill-emacs #'yes-or-no-p) ; confirm when exiting
     (confirm-kill-processes nil) ; don't confirm killing processes
     (revert-without-query (list "."))
