@@ -325,6 +325,21 @@ This is a collection of Evil bindings for the parts of Emacs that Evil does not 
     (evil-collection-setup-minibuffer t)
     (evil-collection-calendar-want-org-bindings t))
 #+end_src
+*** [[https://github.com/7696122/evil-terminal-cursor-changer][evil-terminal-cursor-changer]]
+Change cursor shape and color by evil state in terminal.
+#+begin_src emacs-lisp
+  (use-package evil-terminal-cursor-changer
+    :unless (display-graphic-p)
+    :init
+    (evil-terminal-cursor-changer-activate)
+    :config
+    (setq evil-motion-state-cursor 'box)  ; █
+    (setq evil-visual-state-cursor 'box)  ; █
+    (setq evil-normal-state-cursor 'box)  ; █
+    (setq evil-insert-state-cursor 'bar)  ; ⎸
+    (setq evil-emacs-state-cursor  'hbar) ; _
+    )
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
