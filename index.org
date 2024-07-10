@@ -2316,28 +2316,29 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :hook
     (lsp-mode . lsp-enable-which-key-integration)
     (lsp-completion-mode . my/lsp-mode-setup-completion)
-    ((c-mode c++-mode xml-mode python-mode
-             yaml-mode toml-mode python-mode-local-vars
-             lua-mode jinja2-mode markdown-mode
-             json-mode html-mode
-             web-mode html-mode-local-vars-hook
-             web-mode-local-vars-hook nxml-mode-local-vars-hook
-             scss-mode-local-vars css-mode-local-vars
-             less-css-mode-local-vars css-mode
-             typescript-mode javascript-mode
-             js2-mode typescript-tsx-mode) . lsp-deferred)
+    ;; ((c-mode c++-mode xml-mode python-mode
+    ;;          yaml-mode toml-mode python-mode-local-vars
+    ;;          lua-mode jinja2-mode markdown-mode
+    ;;          json-mode html-mode
+    ;;          web-mode html-mode-local-vars-hook
+    ;;          web-mode-local-vars-hook nxml-mode-local-vars-hook
+    ;;          scss-mode-local-vars css-mode-local-vars
+    ;;          less-css-mode-local-vars css-mode
+    ;;          typescript-mode javascript-mode
+    ;;          js2-mode typescript-tsx-mode) . lsp-deferred)
     :config
     (setq lsp-toml-command
           (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
               (expand-file-name ".cargo/bin/taplo" "~")
             "taplo")
           lsp-rust-rls-server-command "rls"
-          lsp-eldoc-render-all t
+          ;;lsp-eldoc-render-all t
           lsp-enable-snippet nil
           lsp-enable-indentation nil
           lsp-prefer-flymake nil
           lsp-keep-workspace-alive nil
-          lsp-modeline-code-actions-segments '(count icon name))
+          ;; lsp-modeline-code-actions-segments '(count icon name)
+          )
     (when (featurep 'exwm)
       (advice-add #'corfu--make-frame :around
                   (defun +corfu--make-frame-a (oldfun &rest args)
