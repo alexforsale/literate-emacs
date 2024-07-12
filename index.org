@@ -1681,8 +1681,8 @@ This is a package that I should learn more, but the configuration is overwhealmi
     (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 /consult/ integration for /embark/.
-**** cape
-#+begin_src emacs-lisp
+**** cape :disabled:archive:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package cape
     ;; Bind dedicated completion commands
     ;; Alternative prefix keys: C-c p, M-p, M-+, ...
@@ -3842,6 +3842,28 @@ Needs an external package =fd=, or =fd-find=
     (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode) 'append)
     :mode "\\.vue\\'"
     :config
+    (add-to-list 'web-mode-engine-file-regexps '("django" . "\\.\\(djhtml\\|tmpl\\|dtl\\|liquid\\|j2\\|njk\\|.html\\)\\'"))
+    (setq web-mode-engines-alist
+          '(("django"  . "\\.jinja\\'")
+            ("django"  . "\\.djhtml\\'")
+            ("django"  . "\\.html\\'")
+            ("erb"     . "\\.erb\\'")
+            ("erb"     . "\\.rhtml\\'")
+            ("erb"     . "\\.ejs\\'")
+            ("php"     . "\\.phtml\\'")
+            ("php"     . "\\.php\\'")
+            ("php"     . "\\.psp\\'")
+            ("php"     . "\\.ctp\\'")
+            ("jsp"     . "\\.jsp\\'")
+            ("jsp"     . "\\.gsp\\'")
+            ("asp"     . "\\.asp\\'")
+            ("aspx"    . "\\.aspx\\'")
+            ("aspx"    . "\\.ascx\\'")
+            ("closure" . "\\.soy\\'")
+            ("lsp"     . "\\.lsp\\'")
+            ("mako"    . "\\.mako\\'")
+            ("blade"   . "\\.blade\\.")
+            ("svelte"  . "\\.svelte\\'")))
     (setq web-mode-markup-indent-offset 2
           web-mode-enable-auto-closing t
           web-mode-auto-close-style 1
@@ -3860,12 +3882,7 @@ Needs an external package =fd=, or =fd-find=
           web-mode-block-padding 0
           web-mode-comment-style 1
           web-mode-enable-curly-brace-indentation t
-          web-mode-enable-auto-quoting nil
-          web-mode-engines-alist
-          '(("php" . "\\.phtml\\'")
-            ("blade" . "\\.blade\\'")
-            ("elixir" . "\\.eex\\'")
-            ("phoenix" . "\\.[lh]eex\\'")))
+          web-mode-enable-auto-quoting nil)
     ;; web-mode-extra-auto-pairs
     ;; '(("erb" . (("beg" "end")))
     ;;   ("php" . (("beg" "end")))))
@@ -3878,7 +3895,9 @@ Needs an external package =fd=, or =fd-find=
     (with-eval-after-load 'general
       (general-nvmap
         :keymaps 'web-mode-map
-        "gn" 'web-mode-navigate)
+        "gn" 'web-mode-navigate
+        "zo" 'web-mode-fold-or-unfold
+        "zw" 'web-mode-whitespaces-show)
       (general-vmap
         :keymaps 'web-mode-map
         "gs" 'web-mode-surround))
@@ -3892,7 +3911,7 @@ Needs an external package =fd=, or =fd-find=
     :hook ((html-mode-local-vars-hook
             mhtml-mode-local-vars-hook) . tree-sitter)
     :hook (web-mode . +config/django-web-mode)
-    )
+    :hook (web-mode . +config/web-mode-fix-js-comment))
 #+end_src
 **** emmet-mode :external:
 #+name: emmet-mode
