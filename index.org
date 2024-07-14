@@ -3643,6 +3643,22 @@ Needs an external package =fd=, or =fd-find=
     :config
     (require 'sly-autoloads))
 #+end_src
+
+***** sly-quicklisp 
+#+begin_src emacs-lisp
+  (use-package sly-quicklisp
+    :after sly
+    :load-path "site-lisp/sly-quicklisp")
+#+end_src
+
+***** sly-quicklisp 
+#+begin_src emacs-lisp
+  (use-package sly-macrostep
+    :after sly
+    :load-path "site-lisp/sly-macrostep")
+#+end_src
+
+
 **** clojure
 ***** cider :external:
 #+name: cider
