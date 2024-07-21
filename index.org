@@ -492,6 +492,33 @@ This is a replacement for the [[https://github.com/AndrewRadev/linediff.vim][lin
     ;; (setq evil-quick-diff-key (kbd "zx"))
     (evil-quick-diff-install))
 #+end_src
+*** [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
+A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emulation, help you comment code efficiently. For example, you can press ~99,ci~ to comment out 99 lines.
+#+begin_src emacs-lisp
+  (use-package evil-nerd-commenter
+    :after evil
+    :commands (evilnc-comment-operator
+               evilnc-inner-comment
+               evilnc-outer-commenter)
+    :bind ([remap comment-line] . evilnc-comment-or-uncomment-lines))
+#+end_src
+*** [[https://github.com/hlissner/evil-snipe][evil-snipe]]
+Evil-snipe emulates [[https://github.com/goldfeld/vim-seek][vim-seek]] and/or [[https://github.com/justinmk/vim-sneak][vim-sneak]] in evil-mode.
+
+It provides 2-character motions for quickly (and more accurately) jumping around text, compared to evil's built-in f/F/t/T motions, incrementally highlighting candidate targets as you type.
+
+By default, snipe only binds ~s~ (forward) / ~S~ (backward) to =evil-snipe-s= and =evil-snipe-S=, respectively. In operator mode, snipe is bound to ~z~ / ~Z~ and ~x~ / ~X~ (exclusive).
+#+begin_src emacs-lisp
+  (use-package evil-snipe
+    :commands evil-snipe-local-mode evil-snipe-override-local-mode
+    :hook (evil-after-load . evil-snipe-override-mode)
+    :hook (evil-after-load . evil-snipe-mode)
+    :init
+    (setq evil-snipe-smart-case t
+          evil-snipe-scope 'line
+          evil-snipe-repeat-scope 'visible
+          evil-snipe-char-fold t))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
