@@ -2376,7 +2376,15 @@ A project interaction library for /Emacs/, with little external dependency as po
                           diff-hl-show-staged-changes nil)
     :config
     (when (featurep 'flycheck)
-      (setq flycheck-indication-mode 'right-fringe)))
+      (setq flycheck-indication-mode 'right-fringe))
+    (with-eval-after-load 'general
+      (+config/leader-go
+        "*" 'diff-hl-show-hunk
+        "=" 'diff-hl-diff-goto-hunk
+        "[" 'diff-hl-previous-hunk
+        "]" 'diff-hl-next-hunk
+        "{" 'diff-hl-show-hunk-previous
+        "}" 'diff-hl-show-hunk-next)))
 #+end_src
 *** perspective :external:
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
