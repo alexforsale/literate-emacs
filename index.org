@@ -1601,6 +1601,13 @@ This is part of /corfu/ configuration.
     (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
     (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode))
 #+end_src
+*** repeat-mode
+#+begin_src emacs-lisp
+  (use-package repeat
+    :straight nil
+    :init
+    (repeat-mode +1))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-builtins)
