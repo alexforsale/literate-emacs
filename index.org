@@ -1959,8 +1959,8 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 *** ws-butler
 #+name: ws-butler
 #+begin_src emacs-lisp
-    (use-package ws-butler
-      :hook (prog-mode . ws-butler-mode))
+  (use-package ws-butler
+    :hook ((prog-mode text-mode) . ws-butler-mode))
 #+end_src
 *** smartparens
 I still have a mixed feeling for this package, but it still easier to configure than the builtin /electric-pair-mode/. Also, should this be in the /Lisp/ section?
