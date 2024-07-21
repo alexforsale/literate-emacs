@@ -1229,10 +1229,10 @@ When closing a file (like when exiting /Emacs/ or killing a buffer), the point (
     :custom
     (save-place-file (expand-file-name "places" user-emacs-directory)))
 #+end_src
-*** autorevert
+*** autorevert :disabled:archive:noexport:
 Here I'm using =global-auto-revert-mode= to automatically revert all opened buffer.
 #+name: autorevert
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package autorevert
   :init
   (global-auto-revert-mode 1)
