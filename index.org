@@ -1262,9 +1262,9 @@ Saving the /minibuffer/ history.
        search-ring
        regexp-search-ring)))
 #+end_src
-*** recentf
+*** recentf :disabled:archive:noexport:
 #+name: recentf
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package recentf
   :bind ("C-c f" . recentf)
   :custom
