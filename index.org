@@ -332,6 +332,14 @@ Notes:
 - =evil-search-modules= :: I switched this to =isearch= since the default =evil-search= didn't search through collapsed headings in =org-mode=.
 
 Why is this the first? My right hand fingers always land on =h=, =j=, =k=, =l=. You can't teach old dog new tricks.
+**** Useful keybindings
+Not a full list of keybindings, just ones that I should remember to use.
+| keybindings          | function                                          | description                                           |
+|----------------------+---------------------------------------------------+-------------------------------------------------------|
+| normal-state ~] b~   | =evil-next-buffer=                                | Go to the COUNTth next buffer in the buffer list.     |
+| normal-state ~[ b~   | =evil-previous-buffer=                            | Go to the COUNTth previous buffer in the buffer list. |
+| normal-state ~] SPC~ | =evil-collection-unimpaired-insert-newline-below= | Insert COUNT blank line(s) below current line.        |
+| normal-state ~[ SPC~ | =evil-collection-unimpaired-insert-newline-above= | Insert COUNT blank line(s) above current line.        |
 *** [[https://github.com/emacs-evil/evil-collection][evil-collection]]
 This is a collection of Evil bindings for the parts of Emacs that Evil does not cover properly by default, such as /help-mode/, /M-x calendar/, /Eshell/ and more.
 #+begin_src emacs-lisp
