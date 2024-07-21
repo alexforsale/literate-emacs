@@ -1326,8 +1326,8 @@ Basically, in =prog-mode=, some combination of characters will look different.
     (bookmark-default-file (expand-file-name ".bookmark" user-emacs-directory)))
 #+end_src
 The configuration for /bookmark/.
-*** proced
-#+begin_src emacs-lisp
+*** proced :disabled:archive:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package proced
     :straight nil
     :config
