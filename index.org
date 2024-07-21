@@ -400,6 +400,7 @@ This is a useful package for complementing /Evil/'s motion. With =general.el=, I
 | =evilem-motion-backward-WORD-begin= | ~SPC g e B~   | =evil-forward-WORD-begin= | ~B~      |
 | =evilem-motion-backward-word-end=   | ~SPC g e g e~ | =evil-forward-word-end=   | ~g e~    |
 | =evilem-motion-backward-WORD-end=   | ~SPC g e g E~ | =evil-forward-WORD-end=   | ~g E~    |
+These keybindings is also available on =visual-mode=.
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
