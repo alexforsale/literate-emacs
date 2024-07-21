@@ -539,6 +539,14 @@ In addition to the features provided by vim-textobj-anyblock, anyblock will seek
             ("\\[" . "\\]")
             ("<" . ">"))))
 #+end_src
+*** evil-traces
+=evil-traces= is a port of [[https://github.com/markonm/traces.vim][traces.vim]]. It enables visual previews for certain =evil-ex= commands.
+#+begin_src emacs-lisp
+  (use-package evil-traces
+    :after evil
+    :config
+    (evil-traces-mode))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
