@@ -559,6 +559,16 @@ This is a port of one of the many visual-star plugins for Vim to work with evil-
       "*" #'evil-visualstar/begin-search-forward
       "#" #'evil-visualstar/begin-search-backward))
 #+end_src
+*** [[https://github.com/ninrod/exato][exato]]
+This package provides the ~x~ text object to manipulate html/xml tag attributes. You can customize the binding.
+
+Try using ~dax~, ~vix~ and ~gUix~.
+
+#+begin_src emacs-lisp
+  (use-package exato
+    :after evil
+    :commands evil-outer-xml-attr evil-inner-xml-attr)
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
