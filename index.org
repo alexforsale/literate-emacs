@@ -455,10 +455,18 @@ This package provides evil integration of [[https://github.com/cute-jumper/embra
       (embrace-add-pair ?> "<" ">")))
 #+end_src
 *** [[https://github.com/syl20bnr/evil-escape][evil-escape]]
+Customizable key sequence to escape from insert state and everything else in Emacs.
 #+begin_src emacs-lisp
   (use-package evil-escape
     :commands evil-escape
-    :after evil)
+    :after evil
+    :hook (evil-after-load . evil-escape-mode)
+    :init
+    (setq evil-escape-excluded-states '(normal visual multiedit emacs motion)
+          evil-escape-excluded-major-modes '(neotree-mode treemacs-mode vterm-mode dired-mode)
+          evil-escape-key-sequence "jk"
+          evil-escape-delay 0.15)
+    (evil-define-key* '(insert replace visual operator) 'global "\C-g" #'evil-escape))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
