@@ -164,7 +164,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 ** Variables and helper functions
 *** Identity
 #+name: identity
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (setq user-mail-address "alexforsale@yahoo.com"
 	user-full-name "Kristian Alexander P")
 #+end_src
@@ -172,7 +172,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 *** merge-list-to-list function
 This function is just a wrapper to easily merge lists. I don't think I need it anymore.
 #+name: merge-list-to-list
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   ;;; From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048
   (defun merge-list-to-list (dst src)
     "Merges content of the 2nd list with the 1st one"
@@ -181,7 +181,7 @@ This function is just a wrapper to easily merge lists. I don't think I need it a
 #+end_src
 *** define +config/org-directory variable
 #+name: +config/org-directory
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 (when (file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
   (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
 #+end_src
@@ -824,7 +824,7 @@ For window navigation.
 #+end_src
 
 ***** footer :noexport:
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (provide 'config-keybindings)
   ;;; config-keybindings.el ends.here
 #+end_src
@@ -1857,7 +1857,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
 #+end_src
 *** vterm-toggle
 #+name: vterm-toggle
-#+begin_src emacs-lisp -n :tangle no
+#+begin_src emacs-lisp :tangle no
 (use-package vterm-toggle
   :defer t
   :after vterm
@@ -2069,7 +2069,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
 #+caption: /Emacs magit/
 [[./assets/img/emacs-magit.png][file:assets/img/emacs-magit.png]]
 #+name: magit
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
   (use-package magit
     :demand t
     :config
@@ -2266,7 +2266,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
 **** old config :noexport:archive:
-#+begin_src emacs-lisp -n :noweb no
+#+begin_src emacs-lisp :noweb no
   (use-package lsp-mode
     :diminish (lsp-lens-mode lsp-mode)
     :commands lsp lsp-deferred
@@ -3569,7 +3569,7 @@ Needs an external package =fd=, or =fd-find=
   (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
   (add-hook 'scheme-mode-hook #'aggressive-indent-mode))
 
-;;;; emacs-lisp -n
+;;;; emacs-lisp
 (use-package elisp-mode
   :diminish emacs-lisp-mode
   :diminish elisp-mode
@@ -3583,7 +3583,7 @@ Needs an external package =fd=, or =fd-find=
 #+end_src
 ****** ielm 
 #+name: ielm
-#+begin_src emacs-lisp -n
+#+begin_src emacs-lisp
 (use-package ielm
   :straight nil
   ;;:hook (ielm-mode . (turn-on-smartparens-mode))
