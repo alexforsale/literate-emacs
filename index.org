@@ -916,6 +916,9 @@ I use this theme when I'm not using any external theme.
 #+name: ace-window
 #+begin_src emacs-lisp
   (use-package ace-window
+    :init
+    (when (display-graphic-p)
+      (ace-window-posframe-mode t))
     :config
     (setq aw-keys '(?q ?w ?e ?r ?t ?a ?s ?d ?f ?z ?x ?c ?v)
           aw-background nil
@@ -924,6 +927,9 @@ I use this theme when I'm not using any external theme.
     (custom-set-faces
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 4.0)))))
+    (with-eval-after-load 'general
+      (+config/leader-window
+        "S" 'ace-swap-window))
     :bind ([remap other-window] . ace-window))
 #+end_src
 Setting =aw-scope= to =frame= so it doesn't select other frames.
