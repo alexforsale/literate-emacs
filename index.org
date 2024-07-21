@@ -405,9 +405,9 @@ These keybindings is also available on =visual-mode=.
 This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by [[https://github.com/tpope][Tim Pope]]. The functionality is wrapped into a minor mode.
 #+begin_src emacs-lisp
   (use-package evil-surround
-  :ensure t
-  :config
-  (global-evil-surround-mode 1))
+    :after evil
+    :config
+    (global-evil-surround-mode 1))
 #+end_src
 **** Usage
 ***** Add surrounding
@@ -453,6 +453,12 @@ This package provides evil integration of [[https://github.com/cute-jumper/embra
         (set var (delq ?> evil-embrace-evil-surround-keys)))
       (embrace-add-pair-regexp ?< "\\_<[a-z0-9-_]+<" ">" #'+evil--embrace-angle-brackets)
       (embrace-add-pair ?> "<" ">")))
+#+end_src
+*** [[https://github.com/syl20bnr/evil-escape][evil-escape]]
+#+begin_src emacs-lisp
+  (use-package evil-escape
+    :commands evil-escape
+    :after evil)
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
