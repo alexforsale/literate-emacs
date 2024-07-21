@@ -1129,28 +1129,6 @@ Usually configuration that defined at the /C source code/.
 #+begin_src emacs-lisp
   (use-package emacs
     :straight nil
-    :init
-    ;; Add prompt indicator to `completing-read-multiple'.
-    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
-    (defun crm-indicator (args)
-      (cons (format "[CRM%s] %s"
-                    (replace-regexp-in-string
-                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                     crm-separator)
-                    (car args))
-            (cdr args)))
-    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-    ;; Do not allow the cursor in the minibuffer prompt
-    (setq minibuffer-prompt-properties
-          '(read-only t cursor-intangible t face minibuffer-prompt))
-    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-    ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
-    ;; Vertico commands are hidden in normal buffers.
-    (setq read-extended-command-predicate
-          #'command-completion-default-include-p
-          tab-always-indent 'complete)
-    ;; Enable recursive minibuffers
-    (setq enable-recursive-minibuffers t)
     :custom
     (read-buffer-completion-ignore-case t)
     (use-short-answers t)
@@ -1186,14 +1164,6 @@ Usually configurations related to file manipulations.
   (use-package files
     :straight nil
     :config
-    (defun full-auto-save ()
-      (interactive)
-      (save-excursion
-        (dolist (buf (buffer-list))
-          (set-buffer buf)
-          (if (and (buffer-file-name) (buffer-modified-p))
-              (basic-save-buffer)))))
-    (add-hook 'auto-save-visited-mode-hook 'full-auto-save)
     (nconc
      auto-mode-alist
      '(("/LICENSE\\'" . text-mode)
@@ -1207,7 +1177,7 @@ Usually configurations related to file manipulations.
     (confirm-kill-emacs #'yes-or-no-p) ; confirm when exiting
     (confirm-kill-processes nil) ; don't confirm killing processes
     (revert-without-query (list "."))
-    (find-file-visit-truename t) ; `find-file' will visit the actual file 
+    (find-file-visit-truename t) ; `find-file' will visit the actual file
     (version-control t)
     (backup-by-copying t)
     (delete-old-versions t)
@@ -1466,6 +1436,31 @@ I call this framework since usually these packages are what people use together,
        "C-M-n" 'vertico-next-group
        "C-M-p" 'vertico-previous-group)))
 
+  ;; A few more useful configurations...
+  (use-package emacs
+    :custom
+    ;; Support opening new minibuffers from inside existing minibuffers.
+    (enable-recursive-minibuffers t)
+    ;; Emacs 28 and newer: Hide commands in M-x which do not work in the current
+    ;; mode.  Vertico commands are hidden in normal buffers. This setting is
+    ;; useful beyond Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    :init
+    ;; Add prompt indicator to `completing-read-multiple'.
+    ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+    (defun crm-indicator (args)
+      (cons (format "[CRM%s] %s"
+                    (replace-regexp-in-string
+                     "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                     crm-separator)
+                    (car args))
+            (cdr args)))
+    (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+    ;; Do not allow the cursor in the minibuffer prompt
+    (setq minibuffer-prompt-properties
+          '(read-only t cursor-intangible t face minibuffer-prompt))
+    (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 #+end_src
 ***** Extensions
 ****** vertico-directory
