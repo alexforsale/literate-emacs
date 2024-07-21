@@ -358,6 +358,48 @@ Change cursor shape and color by evil state in terminal.
     (setq evil-emacs-state-cursor  'hbar) ; _
     )
 #+end_src
+*** [[https://github.com/PythonNut/evil-easymotion][evil-easymotion]]
+#+begin_src emacs-lisp
+  (use-package evil-easymotion
+    :after evil
+    :demand t
+    :commands evilem-create evilem-default-keybindings
+    :config
+    (evilem-make-motion evilem-motion-search-next #'evil-search-next
+                        :bind ((evil-ex-search-highlight-all nil)))
+    (evilem-make-motion evilem-motion-search-previous #'evil-search-previous
+                        :bind ((evil-ex-search-highlight-all nil)))
+    (evilem-make-motion evilem-motion-search-word-forward #'evil-search-word-forward
+                        :bind ((evil-ex-search-highlight-all nil)))
+    (evilem-make-motion evilem-motion-search-word-backward #'evil-search-word-backward
+                        :bind ((evil-ex-search-highlight-all nil)))
+    ;; Rebind scope of w/W/e/E/ge/gE evil-easymotion motions to the visible
+    ;; buffer, rather than just the current line.
+    (put 'visible 'bounds-of-thing-at-point (lambda () (cons (window-start) (window-end))))
+    (evilem-make-motion evilem-motion-forward-word-begin #'evil-forward-word-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-forward-WORD-begin #'evil-forward-WORD-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-forward-word-end #'evil-forward-word-end :scope 'visible)
+    (evilem-make-motion evilem-motion-forward-WORD-end #'evil-forward-WORD-end :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-word-begin #'evil-backward-word-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-WORD-begin #'evil-backward-WORD-begin :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-word-end #'evil-backward-word-end :scope 'visible)
+    (evilem-make-motion evilem-motion-backward-WORD-end #'evil-backward-WORD-end :scope 'visible)
+    (evilem-default-keybindings "C-c e")
+    (with-eval-after-load 'general
+      (+config/leader-go
+        "e" '(:keymap evilem-map :package evil-easymotion :wk "evilem"))))
+#+end_src
+This is a useful package for complementing /Evil/'s motion. With =general.el=, I set the keymap to ~SPC g e~.
+| evilem keybinding                   | evilem key    | Evil                      | evil key |
+|-------------------------------------+---------------+---------------------------+----------|
+| =evilem-motion-forward-word-begin=  | ~SPC g e w~   | =evil-forward-word-begin= | ~w~      |
+| =evilem-motion-forward-WORD-begin=  | ~SPC g e W~   | =evil-forward-WORD-begin= | ~W~      |
+| =evilem-motion-forward-word-end=    | ~SPC g e e~   | =evil-forward-word-end=   | ~e~      |
+| =evilem-motion-forward-WORD-end=    | ~SPC g e E~   | =evil-forward-WORD-end=   | ~E~      |
+| =evilem-motion-backward-word-begin= | ~SPC g e b~   | =evil-forward-word-begin= | ~b~      |
+| =evilem-motion-backward-WORD-begin= | ~SPC g e B~   | =evil-forward-WORD-begin= | ~B~      |
+| =evilem-motion-backward-word-end=   | ~SPC g e g e~ | =evil-forward-word-end=   | ~g e~    |
+| =evilem-motion-backward-WORD-end=   | ~SPC g e g E~ | =evil-forward-WORD-end=   | ~g E~    |
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
@@ -826,11 +868,11 @@ For window navigation.
     "q" 'evil-quit
     "r" 'evil-window-rotate-downwards
     "R" 'evil-window-rotate-upwards
-    "s" 'evil-window-split
+    "s" '+evil/window-split-and-follow
     "T" '(tear-off-window :wk "tear off window")
     "t" 'evil-window-top-left
     "u" 'winner-undo
-    "v" 'evil-window-vsplit
+    "v" '+evil/window-vsplit-and-follow
     "w" '(other-window :wk "other window")
     "W" 'evil-window-prev
     "x" 'evil-window-exchange
