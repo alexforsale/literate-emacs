@@ -468,6 +468,30 @@ Customizable key sequence to escape from insert state and everything else in Ema
           evil-escape-delay 0.15)
     (evil-define-key* '(insert replace visual operator) 'global "\C-g" #'evil-escape))
 #+end_src
+*** [[https://github.com/Dewdrops/evil-exchange][evil-exchange]]
+#+begin_src emacs-lisp
+  (use-package evil-exchange
+    :init
+    (evil-exchange-install))
+#+end_src
+Easy text exchange operator for Evil. This is the port of [[https://github.com/tommcdo/vim-exchange][vim-exchange]] by Tom McDonald.
+*** Default Bindings
+**** ~gx~ (evil-exchange)
+On the first use, define (and highlight) the first {motion} to exchange. On the second use, define the second {motion} and perform the exchange.
+**** ~gX~ (evil-exchange-cancel)
+Clear any {motion} pending for exchange.
+*** [[https://github.com/rgrinberg/evil-quick-diff][evil-quick-diff]]
+This is a replacement for the [[https://github.com/AndrewRadev/linediff.vim][linediff.vim]] plugin. It's not a faithful port, as it uses ediff for diffing, but the spirit is the same. The default operator key for diffing is ~god~. While ~goD~ is used for canceling.
+#+begin_src emacs-lisp
+  (use-package evil-quick-diff
+    :straight (:host github :repo "rgrinberg/evil-quick-diff")
+    :after evil
+    :commands (evil-quick-diff evil-quick-diff-cancel)
+    :init
+    ;; change default key bindings (if you want) HERE
+    ;; (setq evil-quick-diff-key (kbd "zx"))
+    (evil-quick-diff-install))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
