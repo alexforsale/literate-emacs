@@ -393,9 +393,7 @@ Change cursor shape and color by evil state in terminal.
     (evilem-make-motion evilem-motion-backward-word-end #'evil-backward-word-end :scope 'visible)
     (evilem-make-motion evilem-motion-backward-WORD-end #'evil-backward-WORD-end :scope 'visible)
     (evilem-default-keybindings "C-c e")
-    (with-eval-after-load 'general
-      (+config/leader-go
-        "e" '(:keymap evilem-map :package evil-easymotion :wk "evilem"))))
+    )
 #+end_src
 This is a useful package for complementing /Evil/'s motion. With =general.el=, I set the keymap to ~SPC g e~.
 | evilem keybinding                   | evilem key    | Evil                      | evil key |
@@ -809,6 +807,12 @@ It's just normal /Isearch/ wrapped in /consult/.
      "M-DEL" 'sp-unwrap-sexp))
 #+end_src
 /Smartparens/ is a wonderful package, once you know how to use it.
+***** evil-easymotion
+#+begin_src emacs-lisp
+  (with-eval-after-load 'general
+      (+config/leader-go
+        "e" '(:keymap evilem-map :package evil-easymotion :wk "evilem")))
+#+end_src
 **** dired
 #+begin_src emacs-lisp
   (general-nvmap
