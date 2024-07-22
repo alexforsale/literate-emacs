@@ -1630,6 +1630,32 @@ This is part of /corfu/ configuration.
     :init
     (repeat-mode +1))
 #+end_src
+*** so-long
+#+begin_src emacs-lisp
+  (use-package so-long
+    :straight nil
+    :init
+    (global-so-long-mode)
+    :config
+    ;; Emacs 29 introduced faster long-line detection, so they can afford a much
+    ;; larger `so-long-threshold' and its default `so-long-predicate'.
+    (if (fboundp 'buffer-line-statistics)
+        (unless (featurep 'native-compile)
+          (setq so-long-threshold 5000))
+      ;; reduce false positives w/ larger threshold
+      (setq so-long-threshold 400))
+    (defun doom-buffer-has-long-lines-p ()
+      (unless (bound-and-true-p visual-line-mode)
+        (let ((so-long-skip-leading-comments
+               ;; HACK Fix #2183: `so-long-detected-long-line-p' calls
+               ;;   `comment-forward' which tries to use comment syntax, which
+               ;;   throws an error if comment state isn't initialized, leading
+               ;;   to a wrong-type-argument: stringp error.
+               ;; DEPRECATED Fixed in Emacs 28.
+               (bound-and-true-p comment-use-syntax)))
+          (so-long-detected-long-line-p))))
+    (setq so-long-predicate #'doom-buffer-has-long-lines-p))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-builtins)
@@ -2223,6 +2249,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
   ;; smartparens
   (use-package smartparens
     :demand t
+    :commands sp-pair sp-local-pair sp-with-modes sp-point-in-comment sp-point-in-string
     :init
     (smartparens-global-mode)
     :config
