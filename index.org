@@ -4399,6 +4399,59 @@ Needs an external package =fd=, or =fd-find=
 #+end_src
 
 **** Scheme
+#+begin_src emacs-lisp
+  (use-package scheme
+    :straight nil
+    :interpreter ("scsh" . scheme-mode)
+    :hook (scheme-mode . rainbow-delimiters-mode)
+    :config
+    (defvar calculate-lisp-indent-last-sexp)
+    (defun +scheme-indent-function-a (indent-point state)
+      "Advice to replace `scheme-indent-function'.
+
+  This function is the same as `scheme-indent-function' except it properly indents
+  property lists and names starting with 'default'."
+      (let ((normal-indent (current-column)))
+        (goto-char (1+ (elt state 1)))
+        (parse-partial-sexp (point) calculate-lisp-indent-last-sexp 0 t)
+        (if (and (elt state 2)
+                 ;; NOTE looking-at -> looking-at-p
+                 (not (looking-at-p "\\sw\\|\\s_")))
+            (progn
+              ;; NOTE (if (not ...) (progn ...)) -> (unless ... ...)
+              (unless (> (save-excursion (forward-line 1) (point))
+                         calculate-lisp-indent-last-sexp)
+                (goto-char calculate-lisp-indent-last-sexp)
+                (beginning-of-line)
+                (parse-partial-sexp (point) calculate-lisp-indent-last-sexp 0 t))
+              (backward-prefix-chars)
+              (current-column))
+          ;; NOTE let -> let* & moved `method' def into let bindings
+          (let* ((function (buffer-substring
+                            (point) (progn (forward-sexp 1) (point))))
+                 (method (or (get (intern-soft function) 'scheme-indent-function)
+                             (get (intern-soft function) 'scheme-indent-hook))))
+            (cond ((or (eq method 'defun)
+                       (and (null method)
+                            (> (length function) 3)
+                            ;; NOTE string-match -> string-match-p
+                            ;; NOTE The original regexp is "\\`def" but it will mess
+                            ;;      up indentation with such names as 'default-...'.
+                            (string-match-p "\\`def" function)))
+                   (lisp-indent-defform state indent-point))
+                  ;; NOTE Added this clause to handle alignment of keyword symbols
+                  ((and (null method)
+                        (> (length function) 1)
+                        ;; NOTE string-match -> string-match-p
+                        (string-match-p "\\`:" function))
+                   (let ((lisp-body-indent 1))
+                     (lisp-indent-defform state indent-point)))
+                  ((integerp method)
+                   (lisp-indent-specform method state indent-point normal-indent))
+                  (method
+                   (funcall method state indent-point normal-indent)))))))
+    (advice-add #'scheme-indent-function :override #'+scheme-indent-function-a))
+#+end_src
 ***** geiser :external:
 #+name: geiser
 #+begin_src emacs-lisp
@@ -4410,7 +4463,48 @@ Needs an external package =fd=, or =fd-find=
     :init
     (setq geiser-autodoc-identifier-format "%s → %s"
           geiser-repl-per-project-p t
-          geiser-repl-history-filename (concat user-emacs-directory "geiser-history")))
+          geiser-repl-history-filename (concat user-emacs-directory "geiser-history"))
+    (defun +scheme/open-repl ()
+      "Open the Scheme REPL."
+      (interactive)
+      (call-interactively #'geiser-repl-switch)
+      (current-buffer))
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps '(scheme-mode-map geiser-mode-map)
+        "'" 'geiser-repl-switch
+        "\"" 'geiser-connect
+        "[" 'geiser-squarify
+        "\\" 'geiser-insert-lambda
+        "s" 'geiser-set-scheme
+        "R" 'geiser-reload
+        "h" '(:ignore t :wk "help")
+        "h<" 'geiser-xref-callers
+        "h>" 'geiser-xref-callees
+        "ha" 'geiser-autodoc-mode
+        "hs" 'geiser-autodoc-show
+        "hm" 'geiser-doc-lookup-manual
+        "h." 'geiser-doc-symbol-at-point
+        "r" '(:ignore t :wk "repl")
+        "rf" 'geiser-load-file
+        "rr" 'geiser-restart-repl)
+      (+config/local-leader
+        :keymaps 'scheme-mode-map
+        "e" '(:ignore t :wk "eval")
+        "eb" 'geiser-eval-buffer
+        "B" 'geiser-eval-buffer-and-go
+        "e" 'geiser-eval-last-sexp
+        "d" 'geiser-eval-definition
+        "D" 'geiser-eval-definition-and-go
+        "r" 'geiser-eval-region
+        "R" 'geiser-eval-region-and-go
+        "r" '(ignore t :wk "repl")
+        "rb" 'geiser-load-current-buffer)
+      (+config/local-leader
+        :keymaps 'geiser-repl-mode-map
+        "c" 'geiser-repl-clear-buffer
+        "q" 'geiser-repl-exit)))
 #+end_src
 ***** geiser-guile :external:
 #+name: geiser-guile
@@ -4425,7 +4519,9 @@ Needs an external package =fd=, or =fd-find=
       (when (file-directory-p nonguix-path)
         (add-to-list 'geiser-guile-load-path nonguix-path))
       (when (file-directory-p personal-path)
-        (add-to-list 'geiser-guile-load-path personal-path))))
+        (add-to-list 'geiser-guile-load-path personal-path)))
+    (when (file-directory-p (expand-file-name "~/.config/guix/current/share/guile/site/3.0"))
+      (add-to-list 'geiser-guile-load-path (expand-file-name "~/.config/guix/current/share/guile/site/3.0"))))
 #+end_src
 ***** macrostep-geiser :external:
 #+begin_src emacs-lisp
@@ -4434,7 +4530,18 @@ Needs an external package =fd=, or =fd-find=
     :after geiser-mode geiser-repl
     :hook ((geiser-mode geiser-repl-mode) . macrostep-geiser-setup)
     :bind (:map geiser-mode-map
-                ("C-c e" . macrostep-expand)))
+                ("C-c e" . macrostep-expand))
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps '(scheme-mode-map geiser-repl-mode-map)
+        "m" 'macrostep-expand
+        "M" 'macrostep-geiser-expand-all)))
+#+end_src
+***** flycheck-guile
+#+begin_src emacs-lisp
+  (use-package flycheck-guile
+    :after geiser)
 #+end_src
 *** C and C++
 **** cc-mode :builtin:
