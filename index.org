@@ -1434,6 +1434,7 @@ Usually configurations related to file manipulations.
     ((prog-mode text-mode) . auto-save-visited-mode)
     :custom
     (auto-save-visited-interval 10)
+    (find-file-suppress-same-file-warnings t)
     (confirm-kill-emacs #'yes-or-no-p) ; confirm when exiting
     (confirm-kill-processes nil) ; don't confirm killing processes
     (revert-without-query (list "."))
