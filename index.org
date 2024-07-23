@@ -1438,6 +1438,14 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     (setq split-width-threshold 160
         split-height-threshold nil))
 #+end_src
+*** comint
+#+begin_src emacs-lisp
+  (use-package comint
+    :straight nil
+    :config
+    (setq comint-prompt-read-only t
+          comint-buffer-maximum-size 2048))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-ui)
