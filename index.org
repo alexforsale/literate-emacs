@@ -5349,6 +5349,7 @@ Run this for any buffer you want to skewer."
     :hook ((python-mode . lsp-deferred)
            (python-mode . lsp-ui-mode)
            (python-mode . lsp-ui-doc-mode)
+           (python-mode . +python-use-correct-flycheck-executables-h)
            ;; (python-mode . guess-style-guess-tab-mode)
            (python-mode-local-vars . (lambda ()
                                        (lsp-deferred))))
@@ -5395,6 +5396,92 @@ Run this for any buffer you want to skewer."
         :keymaps 'python-mode-map
         "d" '(:ignore t :wk "doc")))
     )
+
+  (defun +python-executable-find (exe)
+    "Resolve the path to the EXE executable.
+  Tries to be aware of your active conda/pipenv/virtualenv environment, before
+  falling back on searching your PATH."
+    (if (file-name-absolute-p exe)
+        (and (file-executable-p exe)
+             exe)
+      (let ((exe-root (format "bin/%s" exe)))
+        (cond ((when python-shell-virtualenv-root
+                 (let ((bin (expand-file-name exe-root python-shell-virtualenv-root)))
+                   (if (file-exists-p bin) bin))))
+              ((when (require 'conda nil t)
+                 (let ((bin (expand-file-name (concat conda-env-current-name "/" exe-root)
+                                              (conda-env-default-location))))
+                   (if (file-executable-p bin) bin))))
+              ((when-let (bin (projectile-locate-dominating-file default-directory "bin/python"))
+                 (setq-local doom-modeline-python-executable (expand-file-name "bin/python" bin))))
+              ((executable-find exe))))))
+
+  (defun +python/open-repl ()
+    "Open the Python REPL."
+    (interactive)
+    (require 'python)
+    (unless python-shell-interpreter
+      (user-error "`python-shell-interpreter' isn't set"))
+    (pop-to-buffer
+     (process-buffer
+      (let ((dedicated (bound-and-true-p python-shell-dedicated)))
+        (if-let* ((pipenv (+python-executable-find "pipenv"))
+                  (pipenv-project (pipenv-project-p)))
+            (let ((default-directory pipenv-project)
+                  (python-shell-interpreter-args
+                   (format "run %s %s"
+                           python-shell-interpreter
+                           python-shell-interpreter-args))
+                  (python-shell-interpreter pipenv))
+              (run-python nil dedicated t))
+          (run-python nil dedicated t))))))
+
+  (defun +python/open-ipython-repl ()
+    "Open an IPython REPL."
+    (interactive)
+    (require 'python)
+    (let ((python-shell-interpreter
+           (or (+python-executable-find (car +python-ipython-command))
+               "ipython"))
+          (python-shell-interpreter-args
+           (string-join (cdr +python-ipython-command) " ")))
+      (+python/open-repl)))
+
+  (defun +python/open-jupyter-repl ()
+    "Open a Jupyter console."
+    (interactive)
+    (require 'python)
+    (add-to-list 'python-shell-completion-native-disabled-interpreters "jupyter")
+    (let ((python-shell-interpreter
+           (or (+python-executable-find (car +python-jupyter-command))
+               "jupyter"))
+          (python-shell-interpreter-args
+           (string-join (cdr +python-jupyter-command) " ")))
+      (+python/open-repl)))
+
+  (defun +python/optimize-imports ()
+    "organize imports"
+    (interactive)
+    (pyimport-remove-unused)
+    (py-isort-buffer))
+
+  (defun +python-use-correct-flycheck-executables-h ()
+        "Use the correct Python executables for Flycheck."
+        (let ((executable python-shell-interpreter))
+          (save-excursion
+            (goto-char (point-min))
+            (save-match-data
+              (when (or (looking-at "#!/usr/bin/env \\(python[^ \n]+\\)")
+                        (looking-at "#!\\([^ \n]+/python[^ \n]+\\)"))
+                (setq executable (substring-no-properties (match-string 1))))))
+          ;; Try to compile using the appropriate version of Python for
+          ;; the file.
+          (setq-local flycheck-python-pycompile-executable executable)
+          ;; We might be running inside a virtualenv, in which case the
+          ;; modules won't be available. But calling the executables
+          ;; directly will work.
+          (setq-local flycheck-python-pylint-executable "pylint")
+          (setq-local flycheck-python-flake8-executable "flake8")))
 #+end_src
 **** pydoc :external:
 #+begin_src emacs-lisp
@@ -5477,6 +5564,7 @@ Run this for any buffer you want to skewer."
     :init
     (setq pipenv-executable (executable-find "pipenv"))
     :config
+    (setq pipenv-with-projectile nil)
     (with-eval-after-load 'general
       (+config/local-leader
         :keymaps 'python-mode-map
@@ -5486,39 +5574,70 @@ Run this for any buffer you want to skewer."
 **** pyvenv :external:
 #+begin_src emacs-lisp
   ;; (use-package pyvenv
-  ;;   :config
+  ;;   :after python
+  ;;   :demand t
+  ;;   :init
   ;;   (pyvenv-mode +1)
-  ;;   (defun +config/set-venv-python-interpreter-and-directories ()
-  ;;     "Set correct Python interpreter and libraries."
-  ;;     (interactive)
-  ;;     (progn
-  ;;       (setq python-shell-interpreter (concat pyvenv-virtual-env ".venv/bin/python3"))
-  ;;       (add-to-list 'lsp-clients-python-library-directories (concat pyvenv-virtual-env ".venv/"))))
-
-  ;;   (defun +config/unset-venv-python-interpreter-and-directories ()
-  ;;     "Reset back Python interpreter and libraries"
-  ;;     (interactive
-  ;;      (progn
-  ;;        (setq python-shell-interpreter (executable-find "python"))
-  ;;        (setq 'lsp-clients-python-library-directories '("/usr")))))
-  ;;   :hook ((pyvenv-post-activate . +config/set-venv-python-interpreter-and-directories)
-  ;;          (pyvenv-post-deactivate . +config/unset-venv-python-interpreter-and-directories)))
+  ;;   :config
+  ;;   ;; Set correct Python interpreter
+  ;;   (setq pyvenv-post-activate-hooks
+  ;;         (list (lambda ()
+  ;;                 (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")
+  ;;                       lsp-pyright-venv-path pyvenv-virtual-env))))
+  ;;   (setq pyvenv-post-deactivate-hooks
+  ;;         (list (lambda ()
+  ;;                 (setq python-shell-interpreter "python3"
+  ;;                       lsp-pyright-venv-path nil)))))
 
   (use-package pyvenv
     :after python
-    :demand t
-    :init
-    (pyvenv-mode +1)
     :config
-    ;; Set correct Python interpreter
-    (setq pyvenv-post-activate-hooks
-          (list (lambda ()
-                  (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")
-                        lsp-pyright-venv-path pyvenv-virtual-env))))
-    (setq pyvenv-post-deactivate-hooks
-          (list (lambda ()
-                  (setq python-shell-interpreter "python3"
-                        lsp-pyright-venv-path nil)))))
+    (add-hook 'python-mode-local-vars-hook #'pyvenv-track-virtualenv)
+    (add-to-list 'global-mode-string
+                 '(pyvenv-virtual-env-name (" venv:" pyvenv-virtual-env-name " "))
+                 'append))
+#+end_src
+**** pyimport
+#+begin_src emacs-lisp
+  (use-package pyimport
+    :defer t
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "i" '(:ignore t :wk "import")
+        "ii" 'pyimport-insert-missing
+        "iR" 'pyimport-remove-unused
+        "io" '+python/optimize-imports)))
+#+end_src
+**** py-isort
+#+begin_src emacs-lisp
+  (use-package py-isort
+    :defer t
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "i" '(:ignore t :wk "import")
+        "is" 'py-isort-buffer
+        "ir" 'py-isort-region)))
+#+end_src
+**** python-pytest
+#+begin_src emacs-lisp
+  (use-package python-pytest
+    :commands python-pytest-dispatch
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "t" '(:ignore t :wk "test")
+        "ta" 'python-pytest
+        "tf" 'python-pytest-file-dwim
+        "tF" 'python-pytest-file
+        "tt" 'python-pytest-function-dwim
+        "tT" 'python-pytest-function
+        "tr" 'python-pytest-repeat
+        "tp" 'python-pytest-dispatch)))
 #+end_src
 **** flycheck-pycheckers :external:
 #+begin_src emacs-lisp
