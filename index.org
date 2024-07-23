@@ -1293,7 +1293,9 @@ Making /Emacs/ more colourful.
 
   (use-package rainbow-delimiters
     :demand t
-    :hook (prog-mode . rainbow-delimiters-mode))
+    :hook (prog-mode . rainbow-delimiters-mode)
+    :config
+    (setq rainbow-delimiters-max-face-count 4))
 #+end_src
 
 *** [[https://github.com/Wilfred/helpful][helpful]] :external:
