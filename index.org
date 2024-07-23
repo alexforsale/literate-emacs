@@ -4232,7 +4232,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Code:
 #+end_src
 *** Lisp
-**** lispy :disabled:archive:
+**** lispy :disabled:archive:noexport:
 :PROPERTIES:
 :header-args: :tangle no
 :END:
@@ -4244,7 +4244,7 @@ Needs an external package =fd=, or =fd-find=
            (scheme-mode . lispy-mode)
            (geiser-mode . lispy-mode)))
 #+end_src
-**** lispyville :disabled:archive:
+**** lispyville :disabled:archive:noexport:
 :PROPERTIES:
 :header-args: :tangle no
 :END:
