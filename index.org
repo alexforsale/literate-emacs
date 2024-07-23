@@ -1455,7 +1455,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 #+begin_src emacs-lisp
   (use-package emacs
     :straight nil
-    :hook ((prog-mode text-mode conf-mode) . display-line-numbers)
+    :hook ((prog-mode text-mode conf-mode) . display-line-numbers-mode)
     :config
     (setq hscroll-margin 2
           hscroll-step 1
@@ -1486,7 +1486,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
     ;; Show absolute line numbers for narrowed regions to make it easier to tell the
     ;; buffer is narrowed, and where you are, exactly.
-    (setq-default display-line-numbers-widen t))
+    (setq-default display-line-numbers-widen t) )
 #+end_src
 *** frame
 #+begin_src emacs-lisp
