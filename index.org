@@ -1371,11 +1371,15 @@ in /archlinux/, these fonts is conveniently grouped in [[https://archlinux.org/g
 This built-in package is necessary when dealing with /Emacs lisp/.
 #+name: paren
 #+begin_src emacs-lisp
-(use-package paren
-  :config
-  (show-paren-mode 1)
-  :custom
-  (show-paren-style 'mixed))
+  (use-package paren
+    :config
+    (show-paren-mode 1)
+    :custom
+    (show-paren-style 'mixed)
+    (show-paren-delay 0.1)
+    (show-paren-highlight-openparen t)
+    (show-paren-when-point-inside-paren t)
+    (show-paren-when-point-in-periphery t))
 #+end_src
 
 *** mouse
