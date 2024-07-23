@@ -2526,6 +2526,20 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
     :config
     (setq-default sentence-end-double-space nil))
 #+end_src
+*** whitespace
+#+begin_src emacs-lisp
+  (use-package whitespace
+    :straight nil
+    :config
+    (setq whitespace-line-column nil
+          whitespace-style
+          '(face indentation tabs tab-mark spaces space-mark newline newline-mark
+                 trailing lines-tail)
+          whitespace-display-mappings
+          '((tab-mark ?\t [?› ?\t])
+            (newline-mark ?\n [?¬ ?\n])
+            (space-mark ?\  [?·] [?.]))))
+#+end_src
 *** ws-butler
 #+name: ws-butler
 #+begin_src emacs-lisp
