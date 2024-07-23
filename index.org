@@ -2553,12 +2553,17 @@ A project interaction library for /Emacs/, with little external dependency as po
 #+begin_src emacs-lisp
   (use-package projectile
     :demand t
+    :commands (projectile-project-root
+               projectile-project-name
+               projectile-project-p
+               projectile-locate-dominating-file
+               projectile-relevant-known-projects)
     :bind (([remap evil-jump-to-tag] . projectile-find-tag)
            ([remap find-tag] . projectile-find-tag))
     :hook (dired-before-readin . projectile-track-known-projects-find-file-hook)
     :custom
     (projectile-cache-file (expand-file-name ".projects" user-emacs-directory))
-    (projectile-auto-discover t)
+    (projectile-auto-discover nil)
     (projectile-enable-caching (not noninteractive))
     (projectile-globally-ignored-files '("DS_Store" "TAGS"))
     (projectile-globally-ignored-file-suffixes '(".elc" ".pyc" ".o"))
@@ -2578,12 +2583,14 @@ A project interaction library for /Emacs/, with little external dependency as po
     (projectile-git-submodule-command nil)
     (projectile-indexing-method 'hybrid)
     :config
+    (global-set-key [remap evil-jump-to-tag] #'projectile-find-tag)
+    (global-set-key [remap find-tag]         #'projectile-find-tag)
     (projectile-mode +1)
     (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
     (with-eval-after-load 'general
       (+config/leader-key
-      "SPC" 'projectile-find-file
-      "p" '(:keymap projectile-command-map :package projectile :wk "projectile")))
+        "SPC" 'projectile-find-file
+        "p" '(:keymap projectile-command-map :package projectile :wk "projectile")))
     )
 #+end_src
 
