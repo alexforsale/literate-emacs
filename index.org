@@ -605,6 +605,35 @@ This provides a near-complete vim folding experience in evil for Emacs.
       "zd" #'evil-vimish-fold/delete
       "zE" #'evil-vimish-fold/delete-all))
 #+end_src
+*** [[https://github.com/gabesoft/evil-mc/][evil-mc]]
+Multiple cursors implementation for evil-mode
+#+begin_src emacs-lisp
+  (use-package evil-mc
+    :commands (evil-mc-make-cursor-here
+               evil-mc-make-all-cursors
+               evil-mc-undo-all-cursors
+               evil-mc-pause-cursors
+               evil-mc-resume-cursors
+               evil-mc-make-and-goto-first-cursor
+               evil-mc-make-and-goto-last-cursor
+               evil-mc-make-cursor-in-visual-selection-beg
+               evil-mc-make-cursor-in-visual-selection-end
+               evil-mc-make-cursor-move-next-line
+               evil-mc-make-cursor-move-prev-line
+               evil-mc-make-cursor-at-pos
+               evil-mc-has-cursors-p
+               evil-mc-make-and-goto-next-cursor
+               evil-mc-skip-and-goto-next-cursor
+               evil-mc-make-and-goto-prev-cursor
+               evil-mc-skip-and-goto-prev-cursor
+               evil-mc-make-and-goto-next-match
+               evil-mc-skip-and-goto-next-match
+               evil-mc-skip-and-goto-next-match
+               evil-mc-make-and-goto-prev-match
+               evil-mc-skip-and-goto-prev-match)
+    :init
+    (global-evil-mc-mode  1))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
