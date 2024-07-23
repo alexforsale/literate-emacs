@@ -1439,6 +1439,7 @@ Usually configurations related to file manipulations.
     (confirm-kill-processes nil) ; don't confirm killing processes
     (revert-without-query (list "."))
     (find-file-visit-truename t) ; `find-file' will visit the actual file
+    (make-backup-files nil)
     (version-control t)
     (backup-by-copying t)
     (delete-old-versions t)
