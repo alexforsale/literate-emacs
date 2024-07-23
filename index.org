@@ -5402,7 +5402,28 @@ Run this for any buffer you want to skewer."
     ;;     (setq rustic-lsp-server (executable-find "rust-analyzer")
     ;;           lsp-rust-server nil
     ;;           lsp-rust-analyzer-server-command `(,(executable-find "rust-analyzer")))))
-    )
+    (defun +rust/cargo-audit ()
+      "Run 'cargo audit' for the current project."
+      (interactive)
+      (rustic-run-cargo-command "cargo audit"))
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'rustic-mode-map
+        "b" '(:ignore t :wk "build")
+        "ba" '+rust/cargo-audit
+        "bb" 'rustic-cargo-build
+        "bB" 'rustic-cargo-bench
+        "bc" 'rustic-cargo-check
+        "bC" 'rustic-cargo-clippy
+        "bd" 'rustic-cargo-build-doc
+        "bD" 'rustic-cargo-doc
+        "bf" 'rustic-cargo-fmt
+        "bn" 'rustic-cargo-new
+        "bo" 'rustic-cargo-outdated
+        "br" 'rustic-cargo-run
+        "t" '(:ignore t :wk "test")
+        "ta" 'rustic-cargo-test
+        "t" 'rustic-cargo-current-test)))
 #+end_src
 **** flycheck-rust :external:
 #+name: flycheck-rust
