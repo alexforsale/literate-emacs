@@ -1403,6 +1403,7 @@ Usually configuration that defined at the /C source code/.
     :custom
     (read-buffer-completion-ignore-case t)
     (tab-always-indent nil)
+    (visible-bell nil)
     (use-short-answers t)
     (use-dialog-box-p nil)
     (window-resize-pixelwise t)
