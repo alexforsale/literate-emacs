@@ -2403,6 +2403,17 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
   (use-package ws-butler
     :hook ((prog-mode text-mode) . ws-butler-mode))
 #+end_src
+*** [[https://github.com/gilbertw1/better-jumper][better-jumper]]
+#+begin_src emacs-lisp
+  (use-package better-jumper
+    :init
+    (global-set-key [remap evil-jump-forward]  #'better-jumper-jump-forward)
+    (global-set-key [remap evil-jump-backward] #'better-jumper-jump-backward)
+    (global-set-key [remap xref-pop-marker-stack] #'better-jumper-jump-backward)
+    (global-set-key [remap xref-go-back] #'better-jumper-jump-backward)
+    (global-set-key [remap xref-go-forward] #'better-jumper-jump-forward)
+    (better-jumper-mode +1))
+#+end_src
 *** smartparens
 I still have a mixed feeling for this package, but it still easier to configure than the builtin /electric-pair-mode/. Also, should this be in the /Lisp/ section?
 #+name: smartparens
