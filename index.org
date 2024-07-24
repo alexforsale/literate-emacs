@@ -3351,6 +3351,7 @@ This package looks promising, I'll wait until it mature a bit.
       (prettify-symbols-mode))
     (require 'org-tempo)
     :custom
+    (org-highlight-latex-and-related '(native script entities))
     (org-replace-disputed-keys t)
     (org-indirect-buffer-display 'current-window)
     (org-enforce-todo-dependencies t)
@@ -3678,6 +3679,11 @@ This package looks promising, I'll wait until it mature a bit.
      org-agenda-current-time-string
      "◀── now ─────────────────────────────────────────────────")
     (global-org-modern-mode))
+#+end_src
+*** org-appear
+#+begin_src emacs-lisp
+  (use-package org-appear ; better markup edit
+    :hook (org-mode . org-appear-mode))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
