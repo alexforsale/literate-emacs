@@ -2703,17 +2703,12 @@ I still have a mixed feeling for this package, but it still easier to configure 
     )
 #+end_src
 The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/files/smartparens.el][example configuration]] messes up my /evil-mode/. I have them commented for now.
-*** hideshow
+*** [[https://github.com/radian-software/apheleia][apheleia]]
 #+begin_src emacs-lisp
-  (use-package hideshow
-    :straight nil
-    :commands (hs-toggle-hiding
-               hs-hide-block
-               hs-hide-level
-               hs-show-all
-               hs-hide-all)
-    :config
-    (setq hs-hide-comments-when-hiding-all nil))
+  (use-package apheleia
+    :defer t
+    :init
+    (apheleia-global-mode +1))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
