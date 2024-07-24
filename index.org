@@ -3829,7 +3829,9 @@ Blogging tools
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
     :config
-    (when (memq window-system '(mac ns x))
+    (when (or (memq window-system '(mac ns x))
+              (and (daemonp)
+                   (memq window-system '(mac ns x))))
       (exec-path-from-shell-initialize)))
 #+end_src
 *** footer :noexport:
