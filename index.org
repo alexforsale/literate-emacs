@@ -4452,12 +4452,72 @@ Needs an external package =fd=, or =fd-find=
 
 
 **** clojure
+***** clojure-mode
+#+begin_src emacs-lisp
+  (use-package clojure-mode
+    :hook (clojure-mode . rainbow-delimiters-mode)
+    :config
+    (with-eval-after-load 'lsp-mode
+      (add-hook '(clojure-mode-local-vars-hook #'lsp-deferred))
+      (add-hook '(clojurec-mode-local-vars-hook #'lsp-deferred))
+      (add-hook '(clojurescript-mode-local-vars-hook #'lsp-deferred))
+      (setq-local lsp-enable-indentation nil))
+    (with-eval-after-load 'lsp-clojure
+      (dolist (m '(clojure-mode
+                   clojurec-mode
+                   clojurescript-mode
+                   clojurex-mode))
+        (add-to-list 'lsp-language-id-configuration (cons m "clojure"))))
+    (with-eval-after-load 'tree-sitter-langs
+        (add-to-list 'tree-sitter-major-mode-language-alist '(clojurec-mode . clojure))
+        (add-to-list 'tree-sitter-major-mode-language-alist '(clojurescript-mode . clojure))))
+#+end_src
+
 ***** cider :external:
-#+name: cider
+#+name: cider-mode
 #+begin_src emacs-lisp
   ;;;; clojure
   (use-package cider
-    :defer t)
+    :hook (clojure-mode-local-vars . cider-mode)
+    :init
+    ;; HACK Fix radian-software/radian#446: CIDER tries to calculate the frame's
+    ;;   background too early; sometimes before the initial frame has been
+    ;;   initialized, causing errors.
+    (defvar cider-docview-code-background-color nil)
+    (defvar cider-stacktrace-frames-background-color nil)
+    :config
+    (add-hook 'cider-mode-hook #'eldoc-mode)
+    (setq nrepl-hide-special-buffers t
+          nrepl-log-messages nil
+          cider-font-lock-dynamically '(macro core function var deprecated)
+          cider-overlays-use-font-lock t
+          cider-print-options '(("length" 100))
+          cider-prompt-for-symbol nil
+          cider-repl-history-display-duplicates nil
+          cider-repl-history-display-style 'one-line
+          cider-repl-history-file (concat doom-cache-dir "cider-repl-history")
+          cider-repl-history-highlight-current-entry t
+          cider-repl-history-quit-action 'delete-and-restore
+          cider-repl-history-highlight-inserted-item t
+          cider-repl-history-size 1000
+          cider-repl-result-prefix ";; => "
+          cider-repl-use-clojure-font-lock t
+          cider-repl-use-pretty-printing t
+          cider-repl-wrap-history nil
+          cider-stacktrace-default-filters '(tooling dup)
+
+          ;; Don't focus the CIDER REPL when it starts. Since it can take so long
+          ;; to start up, you either wait for a minute doing nothing or be
+          ;; prepared for your cursor to suddenly change buffers without warning.
+          ;; See https://github.com/clojure-emacs/cider/issues/1872
+          cider-repl-pop-to-buffer-on-connect 'display-only)
+    (with-eval-after-load 'lsp-mode
+      (setq cider-eldoc-display-for-symbol-at-point nil
+            cider-font-lock-dynamically nil)
+      (defun +clojure--cider-disable-completion ()
+        "Use lsp completion instead of cider."
+        (remove-hook 'completion-at-point-functions #'cider-complete-at-point t))
+      (add-hook 'cider-mode-hook #'+clojure--cider-disable-completion))
 #+end_src
 ***** clj-refactor :external:
 #+name: clj-refactor
