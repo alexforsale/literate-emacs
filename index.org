@@ -1395,10 +1395,11 @@ Since /Emacs/ is a [[https://www.emacswiki.org/emacs/SelfDocumentation][self-doc
        "C-h F" 'helpful-function
        :keymaps 'prog-mode-map
        "C-c C-d" 'helpful-at-point)
-      (general-nvmap
-        :keymaps 'prog-mode-map
-        "K" '(helpful-at-point :wk "helpful at point")
-        "gr" '(helpful-update :wk "update"))))
+      ;; (general-nvmap
+      ;;   :keymaps 'prog-mode-map
+      ;;   "K" '(helpful-at-point :wk "helpful at point")
+      ;;   "gr" '(helpful-update :wk "update")))
+    ))
 #+end_src
 
 *** hl-line :builtin:
@@ -3082,6 +3083,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
               :name general-SPC-l-simulates-C-c-C-l
               :docstring "Simulates C-c C-l"
               :which-key "LSP")))
+    (general-nvmap
+      :keymaps 'lsp-mode-map
+      "K" 'lsp-describe-thing-at-point)
     :custom
     (lsp-completion-provider :none)
     )
@@ -4515,7 +4519,7 @@ Needs an external package =fd=, or =fd-find=
       (defun +clojure--cider-disable-completion ()
         "Use lsp completion instead of cider."
         (remove-hook 'completion-at-point-functions #'cider-complete-at-point t))
-      (add-hook 'cider-mode-hook #'+clojure--cider-disable-completion))
+      (add-hook 'cider-mode-hook #'+clojure--cider-disable-completion)))
 #+end_src
 ***** clj-refactor :external:
 #+name: clj-refactor
