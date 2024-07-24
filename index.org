@@ -5870,7 +5870,8 @@ Run this for any buffer you want to skewer."
       (remove-hook 'rustic-mode-hook #'flymake-mode-off)
       (remove-hook 'flycheck-mode-hook #'rustic-flycheck-setup))
     (with-eval-after-load 'org-src
-      (defalias 'org-babel-execute:rust #'org-babel-execute:rustic))
+      (defalias 'org-babel-execute:rust #'org-babel-execute:rustic)
+      (add-to-list 'org-src-lang-modes '("rust" . rustic)))
     :config
     (add-hook 'rustic-mode-hook #'rainbow-delimiters-mode)
     (setq rustic-indent-method-chain t)
@@ -5883,14 +5884,9 @@ Run this for any buffer you want to skewer."
               "run"
               "stable"
               "rust-analyzer")))
-    ;; (with-eval-after-load 'lsp-mode
-    ;;   (setq lsp-rust-analyzer-display-parameter-hints t)
-    ;;   ;; (when (executable-find "rls")
-    ;;   ;;   (setq lsp-rust-rls-server-command (executable-find "rls")))
-    ;;   (when (executable-find "rust-analyzer")
-    ;;     (setq rustic-lsp-server (executable-find "rust-analyzer")
-    ;;           lsp-rust-server nil
-    ;;           lsp-rust-analyzer-server-command `(,(executable-find "rust-analyzer")))))
+    (setq rustic-indent-method-chain t)
+    (setq rustic-babel-format-src-block nil
+          rustic-format-trigger nil)
     (defun +rust/cargo-audit ()
       "Run 'cargo audit' for the current project."
       (interactive)
