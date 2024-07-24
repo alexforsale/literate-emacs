@@ -4739,7 +4739,8 @@ Needs an external package =fd=, or =fd-find=
     ;; 	(add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
     (with-eval-after-load 'lsp-mode
       (setq lsp-toml-command (executable-find "taplo")))
-    (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml")))
+    (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml"))
+    (add-hook 'toml-mode-hook #'lsp-deferred))
 #+end_src
 *** Lua
 **** lua-mode :external:
