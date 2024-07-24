@@ -2237,7 +2237,7 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
     ;; Configure a custom style dispatcher (see the Consult wiki)
     ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
     ;;       orderless-component-separator #'orderless-escapable-split-on-space)
-    (setq completion-styles '(orderless basic)
+    (setq completion-styles '(orderless basic substring partial-completion)
           completion-category-defaults nil
           completion-category-overrides '((file (styles orderless partial-completion)))
           orderless-component-separator #'orderless-escapable-split-on-space)
@@ -2296,6 +2296,7 @@ This is a package that I should learn more, but the configuration is overwhealmi
 **** cape
 #+begin_src emacs-lisp
   (use-package cape
+    :defer t
     ;; Bind dedicated completion commands
     ;; Alternative prefix keys: C-c p, M-p, M-+, ...
     :bind (("C-c p p" . completion-at-point) ;; capf
