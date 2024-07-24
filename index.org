@@ -3017,7 +3017,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
               :which-key "LSP"))
       (general-nvmap
         :keymaps 'lsp-mode-map
-        "K" '(lsp-describe-thing-at-point :wk "describe thing at point")))
+        [remap evil-lookup] '(lsp-describe-thing-at-point :wk "describe thing at point")))
     )
 #+end_src
 **** Basic configuration
