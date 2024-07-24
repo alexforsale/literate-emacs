@@ -5805,7 +5805,13 @@ Run this for any buffer you want to skewer."
     :after python
     :init
     (setq poetry-tracking-strategy 'switch-buffer)
-    (add-hook 'python-mode-hook #'poetry-tracking-mode))
+    ;; (add-hook 'python-mode-hook #'poetry-tracking-mode)
+    :config
+    (with-eval-after-load 'general
+      (+config/local-leader
+        :keymaps 'python-mode-map
+        "p" 'poetry))
+    )
 #+end_src
 **** pyenv
 #+begin_src emacs-lisp
