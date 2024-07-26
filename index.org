@@ -1410,6 +1410,10 @@ Enable line highlighting in all buffers.
     :config
     (global-hl-line-mode 1))
 #+end_src
+*** highlight-quoted
+#+begin_src emacs-lisp
+  (use-package highlight-quoted)
+#+end_src
 *** nerd-icons :external:archive:disabled:noexport:
 #+name: nerd-icons
 #+begin_src emacs-lisp :tangle no
@@ -3130,6 +3134,115 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (:map lsp-mode-map
           ([remap xref-find-apropos] . consult-lsp-symbols)))
 #+end_src
+*** Tree-sitter
+#+begin_src emacs-lisp
+  (use-package tree-sitter-langs)
+  (use-package tree-sitter-indent)
+
+  (use-package tree-sitter
+    :defer t
+    :config
+    (require 'tree-sitter-langs)
+    (setq tree-sitter-debug-jump-buttons t
+          ;; and this highlights the entire sub tree in your code
+          tree-sitter-debug-highlight-jump-region t))
+
+  (use-package evil-textobj-tree-sitter
+    :defer t
+    :init
+    (with-eval-after-load 'tree-sitter
+      (require 'evil-textobj-tree-sitter))
+    :config
+    (defvar +tree-sitter-inner-text-objects-map (make-sparse-keymap))
+    (defvar +tree-sitter-outer-text-objects-map (make-sparse-keymap))
+    (defvar +tree-sitter-goto-previous-map (make-sparse-keymap))
+    (defvar +tree-sitter-goto-next-map (make-sparse-keymap))
+
+    (defvar +tree-sitter-hl-enabled-modes '(not web-mode typescript-tsx-mode)
+      "A list of major modes which should be highlighted by tree-sitter.
+
+  If this list begins with `not', then it negates the list.
+  If it is t, it is enabled in all modes.
+  If nil, it is disabled in all modes")
+
+    (defun tree-sitter! ()
+      "Dispatch to turn on tree sitter.
+
+  Used as a hook function which turns on `tree-sitter-mode'
+  and selectively turn on `tree-sitter-hl-mode'.
+  according to `+tree-sitter-hl-enabled-modes'"
+      (turn-on-tree-sitter-mode)
+      ;; conditionally enable `tree-sitter-hl-mode'
+      (let ((mode (bound-and-true-p tree-sitter-hl-mode)))
+        (when-let (mode (if (pcase +tree-sitter-hl-enabled-modes
+                              (`(not . ,modes) (not (memq major-mode modes)))
+                              ((and `(,_ . ,_) modes) (memq major-mode modes))
+                              (bool bool))
+                            (unless mode +1)
+                          (if mode -1)))
+          (tree-sitter-hl-mode mode))))
+
+  ;;;###autodef (fset 'set-tree-sitter-lang! #'ignore)
+    (defun set-tree-sitter-lang! (mode lang)
+      "Associate LANG with major MODE."
+      (after! tree-sitter-langs
+              (add-to-list 'tree-sitter-major-mode-language-alist (cons mode lang))))
+
+    (defun +tree-sitter-get-textobj (group &optional query)
+      "A wrapper around `evil-textobj-tree-sitter-get-textobj' to
+  prevent eager expansion."
+      (eval `(evil-textobj-tree-sitter-get-textobj ,group ,query)))
+
+  ;;;###autoload
+    (defun +tree-sitter-goto-textobj (group &optional previous end query)
+      "Thin wrapper that returns the symbol of a named function, used in keybindings."
+      (let ((sym (intern (format "+goto%s%s-%s" (if previous "-previous" "") (if end "-end" "") group))))
+        (fset sym (lambda ()
+                    (interactive)
+                    (evil-textobj-tree-sitter-goto-textobj group previous end query)))
+        sym))
+
+    (evil-define-key '(visual operator) 'tree-sitter-mode
+      "i" +tree-sitter-inner-text-objects-map
+      "a" +tree-sitter-outer-text-objects-map)
+    (evil-define-key 'normal 'tree-sitter-mode
+      "[g" +tree-sitter-goto-previous-map
+      "]g" +tree-sitter-goto-next-map)
+
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps '+tree-sitter-inner-text-objects-map
+       "A" (+tree-sitter-get-textobj '("parameter.inner" "call.inner"))
+       "f" (+tree-sitter-get-textobj "function.inner")
+       "F" (+tree-sitter-get-textobj "call.inner")
+       "C" (+tree-sitter-get-textobj "class.inner")
+       "v" (+tree-sitter-get-textobj "conditional.inner")
+       "l" (+tree-sitter-get-textobj "loop.inner")
+       :keymaps '+tree-sitter-outer-text-objects-map
+       "A" (+tree-sitter-get-textobj '("parameter.outer" "call.outer"))
+       "f" (+tree-sitter-get-textobj "function.outer")
+       "F" (+tree-sitter-get-textobj "call.outer")
+       "C" (+tree-sitter-get-textobj "class.outer")
+       "c" (+tree-sitter-get-textobj "comment.outer")
+       "v" (+tree-sitter-get-textobj "conditional.outer")
+       "l" (+tree-sitter-get-textobj "loop.outer")
+       :keymaps '+tree-sitter-goto-previous-map
+       "a" (+tree-sitter-goto-textobj "parameter.outer" t)
+       "f" (+tree-sitter-goto-textobj "function.outer" t)
+       "F" (+tree-sitter-goto-textobj "call.outer" t)
+       "C" (+tree-sitter-goto-textobj "class.outer" t)
+       "c" (+tree-sitter-goto-textobj "comment.outer" t)
+       "v" (+tree-sitter-goto-textobj "conditional.outer" t)
+       "l" (+tree-sitter-goto-textobj "loop.outer" t)
+       :keymaps '+tree-sitter-goto-next-map
+       "a" (+tree-sitter-goto-textobj "parameter.outer")
+       "f" (+tree-sitter-goto-textobj "function.outer")
+       "F" (+tree-sitter-goto-textobj "call.outer")
+       "C" (+tree-sitter-goto-textobj "class.outer")
+       "c" (+tree-sitter-goto-textobj "comment.outer")
+       "v" (+tree-sitter-goto-textobj "conditional.outer")
+       "l" (+tree-sitter-goto-textobj "loop.outer"))))
+#+end_src
 *** gptel :external:
 #+name: gptel
 #+begin_src emacs-lisp
@@ -4363,22 +4476,23 @@ Needs an external package =fd=, or =fd-find=
 ***** elisp-mode
 #+name: elisp-mode
 #+begin_src emacs-lisp
-(when (locate-library "aggressive-indent")
-  (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
-  (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
-  (add-hook 'scheme-mode-hook #'aggressive-indent-mode))
+  (when (locate-library "aggressive-indent")
+    (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
+    (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
+    (add-hook 'scheme-mode-hook #'aggressive-indent-mode))
 
-;;;; emacs-lisp
-(use-package elisp-mode
-  :diminish emacs-lisp-mode
-  :diminish elisp-mode
-  :diminish outline-minor-mode
-  :diminish lisp-data-mode
-  :mode ("\\.Cask\\'" . emacs-lisp-mode)
-  :straight nil
-  :hook (emacs-lisp-mode . (lambda ()
-                             (outline-minor-mode)
-                             (rainbow-delimiters-mode))))
+  ;;;; emacs-lisp
+  (use-package elisp-mode
+    :diminish emacs-lisp-mode
+    :diminish elisp-mode
+    :diminish outline-minor-mode
+    :diminish lisp-data-mode
+    :mode ("\\.Cask\\'" . emacs-lisp-mode)
+    :straight nil
+    :hook (emacs-lisp-mode . (lambda ()
+                               (outline-minor-mode)
+                               (rainbow-delimiters-mode)
+                               (highlight-quoted-mode))))
 #+end_src
 ****** ielm 
 #+name: ielm
@@ -5528,6 +5642,8 @@ Run this for any buffer you want to skewer."
             flycheck-python-flake8-executable (executable-find "flake8")
             flycheck-python-pylint-executable (executable-find "pylint")
             flycheck-python-pyright-executable (executable-find "pyright")))
+    (with-eval-after-load 'tree-sitter
+      (add-hook 'python-mode-local-vars-hook #'tree-sitter! 'append))
     (with-eval-after-load 'general
       (+config/local-leader
         :keymaps 'python-mode-map
@@ -5886,7 +6002,8 @@ Run this for any buffer you want to skewer."
     (setq rustic-indent-method-chain t)
     (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
     (add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
-    ;; (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append)
+    (with-eval-after-load 'tree-sitter
+      (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append))
     (when (executable-find "rustup")
       (setq rustic-analyzer-command
             `(,(executable-find "rustup")
