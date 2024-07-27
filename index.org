@@ -4809,7 +4809,16 @@ Needs an external package =fd=, or =fd-find=
     (setq c-basic-offset tab-width
           c-backspace-function #'delete-backward-char)
     (with-eval-after-load 'ffap
-      (add-to-list 'ffap-alist '(c-mode . ffap-c-mode))))
+      (add-to-list 'ffap-alist '(c-mode . ffap-c-mode)))
+    (with-eval-after-load 'tree-sitter
+      (add-hook 'c-mode-hook #'tree-sitter! 'append))
+    (with-eval-after-load 'lsp-mode
+      (add-hook 'c-mode-hook #'lsp-deferred)))
+#+end_src
+**** demangle-mode
+#+begin_src emacs-lisp
+  (use-package demangle-mode
+    :hook llvm-mode)
 #+end_src
 *** XML
 **** nxml-mode 
