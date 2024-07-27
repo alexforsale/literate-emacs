@@ -6115,6 +6115,10 @@ Run this for any buffer you want to skewer."
     :defer t
     :after lsp)
 #+end_src
+*** Ron-mode
+#+begin_src emacs-lisp
+  (use-package ron-mode)
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
