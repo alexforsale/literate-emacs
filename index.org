@@ -1345,7 +1345,11 @@ Making /Emacs/ more colourful.
 #+name: rainbow-packages
 #+begin_src emacs-lisp
   (use-package rainbow-mode
-    :hook (prog-mode . rainbow-mode))
+    :hook (prog-mode . rainbow-mode)
+    :config
+    (setq rainbow-html-colors-major-mode-list
+          '(prog-mode conf-mode html-mode css-mode php-mode nxml-mode xml-mode)
+          rainbow-html-colors t))
 
   (use-package rainbow-identifiers
     :hook (prog-mode . rainbow-identifiers-mode))
