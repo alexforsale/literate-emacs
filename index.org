@@ -6119,6 +6119,10 @@ Run this for any buffer you want to skewer."
 #+begin_src emacs-lisp
   (use-package ron-mode)
 #+end_src
+*** yuck-mode
+#+begin_src emacs-lisp
+  (use-package yuck-mode)
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
