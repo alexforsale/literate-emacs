@@ -392,7 +392,7 @@ Change cursor shape and color by evil state in terminal.
     (evilem-make-motion evilem-motion-backward-WORD-begin #'evil-backward-WORD-begin :scope 'visible)
     (evilem-make-motion evilem-motion-backward-word-end #'evil-backward-word-end :scope 'visible)
     (evilem-make-motion evilem-motion-backward-WORD-end #'evil-backward-WORD-end :scope 'visible)
-    (evilem-default-keybindings "C-c e")
+    (evilem-default-keybindings "z g")
     )
 #+end_src
 This is a useful package for complementing /Evil/'s motion. With =general.el=, I set the keymap to ~SPC g e~.
@@ -606,7 +606,7 @@ This provides a near-complete vim folding experience in evil for Emacs.
       "zE" #'evil-vimish-fold/delete-all))
 #+end_src
 *** [[https://github.com/gabesoft/evil-mc/][evil-mc]]
-Multiple cursors implementation for evil-mode
+Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g .~.
 #+begin_src emacs-lisp
   (use-package evil-mc
     :commands (evil-mc-make-cursor-here
@@ -632,8 +632,57 @@ Multiple cursors implementation for evil-mode
                evil-mc-make-and-goto-prev-match
                evil-mc-skip-and-goto-prev-match)
     :init
-    (global-evil-mc-mode  1))
+    (global-evil-mc-mode  1)
+    :config
+    ;; (evil-define-key 'visual evil-mc-key-map
+    ;;   "A" #'evil-mc-make-cursor-in-visual-selection-end
+    ;;   "I" #'evil-mc-make-cursor-in-visual-selection-beg)
+    (with-eval-after-load 'general
+      (general-define-key
+       :states '(normal visual)
+       :keymaps 'global
+       "gz" '(:ignore t :wk "evil-mc")
+       "gzm" 'evil-mc-make-all-cursors
+       "gzu" 'evil-mc-undo-all-cursors
+       ;; "gzz" '+evil/mc-toggle-cursors
+       ;; "gzc" '+evil/mc-make-cursor-here
+       "gzn" 'evil-mc-make-and-goto-next-cursor
+       "gzp" 'evil-mc-make-and-goto-prev-cursor
+       "gzN" 'evil-mc-make-and-goto-last-cursor
+       "gzP" 'evil-mc-make-and-goto-first-cursor)
+      (general-define-key
+       :states '(normal visual)
+       :keymaps 'evil-mc-key-map
+       "C-n" 'evil-mc-make-and-goto-next-cursor
+       "C-N" 'evil-mc-make-and-goto-next-cursor
+       "C-p" 'evil-mc-make-and-goto-prev-cursor
+       "C-P" 'evil-mc-make-and-goto-first-cursor)))
 #+end_src
+*** [[https://github.com/hlissner/evil-multiedit][evil-multiedit]]
+#+begin_src emacs-lisp
+  (use-package evil-multiedit
+    :config
+    (evil-multiedit-default-keybinds)
+    (evil-define-key 'normal 'global
+      (kbd "M-d")   #'evil-multiedit-match-symbol-and-next
+      (kbd "M-D")   #'evil-multiedit-match-symbol-and-prev)
+    (evil-define-key 'visual 'global
+      "R"           #'evil-multiedit-match-all
+      (kbd "M-d")   #'evil-multiedit-match-and-next
+      (kbd "M-D")   #'evil-multiedit-match-and-prev)
+    (evil-define-key '(visual normal) 'global
+      (kbd "C-M-d") #'evil-multiedit-restore)
+
+    (with-eval-after-load 'evil-mutliedit
+      (evil-define-key 'multiedit 'global
+        (kbd "M-d")   #'evil-multiedit-match-and-next
+        (kbd "M-S-d") #'evil-multiedit-match-and-prev
+        (kbd "RET")   #'evil-multiedit-toggle-or-restrict-region)
+      (evil-define-key '(multiedit multiedit-insert) 'global
+        (kbd "C-n")   #'evil-multiedit-next
+        (kbd "C-p")   #'evil-multiedit-prev)))
+#+end_src
+Hlissner's implementation of multiple-cursor for evil-mode.
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
