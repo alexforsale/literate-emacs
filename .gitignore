@@ -48,3 +48,4 @@ init.el
 early-init.el
 straight/
 geiser-history.guile
+.mc-lists.el

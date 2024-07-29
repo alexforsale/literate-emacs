@@ -1586,7 +1586,14 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 #+end_src
 *** [[https://github.com/benma/visual-regexp.el][visual-regexp]]
 #+begin_src emacs-lisp
-  (use-package visual-regexp)
+  (use-package visual-regexp
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-search
+        "/" '(:ignore t :wk "regex")
+        "/m" 'vr/mc-mark
+        "/r" 'vr/replace
+        "/q" 'vr/query-replace)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
