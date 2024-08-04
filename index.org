@@ -6170,7 +6170,10 @@ Run this for any buffer you want to skewer."
     (haskell-process-load-or-reload-prompt t)
     (haskell-process-auto-import-loaded-modules t)
     (haskell-process-log t)
-    (haskell-tags-on-save t))
+    (haskell-tags-on-save t)
+    :config
+    (with-eval-after-load 'lsp-mode
+      (add-hook 'haskell-mode-hook #'lsp-deferred)))
 #+end_src
 **** lsp-haskell :external:
 #+name: lsp-haskell
