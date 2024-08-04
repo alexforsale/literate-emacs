@@ -4015,6 +4015,33 @@ Blogging tools
                    (memq window-system '(mac ns x))))
       (exec-path-from-shell-initialize)))
 #+end_src
+*** [[https://github.com/skeeto/elfeed][elfeed]]
+An Emacs web feeds client.
+#+begin_src emacs-lisp
+  (use-package elfeed
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-open
+        "e" 'elfeed)))
+#+end_src
+**** extensions
+***** [[https://github.com/remyhonig/elfeed-org][elfeed-org]]
+Configure the Elfeed RSS reader with an Orgmode file.
+#+begin_src emacs-lisp
+  (use-package elfeed-org
+    :after elfeed
+    :init
+    (elfeed-org)
+    :config
+    (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory))))
+#+end_src
+***** [[https://github.com/jeetelongname/elfeed-goodies][elfeed-goodies]]
+#+begin_src emacs-lisp
+  (use-package elfeed-goodies
+    :after elfeed
+    :init
+    (elfeed-goodies/setup))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-tools)
