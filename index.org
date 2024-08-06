@@ -1607,6 +1607,13 @@ This built-in package is necessary when dealing with /Emacs lisp/.
         "/r" 'vr/replace
         "/q" 'vr/query-replace)))
 #+end_src
+*** [[https://github.com/rnkn/olivetti][olivetti]]
+Emacs minor mode to automatically balance window margins.
+#+begin_src emacs-lisp
+  (use-package olivetti
+    :hook
+    (org-mode . olivetti-mode))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-ui)
