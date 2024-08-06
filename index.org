@@ -683,6 +683,18 @@ Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g
         (kbd "C-p")   #'evil-multiedit-prev)))
 #+end_src
 Hlissner's implementation of multiple-cursor for evil-mode.
+*** [[https://github.com/Somelauw/evil-org-mode][evil-org-mode]]
+Supplemental evil-mode keybindings to emacs org-mode.
+#+begin_src emacs-lisp
+  (use-package evil-org
+    :straight (:type git
+                     :repo "Somelauw/evil-org-mode")
+    :after org
+    :hook (org-mode . (lambda () evil-org-mode))
+    :config
+    (require 'evil-org-agenda)
+    (evil-org-agenda-set-keys))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
