@@ -2081,8 +2081,10 @@ I call this framework since usually these packages are what people use together,
        "C-k" 'vertico-previous
        "C-M-j" 'vertico-next-group
        "C-M-k" 'vertico-previous-group
-       "DEL" 'vertico-directory-delete-char
-       )))
+       "DEL" 'vertico-directory-delete-char)
+      (general-define-key
+       :keymaps 'minibuffer-local-map
+       "M-h" 'backward-kill-word)))
 
   ;; A few more useful configurations...
   (use-package emacs
