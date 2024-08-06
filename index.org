@@ -1620,7 +1620,12 @@ Emacs minor mode to automatically balance window margins.
 #+begin_src emacs-lisp
   (use-package olivetti
     :hook
-    (org-mode . olivetti-mode))
+    (org-mode . olivetti-mode)
+    :init
+    (setq olivetti-style 'fancy
+          olivetti-body-width 120
+          olivetti-margin-width 5
+          olivetti-minimum-body-width 80))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
