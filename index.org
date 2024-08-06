@@ -2469,6 +2469,9 @@ Simple templates for Emacs.
       (setq-local completion-at-point-functions
                   (cons #'tempel-expand
                         completion-at-point-functions)))
+    (global-tempel-abbrev-mode)
+    :hook
+    ((conf-mode prog-mode text-mode) . tempel-setup-capf)
     :config
     (with-eval-after-load 'general
       (general-define-key
@@ -2476,7 +2479,9 @@ Simple templates for Emacs.
        "M-+" 'tempel-complete
        "M-*" 'tempel-insert)))
 
-  (use-package tempel-collection)
+  (use-package tempel-collection
+    :after tempel
+    :load-path "site-lisp/tempel-collection")
 #+end_src
 **** nerd-icons-corfu :disabled:archive:noexport:
 :PROPERTIES:
