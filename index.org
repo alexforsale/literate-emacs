@@ -695,6 +695,14 @@ Supplemental evil-mode keybindings to emacs org-mode.
     (require 'evil-org-agenda)
     (evil-org-agenda-set-keys))
 #+end_src
+*** [[https://github.com/edkolev/evil-goggles][evil-goggles]]
+Display visual hint on evil edit operations.
+#+begin_src emacs-lisp
+  (use-package evil-goggles
+    :config
+    (evil-goggles-mode)
+    (evil-goggles-use-diff-faces))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-evil)
@@ -3546,7 +3554,9 @@ This package looks promising, I'll wait until it mature a bit.
           (setq org-directory (expand-file-name "Documents/google-drive/org" (getenv "HOME")))))
       (customize-set-variable 'org-directory +config/org-directory))
     :hook ((org-mode . org-indent-mode)
-           (org-mode . +config/org-prettify-symbols))
+           (org-mode . +config/org-prettify-symbols)
+           (org-mode . (lambda () (electric-indent-local-mode -1)))
+           (org-mode . variable-pitch-mode))
     :config
     (global-set-key (kbd "C-c l") #'org-store-link)
     (global-set-key (kbd "C-c a") #'org-agenda)
