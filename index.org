@@ -2453,6 +2453,31 @@ Enchanted Spell Checker.
        [remap ispell-word] 'jinx-correct
        "C-M-$" 'jinx-languages)))
 #+end_src
+**** [[https://github.com/minad/tempel][tempel]]
+Simple templates for Emacs.
+#+begin_src emacs-lisp
+  (use-package tempel
+    :init
+    (defun tempel-setup-capf ()
+      ;; Add the Tempel Capf to `completion-at-point-functions'.
+      ;; `tempel-expand' only triggers on exact matches. Alternatively use
+      ;; `tempel-complete' if you want to see all matches, but then you
+      ;; should also configure `tempel-trigger-prefix', such that Tempel
+      ;; does not trigger too often when you don't expect it. NOTE: We add
+      ;; `tempel-expand' *before* the main programming mode Capf, such
+      ;; that it will be tried first.
+      (setq-local completion-at-point-functions
+                  (cons #'tempel-expand
+                        completion-at-point-functions)))
+    :config
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'general
+       "M-+" 'tempel-complete
+       "M-*" 'tempel-insert)))
+
+  (use-package tempel-collection)
+#+end_src
 **** nerd-icons-corfu :disabled:archive:noexport:
 :PROPERTIES:
 :header-args: :tangle no
