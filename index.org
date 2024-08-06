@@ -4003,6 +4003,16 @@ This package looks promising, I'll wait until it mature a bit.
   (use-package org-appear ; better markup edit
     :hook (org-mode . org-appear-mode))
 #+end_src
+*** [[https://github.com/rexim/org-cliplink][org-cliplink]]
+#+begin_src emacs-lisp
+  (use-package org-cliplink
+    :after org
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-insert
+        :keymaps 'org-mode-map
+        "l" 'org-cliplink)))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-org)
