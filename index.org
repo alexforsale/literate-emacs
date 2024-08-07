@@ -2638,7 +2638,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
     (setq vterm-kill-buffer-on-exit t)
     (with-eval-after-load 'general
       (+config/leader-menu! "vterm"
-          "tv"
+          ;; "tv"
         "RET" 'vterm-toggle
         "v" 'vterm))
     )
