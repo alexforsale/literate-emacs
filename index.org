@@ -412,6 +412,7 @@ This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by
 #+begin_src emacs-lisp
   (use-package evil-surround
     :after evil
+    :demand t
     :commands (global-evil-surround-mode
                evil-surround-edit
                evil-Surround-edit
@@ -419,7 +420,7 @@ This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by
     :hook
     (org-mode . (lambda () (push '(?~ . ("~" . "~")) evil-surround-pairs-alist)))
     (org-mode . (lambda () (push '(?$ . ("\\(" . "\\)")) evil-surround-pairs-alist)))
-    :config
+    :init
     (global-evil-surround-mode 1))
 #+end_src
 **** Usage
