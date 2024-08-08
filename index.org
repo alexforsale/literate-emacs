@@ -2896,6 +2896,16 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
     :init
     (apheleia-global-mode +1))
 #+end_src
+*** [[https://github.com/magnars/expand-region.el][expand-region]]
+ Emacs extension to increase selected region by semantic units.
+#+begin_src emacs-lisp
+  (use-package expand-region
+    :config
+    (with-eval-after-load 'general
+      (general-define-key
+       :keymaps 'global
+       "C-=" 'er/expand-region)))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-editing)
