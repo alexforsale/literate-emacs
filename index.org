@@ -3467,7 +3467,6 @@ Magit commit with the help of gpt.
         "cm" 'gptel-menu
         "cc" 'gptel
         "cs" 'gptel-send
-        "ca" 'gptel-add-context
         "cA" 'gptel-abort))
     :bind (:map git-commit-mode-map
                 ("C-c C-g" . magit-gptcommit-commit-accept)))
