@@ -764,7 +764,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 **** First level menu
 #+begin_src emacs-lisp
   ;; First level menu
-  (+config/leader-menu! "activities" "C-a")
+  ;; (+config/leader-menu! "activities" "C-a")
   (+config/leader-menu! "buffer" "b")
   (+config/leader-menu! "files" "f")
   (+config/leader-menu! "go" "g")
@@ -777,7 +777,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   (+config/leader-menu! "register" "gr")
   (+config/leader-menu! "tree" "t")
   (+config/leader-menu! "tab" "t TAB")
-  (+config/leader-menu! "vterm" "tv")
+  (+config/leader-menu! "vterm" "v")
   (+config/leader-menu! "window" "w")
   (+config/leader-menu! "search" "/")
 #+end_src
@@ -1630,6 +1630,20 @@ Emacs minor mode to automatically balance window margins.
           olivetti-body-width 120
           olivetti-margin-width 5
           olivetti-minimum-body-width 80))
+#+end_src
+*** [[https://github.com/wolray/symbol-overlay][symbol-overlay]]
+ Highlight symbols with keymap-enabled overlays.
+#+begin_src emacs-lisp
+  (use-package symbol-overlay
+    :hook
+    (prog-mode . (lambda () symbol-overlay-mode +1))
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-search
+        :keymaps 'symbol-overlay-map
+        "s" '(:ignore t :wk "symbol-overlay")
+        "ss" 'symbol-overlay-put
+        "sr" 'symbol-overlay-remove-all)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
@@ -2636,10 +2650,9 @@ A shell-like command interpreter implemented in Emacs Lisp.
                 (setq-local global-hl-line-mode nil)
                 (setq-local hscroll-margin 0)))
     (setq vterm-kill-buffer-on-exit t)
+    (evil-set-initial-state #'vterm-mode 'insert)
     (with-eval-after-load 'general
-      (+config/leader-menu! "vterm"
-          ;; "tv"
-        "RET" 'vterm-toggle
+      (+config/leader-vterm
         "v" 'vterm))
     )
 #+end_src
