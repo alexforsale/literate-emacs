@@ -1301,6 +1301,7 @@ I use this theme when I'm not using any external theme.
 *** [[https://github.com/abo-abo/ace-window][ace-window]] :external:
 #+name: ace-window
 #+begin_src emacs-lisp
+  (use-package posframe)
   (use-package ace-window
     :init
     (when (display-graphic-p)
