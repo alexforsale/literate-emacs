@@ -3446,8 +3446,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+name: gptel
 #+begin_src emacs-lisp
   (use-package gptel
+    :after password-store
     :config
-    (setq gptel-backend 
+    (setq gptel-backend
           (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)
           gptel-default-mode #'org-mode))
 #+end_src
@@ -3458,7 +3459,7 @@ Magit commit with the help of gpt.
   (use-package magit-gptcommit
     :demand t
     :hook (gptel-mode . visual-line-mode)
-    :after gptel magit
+    :after gptel magit password-store
     :config
     (setq magit-gptcommit-llm-provider `(make-llm-gemini :key ,(password-store-get "google.com/gemini_api_key")))
     (magit-gptcommit-mode 1)
