@@ -102,12 +102,13 @@ The =custom-file= is used to save customization settings for future use.
 ** Setup =package=
 Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/. It's actually not used since I'm using =straight.el=.
 #+begin_src emacs-lisp
-  (require 'package)
-  ;; Add `melpa` to `package-archives`.
-  (add-to-list 'package-archives
-  	     '("melpa" . "https://melpa.org/packages/"))
-  ;; gnu-devel
-  (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/"))
+  (with-eval-after-load 'package
+    ;; Add `melpa` to `package-archives`.
+    (add-to-list 'package-archives
+  	       '("melpa" . "https://melpa.org/packages/"))
+    ;; gnu-devel
+    (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/"))
+    (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/")))
 #+end_src
 ** footer :noexport:
 #+begin_src emacs-lisp
