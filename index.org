@@ -6242,6 +6242,9 @@ Run this for any buffer you want to skewer."
       (defalias 'org-babel-execute:rust #'org-babel-execute:rustic)
       (add-to-list 'org-src-lang-modes '("rust" . rustic)))
     :config
+    (add-hook 'rustic-cargo-run-mode-hook (lambda ()
+                                           (comint-mode)
+                                           (read-only-mode 0)))
     (add-hook 'rustic-mode-hook #'rainbow-delimiters-mode)
     (setq rustic-indent-method-chain t)
     (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
