@@ -6379,6 +6379,13 @@ Run this for any buffer you want to skewer."
 #+begin_src emacs-lisp
   (use-package yuck-mode)
 #+end_src
+*** java
+Lsp-java requires jdt-language-server, this package should automatically installs it using the =lsp-install-server= commands
+#+begin_src emacs-lisp
+  (use-package lsp-java
+    :after lsp-mode
+    :hook (java-mode . lsp))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
