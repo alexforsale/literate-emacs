@@ -3152,7 +3152,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 *** lsp :external:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
-**** old config :noexport:archive:
+**** old config :noexport:archive:disabled:
 #+begin_src emacs-lisp :noweb no
   (use-package lsp-mode
     :diminish (lsp-lens-mode lsp-mode)
@@ -3332,6 +3332,15 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :bind
     (:map lsp-mode-map
           ([remap xref-find-apropos] . consult-lsp-symbols)))
+#+end_src
+*** [[https://emacs-lsp.github.io/dap-mode/page/configuration/][dap-mode]]
+#+begin_src emacs-lisp
+  (use-package dap-mode
+    :config
+    (dap-auto-configure-mode)
+    (dap-ui-mode 1)
+    (dap-tooltip-mode 1)
+    (dap-ui-controls-mode 1))
 #+end_src
 *** Tree-sitter
 #+begin_src emacs-lisp
