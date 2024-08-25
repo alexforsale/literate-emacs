@@ -3194,6 +3194,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
           lsp-modeline-code-actions-segments '(count icon name))
     :custom
     (lsp-completion-provider :none)
+    (lsp-use-snippet nil)
     :config
     (when (featurep 'exwm)
       (advice-add #'corfu--make-frame :around
