@@ -49,3 +49,6 @@ early-init.el
 straight/
 geiser-history.guile
 .mc-lists.el
+eclipse.jdt.ls/
+request/
+workspace/
