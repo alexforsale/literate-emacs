@@ -2506,7 +2506,7 @@ Asynchronous Fuzzy Finder for Emacs.
       (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)))
 #+end_src
 **** [[https://github.com/minad/jinx][jinx]]
-Enchanted Spell Checker.
+Enchanted Spell Checker. Here I use /hunspell/ as a backend dictionary
 #+begin_src emacs-lisp
   (use-package jinx
     :if (executable-find "enchant-2")
