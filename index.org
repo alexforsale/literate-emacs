@@ -6420,6 +6420,12 @@ Lsp-java requires jdt-language-server, this package should automatically install
     :after lsp-mode
     :hook (java-mode . lsp))
 #+end_src
+*** fish-mode
+#+begin_src emacs-lisp
+  (use-package fish-mode
+    :config
+    (setq fish-enable-auto-indent t))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
