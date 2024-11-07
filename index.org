@@ -183,8 +183,10 @@ This function is just a wrapper to easily merge lists. I don't think I need it a
 *** define +config/org-directory variable
 #+name: +config/org-directory
 #+begin_src emacs-lisp
-(when (file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
-  (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
+  (cond ((file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
+         (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
+        ((string-match-p "Microsoft" (shell-command-to-string "uname -a"))
+         (customize-set-variable '+config/org-directory (expand-file-name "org" (getenv "HOME")))))
 #+end_src
 ** Load each modular configuration file.
 *** evil 
