@@ -4672,6 +4672,7 @@ Needs an external package =fd=, or =fd-find=
 #+name: notmuch-indicator
 #+begin_src emacs-lisp
   (use-package notmuch-indicator
+    :if (executable-find "notmuch")
     :config
     (setq notmuch-indicator-args
           '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
@@ -4682,18 +4683,21 @@ Needs an external package =fd=, or =fd-find=
 #+begin_src emacs-lisp
   (use-package consult-notmuch
     :after consult
+    :if (executable-find "notmuch")
     :config
     (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
 #+end_src
 *** ol-notmuch
 #+name: ol-notmuch
 #+begin_src emacs-lisp
-  (use-package ol-notmuch)
+  (use-package ol-notmuch
+    :if (executable-find "notmuch"))
 #+end_src
 *** notmuch-maildir
 #+name: notmuch-maildir
 #+begin_src emacs-lisp
   (use-package notmuch-maildir
+    :if (executable-find "notmuch")
     :config
     (notmuch-maildir-inject-section))
 #+end_src
