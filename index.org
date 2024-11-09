@@ -334,8 +334,22 @@ Mostly copied from /doom/ or the [[https://evil.readthedocs.io/en/latest/overvie
 #+end_src
 Notes:
 - =evil-search-modules= :: I switched this to =isearch= since the default =evil-search= didn't search through collapsed headings in =org-mode=.
+- =evil-want-keybindings= :: I set this to nil so it won't load =evil-keybindings.el=.
+- =evil-want-integration= :: Loads =evil-integration.el=.
+- =evil-undo-system= :: Use =undo-redo= which is natively available in /Emacs/ 28.
+- =evil-want-C-i-jump= :: Set to nil so ~C-i~ will insert a tab character, needed when I'm using /Emacs/ inside a terminal.
+- =evil-want-C-u-scroll= :: Set ~C-u~ to scrolls up (like /Vim/), I'm not using it for prefix arguments since it's already mapped to ~SPC u~ in normal mode.
+- =evil-want-C-u-delete= :: The same for insert mode, set ~C-u~ to deletes back to indentation in insert state, prefix argument is set to ~C-c SPC u~ in insert mode.
+- =evil-want-C-g-bindings= :: Set a consistent bindings for ~C-g~, though it also depends on the packages.
+- =evil-ex-search-vim-style-regexp= :: Enables Vim-style backlash codes in search patterns.
+- =evil-ex-interactive-search-highlight= :: Set the interactive highlighting only to =selected-window=.
+- =evil-visual-update-x-selection-p= :: Not updating the =X PRIMARY= selection with the current visual region, not sure how it works under /wayland/ though.
 
-Why is this the first? My right hand fingers always land on =h=, =j=, =k=, =l=. You can't teach old dog new tricks.
+I've also steal two functions from /Doomemacs/,
+- =+evil/window-vsplit-and-follow= :: which is bound to ~SPC w v~.
+- =+evil/window-split-and-follow= :: which is bound to ~SPC w s~.
+
+Why is this the first package in my list? My right hand fingers always land on =h=, =j=, =k=, =l=. You can't teach old dog new tricks. I've used the vanilla keybindings, it's great but it's faster with /evil-mode.
 **** Useful keybindings
 Not a full list of keybindings, just ones that I should remember to use.
 | keybindings          | function                                          | description                                           |
@@ -429,7 +443,7 @@ This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by
 #+end_src
 **** Usage
 ***** Add surrounding
-You can surround in visual-state with ~S<textobject>~ or ~gS<textobject>~. Or in normal-state with ~ys<textobject>~ or ~yS<textobject>~.
+You can surround in visual-state with ~S<textobject>~ or ~gS<textobject>~. Or in normal-state with ~ys<textobject>~ or ~yS<textobject>~. I'm still using the ~Shift I~ in visual mode, and the ~ys~ in normal mode conflicts with ==which-key-mode=.
 ***** Change surrounding
 You can change a surrounding with ~cs<old-textobject><new-textobject>~.
 *** [[https://github.com/cute-jumper/evil-embrace.el][evil-embrace]]
@@ -473,7 +487,7 @@ This package provides evil integration of [[https://github.com/cute-jumper/embra
       (embrace-add-pair ?> "<" ">")))
 #+end_src
 *** [[https://github.com/syl20bnr/evil-escape][evil-escape]]
-Customizable key sequence to escape from insert state and everything else in Emacs.
+Customizable key sequence to escape from insert state and everything else in /Emacs/.
 #+begin_src emacs-lisp
   (use-package evil-escape
     :commands evil-escape
