@@ -188,6 +188,7 @@ This function is just a wrapper to easily merge lists. I don't think I need it a
         ((string-match-p "Microsoft" (shell-command-to-string "uname -a"))
          (customize-set-variable '+config/org-directory (expand-file-name "org" (getenv "HOME")))))
 #+end_src
+I put my org files inside /syncthing/ default directory (=~/Sync= if on /Linux/) so it will automatically synced to all my devices. But on /windows/ WSL the location will vary depending on how you install /syncthing/ so I won't even bother set it up.
 ** Load each modular configuration file.
 *** evil 
 All =evil-mode= specific configuration and =evil= related packages goes here.
