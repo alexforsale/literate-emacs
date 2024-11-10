@@ -88,9 +88,17 @@ Set UTF-8 as the default coding system
 ** Set initial frame
 Here I disable the menu-bar, tool-bar and vertical scroll bar.
 #+begin_src emacs-lisp
-  (push '(menu-bar-lines . 0) default-frame-alist)
-  (push '(tool-bar-lines . 0) default-frame-alist)
-  (push '(vertical-scroll-bars) default-frame-alist)
+  (add-to-list 'default-frame-alist '(menu-bar-lines . 0))
+  (add-to-list 'initial-frame-alist '(menu-bar-lines . 0))
+
+  (add-to-list 'initial-frame-alist '(tool-bar-lines . 0))
+  (add-to-list 'default-frame-alist '(tool-bar-lines . 0))
+
+  (add-to-list 'initial-frame-alist '(vertical-scroll-bars))
+  (add-to-list 'default-frame-alist '(vertical-scroll-bars))
+
+  (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+  (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+end_src
 ** Define the location of =custom-file=
 The =custom-file= is used to save customization settings for future use.
