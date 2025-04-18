@@ -5,6 +5,7 @@
 (setq package-user-dir (expand-file-name "./.packages"))
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("elpa" . "https://elpa.gnu.org/packages/")))
+(setq org-safe-remote-resources (list "https://raw.githubusercontent.com/fniessen/org-html-themes/master/org/theme-readtheorg.setup" "https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup"))
 
 (package-initialize)
 (unless package-archive-contents

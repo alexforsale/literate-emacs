@@ -15,6 +15,9 @@
 #+startup: content indent
 #+export_file_name: index.html
 #+setupfile: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+HTML_HEAD: <style> #content{max-width:1800px;}</style>
+#+HTML_HEAD: <style> p{max-width:800px;}</style>
+#+HTML_HEAD: <style> li{max-width:800px;}</style>
 
 This repository is my personal /Emacs/ configuration. In case you don't know what /Emacs/ is, I won't be the one explaining. To me /Emacs/ is crucial and should exists in all of my machines, including the proprietary ones. In fact, this repository is the first one that I clone into my new machines (with my dotfiles being the second one).
 
@@ -4232,6 +4235,7 @@ Blogging tools
 *** [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
 #+begin_src emacs-lisp
   (use-package exec-path-from-shell
+    :disabled
     :config
     (when (or (memq window-system '(mac ns x))
               (and (daemonp)
