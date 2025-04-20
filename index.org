@@ -2691,7 +2691,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
 #+name: vterm
 #+begin_src emacs-lisp
   (use-package vterm
-    :defer t
+    :demand t
     :commands vterm-mode
     :config
     (add-hook 'vterm-mode-hook
