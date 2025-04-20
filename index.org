@@ -4202,7 +4202,8 @@ This package looks promising, I'll wait until it mature a bit.
   (use-package password-store
     :defer t
     :config
-    (setq password-store-password-length 12))
+    (setq password-store-password-length 12)
+    (setq auth-sources '(password-store "~/.authinfo.gpg" "~/.netrc")))
 
   (use-package password-store-otp
     :defer t
