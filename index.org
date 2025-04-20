@@ -2005,7 +2005,8 @@ I'm still figuring out how to do a proper /TRAMP/ connection into a /guix-system
   (use-package epg-config
     :straight nil
     :custom
-    (epg-pinentry-mode 'loopback))
+    (epg-pinentry-mode 'loopback)
+    (epg-gpg-program "gpg2"))
 #+end_src
 This is for /Gnupg/.
 *** tabify
