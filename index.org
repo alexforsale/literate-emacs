@@ -4609,13 +4609,53 @@ Needs an external package =fd=, or =fd-find=
 :PROPERTIES:
 :header-args: :tangle ./modules/config-mail.el :mkdirp t
 :END:
+For the longest time I've been using /notmuch/ and /msmtp/ in my email setup. For now I'm looking for a simpler solution since it's kind of a hassle setting up notmuch and msmtp in all of my machines, would also prefer a built-in package. For now I'm trying [[https://www.gnu.org/software/emacs/manual/html_node/gnus/][gnus]]. Gnus also have it's own separate configuration file (~~/.gnus.el~) and login credentials in ~~/.authinfo.gpg~.
+*** Example .gnus.el
+#+begin_src emacs-lisp :tangle no
+  (require 'gnus)
+  (require 'gnus-msg)
+
+  (setq gnus-select-method '(nnnil nil))
+  (setq gnus-secondary-select-methods
+        '((nnimap "gmail"
+                  (nnimap-inbox "INBOX")
+                  (nnimap-address "imap.gmail.com")
+                  (nnimap-server-port "imaps")
+                  (nnimap-stream ssl)
+                  (nnir-search-engine imap)
+                  (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")
+                  (nnmail-expiry-wait 'immediate))
+          (nnimap "yahoo"
+                  (nnimap-inbox "Inbox")
+                  (nnimap-address "imap.mail.yahoo.com")
+                  (nnimap-server-port "imaps")
+                  (nnimap-stream ssl)
+                  (nnir-search-engine imap)
+                  (nnmail-expiry-target "nnimap+yahoo:Trash")
+                  (nnmail-expiry-wait 'immediate))))
+
+  (setq gnus-posting-styles
+        '((".*" ; Matches all groups of messages
+           (address "Kristian Alexander P <alexarians@gmail.com>"))
+          ("yahoo" ; Matches Gnus group called "yahoo", probably need to edit this
+           (address "Kristian Alexander P <alexforsale@yahoo.com>")
+           ("X-Message-SMTP-Method" "smtp smtp.mail.yahoo.com 587 alexforsale@yahoo.com"))))
+
+  ;; remove auto-expire
+  (remove-hook 'gnus-summary-prepare-hook 'gnus-summary-expire-articles)
+#+end_src
+For the ~.authinfo.gpg~ files:
+#+begin_src emacs-lisp :tangle no
+  machine yahoo login alexforsale@yahoo.com port imaps password *******
+  machine gmail login alexarians@gmail.com port imaps password ********
+#+end_src
 *** header :noexport:
 #+begin_src emacs-lisp
   ;;; config-mail --- `Emacs' as a mail client -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** notmuch
+*** notmuch :noexport:
 #+name: notmuch
 #+begin_src emacs-lisp
   (use-package notmuch
@@ -4705,7 +4745,7 @@ Needs an external package =fd=, or =fd-find=
     )
 #+end_src
 
-*** notmuch-indicator
+*** notmuch-indicator :noexport:
 #+name: notmuch-indicator
 #+begin_src emacs-lisp
   (use-package notmuch-indicator
@@ -4715,7 +4755,7 @@ Needs an external package =fd=, or =fd-find=
           '((:terms "tag:unread and tag:inbox" :label "U" :label-face success)))
     (notmuch-indicator-mode))
 #+end_src
-*** consult-notmuch
+*** consult-notmuch :noexport:
 #+name: consult-notmuch
 #+begin_src emacs-lisp
   (use-package consult-notmuch
@@ -4724,13 +4764,13 @@ Needs an external package =fd=, or =fd-find=
     :config
     (add-to-list 'consult-buffer-sources 'consult-notmuch-buffer-source))
 #+end_src
-*** ol-notmuch
+*** ol-notmuch :noexport:
 #+name: ol-notmuch
 #+begin_src emacs-lisp
   (use-package ol-notmuch
     :if (executable-find "notmuch"))
 #+end_src
-*** notmuch-maildir
+*** notmuch-maildir :noexport:
 #+name: notmuch-maildir
 #+begin_src emacs-lisp
   (use-package notmuch-maildir
@@ -4738,20 +4778,22 @@ Needs an external package =fd=, or =fd-find=
     :config
     (notmuch-maildir-inject-section))
 #+end_src
-*** message
+*** message :noexport:
 #+name: message
 #+begin_src emacs-lisp
   (use-package message
     :straight nil
+    :if (executable-find "notmuch")
     :custom
     (message-directory (expand-file-name ".mail" (getenv "HOME")))
     (message-sendmail-envelope-from 'header))
 #+end_src
-*** sendmail
+*** sendmail :noexport:
 #+name: sendmail
 #+begin_src emacs-lisp
   (use-package sendmail
     :straight nil
+    :if (executable-find "notmuch")
     :custom
     (mail-specify-envelope-from t)
     (mail-envelope-from 'header)
