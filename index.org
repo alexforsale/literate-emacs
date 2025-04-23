@@ -4616,6 +4616,7 @@ For the longest time I've been using /notmuch/ and /msmtp/ in my email setup. Fo
   (require 'gnus-msg)
 
   (setq gnus-select-method '(nnnil nil))
+  (setq message-send-mail-function 'smtpmail-send-it)
   (setq gnus-secondary-select-methods
         '((nnimap "gmail"
                   (nnimap-inbox "INBOX")
@@ -4636,7 +4637,8 @@ For the longest time I've been using /notmuch/ and /msmtp/ in my email setup. Fo
 
   (setq gnus-posting-styles
         '((".*" ; Matches all groups of messages
-           (address "Kristian Alexander P <alexarians@gmail.com>"))
+           (address "Kristian Alexander P <alexarians@gmail.com>")
+           ("X-Message-SMTP-Method" "smtp smtp.gmail.com 587 alexarians@gmail.com"))
           ("yahoo" ; Matches Gnus group called "yahoo", probably need to edit this
            (address "Kristian Alexander P <alexforsale@yahoo.com>")
            ("X-Message-SMTP-Method" "smtp smtp.mail.yahoo.com 587 alexforsale@yahoo.com"))))
