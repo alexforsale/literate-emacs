@@ -726,8 +726,6 @@ Hlissner's implementation of multiple-cursor for evil-mode.
 Supplemental evil-mode keybindings to emacs org-mode.
 #+begin_src emacs-lisp
   (use-package evil-org
-    :straight (:type git
-                     :repo "Somelauw/evil-org-mode")
     :after org
     :hook (org-mode . (lambda () evil-org-mode))
     :config
