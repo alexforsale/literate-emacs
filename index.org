@@ -1428,7 +1428,7 @@ Emacs package that displays available keybindings in popup. This is one of the t
   (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 80)
   (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 80)
 #+end_src
-the =:height= value is 1/10 pt.
+the =:height= value is 1/10 pt, so 100 height means 10 pt.
 **** font-core
 #+name: font-core
 #+begin_src emacs-lisp
