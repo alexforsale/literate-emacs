@@ -4269,6 +4269,195 @@ Configure the Elfeed RSS reader with an Orgmode file.
     :init
     (elfeed-goodies/setup))
 #+end_src
+*** [[https://gitlab.com/hperrey/khalel/][Khalel]]
+Interacting through Emacs with locally-stored calendars via the console application =khal= and syncing with remote /CalDAV/ calendars using =vdirsyncer=.
+#+begin_src emacs-lisp
+    (use-package khalel
+      :after org
+      :config
+      (khalel-add-capture-template)
+      (setq khalel-import-org-file (expand-file-name "calendar.org" org-directory)))
+#+end_src
+=khalel-import-org-file= should be on the list of =org-agenda-files=.
+**** Vdirsyncer
+First you'll need to setup a new project in [[https://console.developers.google.com/][Google API Manager]], this is needed for the vdirsyncer configuration, see their [[https://vdirsyncer.pimutils.org/en/stable/config.html#google][configuration manual]] for further information. From this you'll get the /Client ID/ and /Client Secret/.
+
+The configuration file should be placed in ~~/.config/vdirsyncer/config~
+#+name: example vdirsyncer google configuration
+#+begin_src conf :tangle no
+  # An example configuration for vdirsyncer.
+  #
+  # Move it to ~/.vdirsyncer/config or ~/.config/vdirsyncer/config and edit it.
+  # Run `vdirsyncer --help` for CLI usage.
+  #
+  # Optional parameters are commented out.
+  # This file doesn't document all available parameters, see
+  # http://vdirsyncer.pimutils.org/ for the rest of them.
+
+  [general]
+  # A folder where vdirsyncer can store some metadata about each pair.
+  status_path = "~/.local/share/vdirsyncer/status/"
+
+  # CARDDAV
+  [pair alexarians_contacts]
+  # A `[pair <name>]` block defines two storages `a` and `b` that should be
+  # synchronized. The definition of these storages follows in `[storage <name>]`
+  # blocks. This is similar to accounts in OfflineIMAP.
+  a = "alexarians_contacts_local"
+  b = "alexarians_contacts_remote"
+
+  # Synchronize all collections that can be found.
+  # You need to run `vdirsyncer discover` if new calendars/addressbooks are added
+  # on the server.
+  collections = ["from a", "from b"]
+
+  # Synchronize the "display name" property into a local file (~/.contacts/displayname).
+  metadata = ["displayname", "description"]
+
+  # To resolve a conflict the following values are possible:
+  #   `null` - abort when collisions occur (default)
+  #   `"a wins"` - assume a's items to be more up-to-date
+  #   `"b wins"` - assume b's items to be more up-to-date
+  #conflict_resolution = null
+
+  [storage alexarians_contacts_local]
+  # A storage references actual data on a remote server or on the local disk.
+  # Similar to repositories in OfflineIMAP.
+  type = "filesystem"
+  path = "~/.contacts/"
+  fileext = ".vcf"
+
+  [storage alexarians_contacts_remote]
+  type = "google_contacts"
+  token_file = "~/.local/share/vdirsyncer/google_contacts_token"
+  client_id = "<Client ID from Google developer console>"
+  client_secret = "<Client secret from Google developer console>"
+
+  #username =
+  # The password can also be fetched from the system password storage, netrc or a
+  # custom command. See http://vdirsyncer.pimutils.org/en/stable/keyring.html
+  #password =
+
+  # CALDAV
+  [pair alexarians_calendar]
+  a = "alexarians_calendar_local"
+  b = "alexarians_calendar_remote"
+  collections = ["from a", "from b"]
+
+  # Calendars also have a color property
+  metadata = ["displayname", "color"]
+
+  [storage alexarians_calendar_local]
+  type = "filesystem"
+  path = "~/.calendars/"
+  fileext = ".ics"
+
+  [storage alexarians_calendar_remote]
+  type = "google_calendar"
+  token_file = "~/.local/share/vdirsyncer/google_calendar_token"
+  client_id = "<Client ID from Google developer console>"
+  client_secret = "<Client secret from Google developer console>"
+  #url = "https://owncloud.example.com/remote.php/caldav/"
+  #username =
+  #password =
+#+end_src
+/Vdirsyncer/ is packaged in /archlinux's extra/ repository, and it comes with a user systemd unit file, after running =vdirsyncer discover=, enable the unit file with =systemctl --user enable vdirsyncer.timer=.
+**** Khal
+Next is the =khal= configuration. This should be placed in ~~/.config/khal/config~:
+
+#+name: khal configuration
+#+begin_src conf :tangle no
+  [calendars]
+
+  [[personal]]
+  path = /home/alexforsale/.calendars/*
+  type = discover
+  color = auto
+
+  [locale]
+  timeformat = %H:%M
+  dateformat = %Y-%m-%d
+  longdateformat = %Y-%m-%d %a
+  datetimeformat = %Y-%m-%d %H:%M
+  longdatetimeformat = %Y-%m-%d %H:%M
+
+  [default]
+  default_calendar = *
+#+end_src
+*** [[https://github.com/DamienCassou/khardel][khardel]]
+Emacs package integrating [[https://github.com/lucc/khard?tab=readme-ov-file][khard]], a console cardav client.
+#+begin_src emacs-lisp
+  (use-package khardel
+    :config
+    (with-eval-after-load 'general
+      (+config/leader-insert
+      "c" '(khardel-insert-email :wk "Insert email"))))
+#+end_src
+**** khard configuration
+This is taken from the [[https://github.com/lucc/khard/blob/main/doc/source/examples/khard.conf.example][example configuration]]. Should be placed in ~~/.config/khard/khard.conf~
+#+name: khard configuration
+#+begin_src conf :tangle no
+  # example configuration file for khard version > 0.14.0
+  # place it under ~/.config/khard/khard.conf
+  # This file is parsed by the configobj library.  The syntax is described at
+  # https://configobj.readthedocs.io/en/latest/configobj.html#the-config-file-format
+
+  [addressbooks]
+  [[family]]
+  path = ~/.contacts/family/
+  [[friends]]
+  path = ~/.contacts/friends/
+  [[work]]
+  path = ~/.work/**/client-*-contacts/
+  type = discover
+
+  [general]
+  debug = no
+  default_action = list
+  # These are either strings or comma seperated lists
+  editor = vim, -i, NONE
+  merge_editor = vimdiff
+
+  [contact table]
+  # display names by first or last name: first_name / last_name / formatted_name
+  display = first_name
+  # group by address book: yes / no
+  group_by_addressbook = no
+  # reverse table ordering: yes / no
+  reverse = no
+  # append nicknames to name column: yes / no
+  show_nicknames = no
+  # show uid table column: yes / no
+  show_uids = yes
+  # show kind table column: yes / no
+  show_kinds = no
+  # sort by first or last name: first_name / last_name / formatted_name
+  sort = last_name
+  # localize dates: yes / no
+  localize_dates = yes
+  # set a comma separated list of preferred phone number types in descending priority
+  # or nothing for non-filtered alphabetical order
+  preferred_phone_number_type = pref, cell, home
+  # set a comma separated list of preferred email address types in descending priority
+  # or nothing for non-filtered alphabetical order
+  preferred_email_address_type = pref, work, home
+
+  [vcard]
+  # extend contacts with your own private objects
+  # these objects are stored with a leading "X-" before the object name in the vcard files
+  # every object label may only contain letters, digits and the - character
+  # example:
+  #   private_objects = Jabber, Skype, Twitter
+  # default: ,  (the empty list)
+  private_objects = Jabber, Skype, Twitter
+  # preferred vcard version: 3.0 / 4.0
+  preferred_version = 3.0
+  # Look into source vcf files to speed up search queries: yes / no
+  search_in_source_files = no
+  # skip unparsable vcard files: yes / no
+  skip_unparsable = no
+#+end_src
+All the paths should reflect the configuration on =vdirsyncer=. See the [[https://khard.readthedocs.io/en/latest/][online documentation]] for more information.
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-tools)
