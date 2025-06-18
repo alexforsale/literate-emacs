@@ -111,7 +111,7 @@ The =custom-file= is used to save customization settings for future use.
     (load custom-file))
 #+end_src
 ** Setup =package=
-Now much more simpler since =[[https://github.com/jwiegley/use-package][use-package]]= is built into /Emacs/. It's actually not used since I'm using =straight.el=.
+Now much more simpler since [[https://github.com/jwiegley/use-package][use-package]] is built into /Emacs/. It's actually not used since I'm using =straight.el=.
 #+begin_src emacs-lisp
   (with-eval-after-load 'package
     ;; Add `melpa` to `package-archives`.
