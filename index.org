@@ -808,7 +808,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
   (+config/leader-menu! "open" "o")
   (+config/leader-menu! "quit" "q")
   (+config/leader-menu! "register" "gr")
-  (+config/leader-menu! "tree" "t")
+  (+config/leader-menu! "tree" "e")
   (+config/leader-menu! "tab" "t TAB")
   (+config/leader-menu! "vterm" "v")
   (+config/leader-menu! "window" "w")
@@ -4699,8 +4699,7 @@ Needs an external package =fd=, or =fd-find=
     :config
     (with-eval-after-load 'general
       (+config/leader-tree
-        "t" 'treemacs
-        "p" 'treemacs-add-and-display-current-project-exclusively)
+        "e" 'treemacs)
       (general-define-key
        :keymaps 'treemacs-mode-map
        "[mouse-1]" 'treemacs-single-click-expand-action)
