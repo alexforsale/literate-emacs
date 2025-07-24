@@ -210,7 +210,7 @@ All =evil-mode= specific configuration and =evil= related packages goes here.
   (require 'config-evil (expand-file-name "modules/config-evil.el" user-emacs-directory) t)
 #+end_src
 *** Keybinding
-Most keybindings here depends on [[id:76f56dc0-309f-485d-b9b6-70971e90437d::evil][evil]], so it will be loaded after.
+Most keybindings here depends on /evil-mode/, so it will be loaded after.
 #+begin_src emacs-lisp
   (require 'config-keybinding (expand-file-name "modules/config-keybinding.el" user-emacs-directory) t)
 #+end_src
@@ -527,10 +527,10 @@ Customizable key sequence to escape from insert state and everything else in /Em
     (evil-exchange-install))
 #+end_src
 Easy text exchange operator for Evil. This is the port of [[https://github.com/tommcdo/vim-exchange][vim-exchange]] by Tom McDonald.
-*** Default Bindings
-**** ~gx~ (evil-exchange)
+**** Default Bindings
+***** ~gx~ (evil-exchange)
 On the first use, define (and highlight) the first {motion} to exchange. On the second use, define the second {motion} and perform the exchange.
-**** ~gX~ (evil-exchange-cancel)
+***** ~gX~ (evil-exchange-cancel)
 Clear any {motion} pending for exchange.
 *** [[https://github.com/rgrinberg/evil-quick-diff][evil-quick-diff]]
 This is a replacement for the [[https://github.com/AndrewRadev/linediff.vim][linediff.vim]] plugin. It's not a faithful port, as it uses ediff for diffing, but the spirit is the same. The default operator key for diffing is ~god~. While ~goD~ is used for canceling.
