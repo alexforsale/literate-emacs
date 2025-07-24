@@ -648,9 +648,9 @@ This provides a near-complete vim folding experience in evil for Emacs.
     :init
     (setq evil-vimish-fold-mode-lighter " ⮒")
     (setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
+    (setq my/vimish-fold-map (make-sparse-keymap))
     :config
     (global-evil-vimish-fold-mode +1)
-    (setq my/vimish-fold-map (make-sparse-keymap))
     (evil-define-key* nil my/z-map "f" (cons "fold" my/vimish-fold-map))
     (evil-define-key* nil my/vimish-fold-map
       "j" '("next fold" . vimish-fold-next-fold)
