@@ -201,13 +201,21 @@ This function is just a wrapper to easily merge lists. I don't think I need it a
 #+end_src
 I put my org files inside /syncthing/ default directory (=~/Sync= if on /Linux/) so it will automatically synced to all my devices. But on /windows/ WSL the location will vary depending on how you install /syncthing/ so I won't even bother set it up.
 ** Load each modular configuration file.
-*** evil 
+*** evil
+:PROPERTIES:
+:ID:       76f56dc0-309f-485d-b9b6-70971e90437d
+:END:
 All =evil-mode= specific configuration and =evil= related packages goes here.
 #+begin_src emacs-lisp
   (require 'config-evil (expand-file-name "modules/config-evil.el" user-emacs-directory) t)
 #+end_src
-*** general
+*** Keybinding
+Most keybindings here depends on [[id:76f56dc0-309f-485d-b9b6-70971e90437d::evil][evil]], so it will be loaded after.
 #+begin_src emacs-lisp
+  (require 'config-keybinding (expand-file-name "modules/config-keybinding.el" user-emacs-directory) t)
+#+end_src
+*** general :noexport:archive:
+#+begin_src emacs-lisp :tangle no
   (require 'config-general (expand-file-name "modules/config-general.el" user-emacs-directory) t)
 #+end_src
 All =general= keybindings are in this file.
@@ -261,8 +269,8 @@ I don't use =dired= that much, but when I do, I at least know my way around.
   (require 'config-treemacs (expand-file-name "modules/config-treemacs.el" user-emacs-directory) t)
 #+end_src
 It's like /NERDtree/ in /vim/, but in /Emacs/, I kinda understand why /vim/ need this functionality. ~C-x C-f~ with =vertico= and =marginalia= already do the same in /Emacs/. So it's not important to me, but still nice to have.
-*** mail
-#+begin_src emacs-lisp
+*** mail :noexport:
+#+begin_src emacs-lisp :tangle no
   (require 'config-mail (expand-file-name "modules/config-mail.el" user-emacs-directory) t)
 #+end_src
 Email in /Emacs/ with the help of /notmuch/, /offlineimap/, /afew/, and /davmail/ for my /Exchange/ mails.
@@ -281,7 +289,7 @@ Doing stuffs in /linux/ will eventually makes you edit files from various progra
   ;;; init.el ends here
 #+end_src
 * Modules
-** [[https://evil.readthedocs.io/][Evil]]
+** [[https://evil.readthedocs.io/][Evil]] :external:
 :PROPERTIES:
 :header-args: :tangle ./modules/config-evil.el :mkdirp t
 :ID:       af30e16b-69ed-47ec-965c-224fc3d7d609
@@ -421,20 +429,20 @@ Change cursor shape and color by evil state in terminal.
     (evilem-make-motion evilem-motion-backward-WORD-begin #'evil-backward-WORD-begin :scope 'visible)
     (evilem-make-motion evilem-motion-backward-word-end #'evil-backward-word-end :scope 'visible)
     (evilem-make-motion evilem-motion-backward-WORD-end #'evil-backward-WORD-end :scope 'visible)
-    (evilem-default-keybindings "z g")
+    (evilem-default-keybindings "z f")
     )
 #+end_src
-This is a useful package for complementing /Evil/'s motion. With =general.el=, I set the keymap to ~SPC g e~.
-| evilem keybinding                   | evilem key    | Evil                      | evil key |
-|-------------------------------------+---------------+---------------------------+----------|
-| =evilem-motion-forward-word-begin=  | ~SPC g e w~   | =evil-forward-word-begin= | ~w~      |
-| =evilem-motion-forward-WORD-begin=  | ~SPC g e W~   | =evil-forward-WORD-begin= | ~W~      |
-| =evilem-motion-forward-word-end=    | ~SPC g e e~   | =evil-forward-word-end=   | ~e~      |
-| =evilem-motion-forward-WORD-end=    | ~SPC g e E~   | =evil-forward-WORD-end=   | ~E~      |
-| =evilem-motion-backward-word-begin= | ~SPC g e b~   | =evil-forward-word-begin= | ~b~      |
-| =evilem-motion-backward-WORD-begin= | ~SPC g e B~   | =evil-forward-WORD-begin= | ~B~      |
-| =evilem-motion-backward-word-end=   | ~SPC g e g e~ | =evil-forward-word-end=   | ~g e~    |
-| =evilem-motion-backward-WORD-end=   | ~SPC g e g E~ | =evil-forward-WORD-end=   | ~g E~    |
+This is a useful package for complementing /Evil/'s motion. With =general.el=, this is the keybinding (using ~zf~), so the fastest motion to use is ~zff~ for .
+| evilem keybinding                   | evilem key | Evil                      | evil key |
+|-------------------------------------+------------+---------------------------+----------|
+| =evilem-motion-forward-word-begin=  | ~z f w~    | =evil-forward-word-begin= | ~w~      |
+| =evilem-motion-forward-WORD-begin=  | ~z f W~    | =evil-forward-WORD-begin= | ~W~      |
+| =evilem-motion-forward-word-end=    | ~z f e~    | =evil-forward-word-end=   | ~e~      |
+| =evilem-motion-forward-WORD-end=    | ~z f E~    | =evil-forward-WORD-end=   | ~E~      |
+| =evilem-motion-backward-word-begin= | ~z f b~    | =evil-forward-word-begin= | ~b~      |
+| =evilem-motion-backward-WORD-begin= | ~z f B~    | =evil-forward-WORD-begin= | ~B~      |
+| =evilem-motion-backward-word-end=   | ~z f g e~  | =evil-forward-word-end=   | ~g e~    |
+| =evilem-motion-backward-WORD-end=   | ~z f g E~  | =evil-forward-WORD-end=   | ~g E~    |
 These keybindings is also available on =visual-mode=.
 *** [[https://github.com/emacs-evil/evil-surround][evil-surround]]
 This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by [[https://github.com/tpope][Tim Pope]]. The functionality is wrapped into a minor mode.
@@ -448,6 +456,7 @@ This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by
                evil-surround-region)
     :hook
     (org-mode . (lambda () (push '(?~ . ("~" . "~")) evil-surround-pairs-alist)))
+    (org-mode . (lambda () (push '(?~ . ("<" . ">")) evil-surround-pairs-alist)))
     (org-mode . (lambda () (push '(?$ . ("\\(" . "\\)")) evil-surround-pairs-alist)))
     :init
     (global-evil-surround-mode 1))
@@ -536,14 +545,19 @@ This is a replacement for the [[https://github.com/AndrewRadev/linediff.vim][lin
     (evil-quick-diff-install))
 #+end_src
 *** [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
-A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emulation, help you comment code efficiently. For example, you can press ~99,ci~ to comment out 99 lines.
+A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emulation, help you comment code efficiently. For example, you can press ~99,ci~ to comment out 99 lines (only works if you set the =(evilnc-default-hotkeys t)=).
 #+begin_src emacs-lisp
   (use-package evil-nerd-commenter
     :after evil
     :commands (evilnc-comment-operator
                evilnc-inner-comment
                evilnc-outer-commenter)
-    :bind ([remap comment-line] . evilnc-comment-or-uncomment-lines))
+    :bind ([remap comment-line] . evilnc-comment-or-uncomment-lines)
+    :config
+    (setq my/evilnc-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "gc") (cons "Comment" my/evilnc-map))
+    (evil-define-key* nil my/evilnc-map "c" '("comment/uncomment" . evilnc-comment-or-uncomment-lines))
+    (evil-define-key* nil my/evilnc-map "o" '("copy and paste commented" . evilnc-copy-and-comment-lines)))
 #+end_src
 *** [[https://github.com/hlissner/evil-snipe][evil-snipe]]
 Evil-snipe emulates [[https://github.com/goldfeld/vim-seek][vim-seek]] and/or [[https://github.com/justinmk/vim-sneak][vim-sneak]] in evil-mode.
@@ -562,7 +576,9 @@ By default, snipe only binds ~s~ (forward) / ~S~ (backward) to =evil-snipe-s= an
     (setq evil-snipe-smart-case t
           evil-snipe-scope 'line
           evil-snipe-repeat-scope 'visible
-          evil-snipe-char-fold t))
+          evil-snipe-char-fold t)
+    (evil-snipe-mode +1)
+    (evil-snipe-override-mode +1))
 #+end_src
 *** [[https://github.com/noctuid/evil-textobj-anyblock][evil-textobj-anyblock]]
 Evil-textobj-anyblock is port of the vim plugin [[https://github.com/rhysd/vim-textobj-anyblock][vim-textobj-anyblock]]. It gives a text object that will select the closest of ~()~, ~{}~, ~[]~, ~<>~, ~''~, ~""~, ~` `~, or ~“”~ by default. This can be convenient for operating on the closest block without having to type its symbol.
@@ -613,35 +629,39 @@ Try using ~dax~, ~vix~ and ~gUix~.
 *** [[https://github.com/alexmurray/evil-vimish-fold][evil-vimish-fold]]
 Integration of [[https://github.com/mrkkrp/vimish-fold][vimish-fold]] with evil
 
-Adds standard vim keybindings of ~zf~ and ~zd~ to create and delete folds (via =vimish-fold=) respectively. Also hooks into evil so the usual vim keybindings for fold toggling (~za~), opening (~zo~), closing (~zc~) etc all work as expected with vimish-fold.
++Adds standard vim keybindings of ~zf~ and ~zd~ to create and delete folds (via =vimish-fold=) respectively+. Fold now can be created with =<leader>zff=, after that, it hooks into evil so the usual vim keybindings for fold toggling (~za~), opening (~zo~), closing (~zc~) etc all work as expected with vimish-fold.
 
 Finally, also supports navigation between folds using ~zj~ and ~zk~.
 
 This provides a near-complete vim folding experience in evil for Emacs.
 #+begin_src emacs-lisp
   (use-package evil-vimish-fold
+    :bind
+    (([remap evil-toggle-fold] . vimish-fold-toggle)
+     ([remap evil-close-fold] . vimish-fold-refold)
+     ([remap evil-open-fold] . vimish-fold-unfold)
+     ([remap evil-close-folds] . vimish-fold-refold-all)
+     ([remap evil-open-folds] . vimish-fold-unfold-all))
     :commands (evil-vimish-fold/next-fold evil-vimish-fold/previous-fold
                                           evil-vimish-fold/delete evil-vimish-fold/delete-all
                                           evil-vimish-fold/create evil-vimish-fold/create-line)
+    :init
+    (setq evil-vimish-fold-mode-lighter " ⮒")
+    (setq evil-vimish-fold-target-modes '(prog-mode conf-mode text-mode))
     :config
-    (vimish-fold-global-mode +1)
-    (with-eval-after-load 'general
-      (general-define-key
-       [remap evil-toggle-fold] 'vimish-fold-toggle
-       [remap evil-close-fold] 'vimish-fold-refold
-       [remap evil-open-fold] 'vimish-fold-unfold
-       [remap evil-close-folds] 'vimish-fold-refold-all
-       [remap evil-open-folds] 'vimish-fold-unfold-all))
-    (evil-define-key* 'motion 'global
-      "zj" #'vimish-fold-next-fold
-      "zk" #'vimish-fold-previous-fold
-      "zf" #'evil-vimish-fold/create
-      "zF" #'evil-vimish-fold/create-line
-      "zd" #'evil-vimish-fold/delete
-      "zE" #'evil-vimish-fold/delete-all))
+    (global-evil-vimish-fold-mode +1)
+    (setq my/vimish-fold-map (make-sparse-keymap))
+    (evil-define-key* nil my/z-map "f" (cons "fold" my/vimish-fold-map))
+    (evil-define-key* nil my/vimish-fold-map
+      "j" '("next fold" . vimish-fold-next-fold)
+      "k" '("prev fold" . vimish-fold-previous-fold)
+      "f" '("create" . evil-vimish-fold/create)
+      "F" '("create line" . evil-vimish-fold/create-line)
+      "d" '("delete" . evil-vimish-fold/delete)
+      "E" '("delete all" . evil-vimish-fold/delete-all)))
 #+end_src
 *** [[https://github.com/gabesoft/evil-mc/][evil-mc]]
-Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g .~.
+Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g .~. Considering to disable this in favor for /evil-multiedit/.
 #+begin_src emacs-lisp
   (use-package evil-mc
     :commands (evil-mc-make-cursor-here
@@ -667,31 +687,7 @@ Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g
                evil-mc-make-and-goto-prev-match
                evil-mc-skip-and-goto-prev-match)
     :init
-    (global-evil-mc-mode  1)
-    :config
-    ;; (evil-define-key 'visual evil-mc-key-map
-    ;;   "A" #'evil-mc-make-cursor-in-visual-selection-end
-    ;;   "I" #'evil-mc-make-cursor-in-visual-selection-beg)
-    (with-eval-after-load 'general
-      (general-define-key
-       :states '(normal visual)
-       :keymaps 'global
-       "gz" '(:ignore t :wk "evil-mc")
-       "gzm" 'evil-mc-make-all-cursors
-       "gzu" 'evil-mc-undo-all-cursors
-       ;; "gzz" '+evil/mc-toggle-cursors
-       ;; "gzc" '+evil/mc-make-cursor-here
-       "gzn" 'evil-mc-make-and-goto-next-cursor
-       "gzp" 'evil-mc-make-and-goto-prev-cursor
-       "gzN" 'evil-mc-make-and-goto-last-cursor
-       "gzP" 'evil-mc-make-and-goto-first-cursor)
-      (general-define-key
-       :states '(normal visual)
-       :keymaps 'evil-mc-key-map
-       "C-n" 'evil-mc-make-and-goto-next-cursor
-       "C-N" 'evil-mc-make-and-goto-next-cursor
-       "C-p" 'evil-mc-make-and-goto-prev-cursor
-       "C-P" 'evil-mc-make-and-goto-first-cursor)))
+    (global-evil-mc-mode  1))
 #+end_src
 *** [[https://github.com/hlissner/evil-multiedit][evil-multiedit]]
 #+begin_src emacs-lisp
@@ -746,19 +742,228 @@ Display visual hint on evil edit operations.
   ;;; config-evil.el ends here
 #+end_src
 
-** general
+** Keybindings
+:PROPERTIES:
+:header-args: :tangle ./modules/config-keybinding.el :mkdirp t
+:END:
+*** header :noexport:
+#+begin_src emacs-lisp
+  ;;; config-keybinding --- various keybidings configuration file -*- lexical-binding: t -*-
+  ;;; Commentary:
+  ;;; Code:
+#+end_src
+All the keybindings set here only for the built-in packages only, for keybindings specific to packages, will be defined in their package declaration.
+*** Leader key
+This is taken from /vim/, The leader key in Vim and Neovim is a special key used as a prefix for custom keyboard shortcuts, also known as mappings. It creates a "namespace" for user-defined commands, allowing you to create personalized shortcuts without conflicting with Vim's default commands.
+#+name: leader key
+#+begin_src emacs-lisp
+  (evil-set-leader '(normal visual) (kbd "SPC"))
+  (evil-set-leader '(insert emacs) (kbd "C-c SPC"))
+#+end_src
+*** 1st level commands
+These commands is used often so it will need a faster keybindings (~<leader> <key>~).
+#+name: 1st level keybindings
+#+begin_src emacs-lisp
+  (evil-global-set-key 'normal (kbd "<leader>:") '("execute commands" . execute-extended-command))
+  (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
+  (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument))
+#+end_src
+*** Buffers
+All keybindings will go with ~<leader>b~.
+#+name: buffers
+#+begin_src emacs-lisp
+  (setq my/buffer-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>b") (cons "Buffer" my/buffer-map))
+  (evil-define-key* nil my/buffer-map
+    "[" '("previous buffer" . previous-buffer)
+    "]" '("next buffer" . next-buffer)
+    "c" '("clone indirect buffer" . clone-indirect-buffer)
+    "C" '("clone indirect buffer other window" . clone-indirect-buffer-other-window)
+    "d" '("kill buffer" . kill-buffer)
+    "i" '("ibuffer" . ibuffer)
+    "k" '("kill buffer" . kill-buffer)
+    "l" '("switch to last buffer" . evil-switch-to-windows-last-buffer)
+    "m" '("switch to message buffer". (lambda () (interactive) (switch-to-buffer "*Messages*")))
+    "n" '("next buffer" . next-buffer)
+    "N" '("new buffer" . evil-buffer-new)
+    "p" '("previous buffer" . previous-buffer)
+    "o" '("other buffer" . (lambda () (interactive) (switch-to-buffer nil)))
+    "r" '("revert buffer" . revert-buffer)
+    "R" '("rename buffer" . rename-buffer)
+    "s" '("save buffer" . save-buffer)
+    "x" '("switch to scratch buffer" . (lambda () (interactive) (switch-to-buffer "*scratch*")))
+    "z" '("bury buffer" . bury-buffer))
+#+end_src
+*** Filetree
+This is for /treemacs/ ~<leader>e~, would be good for /dired/ also.
+#+name: tree
+#+begin_src emacs-lisp
+  (setq my/tree-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>e") (cons "Tree" my/tree-map))
+#+end_src
+*** Files
+Perhaps the most used keybindings, ~<leader>f~.
+#+name: files
+#+begin_src emacs-lisp
+  (setq my/file-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>f") (cons "Files" my/file-map))
+  (evil-define-key* nil my/file-map
+    "f" '("find file" . find-file)
+    "d" '("jump to current directory" . dired-jump)
+    "i" '("open init file" . (lambda () (interactive)
+                               (find-file
+                                (expand-file-name "init.el" user-emacs-directory))))
+    "k" '("delete frame" . delete-frame)
+    "r" '("recent file" . recentf)
+    "s" '("save buffer" . save-buffer)
+    "S" '("Save as" . (lambda () (interactive "F") (write-file "./" t)))
+    "w" '("find file other window" . find-file-other-window))
+#+end_src
+*** Git
+All /git/-related commands goes here, ~<leader>g~.
+#+name: git
+#+begin_src emacs-lisp
+  (setq my/git-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>g") (cons "Git" my/git-map))
+#+end_src
+*** Help
+This key ~<leader>h~ just simulate the standard Emacs ~C-h~.
+#+name: help
+#+begin_src emacs-lisp
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>h") (cons "Help" help-map))
+#+end_src
+*** Insert
+Commands for quick insertion ~<leader>i~.
+#+name: insert
+#+begin_src emacs-lisp
+  (setq my/insert-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>i") (cons "Insert" my/insert-map))
+  (evil-define-key* nil my/insert-map "c" '("insert character" . insert-char))
+#+end_src
+*** Open/org
+Misc quick commands, also for /org-mode/ ~<leader>o~.
+#+name: open
+#+begin_src emacs-lisp
+    (setq my/open-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Insert" my/open-map))
+#+end_src
+**** org-mode
+#+name: org-mode-map
+#+begin_src emacs-lisp
+  (setq my/org-mode-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
+#+end_src
+*** Search
+Maybe the third most used keys, ~<leader>s~.
+#+name: search
+#+begin_src emacs-lisp
+  (setq my/search-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>s") (cons "Search" my/search-map))
+#+end_src
+*** Terminal
+Sets to ~<leader>v~ since I mostly only use /vterm/.
+#+name: term
+#+begin_src emacs-lisp
+  (setq my/vterm-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>v") (cons "Vterm" my/vterm-map))
+#+end_src
+*** Window
+The second most used keybindings, I will try to use the default /vim/ keys.
+#+name: window
+#+begin_src emacs-lisp
+  (setq my/window-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>w") (cons "Window" my/window-map))
+  (evil-define-key* nil my/window-map
+    "C-o" '("delete other window" . delete-other-windows)
+    "C--" '("set height" . evil-window-set-height)
+    "[" '("left window" . evil-window-left)
+    "]" '("right window" . evil-window-right)
+    "=" '("enlarge window" . enlarge-window)
+    "-" '("shrink window" . shrink-window)
+    "}" '("enlarge horizontal" . enlarge-window-horizontally)
+    "{" '("shrink horizontal" . shrink-window-horizontally)
+    "+" '("increase height" . evil-window-increase-height)
+    "_" '("decrease height" . evil-window-decrease-height)
+    "<" '("decrease width" . evil-window-decrease-width)
+    ">" '("increase width" . evil-window-increase-width)
+    "b" '("bottom right" . evil-window-bottom-right)
+    "c" '("delete" . evil-window-delete)
+    "d" '("delete" . evil-window-delete)
+    "h" '("left window" . evil-window-left)
+    "f" '("find file other window" . ffap-other-window)
+    "j" '("down window" . evil-window-down)
+    "k" '("up window" . evil-window-up)
+    "l" '("window right" . evil-window-right)
+    "n" '("new window" . evil-window-new)
+    "m" '("mru" . evil-window-mru)
+    "q" '("quit window" . evil-quit)
+    "r" '("rotate downward" . evil-window-rotate-downwards)
+    "R" '("rotate upward" . evil-window-rotate-upwards)
+    "s" '("split horizontally and follow" . +evil/window-split-and-follow)
+    "T" '("tear off window" . tear-off-window)
+    "t" '("top left window" . evil-window-top-left)
+    "u" '("undo" . winner-undo)
+    "v" '("split vertical and follow" . +evil/window-vsplit-and-follow)
+    "w" '("other window" . other-window)
+    "W" '("previous window" . evil-window-prev)
+    "x" '("exchange window" . evil-window-exchange)
+    "|" '("set width" . evil-window-set-width)
+    (kbd "<left>") '("left window" . evil-window-left)
+    (kbd "<right>") '("right window" . evil-window-right)
+    (kbd "<down>") '("down window" . evil-window-down)
+    (kbd "<up>") '("up window" . evil-window-up))
+#+end_src
+*** Quit
+Also used for reloading configuration (like /Doomemacs/) ~<leader>q~.
+#+name: quit
+#+begin_src emacs-lisp
+  (setq my/quit-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>q") (cons "Quit" my/quit-map))
+  (evil-define-key* nil my/quit-map
+    "R" '("restart Emacs" . restart-emacs)
+    "r" '("reload configuration" . (lambda () (interactive) (load user-init-file)))
+    "q" '("quit Emacs and save" . save-buffers-kill-terminal))
+#+end_src
+*** Z keys
+This is for other /evil/ packages that need its own keybinding, and tbf, there's already a lot of them in the ~g~ and ~z~ keys.
+#+name: Z keys
+#+begin_src emacs-lisp
+  (setq my/z-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>z") (cons "Z" my/z-map))
+#+end_src
+*** Non-leader keys
+These keybindings is mostly package-specifics.
+**** dired :noexport:archive:disabled:
+#+name: dired
+#+begin_src emacs-lisp :tangle no
+  (evil-define-minor-mode-key '(normal visual) 'dired-mode-map
+    (kbd "g$") '("hide subdir" . dired-hide-subdir)
+    (kbd "g?") '("summary" . dired-summary)
+    (kbd "gG") '("change group" . dired-do-chgrp)
+    (kbd "gj") '("next dir line" . dired-next-dirline)
+    (kbd "gk") '("prev dir line" . dired-prev-dirline)
+    (kbd "go") '("view file" dired-view-file)
+    (kbd "gy") '("show file type" . dired-show-file-type))
+#+end_src
+*** footer :noexport:
+#+begin_src emacs-lisp
+  (provide 'config-keybinding)
+  ;;; config-keybinding.el ends here
+#+end_src
+
+** general :external:noexport:archive:
 :PROPERTIES:
 :header-args: :tangle ./modules/config-general.el :mkdirp t
 :END:
 Keybindings in /Emacs/ is always been my struggle, my brain isn't big enough to memorize all the default keybindings (though over the years my fingers started to memorize some of them). At first I started using /[[https://github.com/abo-abo/hydra/][hydra]]/, it's a wonderful package for customized keybindings. But configuring them feels like a chore, considering I'm still working my way on finding my own comfort in keybindings.
 *** header :noexport:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;;; config-general --- `general.el' configuration file -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
 *** configuration
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package general
     :init
     (general-evil-setup t)
@@ -795,7 +1000,7 @@ What I'm doing before is setting the /general/ keybindings inside their respecti
 I prefer to have the keybindings inside the /use-package/ declaration, this way if I decided not to use the package(s), their custom keybindings will also be removed. The other way for this is to use the =:demand t= keyword, with the down side of having a longer initialization time.
 *** Packages keybindings
 **** First level menu
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; First level menu
   ;; (+config/leader-menu! "activities" "C-a")
   (+config/leader-menu! "buffer" "b")
@@ -816,7 +1021,7 @@ I prefer to have the keybindings inside the /use-package/ declaration, this way 
 #+end_src
 This is the immediate menu after pressing =SPC= in normal and visual mode. and also =C-c SPC= in insert mode. Mostly inspired by =Doomemacs=.
 **** First level keybinding
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; keybindings
   (+config/leader-key
     ";" 'pp-eval-expression
@@ -826,7 +1031,7 @@ This is the immediate menu after pressing =SPC= in normal and visual mode. and a
 #+end_src
 These are the commands I used often.
 **** buffer
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; buffer
   (+config/leader-buffer
     "C-b" 'consult-buffer
@@ -858,7 +1063,7 @@ There are some keybindings that are bound to functions, like switching to /Messa
 Consult have too many commands it warrants a special heading in this keybindings.
 ***** global
 This is for temporary, ideally, it should go into separate categories.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'consult
     (general-define-key
      [remap Info-search] 'consult-info
@@ -891,7 +1096,7 @@ This is for temporary, ideally, it should go into separate categories.
 #+end_src
 ***** search
 I'm trying to learn a more complex searching in /Emacs/, for faster navigation.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'consult
     (+config/leader-search
       "c" 'consult-locate
@@ -921,27 +1126,27 @@ I'm trying to learn a more complex searching in /Emacs/, for faster navigation.
 #+end_src
 
 If I happened to have the =fd= binary, also add this keybindings.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (when (executable-find "fd")
     (+config/leader-search
       "f" 'consult-fd))
 #+end_src
 
 Also if I have =ripgrep=:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
     (when (executable-find "rg")
       (+config/leader-search
         "R" 'consult-ripgrep))
 
 #+end_src
 In =org-mode= add this keybindings for navigating through headings.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-search
     :keymaps 'org-mode-map
     "O" 'consult-org-heading)
 #+end_src
 ***** bookmark
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'consult
     (+config/leader-search
       "b" '(:ignore t :wk "bookmark")
@@ -951,7 +1156,7 @@ In =org-mode= add this keybindings for navigating through headings.
 #+end_src
 Also for the goal of faster text navigation. I think it's a feature I should use more.
 ***** register
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'consult
     (+config/leader-search
       "r" '(:ignore t :wk "register")
@@ -960,7 +1165,7 @@ Also for the goal of faster text navigation. I think it's a feature I should use
 #+end_src
 Still wrapping my head around the concept of registers. But I do hope to use this more.
 ***** isearch
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'consult
     (general-define-key
      :keymaps 'isearch-mode-map
@@ -972,7 +1177,7 @@ Still wrapping my head around the concept of registers. But I do hope to use thi
 It's just normal /Isearch/ wrapped in /consult/.
 **** Editing
 ***** smartparens
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'smartparens
     (general-nvmap
      :keymaps 'smartparens-mode-map
@@ -986,13 +1191,13 @@ It's just normal /Isearch/ wrapped in /consult/.
 #+end_src
 /Smartparens/ is a wonderful package, once you know how to use it.
 ***** evil-easymotion
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'general
       (+config/leader-go
         "e" '(:keymap evilem-map :package evil-easymotion :wk "evilem")))
 #+end_src
 **** dired
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (general-nvmap
     'dired-mode-map
     "g$" 'dired-hide-subdir
@@ -1006,7 +1211,7 @@ It's just normal /Isearch/ wrapped in /consult/.
 #+end_src
 Is this even needed?
 **** files
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; files
   (+config/leader-files
     "D" 'dired
@@ -1020,14 +1225,14 @@ Is this even needed?
     "w" '(find-file-other-window :wk "find file other window"))
 #+end_src
 Most of this is built-in, but some packages offer a much more better experience, like =consult-recent-file=:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (with-eval-after-load 'consult
     (+config/leader-files
       "r" 'consult-recent-file))
 #+end_src
 Which have a preview-mode when navigating through files.
 **** help
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; help
 (+config/leader-key
   "h" (general-simulate-key "C-h"
@@ -1038,14 +1243,14 @@ Which have a preview-mode when navigating through files.
 #+end_src
 This command is a wrapper for the actual ~C-h~.
 **** insert
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; insert
 (+config/leader-insert
   "u" '(insert-char :wk "insert character"))
 #+end_src
 for inserting special characters or symbols.
 **** mark
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; mark
   (+config/leader-search
     "bB" '(bookmark-jump-other-window :wk "jump to bookmark other window")
@@ -1060,7 +1265,7 @@ for inserting special characters or symbols.
 #+end_src
 Continuation from the bookmark section in /consult/ earlier.
 **** open
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;; open
   (+config/leader-open
     "i" '((lambda () (interactive)
@@ -1070,7 +1275,7 @@ Continuation from the bookmark section in /consult/ earlier.
                (expand-file-name "init.el" user-emacs-directory)))) :wk "open Emacs configuration file"))
 #+end_src
 Right now just for opening /Emacs/ init file. And I'm tangling it from an org-file so it needs another addition.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-open
     "I" '((lambda () (interactive)
             (find-file
@@ -1078,7 +1283,7 @@ Right now just for opening /Emacs/ init file. And I'm tangling it from an org-fi
 #+end_src
 **** org-mode
 This is the global keybidings.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (general-define-key
    :keymaps 'override
    "C-c l" '(org-store-link :wk "Store link")
@@ -1087,7 +1292,7 @@ This is the global keybidings.
    "C-c C-s" 'org-schedule)
 #+end_src
 For notes-related keybindings.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-notes
     "a" 'org-agenda
     "c" 'org-capture
@@ -1096,7 +1301,7 @@ For notes-related keybindings.
 #+end_src
 
 The keybindings under local leader (~SPC m~), honestly this is too much and I needs to reorganize this.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/local-leader
     :keymaps 'org-mode-map
     "C-a" 'org-attach
@@ -1173,14 +1378,14 @@ The keybindings under local leader (~SPC m~), honestly this is too much and I ne
 #+end_src
 **** quit
 For quitting /Emacs/.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-quit
     "q" '(save-buffers-kill-terminal :wk "quit and save")
     "R" '(restart-emacs :wk "restart Emacs"))
 #+end_src
 **** register
 Not quite /register/ since I moved most of it. Also ~SPC g r~ is just too many keystrokes.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-register
     "M-w" '(copy-rectangle-as-kill :wk "copy region-rectangle and save")
     "c" '(clear-rectangle :wk "blank out region-rectangle")
@@ -1198,7 +1403,7 @@ Not quite /register/ since I moved most of it. Also ~SPC g r~ is just too many k
 #+end_src
 **** window
 For window navigation.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-window
     "C-o" '(delete-other-windows :wk "delete other windows")
     "[" '(evil-window-left :wk "left window")
@@ -1241,15 +1446,8 @@ For window navigation.
     "<down>" 'evil-window-down
     "<up>" 'evil-win-up)
 #+end_src
-
-***** footer :noexport:
-#+begin_src emacs-lisp
-  (provide 'config-keybindings)
-  ;;; config-keybindings.el ends.here
-#+end_src
-
 **** search
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (+config/leader-search
     "r" '(:ignore t :wk "register")
     "rf" '(frameset-to-register :wk "store frameset to register")
@@ -1266,7 +1464,7 @@ For window navigation.
     )
 #+end_src
 *** footer :noexport:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (provide 'config-general)
   ;;; config-general.el ends here
 #+end_src
@@ -1315,7 +1513,6 @@ A fancy and fast mode-line inspired by [[https://github.com/seagle0128/doom-mode
     (with-eval-after-load 'projectile
       (setq doom-modeline-project-detection 'projectile))
     (setq doom-modeline-indent-info t))
-
 #+end_src
 **** modus-vivendi :disabled:archive:noexport:
 I use this theme when I'm not using any external theme.
@@ -1342,9 +1539,8 @@ I use this theme when I'm not using any external theme.
     (custom-set-faces
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 4.0)))))
-    (with-eval-after-load 'general
-      (+config/leader-window
-        "S" 'ace-swap-window))
+    (evil-define-key* nil my/window-map
+      "S" '("swap window" . ace-swap-window))
     :bind ([remap other-window] . ace-window))
 #+end_src
 Setting =aw-scope= to =frame= so it doesn't select other frames.
@@ -1501,16 +1697,8 @@ Since /Emacs/ is a [[https://www.emacswiki.org/emacs/SelfDocumentation][self-doc
          var-bt 'action
          (lambda (button)
            (helpful-variable (button-get button 'apropos-symbol))))))
-    (with-eval-after-load 'general
-      (general-define-key
-       "C-h F" 'helpful-function
-       :keymaps 'prog-mode-map
-       "C-c C-d" 'helpful-at-point)
-      ;; (general-nvmap
-      ;;   :keymaps 'prog-mode-map
-      ;;   "K" '(helpful-at-point :wk "helpful at point")
-      ;;   "gr" '(helpful-update :wk "update")))
-    ))
+    (keymap-global-set "C-h F" '("helpful Function" . helpful-function))
+    (define-key prog-mode-map "C-c C-d" '("help at point" . helpful-at-point)))
 #+end_src
 
 *** hl-line :builtin:
@@ -1521,12 +1709,12 @@ Enable line highlighting in all buffers.
     :config
     (global-hl-line-mode 1))
 #+end_src
-*** highlight-quoted
+*** highlight-quoted :external:
 #+begin_src emacs-lisp
   (use-package highlight-quoted
     :hook ((lisp-mode lisp-interaction-mode) . highlight-quoted-mode))
 #+end_src
-*** hs-mode
+*** hs-mode :builtin:
 #+begin_src emacs-lisp
   (use-package hideshow
     :hook (prog-mode . hs-minor-mode))
@@ -1565,7 +1753,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     (show-paren-when-point-in-periphery t))
 #+end_src
 
-*** mouse
+*** mouse :builtin:
 #+begin_src emacs-lisp
   (use-package mouse
     :straight nil
@@ -1573,7 +1761,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     (setq mouse-yank-at-point t))
 #+end_src
 
-*** Base UI
+*** Base UI :builtin:
 #+begin_src emacs-lisp
   (use-package emacs
     :straight nil
@@ -1610,7 +1798,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     ;; buffer is narrowed, and where you are, exactly.
     (setq-default display-line-numbers-widen t) )
 #+end_src
-*** frame
+*** frame :builtin:
 #+begin_src emacs-lisp
   (use-package frame
     :straight nil
@@ -1621,7 +1809,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
           window-divider-default-bottom-width 1
           window-divider-default-right-width 1))
 #+end_src
-*** window
+*** window :builtin:
 #+begin_src emacs-lisp
   (use-package window
     :straight nil
@@ -1629,7 +1817,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     (setq split-width-threshold 160
         split-height-threshold nil))
 #+end_src
-*** comint
+*** comint :builtin:
 #+begin_src emacs-lisp
   (use-package comint
     :straight nil
@@ -1637,7 +1825,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     (setq comint-prompt-read-only t
           comint-buffer-maximum-size 2048))
 #+end_src
-*** winner
+*** winner :builtin:
 #+begin_src emacs-lisp
   (use-package winner
     :straight nil
@@ -1648,8 +1836,8 @@ This built-in package is necessary when dealing with /Emacs lisp/.
                                   "*Apropos*" "*Help*" "*cvs*" "*Buffer List*" "*Ibuffer*"
                                   "*esh command on file*")))
 #+end_src
-*** [[https://github.com/benma/visual-regexp.el][visual-regexp]]
-#+begin_src emacs-lisp
+*** [[https://github.com/benma/visual-regexp.el][visual-regexp]] :external:disabled:archive:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package visual-regexp
     :config
     (with-eval-after-load 'general
@@ -1671,9 +1859,9 @@ Emacs minor mode to automatically balance window margins.
           olivetti-margin-width 5
           olivetti-minimum-body-width 80))
 #+end_src
-*** [[https://github.com/wolray/symbol-overlay][symbol-overlay]]
+*** [[https://github.com/wolray/symbol-overlay][symbol-overlay]] :external:archive:disabled:noexport:
  Highlight symbols with keymap-enabled overlays.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package symbol-overlay
     :hook
     (prog-mode . (lambda () symbol-overlay-mode +1))
@@ -1685,7 +1873,7 @@ Emacs minor mode to automatically balance window margins.
         "ss" 'symbol-overlay-put
         "sr" 'symbol-overlay-remove-all)))
 #+end_src
-*** [[https://github.com/hlissner/emacs-solaire-mode][solaire-mode]]
+*** [[https://github.com/hlissner/emacs-solaire-mode][solaire-mode]] :external:
  If only certain buffers could be so grossly incandescent.
 #+begin_src emacs-lisp
   (use-package solaire-mode
@@ -1708,7 +1896,7 @@ Emacs minor mode to automatically balance window margins.
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** base
+*** base :builtin:
 Usually configuration that defined at the /C source code/.
 #+name: base
 #+begin_src emacs-lisp
@@ -1748,7 +1936,7 @@ Usually configuration that defined at the /C source code/.
     (setq-default truncate-lines t)
     (setq-default x-stretch-cursor nil))
 #+end_src
-*** tooltip
+*** tooltip :builtin:
 #+begin_src emacs-lisp
   (use-package tooltip
     :straight nil
@@ -1756,7 +1944,7 @@ Usually configuration that defined at the /C source code/.
     (when (bound-and-true-p tooltip-mode)
     (tooltip-mode -1)))
 #+end_src
-*** compile
+*** compile :builtin:
 #+begin_src emacs-lisp
   (use-package compile
     :straight nil
@@ -1770,7 +1958,7 @@ Usually configuration that defined at the /C source code/.
     (autoload 'comint-truncate-buffer "comint" nil t)
     (add-hook 'compilation-filter-hook #'comint-truncate-buffer))
 #+end_src
-*** files
+*** files :builtin:
 Usually configurations related to file manipulations.
 #+name: files
 #+begin_src emacs-lisp
@@ -1804,7 +1992,7 @@ Usually configurations related to file manipulations.
     (auto-mode-case-fold nil)
     (require-final-newline t))
 #+end_src
-*** saveplace
+*** saveplace :builtin:
 When closing a file (like when exiting /Emacs/ or killing a buffer), the point (or cursor) in that buffer will be saved. I find this a must-have feature.
 #+name: saveplace
 #+begin_src emacs-lisp
@@ -1814,7 +2002,7 @@ When closing a file (like when exiting /Emacs/ or killing a buffer), the point (
     :custom
     (save-place-file (expand-file-name "places" user-emacs-directory)))
 #+end_src
-*** autorevert
+*** autorevert :builtin:
 Here I'm using =global-auto-revert-mode= to automatically revert all opened buffer.
 #+name: autorevert
 #+begin_src emacs-lisp
@@ -1855,7 +2043,7 @@ Here I'm using =global-auto-revert-mode= to automatically revert all opened buff
         (with-current-buffer buf
           (doom-auto-revert-buffer-h)))))
 #+end_src
-*** savehist
+*** savehist :builtin:
 Saving the /minibuffer/ history.
 #+name: savehist
 #+begin_src emacs-lisp
@@ -1877,7 +2065,7 @@ Saving the /minibuffer/ history.
        search-ring
        regexp-search-ring)))
 #+end_src
-*** recentf
+*** recentf :builtin:
 #+name: recentf
 #+begin_src emacs-lisp
   (use-package recentf
@@ -1927,7 +2115,7 @@ Saving the /minibuffer/ history.
     )
 #+end_src
 Even though I use /consult-find-file/ the actual /recentf/ package is still used (I think).
-*** server
+*** server :builtin:
 #+name: server
 #+begin_src emacs-lisp
   (use-package server
@@ -1938,7 +2126,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
       (server-start))
     (require 'org-protocol))
 #+end_src
-*** prog-mode
+*** prog-mode :builtin:
 #+name: prog-mode
 #+begin_src emacs-lisp
   (use-package prog-mode
@@ -1947,19 +2135,20 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
            (prog-mode . visual-line-mode)
            ;; (prog-mode . (lambda () (electric-pair-mode 1)))
            )
-    :config
-    (setq prettify-symbols-alist
-          '(("|>" . "▷  ")
-            ("<|" . "◁  ")
-            ("->>" . "↠  ")
-            ("->" . "→  ")
-            ("<-" . "←  ")
-            ("=>" . "⇒  ")
-            ("<=" . "≤ ")
-            (">=" . "≥ "))))
+    ;; :config
+    ;; (setq prettify-symbols-alist
+    ;;       '(("|>" . "▷  ")
+    ;;         ("<|" . "◁  ")
+    ;;         ("->>" . "↠  ")
+    ;;         ("->" . "→  ")
+    ;;         ("<-" . "←  ")
+    ;;         ("=>" . "⇒  ")
+    ;;         ("<=" . "≤ ")
+    ;;         (">=" . "≥ ")))
+    )
 #+end_src
 Basically, in =prog-mode=, some combination of characters will look different.
-*** bookmark 
+*** bookmark :builtin:
 #+name: bookmark
 #+begin_src emacs-lisp
   (use-package bookmark
@@ -1977,7 +2166,7 @@ The configuration for /bookmark/.
           proced-auto-update-interval 3
           proced-sort 'pmem))
 #+end_src
-*** tramp
+*** tramp :builtin:
 #+name: tramp
 #+begin_src emacs-lisp
   (use-package tramp
@@ -1997,7 +2186,7 @@ The configuration for /bookmark/.
     (tramp-auto-save-directory (expand-file-name ".tramp-autosave/" user-emacs-directory)))
 #+end_src
 I'm still figuring out how to do a proper /TRAMP/ connection into a /guix-system/ machine.
-*** epg-config
+*** epg-config :builtin:
 #+name: epg-config
 #+begin_src emacs-lisp
   (use-package epg-config
@@ -2007,14 +2196,14 @@ I'm still figuring out how to do a proper /TRAMP/ connection into a /guix-system
     (epg-gpg-program "gpg2"))
 #+end_src
 This is for /Gnupg/.
-*** tabify
+*** tabify :builtin:
 #+begin_src emacs-lisp
   (use-package tabify
     :straight nil
     :custom
     (tabify-regex "^\t* [ \t]+"))
 #+end_src
-*** simple
+*** simple :builtin:
 #+name: simple
 #+begin_src emacs-lisp
   (use-package simple
@@ -2034,7 +2223,7 @@ This is for /Gnupg/.
       (evil-set-initial-state #'message-mode 'insert)))
 #+end_src
 The important part is the /Evil/ integration, which is should be handled already by /evil-collection/.
-*** vc-hooks
+*** vc-hooks :builtin:
 By default visiting / opening symlinked file will ask if we want to visit the actual file.
 #+begin_src emacs-lisp
   (use-package vc-hooks
@@ -2042,7 +2231,7 @@ By default visiting / opening symlinked file will ask if we want to visit the ac
     :custom
     (vc-follow-symlinks t))
 #+end_src
-*** dabbrev
+*** dabbrev :builtin:
 This is part of /corfu/ configuration.
 #+begin_src emacs-lisp
   ;; Use Dabbrev with Corfu!
@@ -2058,14 +2247,14 @@ This is part of /corfu/ configuration.
     (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
     (add-to-list 'dabbrev-ignored-buffer-modes 'tags-table-mode))
 #+end_src
-*** repeat-mode
+*** repeat-mode :builtin:
 #+begin_src emacs-lisp
   (use-package repeat
     :straight nil
     :init
     (repeat-mode +1))
 #+end_src
-*** so-long
+*** so-long :builtin:
 #+begin_src emacs-lisp
   (use-package so-long
     :straight nil
@@ -2091,7 +2280,7 @@ This is part of /corfu/ configuration.
           (so-long-detected-long-line-p))))
     (setq so-long-predicate #'doom-buffer-has-long-lines-p))
 #+end_src
-*** ediff
+*** ediff :builtin:
 #+begin_src emacs-lisp
   (use-package ediff
     :straight nil
@@ -2116,7 +2305,7 @@ This is part of /corfu/ configuration.
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** Vertico frameworks
+*** Vertico frameworks :external:
 I call this framework since usually these packages are what people use together, though they work fine separately.
 **** vertico
 ***** Basic configuration
@@ -2153,24 +2342,12 @@ I call this framework since usually these packages are what people use together,
     (setq vertico-cycle t)
     :config
     (advice-add #'tmm-add-prompt :after #'minibuffer-hide-completions)
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps 'vertico-map
-       "?" 'minibuffer-completion-help
-       "M-RET" 'minibuffer-force-complete-and-exit
-       "M-TAB" 'minibuffer-complete
-       "<tab>" 'vertico-insert
-       "<escape>" 'minibuffer-keyboard-quit
-       "C-M-n" 'vertico-next-group
-       "C-M-p" 'vertico-previous-group
-       "C-j" 'vertico-next
-       "C-k" 'vertico-previous
-       "C-M-j" 'vertico-next-group
-       "C-M-k" 'vertico-previous-group
-       "DEL" 'vertico-directory-delete-char)
-      (general-define-key
-       :keymaps 'minibuffer-local-map
-       "M-h" 'backward-kill-word)))
+      (keymap-set vertico-map "?" #'minibuffer-completion-help)
+    (keymap-set vertico-map "M-RET" #'minibuffer-force-complete-and-exit)
+    (keymap-set vertico-map "TAB" #'vertico-insert)
+    (keymap-set vertico-map "C-j" #'vertico-next)
+    (keymap-set vertico-map "C-k" #'vertico-previous)
+    (keymap-set vertico-map "DEL" #'vertico-directory-delete-char))
 
   ;; A few more useful configurations...
   (use-package emacs
@@ -2382,20 +2559,60 @@ This is the basic configuration, with the addition of enabling corfu in the mini
           consult-async-min-input 2
           consult-async-refresh-delay  0.15
           consult-async-input-throttle 0.2
-          consult-async-input-debounce 0.1
-          )
-    )
+          consult-async-input-debounce 0.1)
+    (evil-define-key* nil my/buffer-map
+      "b" '("buffers" . consult-buffer)
+      "B" '("project buffers" .consult-project-buffer)
+      )
+    (evil-define-key* nil my/org-mode-map
+      "O" '("search heading" . consult-org-heading))
+    (evil-define-key* nil my/search-map
+      "a" '("grep search" . consult-grep)
+      "b" '("search bookmarks" . consult-bookmark)
+      "B" '("search global mark" . consult-global-mark)
+      "f" '("focus line" . consult-focus-line)
+      "h" '("isearch history" . consult-isearch-history)
+      "m" '("search mark" . consult-mark)
+      "i" '("imenu" . consult-imenu)
+      "o" '("search outline" . consult-outline)
+      "s" '("search line" . consult-line)
+      "S" '("search multi line" . consult-line-multi)
+      "\"" '("search register" . consult-register))
+    (cond ((executable-find "fd")
+           (evil-define-key* nil my/search-map "A" '("fd search" . consult-fd)))
+          (t (evil-define-key* nil my/search-map "A" '("find search" . consult-find))))
+    (when (executable-find "rg")
+      (evil-define-key* nil my/search-map "r" '("search ripgrep" . consult-ripgrep)))
+
+      (keymap-set isearch-mode-map "M-e" #'consult-isearch-history)
+      (keymap-set isearch-mode-map "M-l" #'consult-line)
+      (keymap-set isearch-mode-map "M-L" #'consult-line-multi)
+
+      (keymap-set minibuffer-local-map "M-s" #'consult-history)
+      (keymap-set minibuffer-local-map "M-r" #'consult-history)
+
+      (global-set-key [remap Info-search] 'consult-info)
+      (global-set-key [remap yank-pop] 'consult-yank-pop)
+      (global-set-key [remap bookmark-jump] 'consult-bookmark)
+      (global-set-key [remap evil-show-marks] 'consult-mark)
+      (global-set-key [remap evil-show-registers] 'consult-register)
+      (global-set-key [remap goto-line] 'consult-goto-line)
+      (global-set-key [remap imenu] 'consult-imenu)
+      (global-set-key [remap locate] 'consult-locate)
+      (global-set-key [remap load-theme] 'consult-theme)
+      (global-set-key [remap man] 'consult-man)
+      (global-set-key [remap recentf-open-files] 'consult-recent-file)
+      (global-set-key [remap switch-to-buffer] 'consult-buffer)
+      (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
+      (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window))
 #+end_src
 Apart from the =consult-projectile-function=, this is pretty much the default.
 ***** consult-dir
 #+begin_src emacs-lisp
   (use-package consult-dir
-    :config
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps 'vertico-map
-       "C-x C-d" 'consult-dir
-       "C-x C-j" 'consult-dir-jump-file)))
+    :bind (:map vertico-map
+                ("C-x C-d" . consult-dir)
+                ("C-x C-j" . consult-dir-jump-file)))
 #+end_src
 **** orderless
 ***** Basic Configuration
@@ -2464,9 +2681,9 @@ This is a package that I should learn more, but the configuration is overwhealmi
     (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
 /consult/ integration for /embark/.
-**** [[https://github.com/minad/affe][affe]]
+**** [[https://github.com/minad/affe][affe]] :disabled:archive:noexport:
 Asynchronous Fuzzy Finder for Emacs.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package affe
     :config
     ;; Manual preview key for `affe-grep'
@@ -2544,18 +2761,32 @@ Asynchronous Fuzzy Finder for Emacs.
 Enchanted Spell Checker. Here I use /hunspell/ as a backend dictionary
 #+begin_src emacs-lisp
   (use-package jinx
-    :if (executable-find "enchant-2")
-    :hook (emacs-startup . global-jinx-mode)
-    :config
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps 'override
-       [remap ispell-word] 'jinx-correct
-       "C-M-$" 'jinx-languages)))
+      :if (executable-find "enchant-2")
+      :hook (emacs-startup . global-jinx-mode)
+      :config
+      (global-set-key [remap ispell-word] 'jinx-correct)
+      (evil-global-set-key 'normal (kbd "C-M-$") 'jinx-language))
 #+end_src
-**** [[https://github.com/minad/tempel][tempel]]
-Simple templates for Emacs.
+**** Snippets
+This is provided by yasnippet.
+#+name: snippets
 #+begin_src emacs-lisp
+  (use-package yasnippet
+    :init
+    (yas-global-mode)
+    :config
+    (setq yas-snippets-dir
+          (list (expand-file-name "snippets" user-emacs-directory)
+                (expand-file-name "straight/build/yasnippet-snippets/snippets" user-emacs-directory)))
+    (evil-define-key* nil my/insert-map "s" '("insert snippet" . consult-yasnippet)))
+
+  (use-package consult-yasnippet)
+
+  (use-package yasnippet-snippets)
+#+end_src
+**** [[https://github.com/minad/tempel][tempel]] :disabled:noexport:archive:
+Simple templates for Emacs.
+#+begin_src emacs-lisp :tangle no
   (use-package tempel
     :init
     (defun tempel-setup-capf ()
@@ -2625,7 +2856,7 @@ Simple templates for Emacs.
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** eshell
+*** eshell :builtin:
 #+caption: /eshell/ in action
 [[./assets/img/emacs-eshell.png][file:assets/img/emacs-eshell.png]]
 
@@ -2642,9 +2873,9 @@ A shell-like command interpreter implemented in Emacs Lisp.
   (eshell-destroy-buffer-when-process-dies t)
   (eshell-prompt-regexp "^[^\)]*[\)] "))
 #+end_src
-*** eshell-syntax-highlighting
+*** eshell-syntax-highlighting :external:noexport:archive:disabled:
 #+name: eshell-syntax-highlighting
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp  :tangle no
 (use-package eshell-syntax-highlighting
   :defer t
   :after eshell
@@ -2662,8 +2893,8 @@ A shell-like command interpreter implemented in Emacs Lisp.
   ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
   )
 #+end_src
-*** sh-script 
-#+name: sh-script
+*** sh-script :external:disabled:noexport:archive:
+#+name: sh-script :tangle no
 #+begin_src emacs-lisp
   (use-package sh-script
     :mode ("\\.bats\\'" . sh-mode)
@@ -2686,41 +2917,32 @@ A shell-like command interpreter implemented in Emacs Lisp.
     (with-eval-after-load 'smartparens
       (sp-local-pair 'sh-mode "`" "`" :unless '(sp-point-before-word-p sp-point-before-same-p))))
 #+end_src
-*** vterm
+*** vterm :external:
 #+name: vterm
 #+begin_src emacs-lisp
   (use-package vterm
-    :demand t
-    :commands vterm-mode
-    :config
-    (add-hook 'vterm-mode-hook
-              (lambda ()
-                (setq-local global-hl-line-mode nil)
-                (setq-local hscroll-margin 0)))
-    (setq vterm-kill-buffer-on-exit t)
-    (evil-set-initial-state #'vterm-mode 'insert)
-    (with-eval-after-load 'general
-      (+config/leader-vterm
-        "v" 'vterm))
-    )
+      :demand t
+      :commands vterm-mode
+      :config
+      (add-hook 'vterm-mode-hook
+                (lambda ()
+                  (setq-local global-hl-line-mode nil)
+                  (setq-local hscroll-margin 0)))
+      (setq vterm-kill-buffer-on-exit t)
+      (evil-set-initial-state #'vterm-mode 'insert))
 #+end_src
-*** multi-vterm
+*** multi-vterm :external:
 #+name: multi-vterm
 #+begin_src emacs-lisp
   (use-package multi-vterm
-    :defer t
     :after vterm
     :config
-    (with-eval-after-load 'general
-      (general-iemap
-        :keymaps 'vterm-mode-map
-        "C-SPC" '(:ignore t :wk "multi vterm")
-        "C-SPC a" '(multi-vterm :wk "new vterm buffer")
-        "C-SPC n" '(multi-vterm-next :wk "next vterm buffer")
-        "C-SPC p" '(multi-vterm-prev :wk "previous vterm buffer")))
-    )
+    (evil-define-key* nil my/vterm-map "v" '("toggle terminal" . multi-vterm-dedicated-toggle))
+    (evil-define-key* 'normal vterm-mode-map (kbd ",c") #'multi-vterm)
+    (evil-define-key* 'normal vterm-mode-map (kbd ",n") #'multi-vterm-next)
+    (evil-define-key* 'normal vterm-mode-map (kbd ",p") #'multi-vterm-prev))
 #+end_src
-*** vterm-toggle
+*** vterm-toggle :external:noexport:disabled:archive:
 #+name: vterm-toggle
 #+begin_src emacs-lisp :tangle no
 (use-package vterm-toggle
@@ -2746,9 +2968,9 @@ A shell-like command interpreter implemented in Emacs Lisp.
                  (reusable-frames . visible)
                  (window-height . 0.4))))
 #+end_src
-*** bash-completion
+*** bash-completion :external:
 #+name: bash-completion
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp  :tangle no
 (use-package bash-completion
   :defer t
   :config
@@ -2784,7 +3006,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** select
+*** select :builtin:
 #+name: select
 #+begin_src emacs-lisp
   (use-package select
@@ -2792,19 +3014,19 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :custom
     (select-enable-clipboard t))
 #+end_src
-*** transient-mark-mode
+*** transient-mark-mode :builtin:
 Highlight region.
 #+name: transient-mark-mode
 #+begin_src emacs-lisp
   (transient-mark-mode 1)
 #+end_src
-*** delete-selection-mode
+*** delete-selection-mode :builtin:
 When enabled, typed text replaces the selection if the selection is active.  Otherwise, typed text is just inserted at point regardless of any selection.
 #+name: delete-selection-mode
 #+begin_src emacs-lisp
   (delete-selection-mode 1)
 #+end_src
-*** subword
+*** subword :builtin:
 #+name: subword
 #+begin_src emacs-lisp
   (use-package subword
@@ -2812,7 +3034,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
     :init
     (global-subword-mode 1))
 #+end_src
-*** text-mode 
+*** text-mode :builtin:
 #+name: text-mode
 #+begin_src emacs-lisp
   (use-package text-mode
@@ -2821,7 +3043,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
     :config
     (setq-default sentence-end-double-space nil))
 #+end_src
-*** whitespace
+*** whitespace :builtin:
 #+begin_src emacs-lisp
   (use-package whitespace
     :straight nil
@@ -2835,13 +3057,13 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
             (newline-mark ?\n [?¬ ?\n])
             (space-mark ?\  [?·] [?.]))))
 #+end_src
-*** ws-butler
+*** ws-butler :external:
 #+name: ws-butler
 #+begin_src emacs-lisp
   (use-package ws-butler
     :hook ((prog-mode text-mode) . ws-butler-mode))
 #+end_src
-*** [[https://github.com/gilbertw1/better-jumper][better-jumper]]
+*** [[https://github.com/gilbertw1/better-jumper][better-jumper]] :external:
 #+begin_src emacs-lisp
   (use-package better-jumper
     :init
@@ -2852,7 +3074,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
     (global-set-key [remap xref-go-forward] #'better-jumper-jump-forward)
     (better-jumper-mode +1))
 #+end_src
-*** smartparens
+*** smartparens :external:
 I still have a mixed feeling for this package, but it still easier to configure than the builtin /electric-pair-mode/. Also, should this be in the /Lisp/ section?
 #+name: smartparens
 #+begin_src emacs-lisp
@@ -2933,14 +3155,14 @@ I still have a mixed feeling for this package, but it still easier to configure 
     )
 #+end_src
 The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/files/smartparens.el][example configuration]] messes up my /evil-mode/. I have them commented for now.
-*** [[https://github.com/radian-software/apheleia][apheleia]]
+*** [[https://github.com/radian-software/apheleia][apheleia]] :external:
 #+begin_src emacs-lisp
   (use-package apheleia
     :defer t
     :init
     (apheleia-global-mode +1))
 #+end_src
-*** [[https://github.com/magnars/expand-region.el][expand-region]]
+*** [[https://github.com/magnars/expand-region.el][expand-region]] :external:
  Emacs extension to increase selected region by semantic units.
 #+begin_src emacs-lisp
   (use-package expand-region
@@ -2950,7 +3172,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
        :keymaps 'global
        "C-=" 'er/expand-region)))
 #+end_src
-*** ispell
+*** ispell :builtin:
 #+begin_src emacs-lisp
   (use-package ispell
     :ensure nil
@@ -2998,7 +3220,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** eldoc
+*** eldoc :builtin:
 #+begin_src emacs-lisp
   (use-package eldoc
     :hook ((emacs-lisp-mode
@@ -3014,9 +3236,8 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
     :demand t
     :config
     (evil-set-initial-state #'git-commit-mode 'insert)
-    (with-eval-after-load 'general 
-      (+config/leader-go
-        "g" 'magit-status))
+    (evil-define-key* nil my/git-map
+      "g" '("git status" . magit-status))
     :custom
     (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     (magit-diff-refine-hunk 'all)
@@ -3063,11 +3284,8 @@ A project interaction library for /Emacs/, with little external dependency as po
     (global-set-key [remap find-tag]         #'projectile-find-tag)
     (projectile-mode +1)
     (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
-    (with-eval-after-load 'general
-      (+config/leader-key
-        "SPC" 'projectile-find-file
-        "p" '(:keymap projectile-command-map :package projectile :wk "projectile")))
-    )
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>SPC") '("find project file" . projectile-find-file))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>p") (cons "Project" projectile-command-map)))
 #+end_src
 
 *** diff-hl :external:
@@ -3092,14 +3310,12 @@ A project interaction library for /Emacs/, with little external dependency as po
     :config
     (when (featurep 'flycheck)
       (setq flycheck-indication-mode 'right-fringe))
-    (with-eval-after-load 'general
-      (+config/leader-go
-        "*" 'diff-hl-show-hunk
-        "=" 'diff-hl-diff-goto-hunk
-        "[" 'diff-hl-previous-hunk
-        "]" 'diff-hl-next-hunk
-        "{" 'diff-hl-show-hunk-previous
-        "}" 'diff-hl-show-hunk-next)))
+    (evil-define-key* '(normal visual) 'global
+      "z*" '("show hunk" . diff-hl-show-hunk)
+      "z[" '("prev hunk" . diff-hl-previous-hunk)
+      "z]" '("next hunk" . diff-hl-next-hunk)
+      "z{" '("go and show prev hunk" . diff-hl-show-hunk-previous)
+      "z}" '("go and show next hunk" . diff-hl-show-hunk-next)))
 #+end_src
 *** perspective :external:
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
@@ -3129,44 +3345,29 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                                                     :as #'buffer-name)))))
       (consult-customize consult--source-buffer :hidden t :default nil)
       (add-to-list 'consult-buffer-sources persp-consult-source))
-    (with-eval-after-load 'general
-      (general-def
-        :keymaps 'perspective-map
-        "TAB" '(persp-switch-last :wk "switch to last perspective")
-        "P" 'projectile-persp-switch-project)
-      (+config/leader-key
-        "TAB" (general-simulate-key "C-c TAB"
-                :state '(normal visual)
-                :name general-SPC-h-simulates-C-c-TAB
-                :docstring "Simulates C-c TAB in normal and visual mode."
-                :which-key "Perspective"))
-      (+config/leader-key
-        "C-x" '(persp-switch-to-scratch-buffer :wk "switch to scratch buffer")))
+    (evil-define-key* '(normal visual) 'global
+      (kbd "<leader>TAB") (cons "Perspective" perspective-map))
+    (evil-define-key* nil perspective-map
+      (kbd "TAB") '("swich to last used perspective" . persp-switch-last)
+      "P" '("switch project" . projectile-persp-switch-project))
     :init
     (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
     (unless (equal persp-mode t)
       (persp-mode 1))
     :bind (([remap switch-to-buffer] . persp-switch-to-buffer*)
            ([remap kill-buffer] . persp-kill-buffer*))
-    :hook (kill-emacs . persp-state-save)
-    )
+    :hook (kill-emacs . persp-state-save))
 #+end_src
 *** persp-projectile :external:
 #+name: persp-projectile
 #+begin_src emacs-lisp
   (use-package persp-projectile
     :after perspective
-    :commands projectile-persp-switch-project
-    :config
-    (with-eval-after-load 'general
-      (general-def
-        :keymaps 'perspective-map
-        "P" 'projectile-persp-switch-project))
-    )
+    :commands projectile-persp-switch-project)
 #+end_src
-*** git-link :external:
+*** git-link :external:noexport:disabled:archive:
 #+name: git-link
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package git-link
     :demand t
     :commands (git-link git-link-commit git-link-homepage)
@@ -3179,11 +3380,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
         "Gc" 'git-link-commit))
     )
 #+end_src
-*** git-messenger :external:
+*** git-messenger :external:noexport:disabled:archive:
 #+caption: /git messenger/ popup message
 [[./assets/img/emacs-git-messenger.png][file:assets/img/emacs-git-messenger.png]]
 #+name: git-messenger
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package git-messenger
     :config
     (with-eval-after-load 'general
@@ -3194,8 +3395,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (git-messenger:use-magit-popup t)
     (git-messenger:show-detail t))
 #+end_src
-*** git-timemachine :external:
-#+name: git-timemachine
+*** git-timemachine :external:noexport:disabled:archive:
+#+name: git-timemachine :tangle no
 #+begin_src emacs-lisp
   (use-package git-timemachine
     :after magit
@@ -3205,9 +3406,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
         "Gt" 'git-timemachine-toggle))
     )
 #+end_src
-*** org-project-capture :external:
+*** org-project-capture :external:noexport:disabled:archive:
 #+name: org-project-capture
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package org-project-capture
     :bind (("C-c n p" . org-project-capture-project-todo-completing-read))
     :config
@@ -3220,82 +3421,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 *** lsp :external:
 #+caption: /Emacs/ lsp in action
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
-**** old config :noexport:archive:disabled:
-#+begin_src emacs-lisp :noweb no
-  (use-package lsp-mode
-    :diminish (lsp-lens-mode lsp-mode)
-    :commands lsp lsp-deferred
-    :init
-    (setq lsp-keymap-prefix "C-c C-l")
-    (defun my/orderless-dispatch-flex-first (_pattern index _total)
-      (and (eq index 0) 'orderless-flex))
-    (defun my/lsp-mode-setup-completion ()
-      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-            '(orderless)))
-    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
-    (when (featurep 'cape)
-      (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
-    :hook
-    (lsp-mode . lsp-enable-which-key-integration)
-    (lsp-completion-mode . my/lsp-mode-setup-completion)
-    ((c-mode c++-mode xml-mode
-             yaml-mode toml-mode
-             lua-mode jinja2-mode
-             json-mode html-mode
-             web-mode html-mode-local-vars-hook
-             web-mode-local-vars-hook nxml-mode-local-vars-hook
-             scss-mode-local-vars css-mode-local-vars
-             less-css-mode-local-vars css-mode
-             typescript-mode javascript-mode
-             js2-mode typescript-tsx-mode) . lsp-deferred)
-    :config
-    (setq lsp-toml-command
-          (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
-              (expand-file-name ".cargo/bin/taplo" "~")
-            "taplo")
-          lsp-rust-rls-server-command "rls"
-          lsp-eldoc-render-all t
-          lsp-enable-snippet nil
-          lsp-enable-indentation nil
-          lsp-prefer-flymake nil
-          lsp-keep-workspace-alive nil
-          lsp-modeline-code-actions-segments '(count icon name))
-    :custom
-    (lsp-completion-provider :none)
-    (lsp-use-snippet nil)
-    :config
-    (when (featurep 'exwm)
-      (advice-add #'corfu--make-frame :around
-                  (defun +corfu--make-frame-a (oldfun &rest args)
-                    (cl-letf (((symbol-function #'frame-parent)
-                               (lambda (frame)
-                                 (or (frame-parameter frame 'parent-frame)
-                                     exwm-workspace--current))))
-                      (apply oldfun args))
-                    (when exwm--connection
-                      (set-frame-parameter corfu--frame 'parent-frame nil))))
-
-      (advice-add #'corfu--popup-redirect-focus :override
-                  (defun +corfu--popup-redirect-focus-a ()
-                    (redirect-frame-focus corfu--frame
-                                          (or (frame-parent corfu--frame)
-                                              exwm-workspace--current)))))
-    (with-eval-after-load 'general
-      (+config/leader-key
-        :keymaps 'lsp-mode-map
-        "l" (general-simulate-key "C-c C-l"
-              :name general-SPC-l-simulates-C-c-C-l
-              :docstring "Simulates C-c C-l"
-              :which-key "LSP"))
-      (general-nvmap
-        :keymaps 'lsp-mode-map
-        [remap evil-lookup] '(lsp-describe-thing-at-point :wk "describe thing at point")))
-    )
-#+end_src
 **** Basic configuration
 ***** LSP
 #+begin_src emacs-lisp
   (use-package lsp-mode
+    :after which-key
     :init
     (setq lsp-keymap-prefix "C-c C-l")
     (defun my/orderless-dispatch-flex-first (_pattern index _total)
@@ -3308,18 +3438,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
       (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
     :hook
     (lsp-mode . lsp-enable-which-key-integration)
+    (lsp-mode . evil-normalize-keymaps)
     (lsp-completion-mode . my/lsp-mode-setup-completion)
-    ;; ((c-mode c++-mode xml-mode python-mode
-    ;;          yaml-mode toml-mode python-mode-local-vars
-    ;;          lua-mode jinja2-mode markdown-mode
-    ;;          json-mode html-mode
-    ;;          web-mode html-mode-local-vars-hook
-    ;;          web-mode-local-vars-hook nxml-mode-local-vars-hook
-    ;;          scss-mode-local-vars css-mode-local-vars
-    ;;          less-css-mode-local-vars css-mode
-    ;;          typescript-mode javascript-mode
-    ;;          js2-mode typescript-tsx-mode) . lsp-deferred)
     :config
+    (evil-define-key 'normal lsp-mode-map (kbd "<leader>l") (cons "LSP" lsp-command-map))
+    (evil-define-key 'normal lsp-mode-map "K" '("describe at point" . lsp-describe-thing-at-point))
     (setq lsp-toml-command
           (if (file-exists-p (expand-file-name ".cargo/bin/taplo" "~"))
               (expand-file-name ".cargo/bin/taplo" "~")
@@ -3329,9 +3452,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
           lsp-enable-snippet nil
           lsp-enable-indentation nil
           lsp-prefer-flymake nil
-          lsp-keep-workspace-alive nil
-          ;; lsp-modeline-code-actions-segments '(count icon name)
-          )
+          lsp-keep-workspace-alive nil)
     (when (featurep 'exwm)
       (advice-add #'corfu--make-frame :around
                   (defun +corfu--make-frame-a (oldfun &rest args)
@@ -3348,19 +3469,11 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                     (redirect-frame-focus corfu--frame
                                           (or (frame-parent corfu--frame)
                                               exwm-workspace--current)))))
-    (with-eval-after-load 'general
-      (+config/leader-key
-        :keymaps 'lsp-mode-map
-        "l" (general-simulate-key "C-c C-l"
-              :name general-SPC-l-simulates-C-c-C-l
-              :docstring "Simulates C-c C-l"
-              :which-key "LSP")))
-    (general-nvmap
-      :keymaps 'lsp-mode-map
-      "K" 'lsp-describe-thing-at-point)
     :custom
-    (lsp-completion-provider :none)
-    )
+    (lsp-completion-provider :none))
+
+  ;; (evil-define-key* '(normal visual) lsp-mode-map (kbd "<leader>l") (cons "LSP" lsp-command-map))
+  ;; (evil-define-key* '(normal visual) lsp-mode-map "K" '("describe at point" . lsp-describe-thing-at-point)
 #+end_src
 **** lsp-ui 
 #+begin_src emacs-lisp
@@ -3385,16 +3498,12 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
     (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
     (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t)
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps '(lsp-ui-mode-map)
-       [remap xref-find-definitions] 'lsp-ui-peek-find-definitions
-       [remap xref-find-references] 'lsp-ui-peek-find-references
-       "M-." 'lsp-ui-peek-find-definitions
-       "M-?" 'lsp-ui-peek-find-references))
-    )
+    (define-key lsp-ui-mode-map [remap xref-find-definitions] 'lsp-ui-peek-find-definitions)
+    (define-key lsp-ui-mode-map [remap xref-find-references] 'lsp-ui-peek-find-references)
+    (define-key lsp-ui-mode-map "M-." 'lsp-ui-peek-find-definitions)
+    (define-key lsp-ui-mode-map "M-?" 'lsp-ui-peek-find-references))
 #+end_src
-**** consult-lsp 
+**** consult-lsp :external:
 #+begin_src emacs-lisp
   (use-package consult-lsp
     :after consult lsp
@@ -3402,8 +3511,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (:map lsp-mode-map
           ([remap xref-find-apropos] . consult-lsp-symbols)))
 #+end_src
-*** [[https://emacs-lsp.github.io/dap-mode/page/configuration/][dap-mode]]
-#+begin_src emacs-lisp
+*** [[https://emacs-lsp.github.io/dap-mode/page/configuration/][dap-mode]] :external:archive:disabled:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package dap-mode
     :config
     (dap-auto-configure-mode)
@@ -3411,8 +3520,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (dap-tooltip-mode 1)
     (dap-ui-controls-mode 1))
 #+end_src
-*** Tree-sitter
-#+begin_src emacs-lisp
+*** Tree-sitter :external:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package tree-sitter-langs)
   (use-package tree-sitter-indent)
 
@@ -3478,51 +3587,44 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                     (interactive)
                     (evil-textobj-tree-sitter-goto-textobj group previous end query)))
         sym))
-
     (evil-define-key '(visual operator) 'tree-sitter-mode
       "i" +tree-sitter-inner-text-objects-map
       "a" +tree-sitter-outer-text-objects-map)
     (evil-define-key 'normal 'tree-sitter-mode
       "[g" +tree-sitter-goto-previous-map
       "]g" +tree-sitter-goto-next-map)
-
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps '+tree-sitter-inner-text-objects-map
-       "A" (+tree-sitter-get-textobj '("parameter.inner" "call.inner"))
-       "f" (+tree-sitter-get-textobj "function.inner")
-       "F" (+tree-sitter-get-textobj "call.inner")
-       "C" (+tree-sitter-get-textobj "class.inner")
-       "v" (+tree-sitter-get-textobj "conditional.inner")
-       "l" (+tree-sitter-get-textobj "loop.inner")
-       :keymaps '+tree-sitter-outer-text-objects-map
-       "A" (+tree-sitter-get-textobj '("parameter.outer" "call.outer"))
-       "f" (+tree-sitter-get-textobj "function.outer")
-       "F" (+tree-sitter-get-textobj "call.outer")
-       "C" (+tree-sitter-get-textobj "class.outer")
-       "c" (+tree-sitter-get-textobj "comment.outer")
-       "v" (+tree-sitter-get-textobj "conditional.outer")
-       "l" (+tree-sitter-get-textobj "loop.outer")
-       :keymaps '+tree-sitter-goto-previous-map
-       "a" (+tree-sitter-goto-textobj "parameter.outer" t)
-       "f" (+tree-sitter-goto-textobj "function.outer" t)
-       "F" (+tree-sitter-goto-textobj "call.outer" t)
-       "C" (+tree-sitter-goto-textobj "class.outer" t)
-       "c" (+tree-sitter-goto-textobj "comment.outer" t)
-       "v" (+tree-sitter-goto-textobj "conditional.outer" t)
-       "l" (+tree-sitter-goto-textobj "loop.outer" t)
-       :keymaps '+tree-sitter-goto-next-map
-       "a" (+tree-sitter-goto-textobj "parameter.outer")
-       "f" (+tree-sitter-goto-textobj "function.outer")
-       "F" (+tree-sitter-goto-textobj "call.outer")
-       "C" (+tree-sitter-goto-textobj "class.outer")
-       "c" (+tree-sitter-goto-textobj "comment.outer")
-       "v" (+tree-sitter-goto-textobj "conditional.outer")
-       "l" (+tree-sitter-goto-textobj "loop.outer"))))
+    (define-key +tree-sitter-inner-text-objects-map "A" (+tree-sitter-get-textobj '("parameter.inner" "call.inner")))
+    (define-key +tree-sitter-inner-text-objects-map "f" (+tree-sitter-get-textobj "function.inner"))
+    (define-key +tree-sitter-inner-text-objects-map "F" (+tree-sitter-get-textobj "call.inner"))
+    (define-key +tree-sitter-inner-text-objects-map "F" (+tree-sitter-get-textobj "call.inner"))
+    (define-key +tree-sitter-inner-text-objects-map "C" (+tree-sitter-get-textobj "class.inner"))
+    (define-key +tree-sitter-inner-text-objects-map "v" (+tree-sitter-get-textobj "conditional.inner"))
+    (define-key +tree-sitter-inner-text-objects-map "l" (+tree-sitter-get-textobj "loop.inner"))
+    (define-key +tree-sitter-outer-text-objects-map "A" (+tree-sitter-get-textobj '("parameter.outer" "call.outer")))
+    (define-key +tree-sitter-outer-text-objects-map "f" (+tree-sitter-get-textobj "function.outer"))
+    (define-key +tree-sitter-outer-text-objects-map "F" (+tree-sitter-get-textobj "call.outer"))
+    (define-key +tree-sitter-outer-text-objects-map "C" (+tree-sitter-get-textobj "class.outer"))
+    (define-key +tree-sitter-outer-text-objects-map "c" (+tree-sitter-get-textobj "comment.outer"))
+    (define-key +tree-sitter-outer-text-objects-map "v" (+tree-sitter-get-textobj "conditional.outer"))
+    (define-key +tree-sitter-outer-text-objects-map "l" (+tree-sitter-get-textobj "loop.outer"))
+    (define-key +tree-sitter-goto-previous-map "a" (+tree-sitter-goto-textobj "parameter.outer" t))
+    (define-key +tree-sitter-goto-previous-map "f" (+tree-sitter-goto-textobj "function.outer" t))
+    (define-key +tree-sitter-goto-previous-map "F" (+tree-sitter-goto-textobj "call.outer" t))
+    (define-key +tree-sitter-goto-previous-map "C" (+tree-sitter-goto-textobj "class.outer" t))
+    (define-key +tree-sitter-goto-previous-map "c" (+tree-sitter-goto-textobj "comment.outer" t))
+    (define-key +tree-sitter-goto-previous-map "v" (+tree-sitter-goto-textobj "conditional.outer" t))
+    (define-key +tree-sitter-goto-previous-map "l" (+tree-sitter-goto-textobj "loop.outer" t))
+    (define-key +tree-sitter-goto-next-map "a" (+tree-sitter-goto-textobj "parameter.outer"))
+    (define-key +tree-sitter-goto-next-map "f" (+tree-sitter-goto-textobj "function.outer"))
+    (define-key +tree-sitter-goto-next-map "F" (+tree-sitter-goto-textobj "call.outer"))
+    (define-key +tree-sitter-goto-next-map "C" (+tree-sitter-goto-textobj "class.outer"))
+    (define-key +tree-sitter-goto-next-map "c" (+tree-sitter-goto-textobj "comment.outer"))
+    (define-key +tree-sitter-goto-next-map "v" (+tree-sitter-goto-textobj "conditional.outer"))
+    (define-key +tree-sitter-goto-next-map "l" (+tree-sitter-goto-textobj "loop.outer")))
 #+end_src
-*** gptel :external:
+*** gptel :external:noexport:disabled:archive:
 #+name: gptel
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package gptel
     :after password-store
     :config
@@ -3531,9 +3633,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
           gptel-default-mode #'org-mode))
 #+end_src
 An LLM client for /Emacs/, I'm trying it with google's /[[https://gemini.google.com/][gemini]]/. This package is already good on its own. But the other reason is I'm also trying out /[[https://github.com/armindarvish/consult-web][consult-web]]/, which integrates search results from various sources.
-*** [[https://github.com/douo/magit-gptcommit][magit-gptcommit]]
+*** [[https://github.com/douo/magit-gptcommit][magit-gptcommit]] :noexport:external:disabled:archive:
 Magit commit with the help of gpt.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package magit-gptcommit
     :demand t
     :hook (gptel-mode . visual-line-mode)
@@ -3573,7 +3675,7 @@ This package looks promising, I'll wait until it mature a bit.
     (setq consult-web-dynamic-sources "gptel")
     (require 'consult-web-sources))
 #+end_src
-*** [[https://www.flycheck.org/][flycheck]] 
+*** [[https://www.flycheck.org/][flycheck]] :external:
 #+begin_src emacs-lisp
   (use-package flycheck
     :init
@@ -3591,40 +3693,33 @@ This package looks promising, I'll wait until it mature a bit.
     (setq flycheck-buffer-switch-check-intermediate-buffers t)
     ;; Display errors a little quicker (default is 0.9s)
     (setq flycheck-display-errors-delay 0.25)
-    (with-eval-after-load 'general
-      (+config/leader-key "!"
-        (general-simulate-key "C-c !"
-          :state '(normal visual)
-          :name general-SPC-!-simulates-C-c-!
-          :docstring "Simulates C-c ! in normal and visual mode."
-          :which-key "flycheck"))
-      (general-nvmap
-        :keymaps 'flycheck-error-list-mode-map
-        "C-n" 'flycheck-error-list-next-error
-        "C-p" 'flycheck-error-list-previous-error
-        "j" 'flycheck-error-list-next-error
-        "k" 'flycheck-error-list-previous-error
-        "RET" 'flycheck-error-list-goto-error
-        "[return]" 'flycheck-error-list-goto-error)))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>!") (cons "Flycheck" flycheck-command-map))
+    (evil-define-key* '(normal visual) flycheck-error-list-mode-map
+      "C-n" 'flycheck-error-list-next-error
+      "C-p" 'flycheck-error-list-previous-error
+      "j" 'flycheck-error-list-next-error
+      "k" 'flycheck-error-list-previous-error
+      "RET" 'flycheck-error-list-goto-error
+      "[return]" 'flycheck-error-list-goto-error))
 #+end_src
-**** [[https://github.com/flycheck/flycheck-color-mode-line][flycheck-color-mode-line]] :disabled:noexport:
-#+begin_src emacs-lisp :tangle no
+**** [[https://github.com/flycheck/flycheck-color-mode-line][flycheck-color-mode-line]] :external:
+#+begin_src emacs-lisp
   (use-package flycheck-color-mode-line
     :hook (flycheck-mode . flycheck-color-mode-line-mode))
 #+end_src
-**** [[https://github.com/flycheck/flycheck-pos-tip][flycheck-pos-tip]] :disabled:noexport:
-#+begin_src emacs-lisp :tangle no
+**** [[https://github.com/flycheck/flycheck-pos-tip][flycheck-pos-tip]] :external:
+#+begin_src emacs-lisp
   (use-package flycheck-pos-tip
     :init
     (flycheck-pos-tip-mode))
 #+end_src
-**** [[https://github.com/flycheck/flycheck-popup-tip][flycheck-popup-tip]]
+**** [[https://github.com/flycheck/flycheck-popup-tip][flycheck-popup-tip]] :external:
 #+begin_src emacs-lisp
   (use-package flycheck-popup-tip
     :commands flycheck-popup-tip-show-popup flycheck-popup-tip-delete-popup
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
-**** [[https://github.com/alexmurray/flycheck-posframe][flycheck-posframe]]
+**** [[https://github.com/alexmurray/flycheck-posframe][flycheck-posframe]] :external:
 #+begin_src emacs-lisp
   (use-package flycheck-posframe
     :after flycheck
@@ -3633,14 +3728,12 @@ This package looks promising, I'll wait until it mature a bit.
           flycheck-posframe-info-prefix "ⓘ "
           flycheck-posframe-error-prefix "⮾ "))
 #+end_src
-**** [[https://github.com/minad/consult-flycheck][consult-flycheck]]
+**** [[https://github.com/minad/consult-flycheck][consult-flycheck]] :external:
 #+begin_src emacs-lisp
   (use-package consult-flycheck
     :after (consult flycheck)
     :config
-    (with-eval-after-load 'general
-      (+config/leader-search
-        "f" 'consult-flycheck)))
+    (evil-define-key* nil my/search-map "F" '("Flycheck" . consult-flycheck)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
@@ -3657,7 +3750,7 @@ This package looks promising, I'll wait until it mature a bit.
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** org-mode core package
+*** org-mode core package :builtin:
 #+name: org-mode
 #+begin_src emacs-lisp
   (use-package org
@@ -3787,7 +3880,7 @@ This package looks promising, I'll wait until it mature a bit.
        ("DELEGATED" . "#8fbcbb")
        ("KILL" . "#a3be8c"))))
 #+end_src
-*** org-entities
+*** org-entities :builtin:
 #+begin_src emacs-lisp
   (use-package org-entities
     :straight nil
@@ -3796,14 +3889,14 @@ This package looks promising, I'll wait until it mature a bit.
           '(("flat"  "\\flat" nil "" "" "266D" "♭")
             ("sharp" "\\sharp" nil "" "" "266F" "♯"))))
 #+end_src
-*** ob-diagrams
-#+begin_src emacs-lisp
+*** ob-diagrams :noexport:external:
+#+begin_src emacs-lisp :tangle no
   (use-package ob-diagrams
     :after org
     :config
     (add-to-list 'org-babel-load-languages '(diagrams . t)))
 #+end_src
-*** org-faces 
+*** org-faces :builtin:
 #+name: org-faces
 #+begin_src emacs-lisp
   (use-package org-faces
@@ -3811,7 +3904,7 @@ This package looks promising, I'll wait until it mature a bit.
     :custom
     (org-fontify-quote-and-verse-blocks t))
 #+end_src
-*** org-archive 
+*** org-archive :builtin:
 #+name: org-archive
 #+begin_src emacs-lisp
   (use-package org-archive
@@ -3824,7 +3917,7 @@ This package looks promising, I'll wait until it mature a bit.
     (org-archive-reversed-order t)
     (org-archive-location (concat (expand-file-name "archives.org" org-directory) "::datetree/* Archived Tasks")))
 #+end_src
-*** org-capture
+*** org-capture :builtin:
 #+name: org-capture
 #+begin_src emacs-lisp
   (use-package org-capture
@@ -3842,7 +3935,7 @@ This package looks promising, I'll wait until it mature a bit.
             ("l" "Links" entry
              (file+headline ,(expand-file-name "links.org" org-directory) "Links")))))
 #+end_src
-*** org-refile
+*** org-refile :builtin:
 #+name: org-refile
 #+begin_src emacs-lisp
   (use-package org-refile
@@ -3857,7 +3950,7 @@ This package looks promising, I'll wait until it mature a bit.
     (org-refile-use-outline-path 'file)
     (org-outline-path-complete-in-steps nil))
 #+end_src
-*** org-fold
+*** org-fold :builtin:
 #+name: org-fold
 #+begin_src emacs-lisp
   (use-package org-fold
@@ -3866,7 +3959,7 @@ This package looks promising, I'll wait until it mature a bit.
     :custom
     (org-catch-invisible-edits 'smart))
 #+end_src
-*** org-id
+*** org-id :builtin:
 #+name: org-id
 #+begin_src emacs-lisp
   (use-package org-id
@@ -3877,7 +3970,7 @@ This package looks promising, I'll wait until it mature a bit.
     (org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id))
 #+end_src
 
-*** org-num
+*** org-num :builtin:
 #+name: org-num
 #+begin_src emacs-lisp
   (use-package org-num
@@ -3887,7 +3980,7 @@ This package looks promising, I'll wait until it mature a bit.
     (org-num-face '(:inherit org-special-keyword :underline nil :weight bold))
     (org-num-skip-tags '("noexport" "nonum")))
 #+end_src
-*** org-crypt
+*** org-crypt :builtin:
 #+name: org-crypt
 #+begin_src emacs-lisp
   (use-package org-crypt ; built-in
@@ -3902,7 +3995,7 @@ This package looks promising, I'll wait until it mature a bit.
     (with-eval-after-load 'org
       (add-to-list 'org-tags-exclude-from-inheritance "crypt")))
 #+end_src
-*** org-attach 
+*** org-attach :builtin:
 #+name: org-attach
 #+begin_src emacs-lisp
   (use-package org-attach
@@ -3923,7 +4016,7 @@ This package looks promising, I'll wait until it mature a bit.
     :custom
     (org-attach-auto-tag nil))
 #+end_src
-*** org-agenda 
+*** org-agenda :builtin:
 #+name: org-agenda
 #+begin_src emacs-lisp
   (use-package org-agenda
@@ -3938,6 +4031,7 @@ This package looks promising, I'll wait until it mature a bit.
                           ("TODO" "NEXT" "IDEA" "PROG")
                           nil ""))
     :config
+    (evil-define-key 'normal org-agenda-mode-map "q" 'org-agenda-quit)
     (with-eval-after-load 'evil
       (evil-set-initial-state #'org-agenda-mode 'normal))
     (setq org-agenda-custom-commands
@@ -3985,7 +4079,7 @@ This package looks promising, I'll wait until it mature a bit.
              ((org-agenda-tag-filter-preset '("+personal")))))))
 #+end_src
 
-*** org-clock
+*** org-clock :builtin:
 #+name: org-clock
 #+begin_src emacs-lisp
   (use-package org-clock
@@ -4003,7 +4097,7 @@ This package looks promising, I'll wait until it mature a bit.
     :config
     (org-clock-persistence-insinuate))
 #+end_src
-*** org-timer
+*** org-timer :builtin:
 #+name: org-timer
 #+begin_src emacs-lisp
   (use-package org-timer
@@ -4011,7 +4105,7 @@ This package looks promising, I'll wait until it mature a bit.
     :config
     (setq org-timer-format "Timer :: %s"))
 #+end_src
-*** org-eldoc
+*** org-eldoc :builtin:
 #+name: org-eldoc
 #+begin_src emacs-lisp
   (use-package org-eldoc
@@ -4081,7 +4175,7 @@ This package looks promising, I'll wait until it mature a bit.
      "◀── now ─────────────────────────────────────────────────")
     (global-org-modern-mode))
 #+end_src
-*** org-download
+*** org-download :external:
 #+begin_src emacs-lisp
   (use-package org-download
     :after org
@@ -4126,8 +4220,8 @@ This package looks promising, I'll wait until it mature a bit.
                 (file-relative-name path org-download-image-dir)
               path))))
 #+end_src
-*** org-noter
-#+begin_src emacs-lisp
+*** org-noter :external:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package org-noter
     :defer t
     :preface
@@ -4140,13 +4234,13 @@ This package looks promising, I'll wait until it mature a bit.
     (setq org-noter-auto-save-last-location t
           org-noter-separate-notes-from-heading t))
 #+end_src
-*** org-appear
-#+begin_src emacs-lisp
+*** org-appear :external:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package org-appear ; better markup edit
     :hook (org-mode . org-appear-mode))
 #+end_src
-*** [[https://github.com/rexim/org-cliplink][org-cliplink]]
-#+begin_src emacs-lisp
+*** [[https://github.com/rexim/org-cliplink][org-cliplink]] :external:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package org-cliplink
     :after org
     :config
@@ -4224,7 +4318,7 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
     :if (executable-find "rg")
     :defer t)
 #+end_src
-*** direnv
+*** direnv :noexport:disabled:archive:
 *** ox-hugo
 Blogging tools
 #+name: ox-hugo
@@ -4247,9 +4341,7 @@ An Emacs web feeds client.
 #+begin_src emacs-lisp
   (use-package elfeed
     :config
-    (with-eval-after-load 'general
-      (+config/leader-open
-        "e" 'elfeed)))
+    (evil-define-key* nil my/open-map "e" '("open elfeed" . elfeed)))
 #+end_src
 **** extensions
 ***** [[https://github.com/remyhonig/elfeed-org][elfeed-org]]
@@ -4389,9 +4481,7 @@ Emacs package integrating [[https://github.com/lucc/khard?tab=readme-ov-file][kh
 #+begin_src emacs-lisp
   (use-package khardel
     :config
-    (with-eval-after-load 'general
-      (+config/leader-insert
-      "c" '(khardel-insert-email :wk "Insert email"))))
+    (evil-define-key* nil my/insert-map "e" '("insert email" . khardel-insert-email)))
 #+end_src
 **** khard configuration
 This is taken from the [[https://github.com/lucc/khard/blob/main/doc/source/examples/khard.conf.example][example configuration]]. Should be placed in ~~/.config/khard/khard.conf~
@@ -4615,7 +4705,7 @@ Needs an external package =fd=, or =fd-find=
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** treemacs core package
+*** treemacs core package :external:
 #+name: treemacs
 #+begin_src emacs-lisp
   (use-package treemacs
@@ -4697,56 +4787,36 @@ Needs an external package =fd=, or =fd-find=
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag))
     :config
-    (with-eval-after-load 'general
-      (+config/leader-tree
-        "e" 'treemacs)
-      (general-define-key
-       :keymaps 'treemacs-mode-map
-       "[mouse-1]" 'treemacs-single-click-expand-action)
-      (general-nvmap
-        :keymaps 'treemacs-mode-map
-        "gr" '(treemacs-refresh :wk "refresh tree")
-        "zm" '(:ignore t :wk "move")
-        "zmf" '(treemacs-move-file :wk "move file")
-        "zmd" '(treemacs-move-project-down :wk "move project down")
-        "zmu" '(treemacs-move-project-up :wk "move project up")
-        "zr" '(:ignore t :wk "rename")
-        "zrf" '(treemacs-rename-file :wk "rename file")
-        "zrp" '(treemacs-rename-project :wk "rename project")
-        "zrw" '(treemacs-rename-workspace :wk "rename workspace")
-        "zc" '(:ignore t :wk "create/clean")
-        "zcC" '(treemacs-cleanup-litter :wk "cleanup litter")
-        "zcd" '(treemacs-create-dir :wk "create directory")
-        "zcf" '(treemacs-create-file :wk "create file")
-        "zd" '(treemacs-delete-file :wk "delete file")))
-    )
+    (evil-define-key* nil my/tree-map "e" '("treemacs" . treemacs))
+    (evil-define-key nil treemacs-mode-map
+      "[mouse-1]" 'treemacs-single-click-expand-action))
 #+end_src
-*** treemacs-projectile
+*** treemacs-projectile :external:
 #+name: treemacs-projectile
 #+begin_src emacs-lisp
   (use-package treemacs-projectile
     :after treemacs projectile)
 #+end_src
-*** treemacs-icons-dired
+*** treemacs-icons-dired :external:
 #+name: treemacs-icons-dired
 #+begin_src emacs-lisp
   (use-package treemacs-icons-dired
     :after treemacs
     :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
-*** treemacs-magit
+*** treemacs-magit :external:
 #+name: treemacs-magit
 #+begin_src emacs-lisp
   (use-package treemacs-magit
     :after treemacs magit)
 #+end_src
-*** treemacs-evil
+*** treemacs-evil :external:
 #+name: treemacs-evil
 #+begin_src emacs-lisp
   (use-package treemacs-evil
     :after treemacs evil)
 #+end_src
-*** lsp-treemacs
+*** lsp-treemacs :external:
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+name: lsp-treemacs
@@ -4755,15 +4825,12 @@ Needs an external package =fd=, or =fd-find=
     :after treemacs lsp
     :config
     (lsp-treemacs-sync-mode 1)
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps 'treemacs-mode-map
-       "S" 'lsp-treemacs-symbols
+    (evil-define-key* 'normal treemacs-mode-map
+      "S" 'lsp-treemacs-symbols
        "X" 'lsp-treemacs-errors-list
        "Y" 'lsp-treemacs-call-hierarchy))
-    )
 #+end_src
-*** treemacs-perspective
+*** treemacs-perspective :external:
 #+name: treemacs-perspective
 #+begin_src emacs-lisp
   (use-package treemacs-perspective
@@ -4771,15 +4838,15 @@ Needs an external package =fd=, or =fd-find=
     :config
     (treemacs-set-scope-type 'Perspectives))
 #+end_src
-*** treemacs-tab-bar
+*** treemacs-tab-bar :external:
 #+name: treemacs-tab-bar
 #+begin_src emacs-lisp
   (use-package treemacs-tab-bar
     :after treemacs tab-bar)
 #+end_src
-*** treemacs-nerd-icons
+*** treemacs-nerd-icons :external:noexport:archive:disabled:
 #+name: treemacs-nerd-icons
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package treemacs-nerd-icons
     :after treemacs nerd-icons
     :config
@@ -4791,7 +4858,7 @@ Needs an external package =fd=, or =fd-find=
   (provide 'config-treemacs)
   ;;; config-treemacs.el ends here
 #+end_src
-** Mail
+** Mail :noexport:
 :PROPERTIES:
 :header-args: :tangle ./modules/config-mail.el :mkdirp t
 :END:
@@ -4838,14 +4905,14 @@ For the ~.authinfo.gpg~ files:
   machine gmail login alexarians@gmail.com port imaps password ********
 #+end_src
 *** header :noexport:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;;; config-mail --- `Emacs' as a mail client -*- lexical-binding: t -*-
   ;;; Commentary:
   ;;; Code:
 #+end_src
 *** notmuch :noexport:
 #+name: notmuch
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package notmuch
     :if (executable-find "notmuch")
     :defer t
@@ -4935,7 +5002,7 @@ For the ~.authinfo.gpg~ files:
 
 *** notmuch-indicator :noexport:
 #+name: notmuch-indicator
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package notmuch-indicator
     :if (executable-find "notmuch")
     :config
@@ -4945,7 +5012,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 *** consult-notmuch :noexport:
 #+name: consult-notmuch
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package consult-notmuch
     :after consult
     :if (executable-find "notmuch")
@@ -4954,13 +5021,13 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 *** ol-notmuch :noexport:
 #+name: ol-notmuch
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package ol-notmuch
     :if (executable-find "notmuch"))
 #+end_src
 *** notmuch-maildir :noexport:
 #+name: notmuch-maildir
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package notmuch-maildir
     :if (executable-find "notmuch")
     :config
@@ -4968,7 +5035,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 *** message :noexport:
 #+name: message
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package message
     :straight nil
     :if (executable-find "notmuch")
@@ -4978,7 +5045,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 *** sendmail :noexport:
 #+name: sendmail
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package sendmail
     :straight nil
     :if (executable-find "notmuch")
@@ -4989,7 +5056,7 @@ For the ~.authinfo.gpg~ files:
     (sendmail-program (executable-find "msmtp")))
 #+end_src
 *** footer :noexport:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (provide 'config-mail)
   ;;; config-dired.el ends here
 #+end_src
@@ -5003,7 +5070,7 @@ For the ~.authinfo.gpg~ files:
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** Lisp
+*** Lisp :noexport:
 **** lispy :disabled:archive:noexport:
 :PROPERTIES:
 :header-args: :tangle no
@@ -5029,7 +5096,7 @@ For the ~.authinfo.gpg~ files:
 **** Emacs-lisp
 ***** elisp-mode
 #+name: elisp-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (when (locate-library "aggressive-indent")
     (add-hook 'lisp-mode-hook #'aggressive-indent-mode)
     (add-hook 'clojure-mode-hook #'aggressive-indent-mode)
@@ -5050,7 +5117,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 ****** ielm 
 #+name: ielm
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package ielm
   :straight nil
   ;;:hook (ielm-mode . (turn-on-smartparens-mode))
@@ -5079,7 +5146,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 ***** macrostep :external:
 #+name: macrostep
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package macrostep
     :defer t
     :bind (:map emacs-lisp-mode-map
@@ -5087,7 +5154,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 **** Common lisp
 #+name: common-lisp
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;;;; common-lisp
 (defvar inferior-lisp-program "sbcl")
 (when (executable-find "ros")
@@ -5097,7 +5164,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 ***** sly :external:
 #+name: sly
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package sly
     :commands sly-autoloads
     :hook ((lisp-mode-local-vars . rainbow-delimiters-mode)
@@ -5106,24 +5173,23 @@ For the ~.authinfo.gpg~ files:
     (require 'sly-autoloads))
 #+end_src
 
-***** sly-quicklisp 
-#+begin_src emacs-lisp
+***** sly-quicklisp :external:
+#+begin_src emacs-lisp :tangle no
   (use-package sly-quicklisp
     :after sly
     :load-path "site-lisp/sly-quicklisp")
 #+end_src
 
-***** sly-quicklisp 
-#+begin_src emacs-lisp
+***** sly-quicklisp :external:
+#+begin_src emacs-lisp :tangle no
   (use-package sly-macrostep
     :after sly
     :load-path "site-lisp/sly-macrostep")
 #+end_src
 
-
 **** clojure
-***** clojure-mode
-#+begin_src emacs-lisp
+***** clojure-mode :external:
+#+begin_src emacs-lisp :tangle no
   (use-package clojure-mode
     :hook (clojure-mode . rainbow-delimiters-mode)
     :config
@@ -5145,7 +5211,7 @@ For the ~.authinfo.gpg~ files:
 
 ***** cider :external:
 #+name: cider-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;;;; clojure
   (use-package cider
     :hook (clojure-mode-local-vars . cider-mode)
@@ -5191,7 +5257,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 ***** clj-refactor :external:
 #+name: clj-refactor
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package clj-refactor
     :defer t
     :hook (clojure-mode . +config/clojure-mode-hook)
@@ -5203,7 +5269,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 
 **** Scheme
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package scheme
     :straight nil
     :interpreter ("scsh" . scheme-mode)
@@ -5258,7 +5324,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 ***** geiser :external:
 #+name: geiser
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp  :tangle no
   ;;;; scheme
   (use-package geiser
     :defer t
@@ -5312,7 +5378,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 ***** geiser-guile :external:
 #+name: geiser-guile
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package geiser-guile
     :defer t
     :config
@@ -5328,7 +5394,7 @@ For the ~.authinfo.gpg~ files:
       (add-to-list 'geiser-guile-load-path (expand-file-name "~/.config/guix/current/share/guile/site/3.0"))))
 #+end_src
 ***** macrostep-geiser :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package macrostep-geiser
     :defer t
     :after geiser-mode geiser-repl
@@ -5343,14 +5409,14 @@ For the ~.authinfo.gpg~ files:
         "M" 'macrostep-geiser-expand-all)))
 #+end_src
 ***** flycheck-guile
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-guile
     :after geiser)
 #+end_src
-*** C and C++
+*** C and C++ :noexport:
 **** cc-mode :builtin:
 #+name: cc-mode
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
   (use-package cc-mode
     :straight nil
     :mode ("\\.mm\\'" . objc-mode)
@@ -5370,14 +5436,14 @@ For the ~.authinfo.gpg~ files:
       (add-hook 'c-mode-hook #'lsp-deferred)))
 #+end_src
 **** demangle-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package demangle-mode
     :hook llvm-mode)
 #+end_src
-*** XML
+*** XML :noexport:
 **** nxml-mode 
 #+name: nxml-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package nxml-mode
     :straight nil
     :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
@@ -5387,10 +5453,10 @@ For the ~.authinfo.gpg~ files:
     (setq nxml-slash-auto-complete-flag t
           nxml-auto-insert-xml-declaration-flag t))
 #+end_src
-*** YAML
+*** YAML :noexport:
 **** yaml-mode :external:
 #+name: yaml-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package yaml-mode
     :config
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
@@ -5404,10 +5470,10 @@ For the ~.authinfo.gpg~ files:
      (yaml-mode . (lambda ()
                     (run-hooks 'prog-mode-hook)))))
 #+end_src
-*** TOML
+*** TOML :noexport:
 **** toml-mode :external:
 #+name: toml-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package toml-mode
     :mode
     ("\\.toml\\'" . toml-mode)
@@ -5419,10 +5485,10 @@ For the ~.authinfo.gpg~ files:
     (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml"))
     (add-hook 'toml-mode-hook #'lsp-deferred))
 #+end_src
-*** Lua
+*** Lua :noexport:
 **** lua-mode :external:
 #+name: lua-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lua-mode
     :defer t
     :config
@@ -5430,10 +5496,10 @@ For the ~.authinfo.gpg~ files:
       (setq lsp-lua-hint-enable t
             lsp-lua-hint-set-type t)))
 #+end_src
-*** Jinja2
+*** Jinja2 :noexport:
 **** jinja2-mode :external:
 #+name: jinja2-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package jinja2-mode
     :defer t
     :config
@@ -5444,16 +5510,16 @@ For the ~.authinfo.gpg~ files:
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
     (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
 #+end_src
-*** Json
+*** Json :noexport:
 **** json-mode 
 #+name: json-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package json-mode)
 #+end_src
-*** Web
+*** Web :noexport:
 **** web-mode :external:
 #+name: web-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (defun +config/django-web-mode ()
     "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
     (if (projectile-project-p)
@@ -5570,7 +5636,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 **** emmet-mode :external:
 #+name: emmet-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package emmet-mode
     :defer t
     :hook (css-mode web-mode html-mode haml-mode nxml-mode rjsx-mode reason-mode)
@@ -5589,7 +5655,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 **** skewer-mode :external:
 #+name: skewer-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package skewer-mode
     :defer t
     :hook ((web-mode . skewer-html-mode)
@@ -5597,21 +5663,21 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 **** lsp-tailwindcss :external:
 #+name: lsp-tailwindcss
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lsp-tailwindcss
     :init
     (setq lsp-tailwindcss-add-on-mode t))
 #+end_src
 **** sass-mode :external:
 #+name: sass-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package sass-mode
     :defer t
     :hook (scss-mode . rainbow-mode))
 #+end_src
 **** css-eldoc :external:
 #+name: css-eldoc
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package css-eldoc
     :defer t
     :commands turn-on-css-eldoc
@@ -5621,7 +5687,7 @@ For the ~.authinfo.gpg~ files:
     (add-hook 'scss-mode-hook 'turn-on-css-eldoc))
 #+end_src
 **** com-css-sort :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package com-css-sort
     :defer t
     :commands (com-css-sort com-css-sort-attributes-block com-css-sort-attributes-document)
@@ -5629,7 +5695,7 @@ For the ~.authinfo.gpg~ files:
     (setq com-css-sort-sort-type 'alphabetic-sort))
 #+end_src
 **** css-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package css-mode
     :straight nil
     :hook ((css-mode
@@ -5641,7 +5707,7 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 **** javascript 
 #+name: javascript
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
 (defvar +javascript-npm-conf (make-hash-table :test 'equal))
 
 ;;;###autoload
@@ -5773,7 +5839,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** js2-mode :external:
 #+name: js2-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package js2-mode
     :defer t
     :interpreter ("node" . js2-mode)
@@ -5793,7 +5859,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** js2-refactor :external:
 #+name: js2-refactor
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
   (use-package js2-refactor
     :defer t
     :hook (js2-mode . js2-refactor-mode)
@@ -5812,7 +5878,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** rjsx-mode :external:
 #+name: rjsx-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package rjsx-mode
     :defer t
     :mode "\\.[mc]?js\\'"
@@ -5860,7 +5926,7 @@ Run this for any buffer you want to skewer."
 
 **** xref-js2 :external:
 #+name: xref-js2
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package xref-js2
     :defer t
     :if (executable-find "ag") ; silver-searcher
@@ -5870,7 +5936,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** typescript-mode :external:
 #+name: typescript-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package typescript-mode
     :defer t
     :hook (typescript-mode . rainbow-delimiters-mode)
@@ -5900,7 +5966,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** tide :external:
 #+name: tide
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package tide
     :defer t
     :hook (tide-mode . tide-hl-identifier-mode)
@@ -5913,20 +5979,20 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** npm-mode :external:
 #+name: npm-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package npm-mode
     :defer t)
 #+end_src
 **** nodejs-repl :external:
 #+name: nodejs-repl
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package nodejs-repl
     :defer t)
 #+end_src
-*** Latex
+*** Latex :noexport:
 **** auctex 
 #+name: auctex
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package auctex
   :straight nil
   :mode (("\\.tex\\'" . latex-mode)
@@ -5946,7 +6012,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** preview 
 #+name: preview
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package preview
   :straight nil
   :after auctex
@@ -5958,7 +6024,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** reftex 
 #+name: reftex
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package reftex
   :straight nil
   :commands turn-on-reftex
@@ -5967,7 +6033,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** bibtex 
 #+name: bibtex
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package bibtex
     :straight nil
     :config
@@ -5981,7 +6047,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** LaTex 
 #+name: LaTex
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; Auto-fill for LaTeX
 (defun lem-latex-auto-fill ()
   "Turn on auto-fill for LaTeX mode."
@@ -6037,10 +6103,10 @@ Run this for any buffer you want to skewer."
       (substring fname-or-url 7)
     fname-or-url))
 #+end_src
-*** Markdown
+*** Markdown :noexport:
 **** Basic Configuration
 #+name: markdown-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package markdown-mode
     :mode
     ("README\\.md\\'" . gfm-mode)
@@ -6067,8 +6133,8 @@ Run this for any buffer you want to skewer."
   (use-package edit-indirect
     :after markdown-mode)
 #+end_src
-*** PlantUML
-#+begin_src emacs-lisp
+*** PlantUML :noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package plantuml-mode
     :commands plantuml-download-jar
     :init
@@ -6325,8 +6391,8 @@ Run this for any buffer you want to skewer."
           (message "pyenv: version `%s' is not installed (set by `%s')."
                    version file-path)))))
 #+end_src
-**** pydoc :external:
-#+begin_src emacs-lisp
+**** pydoc :external:noexport:archive:disabled:
+#+begin_src emacs-lisp :tangle no
   (use-package pydoc
     :config
     (with-eval-after-load 'general
@@ -6335,9 +6401,9 @@ Run this for any buffer you want to skewer."
         "C-c C-d" 'pydoc-at-point-no-jedi))
     )
 #+end_src
-**** ob-ipython 
+**** ob-ipython :external:noexport:archive:disabled:
 #+name: ob-ipython
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package ob-ipython
     :defer t
     :init
@@ -6347,9 +6413,9 @@ Run this for any buffer you want to skewer."
     (with-eval-after-load 'ob-async
       (add-to-list 'ob-async-no-async-languages-alist "ipython")))
 #+end_src
-**** pip-requirements :external:
+**** pip-requirements :external:disabled:noexport:archive:
 #+name: pip-requirements
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle no
   (use-package pip-requirements
     :defer t
     :config
@@ -6358,13 +6424,14 @@ Run this for any buffer you want to skewer."
 **** inferior-python-mode :builtin:
 #+name: inferiore-python-mode
 #+begin_src emacs-lisp
-(use-package python
-  :straight nil
-  ;;:hook (inferior-python-mode . hide-mode-line-mode)
-  :config
-  (+config/local-leader
-    :keymaps 'python-mode-map
-    "r" '(run-python :wk "run python")))
+  (use-package python
+    :straight nil
+    ;;:hook (inferior-python-mode . hide-mode-line-mode)
+    :config
+    (setq my/python-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) python-mode-map (kbd "<leader>m") (cons "Python" my/python-map))
+    (evil-define-key* nil my/python-map
+      "r" '("run python" . run-python)))
 #+end_src
 **** lsp-pyright :external:
 #+name: lsp-pyright
@@ -6382,9 +6449,9 @@ Run this for any buffer you want to skewer."
               (executable-find "python3")
             "python")))
 #+end_src
-**** python-docstring :external:
+**** python-docstring :external:disabled:archive:
 #+name: python-docstring
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package python-docstring
     :diminish
     :hook (python-mode . python-docstring-mode)
@@ -6395,9 +6462,9 @@ Run this for any buffer you want to skewer."
         "dq" 'python-docstring-fill))
     )
 #+end_src
-**** pipenv :external:
+**** pipenv :external:disabled:archive:noexport:
 #+name: pipenv
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package pipenv
     :diminish
     :after python
@@ -6413,8 +6480,8 @@ Run this for any buffer you want to skewer."
         "p" '(:keymap pipenv-command-map :package pipenv :wk "pipenv")))
     )
 #+end_src
-**** pyvenv :external:
-#+begin_src emacs-lisp
+**** pyvenv :external:disabled:noexport:archive:
+#+begin_src emacs-lisp :tangle no
   ;; (use-package pyvenv
   ;;   :after python
   ;;   :demand t
@@ -6439,8 +6506,8 @@ Run this for any buffer you want to skewer."
                  '(pyvenv-virtual-env-name (" venv:" pyvenv-virtual-env-name " "))
                  'append))
 #+end_src
-**** pyimport
-#+begin_src emacs-lisp
+**** pyimport :external:disabled:noexport:archive:
+#+begin_src emacs-lisp :tangle no
   (use-package pyimport
     :defer t
     :config
@@ -6452,8 +6519,8 @@ Run this for any buffer you want to skewer."
         "iR" 'pyimport-remove-unused
         "io" '+python/optimize-imports)))
 #+end_src
-**** py-isort
-#+begin_src emacs-lisp
+**** py-isort :external:noexport:disabled:archive:
+#+begin_src emacs-lisp :tangle no
   (use-package py-isort
     :defer t
     :config
@@ -6464,8 +6531,8 @@ Run this for any buffer you want to skewer."
         "is" 'py-isort-buffer
         "ir" 'py-isort-region)))
 #+end_src
-**** python-pytest
-#+begin_src emacs-lisp
+**** python-pytest :external:noexport:archive:disabled:
+#+begin_src emacs-lisp :tangle no
   (use-package python-pytest
     :commands python-pytest-dispatch
     :config
@@ -6481,8 +6548,8 @@ Run this for any buffer you want to skewer."
         "tr" 'python-pytest-repeat
         "tp" 'python-pytest-dispatch)))
 #+end_src
-**** poetry
-#+begin_src emacs-lisp
+**** poetry :external:noexport:archive:disabled:
+#+begin_src emacs-lisp :tangle no
   (use-package poetry
     :after python
     :init
@@ -6495,8 +6562,8 @@ Run this for any buffer you want to skewer."
         "p" 'poetry))
     )
 #+end_src
-**** pyenv
-#+begin_src emacs-lisp
+**** pyenv :external:noexport:archive:disabled:
+#+begin_src emacs-lisp :tangle no
   (use-package pyenv
     :after python
     :config
@@ -6513,15 +6580,15 @@ Run this for any buffer you want to skewer."
     (with-eval-after-load 'flycheck
       (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup)))
 #+end_src
-**** ein :external:
+**** ein :external:noexport:archive:disabled:
 #+name: ein
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package ein)
 #+end_src
 *** Rust
-**** rust-mode 
+**** rust-mode :noexport:disabled:archive:
 #+name: rust-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;;;###autoload
   (defun +rust-cargo-project-p ()
     "Return t if this is a cargo project."
@@ -6607,17 +6674,17 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** flycheck-rust :external:
 #+name: flycheck-rust
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp
   (use-package flycheck-rust
     :after flycheck
     :config
     (with-eval-after-load 'rustic
       (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)))
 #+end_src
-*** Ansible
+*** Ansible :noexport:archive:disabled:
 **** ansible :external:
 #+name: ansible
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package ansible
     :defer t
     :if (executable-find "ansible")
@@ -6638,7 +6705,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** ansible-doc :external:
 #+name: ansible-doc
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package ansible-doc
     :after ansible
     :hook (yaml-mode . ansible-doc-mode)
@@ -6655,8 +6722,7 @@ Run this for any buffer you want to skewer."
     :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
 #+end_src
 *** Haskell
-**** haskell-mode :external:
-#+name: haskell-mode
+#+name: haskell
 #+begin_src emacs-lisp
   (use-package haskell-mode
     :defer t
@@ -6670,31 +6736,28 @@ Run this for any buffer you want to skewer."
     :config
     (with-eval-after-load 'lsp-mode
       (add-hook 'haskell-mode-hook #'lsp-deferred)))
-#+end_src
-**** lsp-haskell :external:
-#+name: lsp-haskell
-#+begin_src emacs-lisp 
+
   (use-package lsp-haskell
     :defer t
     :after lsp)
 #+end_src
-*** Ron-mode
-#+begin_src emacs-lisp
+*** Ron-mode :noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package ron-mode)
 #+end_src
-*** yuck-mode
-#+begin_src emacs-lisp
+*** yuck-mode :noexport:disabled:archive:external:
+#+begin_src emacs-lisp :tangle no
   (use-package yuck-mode)
 #+end_src
-*** java
+*** java :external:
 Lsp-java requires jdt-language-server, this package should automatically installs it using the =lsp-install-server= commands
 #+begin_src emacs-lisp
   (use-package lsp-java
     :after lsp-mode
     :hook (java-mode . lsp))
 #+end_src
-*** fish-mode
-#+begin_src emacs-lisp
+*** fish-mode :noexport:archive:disabled:external:
+#+begin_src emacs-lisp :tangle no
   (use-package fish-mode
     :config
     (setq fish-enable-auto-indent t))
