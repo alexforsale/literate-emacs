@@ -1573,8 +1573,7 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
                                  dashboard-vertically-center-content t
                                  dashboard-navigation-cycle t
                                  dashboard-icon-type 'all-the-icons
-                                 dashboard-heading-icons '((recents   . "history")
-                                                           (bookmarks . "bookmark")
+                                 dashboard-heading-icons '((bookmarks . "bookmark")
                                                            (agenda    . "calendar")
                                                            (projects  . "rocket")
                                                            (registers . "database"))
@@ -4324,6 +4323,7 @@ Blogging tools
 #+name: ox-hugo
 #+begin_src emacs-lisp
   (use-package ox-hugo
+    :if (executable-find "hugo")
     :after ox)
 #+end_src
 *** [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
@@ -4364,11 +4364,12 @@ Configure the Elfeed RSS reader with an Orgmode file.
 *** [[https://gitlab.com/hperrey/khalel/][Khalel]]
 Interacting through Emacs with locally-stored calendars via the console application =khal= and syncing with remote /CalDAV/ calendars using =vdirsyncer=.
 #+begin_src emacs-lisp
-    (use-package khalel
-      :after org
-      :config
-      (khalel-add-capture-template)
-      (setq khalel-import-org-file (expand-file-name "calendar.org" org-directory)))
+  (use-package khalel
+    :if (executable-find "khal")
+    :after org
+    :config
+    (khalel-add-capture-template)
+    (setq khalel-import-org-file (expand-file-name "calendar.org" org-directory)))
 #+end_src
 =khalel-import-org-file= should be on the list of =org-agenda-files=.
 **** Vdirsyncer
@@ -4480,6 +4481,7 @@ Next is the =khal= configuration. This should be placed in ~~/.config/khal/confi
 Emacs package integrating [[https://github.com/lucc/khard?tab=readme-ov-file][khard]], a console cardav client.
 #+begin_src emacs-lisp
   (use-package khardel
+    :if (executable-find "khard")
     :config
     (evil-define-key* nil my/insert-map "e" '("insert email" . khardel-insert-email)))
 #+end_src
