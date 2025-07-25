@@ -6739,6 +6739,7 @@ Run this for any buffer you want to skewer."
 
   (use-package lsp-haskell
     :defer t
+    :hook ((haskell-mode haskell-literate-mode) . lsp-deferred)
     :after lsp)
 #+end_src
 *** Ron-mode :noexport:
