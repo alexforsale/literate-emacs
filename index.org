@@ -887,7 +887,6 @@ The second most used keybindings, I will try to use the default /vim/ keys.
   (evil-define-key* '(normal visual) 'global (kbd "<leader>w") (cons "Window" my/window-map))
   (evil-define-key* nil my/window-map
     "C-o" '("delete other window" . delete-other-windows)
-    (kbd "C--") '("set height" . evil-window-set-height)
     "[" '("left window" . evil-window-left)
     "]" '("right window" . evil-window-right)
     "=" '("enlarge window" . enlarge-window)
@@ -907,6 +906,7 @@ The second most used keybindings, I will try to use the default /vim/ keys.
     "k" '("up window" . evil-window-up)
     "l" '("window right" . evil-window-right)
     "n" '("new window" . evil-window-new)
+    "o" '("delete other" . delete-other-windows)
     "m" '("mru" . evil-window-mru)
     "q" '("quit window" . evil-quit)
     "r" '("rotate downward" . evil-window-rotate-downwards)
