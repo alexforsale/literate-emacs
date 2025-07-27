@@ -869,7 +869,7 @@ Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
 #+begin_src emacs-lisp
     (setq my/open-map (make-sparse-keymap))
-    (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Insert" my/open-map))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Open" my/open-map))
 #+end_src
 *** Search
 Maybe the third most used keys, ~<leader>s~.
