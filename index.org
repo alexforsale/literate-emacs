@@ -1715,7 +1715,7 @@ Since /Emacs/ is a [[https://www.emacswiki.org/emacs/SelfDocumentation][self-doc
          (lambda (button)
            (helpful-variable (button-get button 'apropos-symbol))))))
     (keymap-global-set "C-h F" '("helpful Function" . helpful-function))
-    (define-key prog-mode-map "C-c C-d" '("help at point" . helpful-at-point)))
+    (define-key prog-mode-map (kbd "C-c C-d") '("help at point" . helpful-at-point)))
 #+end_src
 
 *** hl-line :builtin:
@@ -3647,7 +3647,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :after password-store
     :demand t
     :config
-    (setq gptel-backend
+    (setq gptel-model 'gemini-2.5-pro-exp-03-25
+          gptel-backend
           (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)
           gptel-default-mode #'org-mode))
 #+end_src
