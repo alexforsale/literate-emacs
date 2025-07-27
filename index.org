@@ -768,6 +768,17 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
   (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
   (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument))
 #+end_src
+*** Chat
+#+begin_src emacs-lisp
+  (setq my/c-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>c") (cons "Chat" my/c-map))
+  (setq my/gptel-map (make-sparse-keymap))
+  (evil-define-key* nil my/c-map "g" (cons "Gptel" my/gptel-map))
+  (evil-define-key nil my/gptel-map "a" '("Add/remove region" . gptel-add))
+  (evil-define-key nil my/gptel-map "g" '("gptel" . gptel-menu))
+  (evil-define-key nil my/gptel-map "s" '("send" . gtpel-send))
+
+#+end_src
 *** Buffers
 All keybindings will go with ~<leader>b~.
 #+name: buffers
@@ -3621,11 +3632,12 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (define-key +tree-sitter-goto-next-map "v" (+tree-sitter-goto-textobj "conditional.outer"))
     (define-key +tree-sitter-goto-next-map "l" (+tree-sitter-goto-textobj "loop.outer")))
 #+end_src
-*** gptel :external:noexport:disabled:archive:
+*** gptel :external:
 #+name: gptel
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package gptel
     :after password-store
+    :demand t
     :config
     (setq gptel-backend
           (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)
@@ -4219,7 +4231,7 @@ This package looks promising, I'll wait until it mature a bit.
                 (file-relative-name path org-download-image-dir)
               path))))
 #+end_src
-*** org-noter :external:noexport:
+*** org-noter :external:onexport:
 #+begin_src emacs-lisp :tangle no
   (use-package org-noter
     :defer t
