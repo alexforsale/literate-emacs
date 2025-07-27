@@ -1590,11 +1590,15 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
                                  dashboard-center-content t
                                  dashboard-vertically-center-content t
                                  dashboard-navigation-cycle t
+                                 dashboard-set-heading-icons t
+                                 dashboard-set-navigator t
+                                 dashboard-set-file-icons t
                                  dashboard-icon-type 'all-the-icons
-                                 dashboard-heading-icons '((bookmarks . "bookmark")
-                                                           (agenda    . "calendar")
-                                                           (projects  . "rocket")
-                                                           (registers . "database"))
+                                 dashboard-heading-icons '((bookmarks . "nf-oct-bookmark")
+                                                           (history   . "nf-oct-history")
+                                                           (agenda    . "nf-oct-calendar")
+                                                           (projects  . "nf-oct-rocket")
+                                                           (registers . "nf-oct-database"))
                                  dashboard-items '((recents . 3)
                                                    (bookmarks . 2)
                                                    (projects . 5)
@@ -1602,9 +1606,9 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
                                                    (registers . 2)))
     (with-eval-after-load 'nerd-icons
       (setq dashboard-icon-type 'nerd-icons))
-    (with-eval-after-load 'projectile 
+    (with-eval-after-load 'projectile
       (setq dashboard-projects-backend 'projectile))
-    (with-eval-after-load 'persp-projectile
+    (with-eval-after-load 'perspective
       (setq dashboard-projects-switch-function 'projectile-persp-switch-project))
     (dashboard-setup-startup-hook))
 #+end_src
@@ -3340,6 +3344,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+name: perspective
 #+begin_src emacs-lisp
   (use-package perspective
+    :demand t
     :config
     (setq persp-initial-frame-name "Main"
           persp-suppress-no-prefix-key-warning t)
