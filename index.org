@@ -851,18 +851,19 @@ Commands for quick insertion ~<leader>i~.
   (evil-define-key* '(normal visual) 'global (kbd "<leader>i") (cons "Insert" my/insert-map))
   (evil-define-key* nil my/insert-map "c" '("insert character" . insert-char))
 #+end_src
+*** minor-mode
+**** org-mode
+#+name: org-mode-map
+#+begin_src emacs-lisp
+  (setq my/org-mode-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
+#+end_src
 *** Open/org
 Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
 #+begin_src emacs-lisp
     (setq my/open-map (make-sparse-keymap))
     (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Insert" my/open-map))
-#+end_src
-**** org-mode
-#+name: org-mode-map
-#+begin_src emacs-lisp
-  (setq my/org-mode-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
 #+end_src
 *** Search
 Maybe the third most used keys, ~<leader>s~.
