@@ -858,6 +858,11 @@ Commands for quick insertion ~<leader>i~.
   (setq my/org-mode-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
 #+end_src
+**** rustic
+#+name: rustic-mode-map
+#+begin_src emacs-lisp
+  (setq my/rustic-map (make-sparse-keymap))
+#+end_src
 *** Open/org
 Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
@@ -6664,28 +6669,18 @@ Run this for any buffer you want to skewer."
     (setq rustic-indent-method-chain t)
     (setq rustic-babel-format-src-block nil
           rustic-format-trigger nil)
-    (defun +rust/cargo-audit ()
-      "Run 'cargo audit' for the current project."
-      (interactive)
-      (rustic-run-cargo-command "cargo audit"))
-    (with-eval-after-load 'general
-      (+config/local-leader
-        :keymaps 'rustic-mode-map
-        "b" '(:ignore t :wk "build")
-        "ba" '+rust/cargo-audit
-        "bb" 'rustic-cargo-build
-        "bB" 'rustic-cargo-bench
-        "bc" 'rustic-cargo-check
-        "bC" 'rustic-cargo-clippy
-        "bd" 'rustic-cargo-build-doc
-        "bD" 'rustic-cargo-doc
-        "bf" 'rustic-cargo-fmt
-        "bn" 'rustic-cargo-new
-        "bo" 'rustic-cargo-outdated
-        "br" 'rustic-cargo-run
-        "t" '(:ignore t :wk "test")
-        "ta" 'rustic-cargo-test
-        "t" 'rustic-cargo-current-test)))
+    (evil-define-key* '(normal visual) rustic-mode-map (kbd "<leader>m") (cons "rustic-mode" my/rustic-map))
+    (evil-define-key* nil my/rustic-map
+      "B" '("cargo build" . rustic-cargo-build)
+      "b" '("cargo bench" . rustic-cargo-bench)
+      "c" '("cargo check" . rustic-cargo-check)
+      "C" '("cargo clippy" . rustic-cargo-clippy)
+      "F" '("cargo fix" . rustic-rustfix)
+      "f" '("cargo format workspace" . rustic-cargo-fmt)
+      "i" '("cargo initialize" . rustic-cargo-init)
+      "o" '("cargo outdated" . rustic-cargo-outdated)
+      "t" '("cargo test" . rustic-cargo-test)
+      "r" '("cargo run" . rustic-cargo-run)))
 #+end_src
 **** flycheck-rust :external:
 #+name: flycheck-rust
