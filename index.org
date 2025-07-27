@@ -775,7 +775,8 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
   (setq my/gptel-map (make-sparse-keymap))
   (evil-define-key* nil my/c-map "g" (cons "Gptel" my/gptel-map))
   (evil-define-key nil my/gptel-map "a" '("Add/remove region" . gptel-add))
-  (evil-define-key nil my/gptel-map "g" '("gptel" . gptel-menu))
+  (evil-define-key nil my/gptel-map "g" '("gptel" . gptel))
+  (evil-define-key nil my/gptel-map "G" '("gptel-menu" . gptel-menu))
   (evil-define-key nil my/gptel-map "s" '("send" . gtpel-send))
 
 #+end_src
@@ -4309,7 +4310,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: pass
 #+begin_src emacs-lisp
   (use-package password-store
-    :defer t
+    :demand t
     :config
     (setq password-store-password-length 12)
     (setq auth-sources '(password-store "~/.authinfo.gpg" "~/.netrc")))
