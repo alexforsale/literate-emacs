@@ -1840,7 +1840,8 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     :straight nil
     :config
     (setq comint-prompt-read-only t
-          comint-buffer-maximum-size 2048))
+          comint-buffer-maximum-size 2048)
+    (evil-define-key* '(normal visual) comint-mode-map "q" '(lambda () (interactive) (kill-buffer nil))))
 #+end_src
 *** winner :builtin:
 #+begin_src emacs-lisp
