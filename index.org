@@ -110,7 +110,7 @@ The =custom-file= is used to save customization settings for future use.
   (when (file-exists-p custom-file)
     (load custom-file))
 #+end_src
-** Setup =package=
+** Setup package
 Now much more simpler since [[https://github.com/jwiegley/use-package][use-package]] is built into /Emacs/. It's actually not used since I'm using =straight.el=.
 #+begin_src emacs-lisp
   (with-eval-after-load 'package
