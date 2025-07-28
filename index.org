@@ -880,6 +880,11 @@ Commands for quick insertion ~<leader>i~.
   (setq my/python-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) python-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map))
 #+end_src
+**** haskell
+#+begin_src emacs-lisp
+  (setq my/haskell-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) haskell-mode-map (kbd "<leader>m") (cons "haskell-mode" my/haskell-map))
+#+end_src
 *** Open/org
 Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
@@ -6798,6 +6803,13 @@ Run this for any buffer you want to skewer."
     :defer t
     :hook ((haskell-mode haskell-literate-mode) . lsp-deferred)
     :after lsp)
+
+  (evil-define-key* nil my/haskell-map
+    "c" '("compile" . haskell-compile)
+    "d" '("describe" . haskell-describe)
+    "h" '("search hoogle" . haskell-hoogle)
+    "l" '("load and run" . haskell-load-and-run)
+    "r" '("run haskell" . run-haskell))
 #+end_src
 *** Ron-mode :noexport:
 #+begin_src emacs-lisp :tangle no
