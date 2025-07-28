@@ -4008,9 +4008,9 @@ This package looks promising, I'll wait until it mature a bit.
     :hook (org-after-refile-insert . save-buffer)
     :custom
     (org-refile-targets
-     `((,(expand-file-name "projects.org" org-directory) :maxlevel . 2)
+     `((,(expand-file-name "projects.org" org-directory) :maxlevel . 1)
        (,(expand-file-name "notes.org" org-directory) :maxlevel . 1)
-       (,(expand-file-name "routines.org" org-directory) :maxlevel . 2)
+       (,(expand-file-name "routines.org" org-directory) :maxlevel . 3)
        (,(expand-file-name "personal.org" org-directory) :maxlevel . 1)))
     (org-refile-use-outline-path 't)
     (org-outline-path-complete-in-steps nil))
