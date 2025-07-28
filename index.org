@@ -629,13 +629,14 @@ Try using ~dax~, ~vix~ and ~gUix~.
 *** [[https://github.com/alexmurray/evil-vimish-fold][evil-vimish-fold]]
 Integration of [[https://github.com/mrkkrp/vimish-fold][vimish-fold]] with evil
 
-+Adds standard vim keybindings of ~zf~ and ~zd~ to create and delete folds (via =vimish-fold=) respectively+. Fold now can be created with =<leader>zff=, after that, it hooks into evil so the usual vim keybindings for fold toggling (~za~), opening (~zo~), closing (~zc~) etc all work as expected with vimish-fold.
++Adds standard vim keybindings of ~zf~ and ~zd~ to create and delete folds (via =vimish-fold=) respectively+. Fold now can be created with =<leader>zf= in a region, after that, it hooks into evil so the usual vim keybindings for fold toggling (~za~), opening (~zo~), closing (~zc~) etc all work as expected with vimish-fold.
 
 Finally, also supports navigation between folds using ~zj~ and ~zk~.
 
 This provides a near-complete vim folding experience in evil for Emacs.
 #+begin_src emacs-lisp
   (use-package evil-vimish-fold
+    :demand t
     :bind
     (([remap evil-toggle-fold] . vimish-fold-toggle)
      ([remap evil-close-fold] . vimish-fold-refold)
@@ -651,12 +652,10 @@ This provides a near-complete vim folding experience in evil for Emacs.
     (setq my/vimish-fold-map (make-sparse-keymap))
     :config
     (global-evil-vimish-fold-mode +1)
-    (evil-define-key nil my/z-map "f" (cons "fold" my/vimish-fold-map))
-    (evil-define-minor-mode-key nil my/vimish-fold-map
+    (evil-define-key '(normal visual) 'global (kbd "zF") (cons "vimish-fold" my/vimish-fold-map))
+    (evil-define-key nil my/vimish-fold-map
       "j" '("next fold" . vimish-fold-next-fold)
       "k" '("prev fold" . vimish-fold-previous-fold)
-      "f" '("create" . evil-vimish-fold/create)
-      "F" '("create line" . evil-vimish-fold/create-line)
       "d" '("delete" . evil-vimish-fold/delete)
       "E" '("delete all" . evil-vimish-fold/delete-all)))
 #+end_src
