@@ -3895,14 +3895,16 @@ This package looks promising, I'll wait until it mature a bit.
         "|"
         "DONE(d!)"  ; Task successfully completed
         "DELEGATED(l!)" ; Task is delegated
+        "NOTES(o!)" ; set as notes
         "KILL(k!)") ; Task was cancelled, aborted or is no longer applicable
        ))
     (org-todo-keyword-faces
-     '(("PROG" . (:foreground "#5e81ac" :weight bold))
-       ("WAIT" . (:foreground "#ebcb8b" :weight bold))
-       ("HOLD" . (:foreground "#d08770" :weight bold))
-       ("NEXT" . (:foreground "#81a1c1" :weight bold))
-       ("DELEGATED" . "#8fbcbb")
+     '(("PROG" . (:foreground "#268bd2" :weight bold))
+       ("WAIT" . (:foreground "#b58900" :weight bold))
+       ("HOLD" . (:foreground "#859900" :weight bold))
+       ("NEXT" . (:foreground "#2aa198" :weight bold))
+       ("NOTES" . "#6c7c80")
+       ("DELEGATED" . "#d33682")
        ("KILL" . "#a3be8c"))))
 #+end_src
 *** org-entities :builtin:
