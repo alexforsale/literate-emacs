@@ -2645,6 +2645,7 @@ This is the basic configuration, with the addition of enabling corfu in the mini
       "s" '("search line" . consult-line)
       "S" '("search multi line" . consult-line-multi)
       "\"" '("search register" . consult-register))
+    (evil-define-key* '(normal visual) 'global (kbd "M-y") 'consult-yank-pop)
     (cond ((executable-find "fd")
            (evil-define-key* nil my/search-map "A" '("fd search" . consult-fd)))
           (t (evil-define-key* nil my/search-map "A" '("find search" . consult-find))))
