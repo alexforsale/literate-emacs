@@ -3685,8 +3685,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :after password-store
     :demand t
     :config
-    (setq gptel-model 'gemini-2.5-pro-exp-03-25
-          gptel-backend
+    (setq gptel-backend
           (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)
           gptel-default-mode #'org-mode))
 #+end_src
