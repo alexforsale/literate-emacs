@@ -377,7 +377,7 @@ Not a full list of keybindings, just ones that I should remember to use.
 | normal-state ~[ b~   | =evil-previous-buffer=                            | Go to the COUNTth previous buffer in the buffer list. |
 | normal-state ~] SPC~ | =evil-collection-unimpaired-insert-newline-below= | Insert COUNT blank line(s) below current line.        |
 | normal-state ~[ SPC~ | =evil-collection-unimpaired-insert-newline-above= | Insert COUNT blank line(s) above current line.        |
-*** [[https://github.com/emacs-evil/evil-collection][evil-collection]]
+*** [[https://github.com/emacs-evil/evil-collection][evil-collection]] :external:
 This is a collection of Evil bindings for the parts of Emacs that Evil does not cover properly by default, such as /help-mode/, /M-x calendar/, /Eshell/ and more.
 #+begin_src emacs-lisp
   (use-package evil-collection
@@ -388,7 +388,7 @@ This is a collection of Evil bindings for the parts of Emacs that Evil does not 
     (evil-collection-setup-minibuffer t)
     (evil-collection-calendar-want-org-bindings t))
 #+end_src
-*** [[https://github.com/7696122/evil-terminal-cursor-changer][evil-terminal-cursor-changer]]
+*** [[https://github.com/7696122/evil-terminal-cursor-changer][evil-terminal-cursor-changer]] :external:
 Change cursor shape and color by evil state in terminal.
 #+begin_src emacs-lisp
   (use-package evil-terminal-cursor-changer
@@ -403,8 +403,8 @@ Change cursor shape and color by evil state in terminal.
     (setq evil-emacs-state-cursor  'hbar) ; _
     )
 #+end_src
-*** [[https://github.com/PythonNut/evil-easymotion][evil-easymotion]]
-#+begin_src emacs-lisp
+*** [[https://github.com/PythonNut/evil-easymotion][evil-easymotion]] :external:
+#+begin_src emacs-lisp :tangle
   (use-package evil-easymotion
     :after evil
     :demand t
@@ -429,22 +429,22 @@ Change cursor shape and color by evil state in terminal.
     (evilem-make-motion evilem-motion-backward-WORD-begin #'evil-backward-WORD-begin :scope 'visible)
     (evilem-make-motion evilem-motion-backward-word-end #'evil-backward-word-end :scope 'visible)
     (evilem-make-motion evilem-motion-backward-WORD-end #'evil-backward-WORD-end :scope 'visible)
-    (evilem-default-keybindings "z f")
+    (evilem-default-keybindings "z g")
     )
 #+end_src
-This is a useful package for complementing /Evil/'s motion. With =general.el=, this is the keybinding (using ~zf~), so the fastest motion to use is ~zff~ for .
+This is a useful package for complementing /Evil/'s motion (using ~zg~).
 | evilem keybinding                   | evilem key | Evil                      | evil key |
 |-------------------------------------+------------+---------------------------+----------|
-| =evilem-motion-forward-word-begin=  | ~z f w~    | =evil-forward-word-begin= | ~w~      |
-| =evilem-motion-forward-WORD-begin=  | ~z f W~    | =evil-forward-WORD-begin= | ~W~      |
-| =evilem-motion-forward-word-end=    | ~z f e~    | =evil-forward-word-end=   | ~e~      |
-| =evilem-motion-forward-WORD-end=    | ~z f E~    | =evil-forward-WORD-end=   | ~E~      |
-| =evilem-motion-backward-word-begin= | ~z f b~    | =evil-forward-word-begin= | ~b~      |
-| =evilem-motion-backward-WORD-begin= | ~z f B~    | =evil-forward-WORD-begin= | ~B~      |
-| =evilem-motion-backward-word-end=   | ~z f g e~  | =evil-forward-word-end=   | ~g e~    |
-| =evilem-motion-backward-WORD-end=   | ~z f g E~  | =evil-forward-WORD-end=   | ~g E~    |
-These keybindings is also available on =visual-mode=.
-*** [[https://github.com/emacs-evil/evil-surround][evil-surround]]
+| =evilem-motion-forward-word-begin=  | ~z g w~   | =evil-forward-word-begin= | ~w~      |
+| =evilem-motion-forward-WORD-begin=  | ~z g W~   | =evil-forward-WORD-begin= | ~W~      |
+| =evilem-motion-forward-word-end=    | ~z g e~   | =evil-forward-word-end=   | ~e~      |
+| =evilem-motion-forward-WORD-end=    | ~z g E~   | =evil-forward-WORD-end=   | ~E~      |
+| =evilem-motion-backward-word-begin= | ~z g b~   | =evil-forward-word-begin= | ~b~      |
+| =evilem-motion-backward-WORD-begin= | ~z g B~   | =evil-forward-WORD-begin= | ~B~      |
+| =evilem-motion-backward-word-end=   | ~z g g e~ | =evil-forward-word-end=   | ~g e~    |
+| =evilem-motion-backward-WORD-end=   | ~z g g E~ | =evil-forward-WORD-end=   | ~g E~    |
+These keybindings is also available on =visual-mode=. I prefer the simpler /evil-snipe/, so for now I'm not using this in my configuration
+*** [[https://github.com/emacs-evil/evil-surround][evil-surround]] :external:
 This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by [[https://github.com/tpope][Tim Pope]]. The functionality is wrapped into a minor mode.
 #+begin_src emacs-lisp
   (use-package evil-surround
@@ -466,7 +466,7 @@ This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by
 You can surround in visual-state with ~S<textobject>~ or ~gS<textobject>~. Or in normal-state with ~ys<textobject>~ or ~yS<textobject>~. I'm still using the ~Shift I~ in visual mode, and the ~ys~ in normal mode conflicts with ==which-key-mode=.
 ***** Change surrounding
 You can change a surrounding with ~cs<old-textobject><new-textobject>~.
-*** [[https://github.com/cute-jumper/evil-embrace.el][evil-embrace]]
+*** [[https://github.com/cute-jumper/evil-embrace.el][evil-embrace]] :external:
 This package provides evil integration of [[https://github.com/cute-jumper/embrace.el][embrace.el]]. Since =evil-surround= provides a similar set of features as =embrace.el=, this package aims at adding the goodies of =embrace.el= to =evil-surround= and making =evil-surround= even better.
 #+begin_src emacs-lisp
   (use-package evil-embrace
@@ -506,7 +506,7 @@ This package provides evil integration of [[https://github.com/cute-jumper/embra
       (embrace-add-pair-regexp ?< "\\_<[a-z0-9-_]+<" ">" #'+evil--embrace-angle-brackets)
       (embrace-add-pair ?> "<" ">")))
 #+end_src
-*** [[https://github.com/syl20bnr/evil-escape][evil-escape]]
+*** [[https://github.com/syl20bnr/evil-escape][evil-escape]] :external:
 Customizable key sequence to escape from insert state and everything else in /Emacs/.
 #+begin_src emacs-lisp
   (use-package evil-escape
@@ -520,7 +520,7 @@ Customizable key sequence to escape from insert state and everything else in /Em
           evil-escape-delay 0.15)
     (evil-define-key* '(insert replace visual operator) 'global "\C-g" #'evil-escape))
 #+end_src
-*** [[https://github.com/Dewdrops/evil-exchange][evil-exchange]]
+*** [[https://github.com/Dewdrops/evil-exchange][evil-exchange]] :external:
 #+begin_src emacs-lisp
   (use-package evil-exchange
     :init
@@ -532,7 +532,7 @@ Easy text exchange operator for Evil. This is the port of [[https://github.com/t
 On the first use, define (and highlight) the first {motion} to exchange. On the second use, define the second {motion} and perform the exchange.
 ***** ~gX~ (evil-exchange-cancel)
 Clear any {motion} pending for exchange.
-*** [[https://github.com/rgrinberg/evil-quick-diff][evil-quick-diff]]
+*** [[https://github.com/rgrinberg/evil-quick-diff][evil-quick-diff]] :external:
 This is a replacement for the [[https://github.com/AndrewRadev/linediff.vim][linediff.vim]] plugin. It's not a faithful port, as it uses ediff for diffing, but the spirit is the same. The default operator key for diffing is ~god~. While ~goD~ is used for canceling.
 #+begin_src emacs-lisp
   (use-package evil-quick-diff
@@ -544,7 +544,7 @@ This is a replacement for the [[https://github.com/AndrewRadev/linediff.vim][lin
     ;; (setq evil-quick-diff-key (kbd "zx"))
     (evil-quick-diff-install))
 #+end_src
-*** [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]]
+*** [[https://github.com/redguardtoo/evil-nerd-commenter][evil-nerd-commenter]] :external:
 A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emulation, help you comment code efficiently. For example, you can press ~99,ci~ to comment out 99 lines (only works if you set the =(evilnc-default-hotkeys t)=).
 #+begin_src emacs-lisp
   (use-package evil-nerd-commenter
@@ -559,7 +559,7 @@ A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emula
     (evil-define-key* nil my/evilnc-map "c" '("comment/uncomment" . evilnc-comment-or-uncomment-lines))
     (evil-define-key* nil my/evilnc-map "o" '("copy and paste commented" . evilnc-copy-and-comment-lines)))
 #+end_src
-*** [[https://github.com/hlissner/evil-snipe][evil-snipe]]
+*** [[https://github.com/hlissner/evil-snipe][evil-snipe]] :external:
 Evil-snipe emulates [[https://github.com/goldfeld/vim-seek][vim-seek]] and/or [[https://github.com/justinmk/vim-sneak][vim-sneak]] in evil-mode.
 
 It provides 2-character motions for quickly (and more accurately) jumping around text, compared to evil's built-in f/F/t/T motions, incrementally highlighting candidate targets as you type.
@@ -580,7 +580,7 @@ By default, snipe only binds ~s~ (forward) / ~S~ (backward) to =evil-snipe-s= an
     (evil-snipe-mode +1)
     (evil-snipe-override-mode +1))
 #+end_src
-*** [[https://github.com/noctuid/evil-textobj-anyblock][evil-textobj-anyblock]]
+*** [[https://github.com/noctuid/evil-textobj-anyblock][evil-textobj-anyblock]] :external:
 Evil-textobj-anyblock is port of the vim plugin [[https://github.com/rhysd/vim-textobj-anyblock][vim-textobj-anyblock]]. It gives a text object that will select the closest of ~()~, ~{}~, ~[]~, ~<>~, ~''~, ~""~, ~` `~, or ~“”~ by default. This can be convenient for operating on the closest block without having to type its symbol.
 
 In addition to the features provided by vim-textobj-anyblock, anyblock will seek forward in the case that there is not a surrounding match. Also, repeatedly using a text object in visual mode has an expand-region-like functionality by expanding the visual selection to the next block. This is not a primary feature of anyblock but may be nice in some simple cases and is given by evil for free.
@@ -596,7 +596,7 @@ In addition to the features provided by vim-textobj-anyblock, anyblock will seek
             ("\\[" . "\\]")
             ("<" . ">"))))
 #+end_src
-*** [[https://github.com/mamapanda/evil-traces][evil-traces]]
+*** [[https://github.com/mamapanda/evil-traces][evil-traces]] :external:
 =evil-traces= is a port of [[https://github.com/markonm/traces.vim][traces.vim]]. It enables visual previews for certain =evil-ex= commands.
 #+begin_src emacs-lisp
   (use-package evil-traces
@@ -604,7 +604,7 @@ In addition to the features provided by vim-textobj-anyblock, anyblock will seek
     :config
     (evil-traces-mode))
 #+end_src
-*** [[https://github.com/bling/evil-visualstar][evil-visualstar]]
+*** [[https://github.com/bling/evil-visualstar][evil-visualstar]] :external:
 This is a port of one of the many visual-star plugins for Vim to work with evil-mode.
 #+begin_src emacs-lisp
   (use-package evil-visualstar
@@ -616,7 +616,7 @@ This is a port of one of the many visual-star plugins for Vim to work with evil-
       "*" #'evil-visualstar/begin-search-forward
       "#" #'evil-visualstar/begin-search-backward))
 #+end_src
-*** [[https://github.com/ninrod/exato][exato]]
+*** [[https://github.com/ninrod/exato][exato]] :external:
 This package provides the ~x~ text object to manipulate html/xml tag attributes. You can customize the binding.
 
 Try using ~dax~, ~vix~ and ~gUix~.
@@ -626,7 +626,7 @@ Try using ~dax~, ~vix~ and ~gUix~.
     :after evil
     :commands evil-outer-xml-attr evil-inner-xml-attr)
 #+end_src
-*** [[https://github.com/alexmurray/evil-vimish-fold][evil-vimish-fold]]
+*** [[https://github.com/alexmurray/evil-vimish-fold][evil-vimish-fold]] :external:
 Integration of [[https://github.com/mrkkrp/vimish-fold][vimish-fold]] with evil
 
 +Adds standard vim keybindings of ~zf~ and ~zd~ to create and delete folds (via =vimish-fold=) respectively+. Fold now can be created with =<leader>zf= in a region, after that, it hooks into evil so the usual vim keybindings for fold toggling (~za~), opening (~zo~), closing (~zc~) etc all work as expected with vimish-fold.
@@ -652,14 +652,15 @@ This provides a near-complete vim folding experience in evil for Emacs.
     (setq my/vimish-fold-map (make-sparse-keymap))
     :config
     (global-evil-vimish-fold-mode +1)
-    (evil-define-key '(normal visual) 'global (kbd "zF") (cons "vimish-fold" my/vimish-fold-map))
-    (evil-define-key nil my/vimish-fold-map
-      "j" '("next fold" . vimish-fold-next-fold)
-      "k" '("prev fold" . vimish-fold-previous-fold)
-      "d" '("delete" . evil-vimish-fold/delete)
-      "E" '("delete all" . evil-vimish-fold/delete-all)))
+    ;; (evil-define-key '(normal visual) 'global (kbd "zF") (cons "vimish-fold" my/vimish-fold-map))
+    ;; (evil-define-key nil my/vimish-fold-map
+    ;;   "j" '("next fold" . vimish-fold-next-fold)
+    ;;   "k" '("prev fold" . vimish-fold-previous-fold)
+    ;;   "d" '("delete" . evil-vimish-fold/delete)
+    ;;   "E" '("delete all" . evil-vimish-fold/delete-all))
+    )
 #+end_src
-*** [[https://github.com/gabesoft/evil-mc/][evil-mc]]
+*** [[https://github.com/gabesoft/evil-mc/][evil-mc]] :external:
 Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g .~. Considering to disable this in favor for /evil-multiedit/.
 #+begin_src emacs-lisp
   (use-package evil-mc
@@ -688,7 +689,7 @@ Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g
     :init
     (global-evil-mc-mode  1))
 #+end_src
-*** [[https://github.com/hlissner/evil-multiedit][evil-multiedit]]
+*** [[https://github.com/hlissner/evil-multiedit][evil-multiedit]] :external:
 #+begin_src emacs-lisp
   (use-package evil-multiedit
     :config
@@ -717,7 +718,7 @@ Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g
         (kbd "C-p")   #'evil-multiedit-prev)))
 #+end_src
 Hlissner's implementation of multiple-cursor for evil-mode.
-*** [[https://github.com/Somelauw/evil-org-mode][evil-org-mode]]
+*** [[https://github.com/Somelauw/evil-org-mode][evil-org-mode]] :external:
 Supplemental evil-mode keybindings to emacs org-mode.
 #+begin_src emacs-lisp
   (use-package evil-org
@@ -727,7 +728,7 @@ Supplemental evil-mode keybindings to emacs org-mode.
     (require 'evil-org-agenda)
     (evil-org-agenda-set-keys))
 #+end_src
-*** [[https://github.com/edkolev/evil-goggles][evil-goggles]]
+*** [[https://github.com/edkolev/evil-goggles][evil-goggles]] :external:
 Display visual hint on evil edit operations.
 #+begin_src emacs-lisp
   (use-package evil-goggles
@@ -786,6 +787,7 @@ All keybindings will go with ~<leader>b~.
   (setq my/buffer-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) 'global (kbd "<leader>b") (cons "Buffer" my/buffer-map))
   (evil-define-key* nil my/buffer-map
+    "." '("set bookmark" . bookmark-set)
     "[" '("previous buffer" . previous-buffer)
     "]" '("next buffer" . next-buffer)
     "c" '("clone indirect buffer" . clone-indirect-buffer)
@@ -2625,7 +2627,9 @@ This is the basic configuration, with the addition of enabling corfu in the mini
           consult-async-refresh-delay  0.15
           consult-async-input-throttle 0.2
           consult-async-input-debounce 0.1)
-    (evil-define-key* '(normal visual) 'global (kbd "<leader>.") '("Store register" . consult-register-store))
+    (evil-define-key* '(normal visual) 'global
+      (kbd "<leader>.") '("Store register" . consult-register-store)
+      (kbd "<leader> C-.") '("Load register" . consult-register-load))
     (evil-define-key* nil my/buffer-map
       "b" '("buffers" . consult-buffer)
       "B" '("project buffers" .consult-project-buffer)
