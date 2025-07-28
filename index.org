@@ -899,7 +899,8 @@ Misc quick commands, also for /org-mode/ ~<leader>o~.
   (evil-define-key* nil my/open-map (kbd "r") (cons "Org Roam" my/open-roam-map))
 
   (evil-define-key* nil my/open-map
-    "a" '("Org Agenda" . org-agenda))
+    "a" '("Org Agenda" . org-agenda)
+    "l" '("Avy open link" . link-hint-open-link))
 
   (evil-define-key* nil my/open-org
     (kbd "n") '("Notes" . (lambda () (interactive) (find-file (expand-file-name "notes.org" +config/org-directory))))
