@@ -893,8 +893,10 @@ Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+begin_src emacs-lisp
   (setq my/open-map (make-sparse-keymap))
   (setq my/open-org (make-sparse-keymap))
+  (setq my/open-roam-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Open" my/open-map))
   (evil-define-key* nil my/open-map (kbd "o") (cons "Org files" my/open-org))
+  (evil-define-key* nil my/open-map (kbd "r") (cons "Org Roam" my/open-roam-map))
 
   (evil-define-key* nil my/open-map
     "a" '("Org Agenda" . org-agenda))
@@ -2788,13 +2790,13 @@ Asynchronous Fuzzy Finder for Emacs.
     (add-hook 'completion-at-point-functions #'cape-dabbrev)
     (add-hook 'completion-at-point-functions #'cape-file)
     (add-hook 'completion-at-point-functions #'cape-elisp-block)
-    (add-hook 'completion-at-point-functions #'cape-history)
-    (add-hook 'completion-at-point-functions #'cape-keyword)
+    ;; (add-hook 'completion-at-point-functions #'cape-history)
+    ;; (add-hook 'completion-at-point-functions #'cape-keyword)
     ;;(add-hook 'completion-at-point-functions #'cape-tex)
     ;;(add-hook 'completion-at-point-functions #'cape-sgml)
     ;;(add-hook 'completion-at-point-functions #'cape-rfc1345)
     ;;(add-hook 'completion-at-point-functions #'cape-abbrev)
-    (add-hook 'completion-at-point-functions #'cape-dict)
+    ;; (add-hook 'completion-at-point-functions #'cape-dict)
     ;;(add-hook 'completion-at-point-functions #'cape-elisp-symbol)
     ;; (add-hook 'completion-at-point-functions #'cape-line)
     :config
@@ -3836,9 +3838,9 @@ This package looks promising, I'll wait until it mature a bit.
     (global-set-key (kbd "C-c l") #'org-store-link)
     (global-set-key (kbd "C-c a") #'org-agenda)
     (global-set-key (kbd "C-c c") #'org-capture)
-    (when(file-directory-p (expand-file-name "braindump/org" org-directory))
+    (when (file-directory-p (expand-file-name "roam" org-directory))
       (customize-set-variable '+config/org-roam-directory
-                              (expand-file-name "braindump/org" org-directory)))
+                              (expand-file-name "roam" org-directory)))
     (when (file-directory-p (expand-file-name "alexforsale.github.io" org-directory))
       (customize-set-variable '+config/blog-directory
                               (expand-file-name "alexforsale.github.io" org-directory)))
@@ -4282,7 +4284,7 @@ This package looks promising, I'll wait until it mature a bit.
                 (file-relative-name path org-download-image-dir)
               path))))
 #+end_src
-*** org-noter :external:onexport:
+*** org-noter :external:onexport:disabled:archive:
 #+begin_src emacs-lisp :tangle no
   (use-package org-noter
     :defer t
@@ -4296,12 +4298,12 @@ This package looks promising, I'll wait until it mature a bit.
     (setq org-noter-auto-save-last-location t
           org-noter-separate-notes-from-heading t))
 #+end_src
-*** org-appear :external:noexport:
+*** org-appear :external:noexport:disabled:archive:
 #+begin_src emacs-lisp :tangle no
   (use-package org-appear ; better markup edit
     :hook (org-mode . org-appear-mode))
 #+end_src
-*** [[https://github.com/rexim/org-cliplink][org-cliplink]] :external:noexport:
+*** [[https://github.com/rexim/org-cliplink][org-cliplink]] :external:noexport:disabled:archive:
 #+begin_src emacs-lisp :tangle no
   (use-package org-cliplink
     :after org
@@ -4310,6 +4312,45 @@ This package looks promising, I'll wait until it mature a bit.
       (+config/leader-insert
         :keymaps 'org-mode-map
         "l" 'org-cliplink)))
+#+end_src
+*** org-roam
+I've tried different Emacs packages for note taking. Although this is not a lightweight solution, but sorry to say it's still the best one for me. And I publish it to my [[https://alexforsale.github.io/braindump/][personal blog]]. This time I wont do that though
+#+name: org-roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+    :after org
+    :custom
+    (org-roam-directory +config/org-roam-directory)
+    (org-roam-complete-everywhere t)
+    (org-roam-capture-templates
+     '(("d" "default" plain
+        "%?"
+        :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
+        :unnarrowed t)))
+    :config
+    (org-roam-setup)
+    (org-roam-db-autosync-mode)
+    (require 'org-roam-protocol)
+    (evil-define-key* nil my/open-roam-map
+      "a" '("add alias" . org-roam-alias-add)
+      "c" '("roam capture" . org-roam-capture)
+      "f" '("find roam node" . org-roam-node-find)
+      "i" '("insert roam node at point" . org-roam-node-insert)
+      "l" '("toggle roam buffer" . org-roam-buffer-toggle)
+      "r" '("remove alias" . org-roam-alias-remove)))
+#+end_src
+To be fair, this package is very powerful, but for me, at least, not all its feature is needed. I'll try to start simple, and make additional configuration as needed.
+**** org-roam-protocol
+This is from the [[https://www.orgroam.com/manual.html#org_002droam_002dprotocol][orgroam-manual]].
+#+name: ~/.local/share/application/org-protocol.desktop
+#+begin_src conf :tangle no
+  [Desktop Entry]
+  Name=Org-Protocol
+  Exec=emacsclient %u
+  Icon=emacs-icon
+  Type=Application
+  Terminal=false
+  MimeType=x-scheme-handler/org-protocol
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
