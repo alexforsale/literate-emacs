@@ -3972,6 +3972,7 @@ This package looks promising, I'll wait until it mature a bit.
     :custom
     (org-refile-targets
      `((,(expand-file-name "projects.org" org-directory) :maxlevel . 1)
+       (,(expand-file-name "notes.org" org-directory) :maxlevel . 1)
        (,(expand-file-name "routines.org" org-directory) :maxlevel . 1)
        (,(expand-file-name "personal.org" org-directory) :maxlevel . 1)))
     (org-refile-use-outline-path 'file)
