@@ -3709,6 +3709,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :config
     (setq gptel-backend
           (gptel-make-gemini "Gemini" :key (password-store-get "google.com/gemini_api_key") :stream t)
+          gptel-model 'gemini-2.5-pro
           gptel-default-mode #'org-mode))
 #+end_src
 An LLM client for /Emacs/, I'm trying it with google's /[[https://gemini.google.com/][gemini]]/. This package is already good on its own. But the other reason is I'm also trying out /[[https://github.com/armindarvish/consult-web][consult-web]]/, which integrates search results from various sources.
