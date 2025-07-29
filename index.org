@@ -404,7 +404,7 @@ Change cursor shape and color by evil state in terminal.
     )
 #+end_src
 *** [[https://github.com/PythonNut/evil-easymotion][evil-easymotion]] :external:
-#+begin_src emacs-lisp :tangle
+#+begin_src emacs-lisp
   (use-package evil-easymotion
     :after evil
     :demand t
