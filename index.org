@@ -4334,15 +4334,15 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
     (org-roam-complete-everywhere t)
     (org-roam-capture-templates
      '(("d" "default" plain
-        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: other\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: other\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)
        ("p" "programming" plain
-        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: programming\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: programming\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)
        ("t" "tech" plain
-        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: tech\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: tech\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)))
     (org-roam-capture-ref-templates
