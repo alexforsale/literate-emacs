@@ -4359,7 +4359,7 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)))
     (org-roam-capture-ref-templates
-     '(("r" "ref" plain "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: reference\n#+hugo_tags: \n%?" :target (file+head "${slug}.org" "#+title: ${title}")
+     '(("r" "ref" plain "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: reference\n#+hugo_tags: \n%l\n%?" :target (file+head "${slug}.org" "#+title: ${title}")
     :unnarrowed t)))
     :config
     (org-roam-setup)
