@@ -4373,6 +4373,31 @@ This is from the [[https://www.orgroam.com/manual.html#org_002droam_002dprotocol
   Terminal=false
   MimeType=x-scheme-handler/org-protocol
 #+end_src
+*** org-roam-ui
+#+name: org-roam-ui
+#+begin_src emacs-lisp
+  (use-package org-roam-ui
+      :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+      :config
+      (setq org-roam-ui-sync-theme t
+            org-roam-ui-follow t
+            org-roam-ui-update-on-save t
+            org-roam-ui-open-on-start t))
+#+end_src
+*** org-protocol-capture-html
+#+begin_src emacs-lisp
+    (use-package org-protocol-capture-html
+      :after org
+      :config
+      (add-to-list 'org-capture-templates
+                   '("w" "Web site" entry
+                     (file "")
+                     "* %a :website:\n\n%U %?\n\n%:initial")))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-org)
