@@ -4334,19 +4334,19 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
     (org-roam-complete-everywhere t)
     (org-roam-capture-templates
      '(("d" "default" plain
-        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: other\n#+hugo_tags: \n%?"
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: other\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)
        ("programming" "default" plain
-        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: programming\n#+hugo_tags: \n%?"
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: programming\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)
        ("tech" "default" plain
-        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: tech\n#+hugo_tags: \n%?"
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: tech\n#+property: header-args :exports both\n#+hugo_tags: \n%?"
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)))
     (org-roam-capture-ref-templates
-     '(("r" "ref" plain "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: reference\n#+hugo_tags: \n%l\n%?" :target (file+head "${slug}.org" "#+title: ${title}")
+     '(("r" "ref" plain "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: reference\n#+property: header-args :exports both\n#+hugo_tags: \n%l\n%?" :target (file+head "${slug}.org" "#+title: ${title}")
     :unnarrowed t)))
     :config
     (org-roam-setup)
