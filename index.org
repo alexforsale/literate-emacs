@@ -2568,6 +2568,9 @@ This is the basic configuration, with the addition of enabling corfu in the mini
 #+end_src
 **** consult
 ***** Basic Configuration
+:PROPERTIES:
+:ID:       a9fd951e-cf40-4066-b870-36bb2cefaa6c
+:END:
 #+name: consult
 #+begin_src emacs-lisp
   (use-package consult
@@ -3857,9 +3860,9 @@ This package looks promising, I'll wait until it mature a bit.
     (global-set-key (kbd "C-c l") #'org-store-link)
     (global-set-key (kbd "C-c a") #'org-agenda)
     (global-set-key (kbd "C-c c") #'org-capture)
-    (when (file-directory-p (expand-file-name "roam" org-directory))
+    (when (file-directory-p (expand-file-name "braindump/org" org-directory))
       (customize-set-variable '+config/org-roam-directory
-                              (expand-file-name "roam" org-directory)))
+                              (expand-file-name "braindump/org" org-directory)))
     (when (file-directory-p (expand-file-name "alexforsale.github.io" org-directory))
       (customize-set-variable '+config/blog-directory
                               (expand-file-name "alexforsale.github.io" org-directory)))
@@ -4333,7 +4336,7 @@ This package looks promising, I'll wait until it mature a bit.
         "l" 'org-cliplink)))
 #+end_src
 *** org-roam
-I've tried different Emacs packages for note taking. Although this is not a lightweight solution, but sorry to say it's still the best one for me. And I publish it to my [[https://alexforsale.github.io/braindump/][personal blog]]. This time I wont do that though
+I've tried different Emacs packages for note taking. Although this is not a lightweight solution, but it's still the best one for me. And I publish it to my [[https://alexforsale.github.io/braindump/][personal blog]].
 #+name: org-roam
 #+begin_src emacs-lisp
   (use-package org-roam
@@ -4343,9 +4346,20 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
     (org-roam-complete-everywhere t)
     (org-roam-capture-templates
      '(("d" "default" plain
-        "%?"
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: other\n#+hugo_tags: \n%?"
+        :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
+        :unnarrowed t)
+       ("programming" "default" plain
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: programming\n#+hugo_tags: \n%?"
+        :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
+        :unnarrowed t)
+       ("tech" "default" plain
+        "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: tech\n#+hugo_tags: \n%?"
         :if-new (file+head "%<%Y-%m-%d_%H-%M-%S>-${slug}.org" "#+title: ${title}\n")
         :unnarrowed t)))
+    (org-roam-capture-ref-templates
+     '(("r" "ref" plain "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: post\n#+hugo_categories: reference\n#+hugo_tags: \n%?" :target (file+head "${slug}.org" "#+title: ${title}")
+    :unnarrowed t)))
     :config
     (org-roam-setup)
     (org-roam-db-autosync-mode)
