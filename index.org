@@ -2727,6 +2727,7 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
     :config
     (setq which-key-use-C-h-commands nil
           prefix-help-command #'embark-prefix-help-command)
+    (keymap-global-set "C-." #'embark-act)
     (with-eval-after-load 'general
       (general-define-key
        :keymaps 'override
