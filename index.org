@@ -2727,20 +2727,7 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
     :config
     (setq which-key-use-C-h-commands nil
           prefix-help-command #'embark-prefix-help-command)
-    (keymap-global-set "C-." #'embark-act)
-    (with-eval-after-load 'general
-      (general-define-key
-       :keymaps 'override
-       "C-." 'embark-act
-       "C-;" 'embark-dwim
-       "C-h B" 'embark-bindings)
-      (general-define-key
-       :keymaps 'minibuffer-local-map
-       "C-;" 'embark-act
-       "C-c C-;" 'embark-export
-       "C-c C-l" 'embark-collect)
-      (+config/leader-key
-        "." 'embark-act))
+    (evil-define-key* '(normal visual insert) 'global (kbd "C-.") 'embark-act)
 
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
