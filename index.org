@@ -44,7 +44,7 @@ Try setting a /sensible/ keybindings, especially for external packages. Don't me
 *** Evil Mode keybindings
 /Evil/ mode already sets keybindings by default, some of them already changed the vanilla keybindings. For me /Evil-mode/ is a necessary evil, I don't like it, but it's definitely better than the /Emacs/ vanilla keychords (trust me, I tried).
 ** Use =org-mode=
-This way I don't have to separate each configurations into a separate modules. But having all the configuration in one file is also made debugging quite hard, so I'll still separate them into separate files.
+With a literate configuration I don't have to separate each configurations into a separate modules. But having all the configuration in one file is also made debugging quite hard, so I'll still separate them into separate files.
 *** =init.el= and =config.el=
 /init.el/ is for the essential configurations, everything else goes to into separate files.
 ** Try to minimize the use of external packages
