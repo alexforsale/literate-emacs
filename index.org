@@ -48,7 +48,7 @@ With a literate configuration I don't have to separate each configurations into 
 *** =init.el= and =config.el=
 /init.el/ is for the essential configurations, everything else goes to into separate files.
 ** Try to minimize the use of external packages
-More dependencies means more bloats, avoid it when possible.
+More dependencies means more bloats, avoid it when possible. Also, if a built-in package offers the same functionality, try it first.
 * early-init.el
 :PROPERTIES:
 :header-args: :tangle ./early-init.el
