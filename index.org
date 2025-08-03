@@ -1947,6 +1947,25 @@ Emacs minor mode to automatically balance window margins.
     :init
     (beacon-mode 1))
 #+end_src
+*** hl-todo
+Highlight TODO keywords.
+#+name: hl-todo
+#+caption: hl-todo
+#+begin_src emacs-lisp
+  (use-package hl-todo
+    :config
+    (setq hl-todo-keyword-faces
+        '(("TODO"   . "#FF0000")
+          ("FIXME"  . "#FF0000")
+          ("DEBUG"  . "#A020F0")
+          ("GOTCHA" . "#FF4500")
+          ("STUB"   . "#1E90FF")))
+    (with-eval-after-load 'magit
+    (add-hook 'magit-log-wash-summary-hook
+              #'hl-todo-search-and-highlight t)
+    (add-hook 'magit-revision-wash-message-hook
+              #'hl-todo-search-and-highlight t)))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-ui)
