@@ -1953,6 +1953,8 @@ Highlight TODO keywords.
 #+caption: hl-todo
 #+begin_src emacs-lisp
   (use-package hl-todo
+    :init
+    (add-hook 'prog-mode-hook (lambda () (hl-todo-mode 1)))
     :config
     (setq hl-todo-keyword-faces
         '(("TODO"   . "#FF0000")
