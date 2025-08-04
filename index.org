@@ -901,6 +901,7 @@ Misc quick commands, also for /org-mode/ ~<leader>o~.
 
   (evil-define-key* nil my/open-map
     "a" '("Org Agenda" . org-agenda)
+    "L" '("Store org link" . org-store-link)
     "l" '("Avy open link" . link-hint-open-link))
 
   (evil-define-key* nil my/open-org
