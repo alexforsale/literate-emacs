@@ -3603,8 +3603,6 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
     (add-to-list 'lsp-language-id-configuration '(jinja2-mode . "jinja2") t)
     (add-to-list 'lsp-language-id-configuration '("\\.js2$" . "jinja2") t)
-    (define-key lsp-ui-mode-map [remap xref-find-definitions] 'lsp-ui-peek-find-definitions)
-    (define-key lsp-ui-mode-map [remap xref-find-references] 'lsp-ui-peek-find-references)
     (define-key lsp-ui-mode-map (kbd "M-.") 'lsp-ui-peek-find-definitions)
     (define-key lsp-ui-mode-map (kbd "M-?") 'lsp-ui-peek-find-references))
 #+end_src
