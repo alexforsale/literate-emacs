@@ -3544,6 +3544,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (lsp-mode . evil-normalize-keymaps)
     (lsp-completion-mode . my/lsp-mode-setup-completion)
     :config
+    (with-eval-after-load 'treemacs
+      (add-hook 'lsp-mode-hook #'lsp-treemacs-sync-mode))
     (evil-define-key 'normal lsp-mode-map (kbd "<leader>l") (cons "LSP" lsp-command-map))
     (evil-define-key 'normal lsp-mode-map "K" '("describe at point" . lsp-describe-thing-at-point))
     (setq lsp-toml-command
@@ -5011,7 +5013,6 @@ Needs an external package =fd=, or =fd-find=
   (use-package lsp-treemacs
     :after treemacs lsp
     :config
-    (lsp-treemacs-sync-mode 1)
     (evil-define-key* 'normal treemacs-mode-map
       "S" 'lsp-treemacs-symbols
        "X" 'lsp-treemacs-errors-list
