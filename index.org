@@ -2330,8 +2330,9 @@ This is part of /corfu/ configuration.
     :bind (("M-/" . dabbrev-completion)
            ("C-M-/" . dabbrev-expand))
     :config
-    (add-to-list 'dabbrev-ignored-buffer-regexps '("\\` "
-                                                   "\\(TAGS\\|tags\\|ETAGS\\|etags\\|GTAGS\\|GRTAGS\\|GPATH\\)\\(<[0-9]+>\\)?"))
+    (add-to-list 'dabbrev-ignored-buffer-regexps "\\` ")
+    ;(add-to-list 'dabbrev-ignored-buffer-regexps '("\\` "
+                                                   ;;"\\(TAGS\\|tags\\|ETAGS\\|etags\\|GTAGS\\|GRTAGS\\|GPATH\\)\\(<[0-9]+>\\)?"))
     ;; Since 29.1, use `dabbrev-ignored-buffer-regexps' on older.
     (add-to-list 'dabbrev-ignored-buffer-modes 'doc-view-mode)
     (add-to-list 'dabbrev-ignored-buffer-modes 'pdf-view-mode)
