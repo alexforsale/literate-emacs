@@ -113,13 +113,15 @@ The =custom-file= is used to save customization settings for future use.
 ** Setup package
 Now much more simpler since [[https://github.com/jwiegley/use-package][use-package]] is built into /Emacs/. It's actually not used since I'm using =straight.el=.
 #+begin_src emacs-lisp
-  (with-eval-after-load 'package
-    ;; Add `melpa` to `package-archives`.
-    (add-to-list 'package-archives
-  	       '("melpa" . "https://melpa.org/packages/"))
-    ;; gnu-devel
-    (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/"))
-    (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+    (with-eval-after-load 'package
+      (setq package-enable-at-startup nil)
+      ;; Add `melpa` to `package-archives`.
+      (add-to-list 'package-archives
+    	       '("melpa" . "https://melpa.org/packages/") t)
+      ;; gnu-devel
+      (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/") t)
+      (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/") t)
+      (package-initialize))
 #+end_src
 ** footer :noexport:
 #+begin_src emacs-lisp
@@ -138,7 +140,7 @@ Now much more simpler since [[https://github.com/jwiegley/use-package][use-packa
   ;;; Code:
 #+end_src
 ** straight.el
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (customize-set-variable 'straight-use-package-by-default t)
 
   (defvar bootstrap-version)
@@ -304,7 +306,7 @@ Doing stuffs in /linux/ will eventually makes you edit files from various progra
 Mostly copied from /doom/ or the [[https://evil.readthedocs.io/en/latest/overview.html#installation-via-package-el][official documentation]].
 #+begin_src emacs-lisp
   (use-package evil
-    :demand t
+    :ensure t
     :hook
     (after-change-major-mode . (lambda ()
                                  (setq evil-shift-width tab-width)))
@@ -382,6 +384,7 @@ This is a collection of Evil bindings for the parts of Emacs that Evil does not 
 #+begin_src emacs-lisp
   (use-package evil-collection
     :after evil
+    :ensure t
     :init
     (evil-collection-init)
     :custom
@@ -393,6 +396,7 @@ Change cursor shape and color by evil state in terminal.
 #+begin_src emacs-lisp
   (use-package evil-terminal-cursor-changer
     :unless (display-graphic-p)
+    :ensure t
     :init
     (evil-terminal-cursor-changer-activate)
     :config
@@ -407,7 +411,7 @@ Change cursor shape and color by evil state in terminal.
 #+begin_src emacs-lisp
   (use-package evil-easymotion
     :after evil
-    :demand t
+    :ensure t
     :commands evilem-create evilem-default-keybindings
     :config
     (evilem-make-motion evilem-motion-search-next #'evil-search-next
@@ -449,7 +453,7 @@ This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by
 #+begin_src emacs-lisp
   (use-package evil-surround
     :after evil
-    :demand t
+    :ensure t
     :commands (global-evil-surround-mode
                evil-surround-edit
                evil-Surround-edit
@@ -470,6 +474,7 @@ You can change a surrounding with ~cs<old-textobject><new-textobject>~.
 This package provides evil integration of [[https://github.com/cute-jumper/embrace.el][embrace.el]]. Since =evil-surround= provides a similar set of features as =embrace.el=, this package aims at adding the goodies of =embrace.el= to =evil-surround= and making =evil-surround= even better.
 #+begin_src emacs-lisp
   (use-package evil-embrace
+    :ensure t
     :commands embrace-add-pair embrace-add-pair-regexp
     :hook (LaTeX-mode . embrace-LaTeX-mode-hook)
     :hook (LaTeX-mode . +evil-embrace-latex-mode-hook-h)
@@ -512,6 +517,7 @@ Customizable key sequence to escape from insert state and everything else in /Em
   (use-package evil-escape
     :commands evil-escape
     :after evil
+    :ensure t
     :hook (evil-after-load . evil-escape-mode)
     :init
     (setq evil-escape-excluded-states '(normal visual multiedit emacs motion)
@@ -523,6 +529,7 @@ Customizable key sequence to escape from insert state and everything else in /Em
 *** [[https://github.com/Dewdrops/evil-exchange][evil-exchange]] :external:
 #+begin_src emacs-lisp
   (use-package evil-exchange
+    :ensure t
     :init
     (evil-exchange-install))
 #+end_src
@@ -532,9 +539,9 @@ Easy text exchange operator for Evil. This is the port of [[https://github.com/t
 On the first use, define (and highlight) the first {motion} to exchange. On the second use, define the second {motion} and perform the exchange.
 ***** ~gX~ (evil-exchange-cancel)
 Clear any {motion} pending for exchange.
-*** [[https://github.com/rgrinberg/evil-quick-diff][evil-quick-diff]] :external:
+*** [[https://github.com/rgrinberg/evil-quick-diff][evil-quick-diff]]                             :external:archive:noexport:
 This is a replacement for the [[https://github.com/AndrewRadev/linediff.vim][linediff.vim]] plugin. It's not a faithful port, as it uses ediff for diffing, but the spirit is the same. The default operator key for diffing is ~god~. While ~goD~ is used for canceling.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package evil-quick-diff
     :straight (:host github :repo "rgrinberg/evil-quick-diff")
     :after evil
@@ -549,6 +556,7 @@ A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emula
 #+begin_src emacs-lisp
   (use-package evil-nerd-commenter
     :after evil
+    :ensure t
     :commands (evilnc-comment-operator
                evilnc-inner-comment
                evilnc-outer-commenter)
@@ -556,8 +564,8 @@ A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emula
     :config
     (setq my/evilnc-map (make-sparse-keymap))
     (evil-define-key* '(normal visual) 'global (kbd "gc") (cons "Comment" my/evilnc-map))
-    (evil-define-key* nil my/evilnc-map "c" '("comment/uncomment" . evilnc-comment-or-uncomment-lines))
-    (evil-define-key* nil my/evilnc-map "o" '("copy and paste commented" . evilnc-copy-and-comment-lines)))
+    (evil-define-key* nil my/evilnc-map
+      "c" '("comment/uncomment" . evilnc-comment-operator)))
 #+end_src
 *** [[https://github.com/hlissner/evil-snipe][evil-snipe]] :external:
 Evil-snipe emulates [[https://github.com/goldfeld/vim-seek][vim-seek]] and/or [[https://github.com/justinmk/vim-sneak][vim-sneak]] in evil-mode.
@@ -569,6 +577,7 @@ By default, snipe only binds ~s~ (forward) / ~S~ (backward) to =evil-snipe-s= an
   (use-package evil-snipe
     :commands evil-snipe-local-mode evil-snipe-override-local-mode
     :after evil
+    :ensure t
     :hook (evil-after-load . (lambda () (evil-snipe-override-mode +1)))
     :hook (evil-after-load . (lambda () (evil-snipe-mode +1)))
     :hook (magit-mode . turn-off-evil-snipe-override-mode)
@@ -580,11 +589,11 @@ By default, snipe only binds ~s~ (forward) / ~S~ (backward) to =evil-snipe-s= an
     (evil-snipe-mode +1)
     (evil-snipe-override-mode +1))
 #+end_src
-*** [[https://github.com/noctuid/evil-textobj-anyblock][evil-textobj-anyblock]] :external:
+*** [[https://github.com/noctuid/evil-textobj-anyblock][evil-textobj-anyblock]]                       :external:archive:noexport:
 Evil-textobj-anyblock is port of the vim plugin [[https://github.com/rhysd/vim-textobj-anyblock][vim-textobj-anyblock]]. It gives a text object that will select the closest of ~()~, ~{}~, ~[]~, ~<>~, ~''~, ~""~, ~` `~, or ~“”~ by default. This can be convenient for operating on the closest block without having to type its symbol.
 
 In addition to the features provided by vim-textobj-anyblock, anyblock will seek forward in the case that there is not a surrounding match. Also, repeatedly using a text object in visual mode has an expand-region-like functionality by expanding the visual selection to the next block. This is not a primary feature of anyblock but may be nice in some simple cases and is given by evil for free.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package evil-textobj-anyblock
     :straight (:host github :repo "willghatch/evil-textobj-anyblock")
     :after evil
@@ -601,6 +610,7 @@ In addition to the features provided by vim-textobj-anyblock, anyblock will seek
 #+begin_src emacs-lisp
   (use-package evil-traces
     :after evil
+    :ensure t
     :config
     (evil-traces-mode))
 #+end_src
@@ -608,6 +618,7 @@ In addition to the features provided by vim-textobj-anyblock, anyblock will seek
 This is a port of one of the many visual-star plugins for Vim to work with evil-mode.
 #+begin_src emacs-lisp
   (use-package evil-visualstar
+    :ensure t
     :commands (evil-visualstar/begin-search
                evil-visualstar/begin-search-forward
                evil-visualstar/begin-search-backward)
@@ -624,6 +635,7 @@ Try using ~dax~, ~vix~ and ~gUix~.
 #+begin_src emacs-lisp
   (use-package exato
     :after evil
+    :ensure t
     :commands evil-outer-xml-attr evil-inner-xml-attr)
 #+end_src
 *** [[https://github.com/alexmurray/evil-vimish-fold][evil-vimish-fold]] :external:
@@ -664,6 +676,7 @@ This provides a near-complete vim folding experience in evil for Emacs.
 Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g .~. Considering to disable this in favor for /evil-multiedit/.
 #+begin_src emacs-lisp
   (use-package evil-mc
+    :ensure t
     :commands (evil-mc-make-cursor-here
                evil-mc-make-all-cursors
                evil-mc-undo-all-cursors
@@ -692,6 +705,7 @@ Multiple cursors implementation for =evil-mode=. I'm using the default prefix ~g
 *** [[https://github.com/hlissner/evil-multiedit][evil-multiedit]] :external:
 #+begin_src emacs-lisp
   (use-package evil-multiedit
+    :ensure t
     :config
     (defun make-evil-multiedit-case-sensitive (fn &rest args)
       (let ((case-fold-search (not iedit-case-sensitive)))
@@ -723,6 +737,7 @@ Supplemental evil-mode keybindings to emacs org-mode.
 #+begin_src emacs-lisp
   (use-package evil-org
     :after org
+    :ensure t
     :hook (org-mode . (lambda () evil-org-mode))
     :config
     (require 'evil-org-agenda)
@@ -732,6 +747,7 @@ Supplemental evil-mode keybindings to emacs org-mode.
 Display visual hint on evil edit operations.
 #+begin_src emacs-lisp
   (use-package evil-goggles
+    :ensure t
     :config
     (evil-goggles-mode)
     (evil-goggles-use-diff-faces))
@@ -773,11 +789,12 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
   (setq my/c-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) 'global (kbd "<leader>c") (cons "Chat" my/c-map))
   (setq my/gptel-map (make-sparse-keymap))
-  (evil-define-key* nil my/c-map "g" (cons "Gptel" my/gptel-map))
-  (evil-define-key nil my/gptel-map "a" '("Add/remove region" . gptel-add))
-  (evil-define-key nil my/gptel-map "g" '("gptel" . gptel))
-  (evil-define-key nil my/gptel-map "G" '("gptel-menu" . gptel-menu))
-  (evil-define-key nil my/gptel-map "s" '("send" . gtpel-send))
+  (with-eval-after-load 'gptel
+    (evil-define-key* nil my/c-map "g" (cons "Gptel" my/gptel-map))
+    (evil-define-key nil my/gptel-map "a" '("Add/remove region" . gptel-add))
+    (evil-define-key nil my/gptel-map "g" '("gptel" . gptel))
+    (evil-define-key nil my/gptel-map "G" '("gptel-menu" . gptel-menu))
+    (evil-define-key nil my/gptel-map "s" '("send" . gtpel-send)))
 
 #+end_src
 *** Buffers
@@ -837,7 +854,8 @@ All /git/-related commands goes here, ~<leader>g~.
 #+name: git
 #+begin_src emacs-lisp
   (setq my/git-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>g") (cons "Git" my/git-map))
+  (with-eval-after-load 'magit
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>g") (cons "Git" my/git-map)))
 #+end_src
 *** Help
 This key ~<leader>h~ just simulate the standard Emacs ~C-h~.
@@ -857,18 +875,19 @@ Commands for quick insertion ~<leader>i~.
 **** org-mode
 #+name: org-mode-map
 #+begin_src emacs-lisp
-  (setq my/org-mode-map (make-sparse-keymap))
-  (setq my/org-note-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
-  (evil-define-key* nil my/org-mode-map "n" (cons "Notes" my/org-note-map))
-  (evil-define-key* nil my/org-mode-map
-    (kbd "M-l") 'org-insert-last-stored-link
-    (kbd "C-w") '("Refile" . org-refile)
-    )
-  (evil-define-key nil my/org-note-map
-    "c" '("capture" . org-capture)
-    "C" '("goto last capture" . org-capture-goto-last-stored)
-    "r" '("last stored refile" . org-refile-goto-last-stored))
+  (with-eval-after-load 'org
+    (setq my/org-mode-map (make-sparse-keymap))
+    (setq my/org-note-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
+    (evil-define-key* nil my/org-mode-map "n" (cons "Notes" my/org-note-map))
+    (evil-define-key* nil my/org-mode-map
+      (kbd "M-l") 'org-insert-last-stored-link
+      (kbd "C-w") '("Refile" . org-refile)
+      )
+    (evil-define-key nil my/org-note-map
+      "c" '("capture" . org-capture)
+      "C" '("goto last capture" . org-capture-goto-last-stored)
+      "r" '("last stored refile" . org-refile-goto-last-stored)))
 #+end_src
 **** rustic
 #+name: rustic-mode-map
@@ -897,7 +916,8 @@ Misc quick commands, also for /org-mode/ ~<leader>o~.
   (setq my/open-roam-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Open" my/open-map))
   (evil-define-key* nil my/open-map (kbd "o") (cons "Org files" my/open-org))
-  (evil-define-key* nil my/open-map (kbd "r") (cons "Org Roam" my/open-roam-map))
+  (with-eval-after-load 'org-roam
+    (evil-define-key* nil my/open-map (kbd "r") (cons "Org Roam" my/open-roam-map)))
 
   (evil-define-key* nil my/open-map
     "a" '("Org Agenda" . org-agenda)
@@ -1543,7 +1563,7 @@ A megapack of [[https://github.com/doomemacs/themes][themes for GNU Emacs]]. I'm
 #+name: doom-themes
 #+begin_src emacs-lisp
   (use-package doom-themes
-    :demand t
+    :ensure t
     :config
     ;; Global settings (defaults)
     (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -1565,6 +1585,7 @@ A fancy and fast mode-line inspired by [[https://github.com/seagle0128/doom-mode
 #+name: doom-modeline
 #+begin_src emacs-lisp
   (use-package doom-modeline
+    :ensure t
     :init
     (doom-modeline-mode 1)
     :config
@@ -1577,15 +1598,16 @@ I use this theme when I'm not using any external theme.
 #+name: modus-vivendi
 #+begin_src emacs-lisp :tangle no :noweb no
   (use-package custom
-    :straight nil
+    :ensure nil
     :init
     (load-theme 'modus-vivendi t))
 #+end_src
 *** [[https://github.com/abo-abo/ace-window][ace-window]] :external:
 #+name: ace-window
-#+begin_src emacs-lisp
-  (use-package posframe)
+#+begin_src emacs-lisp :tangle no
+  (use-package posframe :ensure t :demand t)
   (use-package ace-window
+    :ensure t
     :init
     (when (display-graphic-p)
       (ace-window-posframe-mode t))
@@ -1607,12 +1629,13 @@ A utility package to collect various Icon Fonts and propertize them within Emacs
 #+name: all-the-icons
 #+begin_src emacs-lisp 
   (use-package all-the-icons
+    :ensure t
     :if (display-graphic-p))
 #+end_src
 This needs a manual intervention from the user to install the fonts (by running the =all-the-icons-install-fonts= command).
 *** [[https://github.com/purcell/page-break-lines][page-break-lines]]
 #+begin_src emacs-lisp
-  (use-package page-break-lines)
+  (use-package page-break-lines :ensure t)
 #+end_src
 *** [[https://github.com/emacs-dashboard/emacs-dashboard][dashboard]] :external:
 An extensible emacs[[https://github.com/emacs-dashboard/emacs-dashboard][ dashboard]].
@@ -1623,7 +1646,7 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
 #+name: dashboard
 #+begin_src emacs-lisp
   (use-package dashboard
-    :demand t
+    :ensure t
     :config
     (setq initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name))
                                  dashboard-startup-banner 'logo
@@ -1647,7 +1670,7 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
     (with-eval-after-load 'nerd-icons
       (setq dashboard-icon-type 'nerd-icons))
     (with-eval-after-load 'projectile
-      (setq dashboard-projects-backend 'projectile))
+      (setq dashboard-projects-backend 'project.el))
     (with-eval-after-load 'perspective
       (setq dashboard-projects-switch-function 'projectile-persp-switch-project))
     (dashboard-setup-startup-hook))
@@ -1657,7 +1680,7 @@ Emacs package that displays available keybindings in popup. This is one of the t
 #+name: which-key
 #+begin_src emacs-lisp
   (use-package which-key
-    :demand t
+    :ensure t
     :custom
     (which-key-lighter "")
     (which-key-sort-order #'which-key-key-order-alpha)
@@ -1684,13 +1707,14 @@ Emacs package that displays available keybindings in popup. This is one of the t
 #+begin_src emacs-lisp
   (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 80)
   (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 80)
+  (set-frame-font "Iosevka Nerd Font Mono 8" nil t)
 #+end_src
 the =:height= value is 1/10 pt, so 100 height means 10 pt.
 **** font-core
 #+name: font-core
 #+begin_src emacs-lisp
   (use-package font-core
-    :straight nil
+    :ensure nil
     :init
     (global-font-lock-mode t))
 #+end_src
@@ -1700,7 +1724,7 @@ Nerd font integration for all-the-icons.
 #+begin_src emacs-lisp :tangle no
   (use-package all-the-icons-nerd-fonts
     :after all-the-icons
-    :demand t
+    :ensure t
     :config
     (all-the-icons-nerd-fonts-prefer))
 #+end_src
@@ -1710,16 +1734,18 @@ Making /Emacs/ more colourful.
 #+begin_src emacs-lisp
   (use-package rainbow-mode
     :hook (prog-mode . rainbow-mode)
+    :ensure t
     :config
     (setq rainbow-html-colors-major-mode-list
           '(prog-mode conf-mode html-mode css-mode php-mode nxml-mode xml-mode)
           rainbow-html-colors t))
 
   (use-package rainbow-identifiers
+    :ensure t
     :hook (prog-mode . rainbow-identifiers-mode))
 
   (use-package rainbow-delimiters
-    :demand t
+    :ensure t
     :hook (prog-mode . rainbow-delimiters-mode)
     :config
     (setq rainbow-delimiters-max-face-count 4))
@@ -1738,6 +1764,7 @@ Since /Emacs/ is a [[https://www.emacswiki.org/emacs/SelfDocumentation][self-doc
 #+name: helpful
 #+begin_src emacs-lisp
   (use-package helpful
+    :ensure t
     :bind
     ("C-h f" . helpful-function)
     ([remap describe-symbol] . helpful-symbol)
@@ -1773,6 +1800,7 @@ Enable line highlighting in all buffers.
 *** highlight-quoted :external:
 #+begin_src emacs-lisp
   (use-package highlight-quoted
+    :ensure t
     :hook ((lisp-mode lisp-interaction-mode) . highlight-quoted-mode))
 #+end_src
 *** hs-mode :builtin:
@@ -1808,16 +1836,16 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     (show-paren-mode 1)
     :custom
     (show-paren-style 'mixed)
-    (show-paren-delay 0.1)
-    (show-paren-highlight-openparen t)
-    (show-paren-when-point-inside-paren t)
+    (show-paren-delay 0.4)
+    (show-paren-highlight-openparen nil)
+    (show-paren-when-point-inside-paren nil)
     (show-paren-when-point-in-periphery t))
 #+end_src
 
 *** mouse :builtin:
 #+begin_src emacs-lisp
   (use-package mouse
-    :straight nil
+    :ensure nil
     :config
     (setq mouse-yank-at-point t))
 #+end_src
@@ -1825,7 +1853,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 *** Base UI :builtin:
 #+begin_src emacs-lisp
   (use-package emacs
-    :straight nil
+    :ensure nil
     :hook ((prog-mode text-mode conf-mode) . display-line-numbers-mode)
     :config
     (setq hscroll-margin 2
@@ -1862,7 +1890,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 *** frame :builtin:
 #+begin_src emacs-lisp
   (use-package frame
-    :straight nil
+    :ensure nil
     :hook (after-init . window-divider-mode)
     :config
     (blink-cursor-mode -1)
@@ -1873,7 +1901,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 *** window :builtin:
 #+begin_src emacs-lisp
   (use-package window
-    :straight nil
+    :ensure nil
     :config
     (setq split-width-threshold 160
         split-height-threshold nil))
@@ -1881,7 +1909,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 *** comint :builtin:
 #+begin_src emacs-lisp
   (use-package comint
-    :straight nil
+    :ensure nil
     :config
     (setq comint-prompt-read-only t
           comint-buffer-maximum-size 2048)
@@ -1890,7 +1918,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 *** winner :builtin:
 #+begin_src emacs-lisp
   (use-package winner
-    :straight nil
+    :ensure nil
     :init
     (winner-mode +1)
     :config
@@ -1939,6 +1967,7 @@ Emacs minor mode to automatically balance window margins.
  If only certain buffers could be so grossly incandescent.
 #+begin_src emacs-lisp
   (use-package solaire-mode
+    :ensure t
     :init
     (solaire-global-mode +1))
 #+end_src
@@ -1946,6 +1975,7 @@ Emacs minor mode to automatically balance window margins.
 #+name: beacon-mode
 #+begin_src emacs-lisp
   (use-package beacon
+    :ensure t
     :init
     (beacon-mode 1))
 #+end_src
@@ -1955,6 +1985,7 @@ Highlight TODO keywords.
 #+caption: hl-todo
 #+begin_src emacs-lisp
   (use-package hl-todo
+    :ensure t
     :init
     (add-hook 'prog-mode-hook (lambda () (hl-todo-mode 1)))
     :config
@@ -1991,10 +2022,11 @@ Usually configuration that defined at the /C source code/.
 #+name: base
 #+begin_src emacs-lisp
   (use-package emacs
-    :straight nil
+    :ensure nil
     :custom
     (read-buffer-completion-ignore-case t)
     (tab-always-indent nil)
+    (tab-width 2)
     (visible-bell nil)
     (use-short-answers t)
     (use-dialog-box nil)
@@ -2029,7 +2061,7 @@ Usually configuration that defined at the /C source code/.
 *** tooltip :builtin:
 #+begin_src emacs-lisp
   (use-package tooltip
-    :straight nil
+    :ensure nil
     :config
     (when (bound-and-true-p tooltip-mode)
     (tooltip-mode -1)))
@@ -2037,7 +2069,7 @@ Usually configuration that defined at the /C source code/.
 *** compile :builtin:
 #+begin_src emacs-lisp
   (use-package compile
-    :straight nil
+    :ensure nil
     :hook (compilation-filter . ansi-color-compilation-filter)
     :config
     (setq compilation-always-kill t       ; kill compilation process before starting another
@@ -2053,7 +2085,7 @@ Usually configurations related to file manipulations.
 #+name: files
 #+begin_src emacs-lisp
   (use-package files
-    :straight nil
+    :ensure nil
     :config
     (nconc
      auto-mode-alist
@@ -2220,7 +2252,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
 #+name: prog-mode
 #+begin_src emacs-lisp
   (use-package prog-mode
-    :straight nil
+    :ensure nil
     :hook ((prog-mode . prettify-symbols-mode)
            (prog-mode . visual-line-mode)
            ;; (prog-mode . (lambda () (electric-pair-mode 1)))
@@ -2250,7 +2282,7 @@ The configuration for /bookmark/.
 *** proced :disabled:archive:noexport:
 #+begin_src emacs-lisp :tangle no
   (use-package proced
-    :straight nil
+    :ensure nil
     :config
     (setq proced-enable-color-flag t
           proced-auto-update-interval 3
@@ -2260,7 +2292,7 @@ The configuration for /bookmark/.
 #+name: tramp
 #+begin_src emacs-lisp
   (use-package tramp
-    :straight nil
+    :ensure nil
     :config
     (setq tramp-remote-path
           (append '("~/.guix-profile/bin" "~/.guix-profile/sbin"
@@ -2280,7 +2312,7 @@ I'm still figuring out how to do a proper /TRAMP/ connection into a /guix-system
 #+name: epg-config
 #+begin_src emacs-lisp
   (use-package epg-config
-    :straight nil
+    :ensure nil
     :custom
     (epg-pinentry-mode 'loopback)
     (epg-gpg-program "gpg2"))
@@ -2289,7 +2321,7 @@ This is for /Gnupg/.
 *** tabify :builtin:
 #+begin_src emacs-lisp
   (use-package tabify
-    :straight nil
+    :ensure nil
     :custom
     (tabify-regex "^\t* [ \t]+"))
 #+end_src
@@ -2297,7 +2329,7 @@ This is for /Gnupg/.
 #+name: simple
 #+begin_src emacs-lisp
   (use-package simple
-    :straight nil
+    :ensure nil
     :custom
     (blink-matching-paren nil)
     (save-interprogram-paste-before-kill t)
@@ -2317,7 +2349,7 @@ The important part is the /Evil/ integration, which is should be handled already
 By default visiting / opening symlinked file will ask if we want to visit the actual file.
 #+begin_src emacs-lisp
   (use-package vc-hooks
-    :straight nil
+    :ensure nil
     :custom
     (vc-follow-symlinks t))
 #+end_src
@@ -2341,14 +2373,14 @@ This is part of /corfu/ configuration.
 *** repeat-mode :builtin:
 #+begin_src emacs-lisp
   (use-package repeat
-    :straight nil
+    :ensure nil
     :init
     (repeat-mode +1))
 #+end_src
 *** so-long :builtin:
 #+begin_src emacs-lisp
   (use-package so-long
-    :straight nil
+    :ensure nil
     :init
     (global-so-long-mode)
     :config
@@ -2374,7 +2406,7 @@ This is part of /corfu/ configuration.
 *** ediff :builtin:
 #+begin_src emacs-lisp
   (use-package ediff
-    :straight nil
+    :ensure nil
     :config
     (setq ediff-diff-options "-w" ; turn off whitespace checking
           ediff-split-window-function #'split-window-horizontally
@@ -2399,11 +2431,11 @@ This is part of /corfu/ configuration.
 *** Vertico frameworks :external:
 I call this framework since usually these packages are what people use together, though they work fine separately.
 **** vertico
-***** Basic configuration
+***** Basic configuration :disabled:archive:noexport:
 #+name: vertico
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package vertico
-    :straight (vertico
+    :ensure (vertico
                :files (:defaults "extensions/*.el")
                :includes (vertico-buffer
                           vertico-directory
@@ -2466,12 +2498,46 @@ I call this framework since usually these packages are what people use together,
           '(read-only t cursor-intangible t face minibuffer-prompt))
     (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode))
 #+end_src
+***** Vertico
+#+name: vertico
+#+begin_src emacs-lisp
+  (use-package vertico
+    :ensure t
+    :hook
+    (rfn-eshadow-update-overlay . vertico-directory-tidy)
+    :custom
+    ;; (vertico-scroll-margin 0) ;; Different scroll margin
+    (vertico-count 15) ;; Show more candidates
+    (vertico-resize nil) ;; Grow and shrink the Vertico minibuffer
+    (vertico-cycle t) ;; Enable cycling for `vertico-next/previous'
+    :config
+    (advice-add #'tmm-add-prompt :after #'minibuffer-hide-completions)
+      (keymap-set vertico-map "?" #'minibuffer-completion-help)
+    :init
+    (vertico-mode))
+
+  ;; Emacs minibuffer configurations.
+  (use-package emacs
+    :custom
+    ;; Enable context menu. `vertico-multiform-mode' adds a menu in the minibuffer
+    ;; to switch display modes.
+    (context-menu-mode t)
+    ;; Support opening new minibuffers from inside existing minibuffers.
+    (enable-recursive-minibuffers t)
+    ;; Hide commands in M-x which do not work in the current mode.  Vertico
+    ;; commands are hidden in normal buffers. This setting is useful beyond
+    ;; Vertico.
+    (read-extended-command-predicate #'command-completion-default-include-p)
+    ;; Do not allow the cursor in the minibuffer prompt
+    (minibuffer-prompt-properties
+     '(read-only t cursor-intangible t face minibuffer-prompt)))
+#+end_src
 ***** Extensions
 ****** vertico-directory
 #+begin_src emacs-lisp
 (use-package vertico-directory
   :after vertico
-  :straight nil
+  :ensure nil
   ;; More convenient directory navigation commands
   :bind (:map vertico-map
               ("RET" . vertico-directory-enter)
@@ -2484,7 +2550,7 @@ I call this framework since usually these packages are what people use together,
 #+begin_src emacs-lisp
 (use-package vertico-quick
   :after vertico
-  :straight nil
+  :ensure nil
   :bind (:map vertico-map
               ("M-q" . vertico-quick-insert)
               ("C-q" . vertico-quick-exit)))
@@ -2492,7 +2558,7 @@ I call this framework since usually these packages are what people use together,
 ****** vertico-multiform
 #+begin_src emacs-lisp
   (use-package vertico-multiform
-    :straight nil
+    :ensure nil
     :init
     (vertico-multiform-mode)
     :config
@@ -2514,18 +2580,19 @@ I call this framework since usually these packages are what people use together,
 **** marginalia
 #+name: marginalia
 #+begin_src emacs-lisp
-;; Enable rich annotations using the Marginalia package
-(use-package marginalia
-  :bind (:map minibuffer-local-map
-              ("M-A" . marginalia-cycle))
-  :init
-  (marginalia-mode))
+  (use-package marginalia
+    :ensure t
+    :bind (:map minibuffer-local-map
+                ("M-A" . marginalia-cycle))
+    :init
+    (marginalia-mode))
 #+end_src
 **** corfu
-***** Basic Configuration
+***** corfu main package
 #+name: corfu
 #+begin_src emacs-lisp
   (use-package corfu
+    :ensure t
     :custom
     (corfu-cycle t)
     (corfu-auto t)
@@ -2587,7 +2654,7 @@ This is the basic configuration, with the addition of enabling corfu in the mini
 ***** corfu-history
 #+begin_src emacs-lisp
   (use-package corfu-history
-    :straight nil
+    :ensure nil
     :hook ((corfu-mode . corfu-history-mode))
     :config
     (with-eval-after-load 'savehist
@@ -2596,19 +2663,21 @@ This is the basic configuration, with the addition of enabling corfu in the mini
 ***** corfu-popupinfo
 #+begin_src emacs-lisp
   (use-package corfu-popupinfo
-    :straight nil
+    :ensure nil
     :hook ((corfu-mode . corfu-popupinfo-mode))
     :config
     (setq corfu-popupinfo-delay '(0.5 . 1.0)))
 #+end_src
 **** consult
-***** Basic Configuration
+***** consult main package
 :PROPERTIES:
 :ID:       a9fd951e-cf40-4066-b870-36bb2cefaa6c
 :END:
 #+name: consult
 #+begin_src emacs-lisp
   (use-package consult
+    :ensure t
+    :demand t
     :hook (completion-list-mode . consult-preview-at-point-mode)
     :init
     ;; Optionally configure the register formatting. This improves the register
@@ -2649,15 +2718,15 @@ This is the basic configuration, with the addition of enabling corfu in the mini
     ;; By default `consult-project-function' uses `project-root' from project.el.
     ;; Optionally configure a different project root function.
   ;;;; 1. project.el (the default)
-    ;; (setq consult-project-function #'consult--default-project--function)
+    ;;(setq consult-project-function #'consult--default-project--function)
   ;;;; 2. vc.el (vc-root-dir)
     ;; (setq consult-project-function (lambda (_) (vc-root-dir)))
   ;;;; 3. locate-dominating-file
     ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   ;;;; 4. projectile.el (projectile-project-root)
-    (with-eval-after-load 'projectile
-      (autoload 'projectile-project-root "projectile")
-      (setq consult-project-function (lambda (_) (projectile-project-root))))
+    ;; (with-eval-after-load 'projectile
+    ;;   (autoload 'projectile-project-root "projectile")
+    ;;   (setq consult-project-function (lambda (_) (projectile-project-root))))
   ;;;; 5. No project support
     ;; (setq consult-project-function nil))
     (setq consult-line-numbers-widen t
@@ -2670,7 +2739,7 @@ This is the basic configuration, with the addition of enabling corfu in the mini
       (kbd "<leader> C-.") '("Load register" . consult-register-load))
     (evil-define-key* nil my/buffer-map
       "b" '("buffers" . consult-buffer)
-      "B" '("project buffers" .consult-project-buffer)
+      "B" '("project buffers" . consult-project-buffer)
       )
     (evil-define-key* nil my/org-mode-map
       "O" '("search heading" . consult-org-heading))
@@ -2719,15 +2788,16 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
 ***** consult-dir
 #+begin_src emacs-lisp
   (use-package consult-dir
+    :ensure t
     :bind (:map vertico-map
                 ("C-x C-d" . consult-dir)
                 ("C-x C-j" . consult-dir-jump-file)))
 #+end_src
 **** orderless
-***** Basic Configuration
 #+name: orderless
 #+begin_src emacs-lisp
   (use-package orderless
+    :ensure t
     :init
     ;; Configure a custom style dispatcher (see the Consult wiki)
     ;; (setq orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch)
@@ -2740,7 +2810,7 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
 #+end_src
 =partial-completion= and =flex= are built-ins completion-styles.
 **** embark
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package embark
     :defer t
     :bind
@@ -2772,7 +2842,7 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
 #+end_src
 This is a package that I should learn more, but the configuration is overwhealming.
 **** embark-consult
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package embark-consult
     :hook
     (embark-collect-mode . consult-preview-at-point-mode))
@@ -2795,7 +2865,7 @@ Asynchronous Fuzzy Finder for Emacs.
         "A" 'affe-find)))
 #+end_src
 **** cape
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package cape
     :defer t
     ;; Bind dedicated completion commands
@@ -2856,7 +2926,7 @@ Asynchronous Fuzzy Finder for Emacs.
 #+end_src
 **** [[https://github.com/minad/jinx][jinx]]
 Enchanted Spell Checker. Here I use /hunspell/ as a backend dictionary
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package jinx
       :if (executable-find "enchant-2")
       :hook (emacs-startup . global-jinx-mode)
@@ -2867,7 +2937,7 @@ Enchanted Spell Checker. Here I use /hunspell/ as a backend dictionary
 **** Snippets
 This is provided by yasnippet.
 #+name: snippets
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package yasnippet
     :init
     (yas-global-mode)
@@ -2916,7 +2986,7 @@ Simple templates for Emacs.
 :header-args: :tangle no
 :END:
 #+name: nerd-icons-corfu
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package nerd-icons-corfu
   :config
   (add-to-list 'corfu-margin-formatters #'nerd-icons-corfu-formatter)
@@ -2931,7 +3001,7 @@ Simple templates for Emacs.
 :header-args: :tangle no
 :END:
 #+name: nerd-icons-completion
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package nerd-icons-completion
   :hook (marginalia-mode . nerd-icons-completion-marginalia-setup)
   :config
@@ -2959,9 +3029,9 @@ Simple templates for Emacs.
 
 A shell-like command interpreter implemented in Emacs Lisp.
 #+name: eshell
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package eshell
-  :straight nil
+  :ensure nil
   :custom
   (eshell-history-size 10000)
   (eshell-hist-ignore-dups t)
@@ -3018,21 +3088,23 @@ A shell-like command interpreter implemented in Emacs Lisp.
 #+name: vterm
 #+begin_src emacs-lisp
   (use-package vterm
-      :demand t
-      :commands vterm-mode
-      :config
-      (add-hook 'vterm-mode-hook
-                (lambda ()
-                  (setq-local global-hl-line-mode nil)
-                  (setq-local hscroll-margin 0)))
-      (setq vterm-kill-buffer-on-exit t)
-      (evil-set-initial-state #'vterm-mode 'insert))
+    :ensure t
+    :demand t
+    :commands vterm-mode
+    :config
+    (add-hook 'vterm-mode-hook
+              (lambda ()
+                (setq-local global-hl-line-mode nil)
+                (setq-local hscroll-margin 0)))
+    (setq vterm-kill-buffer-on-exit t)
+    (evil-set-initial-state #'vterm-mode 'insert))
 #+end_src
 *** multi-vterm :external:
 #+name: multi-vterm
 #+begin_src emacs-lisp
   (use-package multi-vterm
     :after vterm
+    :ensure t
     :config
     (evil-define-key* nil my/vterm-map "v" '("toggle terminal" . multi-vterm-dedicated-toggle))
     (evil-define-key* 'normal vterm-mode-map (kbd ",c") #'multi-vterm)
@@ -3076,7 +3148,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
   (shell-dynamic-complete-function bash-completion-dynamic-complete))
 #+end_src
 *** [[https://codeberg.org/akib/emacs-corfu-terminal][emacs-corfu-terminal]]
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (straight-use-package
    '(corfu-terminal
      :type git
@@ -3107,7 +3179,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
 #+name: select
 #+begin_src emacs-lisp
   (use-package select
-    :straight nil
+    :ensure nil
     :custom
     (select-enable-clipboard t))
 #+end_src
@@ -3127,7 +3199,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 #+name: subword
 #+begin_src emacs-lisp
   (use-package subword
-    :straight nil
+    :ensure nil
     :init
     (global-subword-mode 1))
 #+end_src
@@ -3135,7 +3207,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 #+name: text-mode
 #+begin_src emacs-lisp
   (use-package text-mode
-    :straight nil
+    :ensure nil
     :hook (text-mode . visual-line-mode)
     :config
     (setq-default sentence-end-double-space nil))
@@ -3143,7 +3215,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 *** whitespace :builtin:
 #+begin_src emacs-lisp
   (use-package whitespace
-    :straight nil
+    :ensure nil
     :config
     (setq whitespace-line-column nil
           whitespace-style
@@ -3156,12 +3228,12 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 #+end_src
 *** ws-butler :external:
 #+name: ws-butler
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package ws-butler
     :hook ((prog-mode text-mode) . ws-butler-mode))
 #+end_src
 *** [[https://github.com/gilbertw1/better-jumper][better-jumper]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package better-jumper
     :init
     (global-set-key [remap evil-jump-forward]  #'better-jumper-jump-forward)
@@ -3177,6 +3249,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+begin_src emacs-lisp
   ;; smartparens
   (use-package smartparens
+    :ensure t
     :demand t
     :commands sp-pair sp-local-pair sp-with-modes sp-point-in-comment sp-point-in-string
     :init
@@ -3259,7 +3332,7 @@ I still have a mixed feeling for this package, but it still easier to configure 
 #+end_src
 The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/files/smartparens.el][example configuration]] messes up my /evil-mode/. I have them commented for now.
 *** [[https://github.com/radian-software/apheleia][apheleia]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package apheleia
     :defer t
     :init
@@ -3267,7 +3340,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
 #+end_src
 *** [[https://github.com/magnars/expand-region.el][expand-region]] :external:
  Emacs extension to increase selected region by semantic units.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package expand-region
     :config
     (with-eval-after-load 'general
@@ -3336,6 +3409,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
 #+name: magit
 #+begin_src emacs-lisp
   (use-package magit
+    :ensure t
     :demand t
     :config
     (evil-set-initial-state #'git-commit-mode 'insert)
@@ -3350,8 +3424,9 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
 *** projectile :external:
 A project interaction library for /Emacs/, with little external dependency as possible.
 #+name: projectile
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package projectile
+    :ensure t
     :demand t
     :commands (projectile-project-root
                projectile-project-name
@@ -3397,6 +3472,8 @@ A project interaction library for /Emacs/, with little external dependency as po
 #+name: diff-hl
 #+begin_src emacs-lisp
   (use-package diff-hl
+    :ensure t
+    :demand t
     :hook (find-file . diff-hl-mode)
     :hook (vc-dir-mode . diff-hl-dir-mode)
     :hook (dired-mode . diff-hl-dired-mode)
@@ -3423,8 +3500,9 @@ A project interaction library for /Emacs/, with little external dependency as po
 *** perspective :external:
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
 #+name: perspective
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package perspective
+    :ensure t
     :demand t
     :config
     (setq persp-initial-frame-name "Main"
@@ -3464,8 +3542,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 *** persp-projectile :external:
 #+name: persp-projectile
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package persp-projectile
+    :ensure t
     :after perspective
     :commands projectile-persp-switch-project)
 #+end_src
@@ -3473,6 +3552,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+name: git-link
 #+begin_src emacs-lisp :tangle no
   (use-package git-link
+    :ensure t
     :demand t
     :commands (git-link git-link-commit git-link-homepage)
     :config
@@ -3500,8 +3580,8 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (git-messenger:show-detail t))
 #+end_src
 *** git-timemachine :external:noexport:disabled:archive:
-#+name: git-timemachine :tangle no
-#+begin_src emacs-lisp
+#+name: git-timemachine
+#+begin_src emacs-lisp :tangle no
   (use-package git-timemachine
     :after magit
     :config
@@ -3527,7 +3607,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 [[./assets/img/emacs-lsp.png][file:assets/img/emacs-lsp.png]]
 **** Basic configuration
 ***** LSP
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lsp-mode
     :after which-key
     :init
@@ -3582,7 +3662,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
   ;; (evil-define-key* '(normal visual) lsp-mode-map "K" '("describe at point" . lsp-describe-thing-at-point)
 #+end_src
 **** lsp-ui 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lsp-ui
     :hook (lsp-mode . lsp-ui-mode)
     :demand t
@@ -3608,12 +3688,35 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     (define-key lsp-ui-mode-map (kbd "M-?") 'lsp-ui-peek-find-references))
 #+end_src
 **** consult-lsp :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package consult-lsp
     :after consult lsp
     :bind
     (:map lsp-mode-map
           ([remap xref-find-apropos] . consult-lsp-symbols)))
+#+end_src
+*** treesit 
+#+begin_src emacs-lisp
+  (use-package treesit-auto
+    :ensure t
+    :config
+    (treesit-auto-add-to-auto-mode-alist 'all)
+    (setq treesit-auto-install 'prompt))
+#+end_src
+*** eglot :builtin:
+#+name: eglot
+#+begin_src emacs-lisp
+  (use-package eglot
+    :hook ((rust-mode nix-mode) . eglot-ensure)
+    :config (add-to-list 'eglot-server-programs
+                         `(rust-mode . ("rust-analyzer" :initializationOptions
+                                        ( :procMacro (:enable t)
+                                          :cargo ( :buildScripts (:enable t)
+                                                   :features "all"))))))
+#+end_src
+*** project.el 
+#+begin_src emacs-lisp
+  (use-package project)
 #+end_src
 *** [[https://emacs-lsp.github.io/dap-mode/page/configuration/][dap-mode]] :external:archive:disabled:noexport:
 #+begin_src emacs-lisp :tangle no
@@ -3730,6 +3833,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+name: gptel
 #+begin_src emacs-lisp
   (use-package gptel
+    :ensure t
     :after password-store
     :demand t
     :config
@@ -3782,7 +3886,7 @@ This package looks promising, I'll wait until it mature a bit.
     (require 'consult-web-sources))
 #+end_src
 *** [[https://www.flycheck.org/][flycheck]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck
     :init
     (global-flycheck-mode +1)
@@ -3809,24 +3913,26 @@ This package looks promising, I'll wait until it mature a bit.
       "[return]" 'flycheck-error-list-goto-error))
 #+end_src
 **** [[https://github.com/flycheck/flycheck-color-mode-line][flycheck-color-mode-line]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-color-mode-line
     :hook (flycheck-mode . flycheck-color-mode-line-mode))
 #+end_src
 **** [[https://github.com/flycheck/flycheck-pos-tip][flycheck-pos-tip]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-pos-tip
+    :ensure t
+    :demand t
     :init
     (flycheck-pos-tip-mode))
 #+end_src
 **** [[https://github.com/flycheck/flycheck-popup-tip][flycheck-popup-tip]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-popup-tip
     :commands flycheck-popup-tip-show-popup flycheck-popup-tip-delete-popup
     :hook (flycheck-mode . flycheck-popup-tip-mode))
 #+end_src
 **** [[https://github.com/alexmurray/flycheck-posframe][flycheck-posframe]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-posframe
     :after flycheck
     :config (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
@@ -3835,7 +3941,7 @@ This package looks promising, I'll wait until it mature a bit.
           flycheck-posframe-error-prefix "⮾ "))
 #+end_src
 **** [[https://github.com/minad/consult-flycheck][consult-flycheck]] :external:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package consult-flycheck
     :after (consult flycheck)
     :config
@@ -3991,7 +4097,7 @@ This package looks promising, I'll wait until it mature a bit.
 *** org-entities :builtin:
 #+begin_src emacs-lisp
   (use-package org-entities
-    :straight nil
+    :ensure nil
     :config
     (setq org-entities-user
           '(("flat"  "\\flat" nil "" "" "266D" "♭")
@@ -4008,7 +4114,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-faces
 #+begin_src emacs-lisp
   (use-package org-faces
-    :straight nil
+    :ensure nil
     :custom
     (org-fontify-quote-and-verse-blocks t))
 #+end_src
@@ -4016,7 +4122,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-archive
 #+begin_src emacs-lisp
   (use-package org-archive
-    :straight nil
+    :ensure nil
     :after org
     :custom
     (org-archive-tag "archive")
@@ -4030,7 +4136,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+begin_src emacs-lisp
   (use-package org-capture
     :after org
-    :straight nil
+    :ensure nil
     :demand t
     :config
     (org-capture-put :kill-buffer t)
@@ -4047,7 +4153,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-refile
 #+begin_src emacs-lisp
   (use-package org-refile
-    :straight nil
+    :ensure nil
     :after org
     :hook (org-after-refile-insert . save-buffer)
     :custom
@@ -4063,7 +4169,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-fold
 #+begin_src emacs-lisp
   (use-package org-fold
-    :straight nil
+    :ensure nil
     :after org org-contrib
     :custom
     (org-catch-invisible-edits 'smart))
@@ -4072,7 +4178,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-id
 #+begin_src emacs-lisp
   (use-package org-id
-    :straight nil
+    :ensure nil
     :after org
     :custom
     (org-id-locations-file-relative t)
@@ -4083,7 +4189,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-num
 #+begin_src emacs-lisp
   (use-package org-num
-    :straight nil
+    :ensure nil
     :after org
     :custom
     (org-num-face '(:inherit org-special-keyword :underline nil :weight bold))
@@ -4093,7 +4199,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-crypt
 #+begin_src emacs-lisp
   (use-package org-crypt ; built-in
-    :straight nil
+    :ensure nil
     :after org
     :commands org-encrypt-entries org-encrypt-entry org-decrypt-entries org-decrypt-entry
     ;;:hook (org-reveal-start . org-decrypt-entry)
@@ -4108,7 +4214,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-attach
 #+begin_src emacs-lisp
   (use-package org-attach
-    :straight nil
+    :ensure nil
     :after org
     :commands (org-attach-new
                org-attach-open
@@ -4129,7 +4235,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-agenda
 #+begin_src emacs-lisp
   (use-package org-agenda
-    :straight nil
+    :ensure nil
     :after org
     :custom
     (org-agenda-files (list (concat org-directory "/")))
@@ -4192,7 +4298,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-clock
 #+begin_src emacs-lisp
   (use-package org-clock
-    :straight nil
+    :ensure nil
     :after org
     :commands org-clock-save
     :hook (kill-emacs . org-clock-save)
@@ -4210,7 +4316,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-timer
 #+begin_src emacs-lisp
   (use-package org-timer
-    :straight nil
+    :ensure nil
     :config
     (setq org-timer-format "Timer :: %s"))
 #+end_src
@@ -4218,7 +4324,7 @@ This package looks promising, I'll wait until it mature a bit.
 #+name: org-eldoc
 #+begin_src emacs-lisp
   (use-package org-eldoc
-    :straight nil
+    :ensure nil
     :after org org-contrib
     :config
     (puthash "org" #'ignore org-eldoc-local-functions-cache)
@@ -4231,35 +4337,38 @@ This package looks promising, I'll wait until it mature a bit.
 *** org-superstar :external:
 #+name: org-superstar
 #+begin_src emacs-lisp
-(use-package org-superstar
-  :hook (org-mode . org-superstar-mode)
-  :custom
-  (org-superstar-leading-bullet ?\s)
-  (org-superstar-leading-fallback ?\s)
-  (org-hide-leading-stars nil)
-  (org-indent-mode-turns-on-hiding-stars nil)
-  (org-superstar-todo-bullet-alist
-   '(("TODO" . 9744)
-     ("[ ]"  . 9744)
-     ("DONE" . 9745)
-     ("[X]"  . 9745)))
-  :config
-  (org-superstar-configure-like-org-bullets))
+  (use-package org-superstar
+    :ensure t
+    :hook (org-mode . org-superstar-mode)
+    :custom
+    (org-superstar-leading-bullet ?\s)
+    (org-superstar-leading-fallback ?\s)
+    (org-hide-leading-stars nil)
+    (org-indent-mode-turns-on-hiding-stars nil)
+    (org-superstar-todo-bullet-alist
+     '(("TODO" . 9744)
+       ("[ ]"  . 9744)
+       ("DONE" . 9745)
+       ("[X]"  . 9745)))
+    :config
+    (org-superstar-configure-like-org-bullets))
 #+end_src
 *** org-fancy-priority :external:
 #+name: org-fancy-priorities
 #+begin_src emacs-lisp
-(use-package org-fancy-priorities ; priority icons
-  :defer t
-  :hook (org-mode . org-fancy-priorities-mode)
-  :hook (org-agenda-mode . org-fancy-priorities-mode)
-  :custom
-  (org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+  (use-package org-fancy-priorities ; priority icons
+    :ensure t
+    :defer t
+    :hook (org-mode . org-fancy-priorities-mode)
+    :hook (org-agenda-mode . org-fancy-priorities-mode)
+    :custom
+    (org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
 #+end_src
 *** org-modern :external:
 #+name: org-modern
 #+begin_src emacs-lisp
   (use-package org-modern
+    :ensure t
     :demand t
     :config
     (set-face-attribute 'org-modern-symbol nil :family "Iosevka Nerd Font")
@@ -4287,6 +4396,7 @@ This package looks promising, I'll wait until it mature a bit.
 *** org-download :external:
 #+begin_src emacs-lisp
   (use-package org-download
+    :ensure t
     :after org
     :commands
     org-download-dnd
@@ -4363,6 +4473,8 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
 #+name: org-roam
 #+begin_src emacs-lisp
   (use-package org-roam
+    :ensure t
+    :demand t
     :after org
     :custom
     (org-roam-directory +config/org-roam-directory)
@@ -4410,8 +4522,9 @@ This is from the [[https://www.orgroam.com/manual.html#org_002droam_002dprotocol
 #+end_src
 *** org-roam-ui
 #+name: org-roam-ui
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package org-roam-ui
+    :ensure t
       :after org-roam ;; or :after org
   ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
   ;;         a hookable mode anymore, you're advised to pick something yourself
@@ -4427,6 +4540,7 @@ This is from the [[https://www.orgroam.com/manual.html#org_002droam_002dprotocol
 Requires pandoc
 #+begin_src emacs-lisp
   (use-package org-protocol-capture-html
+    :load-path "site-lisp/org-protocol-capture-html"
     :after org
     :config
     (add-to-list 'org-capture-templates
@@ -4449,71 +4563,77 @@ Requires pandoc
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** make-mode
+*** make-mode                                                     :builtin:
 #+name: make-mode
 #+begin_src emacs-lisp
   (use-package make-mode
-    :straight nil
+    :ensure nil
     :config
     (add-hook 'makefile-mode-hook 'indent-tabs-mode))
 #+end_src
-*** executable
+*** executable                                                    :builtin:
 #+name: executable
 #+begin_src emacs-lisp
   (use-package executable
-    :straight nil
+    :ensure nil
     :hook
     (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
-*** pinentry
+*** pinentry                                                     :external:
 #+name: pinentry
 #+begin_src emacs-lisp
   (use-package pinentry
+    :ensure t
     :defer t
     :config
     (pinentry-start))
 #+end_src
-*** pass
+*** pass                                                         :external:
 #+name: pass
 #+begin_src emacs-lisp
   (use-package password-store
+    :ensure t
     :demand t
     :config
     (setq password-store-password-length 12)
     (setq auth-sources '(password-store "~/.authinfo.gpg" "~/.netrc")))
 
   (use-package password-store-otp
+    :ensure t
     :defer t
     :after password-store)
 
   (use-package pass
+    :ensure t
     :defer t)
 
   (use-package auth-source-pass
-    :straight nil
+    :ensure nil
     :init
     (auth-source-pass-enable))
 #+end_src
 /Elpaca/ complains about different of /pass/ version installed. But it installed just fine.
-*** rg
+*** rg                                                           :external:
 Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the executable not found.
 #+name: rg
 #+begin_src emacs-lisp
   (use-package rg
+    :ensure t
     :if (executable-find "rg")
     :defer t)
 #+end_src
 *** direnv :noexport:disabled:archive:
-*** ox-hugo
+*** ox-hugo                                                      :external:
 Blogging tools
 #+name: ox-hugo
 #+begin_src emacs-lisp
   (use-package ox-hugo
+    :ensure t
     :if (executable-find "hugo")
     :after ox)
 #+end_src
-*** [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]
-#+begin_src emacs-lisp
+*** [[https://github.com/purcell/exec-path-from-shell][exec-path-from-shell]]                                 :archive:noexport:
+#+begin_src emacs-lisp :tangle no
   (use-package exec-path-from-shell
     :disabled
     :config
@@ -4522,10 +4642,12 @@ Blogging tools
                    (memq window-system '(mac ns x))))
       (exec-path-from-shell-initialize)))
 #+end_src
-*** [[https://github.com/skeeto/elfeed][elfeed]]
+*** [[https://github.com/skeeto/elfeed][elfeed]]                                                       :external:
 An Emacs web feeds client.
 #+begin_src emacs-lisp
   (use-package elfeed
+    :ensure t
+    :demand t
     :config
     (evil-define-key* nil my/open-map "e" '("open elfeed" . elfeed)))
 #+end_src
@@ -4535,6 +4657,7 @@ Configure the Elfeed RSS reader with an Orgmode file.
 #+begin_src emacs-lisp
   (use-package elfeed-org
     :after elfeed
+    :ensure t
     :init
     (elfeed-org)
     :config
@@ -4544,13 +4667,16 @@ Configure the Elfeed RSS reader with an Orgmode file.
 #+begin_src emacs-lisp
   (use-package elfeed-goodies
     :after elfeed
+    :ensure t
     :init
     (elfeed-goodies/setup))
 #+end_src
-*** [[https://gitlab.com/hperrey/khalel/][Khalel]]
+*** [[https://gitlab.com/hperrey/khalel/][Khalel]]                                                       :external:
 Interacting through Emacs with locally-stored calendars via the console application =khal= and syncing with remote /CalDAV/ calendars using =vdirsyncer=.
 #+begin_src emacs-lisp
   (use-package khalel
+    :ensure t
+    :demand t
     :if (executable-find "khal")
     :after org
     :config
@@ -4663,10 +4789,11 @@ Next is the =khal= configuration. This should be placed in ~~/.config/khal/confi
   [default]
   default_calendar = *
 #+end_src
-*** [[https://github.com/DamienCassou/khardel][khardel]]
+*** [[https://github.com/DamienCassou/khardel][khardel]]                                                      :external:
 Emacs package integrating [[https://github.com/lucc/khard?tab=readme-ov-file][khard]], a console cardav client.
 #+begin_src emacs-lisp
   (use-package khardel
+    :ensure t
     :if (executable-find "khard")
     :config
     (evil-define-key* nil my/insert-map "e" '("insert email" . khardel-insert-email)))
@@ -4756,7 +4883,7 @@ Stands for /Directory Editor/ (I guess), is a builtin file manager for /Emacs/.
 #+name: dired
 #+begin_src emacs-lisp
   (use-package dired
-    :straight nil
+    :ensure nil
     :commands (dired dired-jump)
     :init
     (setq dired-dwim-target t ; guess a default target directory
@@ -4782,7 +4909,7 @@ The arguments for =dired-listing-switches= are:
 #+name: image-dired
 #+begin_src emacs-lisp
   (use-package image-dired
-    :straight nil
+    :ensure nil
     :config
     (setq image-dired-thumb-size 150
           image-dired-thumbnail-storage 'standard
@@ -4792,7 +4919,7 @@ The arguments for =dired-listing-switches= are:
 #+name: dired-x
 #+begin_src emacs-lisp
   (use-package dired-x
-    :straight nil
+    :ensure nil
     :hook (dired-mode . dired-omit-mode)
     :config
     (setq dired-omit-files
@@ -4825,14 +4952,16 @@ Needs an external package =fd=, or =fd-find=
 #+begin_src emacs-lisp
   (use-package fd-dired
     :if (executable-find "fd")
+    :ensure t
     :defer t
     :init
     (global-set-key [remap find-dired] #'fd-dired))
 #+end_src
-*** dired-git-info
+*** dired-git-info                                               :external:
 #+name: dired-git-info
 #+begin_src emacs-lisp
   (use-package dired-git-info
+    :ensure t
     :defer t
     ;; :hook
     ;; (dired-after-readin . dired-git-info-auto-enable)
@@ -4846,36 +4975,40 @@ Needs an external package =fd=, or =fd-find=
 #+name: dired-aux
 #+begin_src emacs-lisp
   (use-package dired-aux
-    :straight nil
+    :ensure nil
     :config
     (setq dired-create-destination-dirs 'ask
           dired-vc-rename-file t
           dired-isearch-filenames 'dwim
           dired-create-destination-dirs-on-trailing-dirsep t))
 #+end_src
-*** dired-rsync
+*** dired-rsync                                                  :external:
 #+name: dired-rsync
 #+begin_src emacs-lisp
   (use-package dired-rsync
+    :ensure t
     :defer t)
 #+end_src
-*** diredfl
+*** diredfl                                                      :external:
 #+name: diredfl
 #+begin_src emacs-lisp
   (use-package diredfl
+    :ensure t
     :defer t
     :hook (dired-mode . diredfl-global-mode))
 #+end_src
-*** [[https://github.com/jtbm37/all-the-icons-dired][all-the-icons-dired]]
+
+*** [[https://github.com/jtbm37/all-the-icons-dired][all-the-icons-dired]]                                          :external:
 #+begin_src emacs-lisp
   (use-package all-the-icons-dired
+    :ensure t
     :after all-the-icons
     :hook (dired-mode . all-the-icons-dired-mode))
 #+end_src
-*** wdired
+*** wdired                                                        :builtin:
 #+begin_src emacs-lisp
   (use-package wdired
-    :straight nil
+    :ensure nil
     :commands (wdired-change-to-wdired-mode))
 #+end_src
 *** footer :noexport:
@@ -4897,6 +5030,7 @@ Needs an external package =fd=, or =fd-find=
 #+name: treemacs
 #+begin_src emacs-lisp
   (use-package treemacs
+    :ensure t
     :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
     :config
     (setq treemacs-hide-gitignored-files-mode t
@@ -4981,8 +5115,9 @@ Needs an external package =fd=, or =fd-find=
 #+end_src
 *** treemacs-projectile :external:
 #+name: treemacs-projectile
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package treemacs-projectile
+    :ensure t
     :after treemacs projectile)
 #+end_src
 *** treemacs-icons-dired :external:
@@ -4990,25 +5125,28 @@ Needs an external package =fd=, or =fd-find=
 #+begin_src emacs-lisp
   (use-package treemacs-icons-dired
     :after treemacs
+    :ensure t
     :hook (dired-mode . treemacs-icons-dired-enable-once))
 #+end_src
 *** treemacs-magit :external:
 #+name: treemacs-magit
 #+begin_src emacs-lisp
   (use-package treemacs-magit
+    :ensure t
     :after treemacs magit)
 #+end_src
 *** treemacs-evil :external:
 #+name: treemacs-evil
 #+begin_src emacs-lisp
   (use-package treemacs-evil
+    :ensure t
     :after treemacs evil)
 #+end_src
 *** lsp-treemacs :external:
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+name: lsp-treemacs
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lsp-treemacs
     :after treemacs lsp
     :config
@@ -5021,6 +5159,7 @@ Needs an external package =fd=, or =fd-find=
 #+name: treemacs-perspective
 #+begin_src emacs-lisp
   (use-package treemacs-perspective
+    :ensure t
     :after treemacs perspective
     :config
     (treemacs-set-scope-type 'Perspectives))
@@ -5029,12 +5168,14 @@ Needs an external package =fd=, or =fd-find=
 #+name: treemacs-tab-bar
 #+begin_src emacs-lisp
   (use-package treemacs-tab-bar
+    :ensure t
     :after treemacs tab-bar)
 #+end_src
 *** treemacs-nerd-icons :external:noexport:archive:disabled:
 #+name: treemacs-nerd-icons
 #+begin_src emacs-lisp :tangle no
   (use-package treemacs-nerd-icons
+    :ensure t
     :after treemacs nerd-icons
     :config
     (treemacs-load-theme "nerd-icons"))
@@ -5224,7 +5365,7 @@ For the ~.authinfo.gpg~ files:
 #+name: message
 #+begin_src emacs-lisp :tangle no
   (use-package message
-    :straight nil
+    :ensure nil
     :if (executable-find "notmuch")
     :custom
     (message-directory (expand-file-name ".mail" (getenv "HOME")))
@@ -5234,7 +5375,7 @@ For the ~.authinfo.gpg~ files:
 #+name: sendmail
 #+begin_src emacs-lisp :tangle no
   (use-package sendmail
-    :straight nil
+    :ensure nil
     :if (executable-find "notmuch")
     :custom
     (mail-specify-envelope-from t)
@@ -5263,7 +5404,7 @@ For the ~.authinfo.gpg~ files:
 :header-args: :tangle no
 :END:
 #+name: lispy
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lispy
     :hook ((emacs-lisp-mode . lispy-mode)
            (lisp-mode . lispy-mode)
@@ -5275,7 +5416,7 @@ For the ~.authinfo.gpg~ files:
 :header-args: :tangle no
 :END:
 #+name: lispyville
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lispyville
     :hook (lispy-mode . lispyville-mode))
 #+end_src
@@ -5296,7 +5437,7 @@ For the ~.authinfo.gpg~ files:
     :diminish outline-minor-mode
     :diminish lisp-data-mode
     :mode ("\\.Cask\\'" . emacs-lisp-mode)
-    :straight nil
+    :ensure nil
     :hook (emacs-lisp-mode . (lambda ()
                                (outline-minor-mode)
                                (rainbow-delimiters-mode)
@@ -5306,7 +5447,7 @@ For the ~.authinfo.gpg~ files:
 #+name: ielm
 #+begin_src emacs-lisp :tangle no
 (use-package ielm
-  :straight nil
+  :ensure nil
   ;;:hook (ielm-mode . (turn-on-smartparens-mode))
   :config
   (setq ielm-font-lock-keywords
@@ -5458,7 +5599,7 @@ For the ~.authinfo.gpg~ files:
 **** Scheme
 #+begin_src emacs-lisp :tangle no
   (use-package scheme
-    :straight nil
+    :ensure nil
     :interpreter ("scsh" . scheme-mode)
     :hook (scheme-mode . rainbow-delimiters-mode)
     :config
@@ -5605,7 +5746,7 @@ For the ~.authinfo.gpg~ files:
 #+name: cc-mode
 #+begin_src emacs-lisp :tangle no
   (use-package cc-mode
-    :straight nil
+    :ensure nil
     :mode ("\\.mm\\'" . objc-mode)
     :mode ("\\.h\\'" . +cc-c-c++-objc-mode)
     :hook (c-mode-common . rainbow-delimiters-mode)
@@ -5632,7 +5773,7 @@ For the ~.authinfo.gpg~ files:
 #+name: nxml-mode
 #+begin_src emacs-lisp :tangle no
   (use-package nxml-mode
-    :straight nil
+    :ensure nil
     :mode "\\.p\\(?:list\\|om\\)\\'" ; plist, pom
     :mode "\\.xs\\(?:d\\|lt\\)\\'"   ; xslt, xsd
     :mode "\\.rss\\'"
@@ -5884,7 +6025,7 @@ For the ~.authinfo.gpg~ files:
 **** css-mode
 #+begin_src emacs-lisp :tangle no
   (use-package css-mode
-    :straight nil
+    :ensure nil
     :hook ((css-mode
             stylus-mode) . rainbow-mode)
     :hook (css-mode-local-vars . tree-sitter)
@@ -6181,7 +6322,7 @@ Run this for any buffer you want to skewer."
 #+name: auctex
 #+begin_src emacs-lisp :tangle no
 (use-package auctex
-  :straight nil
+  :ensure nil
   :mode (("\\.tex\\'" . latex-mode)
          ("\\.latex\\'" . latex-mode))
   :commands (latex-mode LaTeX-mode plain-tex-mode)
@@ -6201,7 +6342,7 @@ Run this for any buffer you want to skewer."
 #+name: preview
 #+begin_src emacs-lisp :tangle no
 (use-package preview
-  :straight nil
+  :ensure nil
   :after auctex
   :commands LaTeX-preview-setup
   :init
@@ -6213,7 +6354,7 @@ Run this for any buffer you want to skewer."
 #+name: reftex
 #+begin_src emacs-lisp :tangle no
 (use-package reftex
-  :straight nil
+  :ensure nil
   :commands turn-on-reftex
   :init
   (setq reftex-plug-into-AUCTeX t))
@@ -6222,7 +6363,7 @@ Run this for any buffer you want to skewer."
 #+name: bibtex
 #+begin_src emacs-lisp :tangle no
   (use-package bibtex
-    :straight nil
+    :ensure nil
     :config
     (setq bibtex-autokey-year-length 4
           bibtex-autokey-name-year-separator "-"
@@ -6411,9 +6552,9 @@ Run this for any buffer you want to skewer."
 *** Python
 **** Builtin python mode :builtin:
 #+name: python
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package python
-    :straight nil
+    :ensure nil
     :mode ("[./]flake8\\'" . conf-mode)
     :mode ("/Pipfile\\'" . conf-mode)
     :hook ((python-mode . lsp-deferred)
@@ -6620,7 +6761,7 @@ Run this for any buffer you want to skewer."
 #+name: inferiore-python-mode
 #+begin_src emacs-lisp
   (use-package python
-    :straight nil
+    :ensure nil
     ;;:hook (inferior-python-mode . hide-mode-line-mode)
     :config
     (setq my/python-map (make-sparse-keymap))
@@ -6630,7 +6771,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 **** lsp-pyright :external:
 #+name: lsp-pyright
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lsp-pyright
     :after lsp-mode
     :hook (python-mode . (lambda ()
@@ -6770,6 +6911,7 @@ Run this for any buffer you want to skewer."
 **** flycheck-pycheckers :external:
 #+begin_src emacs-lisp
   (use-package flycheck-pycheckers
+    :ensure t
     :after flycheck
     :config
     (with-eval-after-load 'flycheck
@@ -6805,32 +6947,39 @@ Run this for any buffer you want to skewer."
 **** rustic :external:
 #+name: rustic
 #+begin_src emacs-lisp
+  ;; need external package tree-sitter-rust
+  (use-package rust-mode
+    :ensure t
+    :init
+    (setq rust-mode-treesitter-derive t))
+
   (use-package rustic
+    :ensure t
     :mode ("\\.rs$" . rustic-mode)
-    :bind
-    (:map rustic-mode-map
-          ("M-j" . lsp-ui-menu)
-          ("M-?" . lsp-find-references)
-          ("C-c C-c l" . flycheck-list-errors)
-                ("C-c C-c q" . lsp-workspace-restart)
-                ("C-c C-c Q" . lsp-workspace-shutdown)
-                ("C-c C-c s" . lsp-rust-analyzer-status))
     :init
     (with-eval-after-load 'rustic-flycheck
       (remove-hook 'rustic-mode-hook #'flycheck-mode)
       (remove-hook 'rustic-mode-hook #'flymake-mode-off)
       (remove-hook 'flycheck-mode-hook #'rustic-flycheck-setup))
+    (with-eval-after-load 'eglot
+      (setq rustic-lsp-client 'eglot
+            rustic-lsp-setup-p nil)
+      (add-to-list 'eglot-server-programs
+                   '((rust-ts-mode rust-mode rustic-mode)
+                     ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
+      (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1))))
     (with-eval-after-load 'org-src
       (defalias 'org-babel-execute:rust #'org-babel-execute:rustic)
       (add-to-list 'org-src-lang-modes '("rust" . rustic)))
     :config
-    (add-hook 'rustic-cargo-run-mode-hook (lambda ()
-                                           (comint-mode)
-                                           (read-only-mode 0)))
+    ;; (add-hook 'rustic-cargo-run-mode-hook (lambda ()
+    ;;                                        (comint-mode)
+    ;;                                        (read-only-mode 0)))
     (add-hook 'rustic-mode-hook #'rainbow-delimiters-mode)
-    (setq rustic-indent-method-chain t)
-    (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
-    (add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
+    (with-eval-after-load 'treesit
+      (add-hook 'rustic-mode-hook #'treesit-inspect-mode))
+    ;; (add-hook 'rustic-mode-local-vars-hook #'rustic-setup-lsp 'append)
+    ;;(add-hook 'rustic-mode-local-vars-hook #'flycheck-mode)
     (with-eval-after-load 'tree-sitter
       (add-hook 'rustic-mode-local-vars-hook #'tree-sitter! 'append))
     (when (executable-find "rustup")
@@ -6853,12 +7002,18 @@ Run this for any buffer you want to skewer."
       "i" '("cargo initialize" . rustic-cargo-init)
       "o" '("cargo outdated" . rustic-cargo-outdated)
       "t" '("cargo test" . rustic-cargo-test)
-      "r" '("cargo run" . rustic-cargo-run)))
+      "r" '("cargo run" . rustic-cargo-run))
+    (with-eval-after-load 'eglot
+      (evil-define-key* nil my/rustic-map
+        "a" '("eglot code action" . eglot-code-actions)
+        "I" '("eglot organize Import" . eglot-code-action-organize-imports)
+        "R" '("eglot rename" . eglot-rename))))
 #+end_src
 **** flycheck-rust :external:
 #+name: flycheck-rust
 #+begin_src emacs-lisp
   (use-package flycheck-rust
+    :ensure t
     :after flycheck
     :config
     (with-eval-after-load 'rustic
@@ -6899,7 +7054,7 @@ Run this for any buffer you want to skewer."
 *** Perl
 **** cperl-mode :external:
 #+name: cperl-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package cperl-mode
     :defer t
     :mode ("\\.\\([pP][Llm]\\|al\\)\\'" . cperl-mode))
@@ -6908,6 +7063,7 @@ Run this for any buffer you want to skewer."
 #+name: haskell
 #+begin_src emacs-lisp
   (use-package haskell-mode
+    :ensure t
     :defer t
     :init
     (setq flymake-allowed-file-name-masks nil)
@@ -6942,7 +7098,7 @@ Run this for any buffer you want to skewer."
 #+end_src
 *** java :external:
 Lsp-java requires jdt-language-server, this package should automatically installs it using the =lsp-install-server= commands
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package lsp-java
     :after lsp-mode
     :hook (java-mode . lsp))
