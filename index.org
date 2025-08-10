@@ -4094,6 +4094,12 @@ This package looks promising, I'll wait until it mature a bit.
        ("DELEGATED" . "#d33682")
        ("KILL" . "#a3be8c"))))
 #+end_src
+*** org-contrib :external:
+#+name: org-contrib
+#+begin_src emacs-lisp
+  (use-package org-contrib
+    :ensure t)
+#+end_src
 *** org-entities :builtin:
 #+begin_src emacs-lisp
   (use-package org-entities
