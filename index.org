@@ -1691,11 +1691,11 @@ Emacs package that displays available keybindings in popup. This is one of the t
     (which-key-compute-remaps t)
     (which-key-side-window-slot -10)
     (which-key-separator " → ")
-    (which-key-allow-evil-operators t)
+    (which-key-allow-evil-operators nil)
     (which-key-use-C-h-commands t)
     (which-key-show-remaining-keys t)
     (which-key-show-prefix 'bottom)
-    (which-key-show-operator-state-maps t)
+    (which-key-show-operator-state-maps nil)
     :config
     (which-key-mode)
     (which-key-setup-side-window-bottom)
