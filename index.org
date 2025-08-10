@@ -1670,7 +1670,7 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
     (with-eval-after-load 'nerd-icons
       (setq dashboard-icon-type 'nerd-icons))
     (with-eval-after-load 'projectile
-      (setq dashboard-projects-backend 'project.el))
+      (setq dashboard-projects-backend 'projectile))
     (with-eval-after-load 'perspective
       (setq dashboard-projects-switch-function 'projectile-persp-switch-project))
     (dashboard-setup-startup-hook))
@@ -2724,9 +2724,9 @@ This is the basic configuration, with the addition of enabling corfu in the mini
   ;;;; 3. locate-dominating-file
     ;; (setq consult-project-function (lambda (_) (locate-dominating-file "." ".git")))
   ;;;; 4. projectile.el (projectile-project-root)
-    ;; (with-eval-after-load 'projectile
-    ;;   (autoload 'projectile-project-root "projectile")
-    ;;   (setq consult-project-function (lambda (_) (projectile-project-root))))
+    (with-eval-after-load 'projectile
+      (autoload 'projectile-project-root "projectile")
+      (setq consult-project-function (lambda (_) (projectile-project-root))))
   ;;;; 5. No project support
     ;; (setq consult-project-function nil))
     (setq consult-line-numbers-widen t
@@ -3424,7 +3424,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
 *** projectile :external:
 A project interaction library for /Emacs/, with little external dependency as possible.
 #+name: projectile
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package projectile
     :ensure t
     :demand t
@@ -3500,7 +3500,7 @@ A project interaction library for /Emacs/, with little external dependency as po
 *** perspective :external:
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
 #+name: perspective
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package perspective
     :ensure t
     :demand t
@@ -3542,7 +3542,7 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+end_src
 *** persp-projectile :external:
 #+name: persp-projectile
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package persp-projectile
     :ensure t
     :after perspective
@@ -3713,10 +3713,6 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                                         ( :procMacro (:enable t)
                                           :cargo ( :buildScripts (:enable t)
                                                    :features "all"))))))
-#+end_src
-*** project.el 
-#+begin_src emacs-lisp
-  (use-package project)
 #+end_src
 *** [[https://emacs-lsp.github.io/dap-mode/page/configuration/][dap-mode]] :external:archive:disabled:noexport:
 #+begin_src emacs-lisp :tangle no
