@@ -180,7 +180,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+name: identity
 #+begin_src emacs-lisp
   (setq user-mail-address "alexforsale@yahoo.com"
-	user-full-name "Kristian Alexander P")
+        user-full-name "Kristian Alexander P")
 #+end_src
 
 *** merge-list-to-list function
@@ -191,7 +191,7 @@ This function is just a wrapper to easily merge lists. I don't think I need it a
   (defun merge-list-to-list (dst src)
     "Merges content of the 2nd list with the 1st one"
     (set dst
-	 (append (eval dst) src)))
+         (append (eval dst) src)))
 #+end_src
 *** define +config/org-directory variable
 #+name: +config/org-directory
@@ -439,14 +439,14 @@ Change cursor shape and color by evil state in terminal.
 This is a useful package for complementing /Evil/'s motion (using ~zg~).
 | evilem keybinding                   | evilem key | Evil                      | evil key |
 |-------------------------------------+------------+---------------------------+----------|
-| =evilem-motion-forward-word-begin=  | ~z g w~   | =evil-forward-word-begin= | ~w~      |
-| =evilem-motion-forward-WORD-begin=  | ~z g W~   | =evil-forward-WORD-begin= | ~W~      |
-| =evilem-motion-forward-word-end=    | ~z g e~   | =evil-forward-word-end=   | ~e~      |
-| =evilem-motion-forward-WORD-end=    | ~z g E~   | =evil-forward-WORD-end=   | ~E~      |
-| =evilem-motion-backward-word-begin= | ~z g b~   | =evil-forward-word-begin= | ~b~      |
-| =evilem-motion-backward-WORD-begin= | ~z g B~   | =evil-forward-WORD-begin= | ~B~      |
-| =evilem-motion-backward-word-end=   | ~z g g e~ | =evil-forward-word-end=   | ~g e~    |
-| =evilem-motion-backward-WORD-end=   | ~z g g E~ | =evil-forward-WORD-end=   | ~g E~    |
+| =evilem-motion-forward-word-begin=  | ~z g w~    | =evil-forward-word-begin= | ~w~      |
+| =evilem-motion-forward-WORD-begin=  | ~z g W~    | =evil-forward-WORD-begin= | ~W~      |
+| =evilem-motion-forward-word-end=    | ~z g e~    | =evil-forward-word-end=   | ~e~      |
+| =evilem-motion-forward-WORD-end=    | ~z g E~    | =evil-forward-WORD-end=   | ~E~      |
+| =evilem-motion-backward-word-begin= | ~z g b~    | =evil-forward-word-begin= | ~b~      |
+| =evilem-motion-backward-WORD-begin= | ~z g B~    | =evil-forward-WORD-begin= | ~B~      |
+| =evilem-motion-backward-word-end=   | ~z g g e~  | =evil-forward-word-end=   | ~g e~    |
+| =evilem-motion-backward-WORD-end=   | ~z g g E~  | =evil-forward-WORD-end=   | ~g E~    |
 These keybindings is also available on =visual-mode=. I prefer the simpler /evil-snipe/, so for now I'm not using this in my configuration
 *** [[https://github.com/emacs-evil/evil-surround][evil-surround]] :external:
 This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by [[https://github.com/tpope][Tim Pope]]. The functionality is wrapped into a minor mode.
@@ -467,7 +467,7 @@ This package emulates [[https://github.com/tpope/vim-surround][surround.vim]] by
 #+end_src
 **** Usage
 ***** Add surrounding
-You can surround in visual-state with ~S<textobject>~ or ~gS<textobject>~. Or in normal-state with ~ys<textobject>~ or ~yS<textobject>~. I'm still using the ~Shift I~ in visual mode, and the ~ys~ in normal mode conflicts with ==which-key-mode=.
+You can surround in visual-state with ~S<textobject>~ or ~gS<textobject>~. Or in normal-state with ~ys<textobject>~ or ~yS<textobject>~. I'm still using the ~Shift I~ in visual mode, and the ~ys~ in normal mode conflicts with =which-key-mode=.
 ***** Change surrounding
 You can change a surrounding with ~cs<old-textobject><new-textobject>~.
 *** [[https://github.com/cute-jumper/evil-embrace.el][evil-embrace]] :external:
