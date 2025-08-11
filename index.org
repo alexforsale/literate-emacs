@@ -2942,19 +2942,20 @@ Enchanted Spell Checker. Here I use /hunspell/ as a backend dictionary
 **** Snippets
 This is provided by yasnippet.
 #+name: snippets
-#+begin_src emacs-lisp :tangle no
-  (use-package yasnippet
-    :init
-    (yas-global-mode)
-    :config
-    (setq yas-snippets-dir
-          (list (expand-file-name "snippets" user-emacs-directory)
-                (expand-file-name "straight/build/yasnippet-snippets/snippets" user-emacs-directory)))
-    (evil-define-key* nil my/insert-map "s" '("insert snippet" . consult-yasnippet)))
+#+begin_src emacs-lisp
+    (use-package yasnippet
+      :ensure t
+      :init
+      (yas-global-mode)
+      :config
+      (setq yas-snippets-dir
+            (list (expand-file-name "snippets" user-emacs-directory)
+                  (expand-file-name "straight/build/yasnippet-snippets/snippets" user-emacs-directory)))
+      (evil-define-key* nil my/insert-map "s" '("insert snippet" . consult-yasnippet)))
 
-  (use-package consult-yasnippet)
+    (use-package consult-yasnippet :ensure t)
 
-  (use-package yasnippet-snippets)
+    (use-package yasnip)
 #+end_src
 **** [[https://github.com/minad/tempel][tempel]] :disabled:noexport:archive:
 Simple templates for Emacs.
@@ -3404,10 +3405,12 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
             ispell-extra-args '("--sug-mode=ultra"
                                 "--run-together")))
     (when (executable-find "hunspell")
-      (setq ispell-program-name (executable-find "hunspell")))
+      (setq ispell-program-name (executable-find "hunspell")
+            ispell-extra-args nil))
     (when (executable-find "enchant-2")
       (setq ispell-program-name (executable-find "enchant-2")
-            ispell-cmd-args '("-a"))))
+            ispell-cmd-args '("-a")
+            ispell-extra-args nil)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
@@ -5146,7 +5149,7 @@ Needs an external package =fd=, or =fd-find=
 #+end_src
 *** treemacs-projectile :external:
 #+name: treemacs-projectile
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package treemacs-projectile
     :ensure t
     :after treemacs projectile)
@@ -5878,7 +5881,7 @@ For the ~.authinfo.gpg~ files:
 *** Web :noexport:
 **** web-mode :external:
 #+name: web-mode
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (defun +config/django-web-mode ()
     "Set web-engine to django if `manage.py' detected in `projectile-project-root'."
     (if (projectile-project-p)
@@ -5899,6 +5902,7 @@ For the ~.authinfo.gpg~ files:
       (setq-local comment-start-skip "// *")))
 
   (use-package web-mode
+    :ensure t
     :defer t
     :mode "\\.[px]?html?\\'"
     :mode "\\.\\(?:tpl\\|blade\\)\\(?:\\.php\\)?\\'"
@@ -5966,21 +5970,25 @@ For the ~.authinfo.gpg~ files:
     ;; web-mode-extra-auto-pairs
     ;; '(("erb" . (("beg" "end")))
     ;;   ("php" . (("beg" "end")))))
-    (with-eval-after-load 'smartparens
-      (sp-local-pair 'web-mode "<" nil :actions :rem)
-      (sp-local-pair 'web-mode "{%" " %}")
-      (sp-local-pair 'web-mode "{{" " }}")
-      (sp-local-pair 'web-mode "<!--" " -->")
-      )
-    (with-eval-after-load 'general
-      (general-nvmap
-        :keymaps 'web-mode-map
-        "gn" 'web-mode-navigate
-        "zo" 'web-mode-fold-or-unfold
-        "zw" 'web-mode-whitespaces-show)
-      (general-vmap
-        :keymaps 'web-mode-map
-        "gs" 'web-mode-surround))
+    ;; (with-eval-after-load 'smartparens
+    ;;   (sp-local-pair 'web-mode "<" nil :actions :rem)
+    ;;   (sp-local-pair 'web-mode "{%" " %}")
+    ;;   (sp-local-pair 'web-mode "{{" " }}")
+    ;;   (sp-local-pair 'web-mode "<!--" " -->")
+    ;;   )
+    ;; (with-eval-after-load 'general
+    ;;   (general-nvmap
+    ;;     :keymaps 'web-mode-map
+    ;;     "gn" 'web-mode-navigate
+    ;;     "zo" 'web-mode-fold-or-unfold
+    ;;     "zw" 'web-mode-whitespaces-show)
+    ;;   (general-vmap
+    ;;     :keymaps 'web-mode-map
+    ;;     "gs" 'web-mode-surround))
+    (with-eval-after-load 'eglot
+      (add-to-list 'eglot-server-programs
+                   '(web-mode . ("vscode-html-language-server" "--stdio"))))
+    (add-hook 'web-mode-hook #'eglot-ensure)
     (defun +config/web-mode-hook ()
       "Hooks for Web mode."
       (local-set-key (kbd "RET") 'newline-and-indent))
@@ -5988,8 +5996,8 @@ For the ~.authinfo.gpg~ files:
     (with-eval-after-load 'web-mode
       (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
             "//"))
-    :hook ((html-mode-local-vars-hook
-            mhtml-mode-local-vars-hook) . tree-sitter)
+    ;; :hook ((html-mode-local-vars-hook
+    ;;         mhtml-mode-local-vars-hook) . tree-sitter)
     :hook (web-mode . +config/django-web-mode)
     :hook (web-mode . +config/web-mode-fix-js-comment))
 #+end_src
@@ -6014,8 +6022,9 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 **** skewer-mode :external:
 #+name: skewer-mode
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package skewer-mode
+    :ensure t
     :defer t
     :hook ((web-mode . skewer-html-mode)
            (js2-mode . skewer-mode)))
@@ -6029,15 +6038,17 @@ For the ~.authinfo.gpg~ files:
 #+end_src
 **** sass-mode :external:
 #+name: sass-mode
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package sass-mode
+    :ensure t
     :defer t
     :hook (scss-mode . rainbow-mode))
 #+end_src
 **** css-eldoc :external:
 #+name: css-eldoc
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package css-eldoc
+    :ensure t
     :defer t
     :commands turn-on-css-eldoc
     ;;add a hook if you want always to see the selector options in the minibuffer
@@ -6053,159 +6064,173 @@ For the ~.authinfo.gpg~ files:
     :config
     (setq com-css-sort-sort-type 'alphabetic-sort))
 #+end_src
-**** css-mode
-#+begin_src emacs-lisp :tangle no
+**** css-mode :builtin:
+#+begin_src emacs-lisp
   (use-package css-mode
     :ensure nil
     :hook ((css-mode
             stylus-mode) . rainbow-mode)
-    :hook (css-mode-local-vars . tree-sitter)
     :config
+    (with-eval-after-load 'tree-sitter
+      (add-hook 'css-mode-local-vars-hook #'tree-sitter))
     (with-eval-after-load 'skewer-mode
       (add-hook 'css-mode-hook 'skewer-css-mode)))
 #+end_src
 **** javascript 
 #+name: javascript
 #+begin_src emacs-lisp :tangle no
-(defvar +javascript-npm-conf (make-hash-table :test 'equal))
+  (defvar +javascript-npm-conf (make-hash-table :test 'equal))
 
-;;;###autoload
-(defun +javascript-npm-conf (&optional project-root refresh-p)
-  "Retrieves an alist of this project's 'package.json'. If REFRESH-P is non-nil
-ignore the cache."
-  (let ((project-root (or project-root (doom-project-root))))
-    (or (and (not refresh-p)
-             (gethash project-root +javascript-npm-conf))
-        (let ((package-file (expand-file-name "package.json" project-root)))
-          (when-let (json (and (file-exists-p package-file)
-                               (require 'json)
-                               (json-read-file package-file)))
-            (puthash project-root json +javascript-npm-conf))))))
+  ;;;###autoload
+  (defun +javascript-npm-conf (&optional project-root refresh-p)
+    "Retrieves an alist of this project's 'package.json'. If REFRESH-P is non-nil
+  ignore the cache."
+    (let ((project-root (or project-root (doom-project-root))))
+      (or (and (not refresh-p)
+               (gethash project-root +javascript-npm-conf))
+          (let ((package-file (expand-file-name "package.json" project-root)))
+            (when-let (json (and (file-exists-p package-file)
+                                 (require 'json)
+                                 (json-read-file package-file)))
+              (puthash project-root json +javascript-npm-conf))))))
 
-;;;###autoload
-(defun +javascript-npm-dep-p (packages &optional project-root refresh-p)
-  (when-let (data (and (bound-and-true-p +javascript-npm-mode)
-                       (+javascript-npm-conf project-root refresh-p)))
-    (let ((deps (append (cdr (assq 'dependencies data))
-                        (cdr (assq 'devDependencies data)))))
-      (cond ((listp packages)
-             (funcall (if (eq (car packages) 'and)
-                          #'cl-every
-                        #'cl-some)
-                      (lambda (pkg) (assq pkg deps))
-                      (if (listp packages) packages (list packages))))
-            ((symbolp packages)
-             (assq packages deps))
-            (t (error "Expected a package symbol or list, got %s" packages))))))
+  ;;;###autoload
+  (defun +javascript-npm-dep-p (packages &optional project-root refresh-p)
+    (when-let (data (and (bound-and-true-p +javascript-npm-mode)
+                         (+javascript-npm-conf project-root refresh-p)))
+      (let ((deps (append (cdr (assq 'dependencies data))
+                          (cdr (assq 'devDependencies data)))))
+        (cond ((listp packages)
+               (funcall (if (eq (car packages) 'and)
+                            #'cl-every
+                          #'cl-some)
+                        (lambda (pkg) (assq pkg deps))
+                        (if (listp packages) packages (list packages))))
+              ((symbolp packages)
+               (assq packages deps))
+              (t (error "Expected a package symbol or list, got %s" packages))))))
 
-;;;###autoload
-(defun +javascript-add-npm-path-h ()
-  "Add node_modules/.bin to `exec-path'."
-  (when-let ((search-directory (or (doom-project-root) default-directory))
-             (node-modules-parent (locate-dominating-file search-directory "node_modules/"))
-             (node-modules-dir (expand-file-name "node_modules/.bin/" node-modules-parent)))
-    (make-local-variable 'exec-path)
-    (add-to-list 'exec-path node-modules-dir)
-    (doom-log ":lang:javascript: add %s to $PATH" (expand-file-name "node_modules/" node-modules-parent))))
+  ;;;###autoload
+  (defun +javascript-add-npm-path-h ()
+    "Add node_modules/.bin to `exec-path'."
+    (when-let ((search-directory (or (doom-project-root) default-directory))
+               (node-modules-parent (locate-dominating-file search-directory "node_modules/"))
+               (node-modules-dir (expand-file-name "node_modules/.bin/" node-modules-parent)))
+      (make-local-variable 'exec-path)
+      (add-to-list 'exec-path node-modules-dir)
+      (doom-log ":lang:javascript: add %s to $PATH" (expand-file-name "node_modules/" node-modules-parent))))
 
 
-;;
-;; Commands
+  ;;
+  ;; Commands
 
-;;;###autoload
-(defun +javascript/open-repl ()
-  "Open a Javascript REPL. Meaning either `skewer-repl', if any of the
-skewer-*-mode's are enabled, or `nodejs-repl' otherwise."
-  (interactive)
-  (call-interactively
-   (if (and (featurep 'skewer-mode)
-            (or (bound-and-true-p skewer-mode)
-                (bound-and-true-p skewer-css-mode)
-                (bound-and-true-p skewer-html-mode)))
-       #'skewer-repl
-     #'nodejs-repl))
-  (current-buffer))
+  ;;;###autoload
+  (defun +javascript/open-repl ()
+    "Open a Javascript REPL. Meaning either `skewer-repl', if any of the
+  skewer-*-mode's are enabled, or `nodejs-repl' otherwise."
+    (interactive)
+    (call-interactively
+     (if (and (featurep 'skewer-mode)
+              (or (bound-and-true-p skewer-mode)
+                  (bound-and-true-p skewer-css-mode)
+                  (bound-and-true-p skewer-html-mode)))
+         #'skewer-repl
+       #'nodejs-repl))
+    (current-buffer))
 
-;;;###autoload
-(defun +javascript/skewer-this-buffer ()
-  "Toggle a globalized skewer-mode, attaching an external browser (once),
-initiating an internal httpd server (once) and enabling the appropriate
-skewer-mode for the current buffer.
+  ;;;###autoload
+  (defun +javascript/skewer-this-buffer ()
+    "Toggle a globalized skewer-mode, attaching an external browser (once),
+  initiating an internal httpd server (once) and enabling the appropriate
+  skewer-mode for the current buffer.
 
-Run this for any buffer you want to skewer."
-  (interactive)
-  (when (bound-and-true-p impatient-mode)
-    (error "Skewer-mode isn't compatible with impatient mode"))
-  (require 'skewer-mode)
-  (unless (process-status "httpd")
-    (run-skewer))
-  (pcase major-mode
-    ((or 'css-mode 'scss-mode 'less-css-mode)
-     (unless (bound-and-true-p skewer-css-mode)
-       (skewer-css-mode +1)))
-    ((or 'web-mode 'html-mode)
-     (unless (bound-and-true-p skewer-html-mode)
-       (skewer-html-mode +1)))
-    ('js2-mode
-     (unless (bound-and-true-p skewer-mode)
-       (skewer-mode +1)))
-    (_ (error "Invalid mode %s" major-mode))))
+  Run this for any buffer you want to skewer."
+    (interactive)
+    (when (bound-and-true-p impatient-mode)
+      (error "Skewer-mode isn't compatible with impatient mode"))
+    (require 'skewer-mode)
+    (unless (process-status "httpd")
+      (run-skewer))
+    (pcase major-mode
+      ((or 'css-mode 'scss-mode 'less-css-mode)
+       (unless (bound-and-true-p skewer-css-mode)
+         (skewer-css-mode +1)))
+      ((or 'web-mode 'html-mode)
+       (unless (bound-and-true-p skewer-html-mode)
+         (skewer-html-mode +1)))
+      ('js2-mode
+       (unless (bound-and-true-p skewer-mode)
+         (skewer-mode +1)))
+      (_ (error "Invalid mode %s" major-mode))))
 
-;;;###autoload
-(defun +javascript/skewer-cleanup ()
-  "Disable skewer-mode globally and disable the httpd server."
-  (interactive)
-  (when (process-status "httpd")
-    (httpd-stop))
-  (dolist (buf (buffer-list))
-    (with-current-buffer buf
-      (if (bound-and-true-p skewer-mode)
-          (skewer-mode -1))
-      (if (bound-and-true-p skewer-css-mode)
-          (skewer-css-mode -1))
-      (if (bound-and-true-p skewer-html-mode)
-          (skewer-html-mode -1)))))
+  ;;;###autoload
+  (defun +javascript/skewer-cleanup ()
+    "Disable skewer-mode globally and disable the httpd server."
+    (interactive)
+    (when (process-status "httpd")
+      (httpd-stop))
+    (dolist (buf (buffer-list))
+      (with-current-buffer buf
+        (if (bound-and-true-p skewer-mode)
+            (skewer-mode -1))
+        (if (bound-and-true-p skewer-css-mode)
+            (skewer-css-mode -1))
+        (if (bound-and-true-p skewer-html-mode)
+            (skewer-html-mode -1)))))
 
-;;
-;; Hooks
+  ;;
+  ;; Hooks
 
-;;;###autoload
-(defun +javascript-cleanup-tide-processes-h ()
-  "Clean up dangling tsserver processes if there are no more buffers with
-`tide-mode' active that belong to that server's project."
-  (when tide-mode
-    (unless (cl-loop with project-name = (tide-project-name)
-                     for buf in (delq (current-buffer) (buffer-list))
-                     if (and (buffer-local-value 'tide-mode buf)
-                             (with-current-buffer buf
-                               (string= (tide-project-name) project-name)))
-                     return buf)
-      (kill-process (tide-current-server)))))
+  ;;;###autoload
+  (defun +javascript-cleanup-tide-processes-h ()
+    "Clean up dangling tsserver processes if there are no more buffers with
+  `tide-mode' active that belong to that server's project."
+    (when tide-mode
+      (unless (cl-loop with project-name = (tide-project-name)
+                       for buf in (delq (current-buffer) (buffer-list))
+                       if (and (buffer-local-value 'tide-mode buf)
+                               (with-current-buffer buf
+                                 (string= (tide-project-name) project-name)))
+                       return buf)
+        (kill-process (tide-current-server)))))
 
-;;
-;; Advice
+  ;;
+  ;; Advice
 
-;;;###autoload
-(defun +javascript-tide-project-root-a ()
-  "Resolve to `doom-project-root' if `tide-project-root' fails."
-  (or tide-project-root
-      (or (locate-dominating-file default-directory "tsconfig.json")
-          (locate-dominating-file default-directory "jsconfig.json"))))
+  ;;;###autoload
+  (defun +javascript-tide-project-root-a ()
+    "Resolve to `doom-project-root' if `tide-project-root' fails."
+    (or tide-project-root
+        (or (locate-dominating-file default-directory "tsconfig.json")
+            (locate-dominating-file default-directory "jsconfig.json"))))
 
-(with-eval-after-load 'projectile
-  (add-to-list 'projectile-globally-ignored-directories "^node_modules$")
-  (add-to-list 'projectile-globally-ignored-directories "^flow-typed$"))
+  (with-eval-after-load 'projectile
+    (add-to-list 'projectile-globally-ignored-directories "^node_modules$")
+    (add-to-list 'projectile-globally-ignored-directories "^flow-typed$"))
+#+end_src
+**** js-mode
+#+name: js-mode
+#+begin_src emacs-lisp :tangle no
+  (use-package js-mode
+    :hook ((js-mode . subword-mode)
+           (js-mode . electric-pair-mode)
+           (js-mode . eglot-ensure)
+           (js-mode . completion-preview-mode)))
 #+end_src
 **** js2-mode :external:
 #+name: js2-mode
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package js2-mode
+    :ensure t
     :defer t
     :interpreter ("node" . js2-mode)
     :hook (js2-mode . rainbow-delimiters-mode)
     :hook (js2-mode . js2-imenu-extras-mode)
     :hook (js2-mode . (lambda () (push '("function" . ?ƒ) prettify-symbols-alist)))
     :config
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+    (with-eval-after-load 'eglot
+      (add-hook 'js2-mode-hook #'eglot-ensure))
     (with-eval-after-load 'skewer-mode
       (add-hook 'js2-mode 'skewer-mode))
     (setq-default js2-basic-indent 2
