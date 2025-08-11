@@ -2955,7 +2955,7 @@ This is provided by yasnippet.
 
     (use-package consult-yasnippet :ensure t)
 
-    (use-package yasnip)
+    (use-package yasnippet-snippets :ensure t)
 #+end_src
 **** [[https://github.com/minad/tempel][tempel]] :disabled:noexport:archive:
 Simple templates for Emacs.
@@ -5065,6 +5065,7 @@ Needs an external package =fd=, or =fd-find=
 #+begin_src emacs-lisp
   (use-package treemacs
     :ensure t
+    :demand t
     :hook ((treemacs-mode . (lambda () (hs-minor-mode -1))))
     :config
     (setq treemacs-hide-gitignored-files-mode t
