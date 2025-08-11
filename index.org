@@ -4146,8 +4146,8 @@ This package looks promising, I'll wait until it mature a bit.
           `(("i" "Inbox - Goes Here first!" entry
              (file+headline ,(expand-file-name "inbox.org" org-directory) "Inbox")
              "** %?\n%i\n%a" :prepend t)
-            ("r" "Request" entry (file+headline ,(expand-file-name "inbox.org" org-directory) "Request")
-             (file ,(expand-file-name "request.template" org-directory)))
+            ;; ("r" "Request" entry (file+headline ,(expand-file-name "inbox.org" org-directory) "Request")
+            ;;  (file ,(expand-file-name "request.template" org-directory)))
             ("l" "Links" entry
              (file+headline ,(expand-file-name "links.org" org-directory) "Links")))))
 #+end_src
