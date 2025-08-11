@@ -6554,19 +6554,19 @@ Run this for any buffer you want to skewer."
 *** Python
 **** Builtin python mode :builtin:
 #+name: python
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package python
     :ensure nil
     :mode ("[./]flake8\\'" . conf-mode)
     :mode ("/Pipfile\\'" . conf-mode)
-    :hook ((python-mode . lsp-deferred)
-           (python-mode . lsp-ui-mode)
-           (python-mode . lsp-ui-doc-mode)
-           (python-mode . +python-use-correct-flycheck-executables-h)
-           ;; (python-mode . guess-style-guess-tab-mode)
-           (python-mode-local-vars . (lambda ()
-                                       (lsp-deferred))))
     :config
+    (with-eval-after-load 'eglot
+      (add-hook 'python-mode-hook #'eglot-ensure))
+    (with-eval-after-load 'lsp-mode
+      (add-hook 'python-mode-hook #'lsp-deferred)
+      (add-hook 'python-mode-hook #'lsp-ui-mode)
+      (add-hook 'python-mode-hook #'lsp-ui-doc-mode)
+      (add-hook 'python-mode-local-vars-hook '(lambda () (lsp-deferred))))
     (if (executable-find "ipython")
         (setq python-interpreter (executable-find "ipython"))
       (setq python-interpreter (executable-find "python3")))
@@ -6581,8 +6581,7 @@ Run this for any buffer you want to skewer."
     (when (featurep 'lsp-mode)
       (setq lsp-pylsp-plugins-rope-completion-enabled t ; needs python-rope package
             lsp-pylsp-plugins-mccabe-enabled t ; needs python-mccabe package
-            lsp-ruff-lsp-python-path (executable-find "python3")
-            )
+            lsp-ruff-lsp-python-path (executable-find "python3"))
       (when (executable-find "black")
         (setq lsp-pylsp-plugins-black-enabled t))
       (when (executable-find "autopep8")
@@ -7011,9 +7010,9 @@ Run this for any buffer you want to skewer."
         "I" '("eglot organize Import" . eglot-code-action-organize-imports)
         "R" '("eglot rename" . eglot-rename))))
 #+end_src
-**** flycheck-rust :external:
+**** flycheck-rust :external:archive:noexport:
 #+name: flycheck-rust
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package flycheck-rust
     :ensure t
     :after flycheck
