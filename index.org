@@ -7035,7 +7035,8 @@ For the ~.authinfo.gpg~ files:
       (add-to-list 'eglot-server-programs
                    '((rust-ts-mode rust-mode rustic-mode)
                      ("rust-analyzer" :initializationOptions (:check (:command "clippy")))))
-      (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode -1))))
+      (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode 1)))
+      )
     (with-eval-after-load 'org-src
       (defalias 'org-babel-execute:rust #'org-babel-execute:rustic)
       (add-to-list 'org-src-lang-modes '("rust" . rustic)))
@@ -7071,6 +7072,9 @@ For the ~.authinfo.gpg~ files:
       "o" '("cargo outdated" . rustic-cargo-outdated)
       "t" '("cargo test" . rustic-cargo-test)
       "r" '("cargo run" . rustic-cargo-run))
+    (with-eval-after-load 'consult
+      (evil-define-key* nil my/rustic-map
+        "m" '("consult flymake" . consult-flymake)))
     (with-eval-after-load 'eglot
       (evil-define-key* nil my/rustic-map
         "a" '("eglot code action" . eglot-code-actions)
