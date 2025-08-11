@@ -5200,7 +5200,7 @@ Needs an external package =fd=, or =fd-find=
 #+end_src
 *** treemacs-tab-bar :external:
 #+name: treemacs-tab-bar
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package treemacs-tab-bar
     :ensure t
     :after treemacs tab-bar)
