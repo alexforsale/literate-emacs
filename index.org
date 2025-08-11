@@ -4325,7 +4325,8 @@ This package looks promising, I'll wait until it mature a bit.
                        (org-agenda-block-separator nil)
                        (org-agenda-use-time-grid nil)
                        (org-agenda-overriding-header "\nWeekly\n"))))
-             ((org-agenda-tag-filter-preset '("+personal")))))))
+             ;; ((org-agenda-tag-filter-preset '("+personal")))
+             ))))
 #+end_src
 
 *** org-clock :builtin:
