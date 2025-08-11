@@ -3339,14 +3339,14 @@ I still have a mixed feeling for this package, but it still easier to configure 
     )
 #+end_src
 The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/files/smartparens.el][example configuration]] messes up my /evil-mode/. I have them commented for now.
-*** [[https://github.com/radian-software/apheleia][apheleia]] :external:
+*** [[https://github.com/radian-software/apheleia][apheleia]] :external:archive:noexport:
 #+begin_src emacs-lisp :tangle no
   (use-package apheleia
     :defer t
     :init
     (apheleia-global-mode +1))
 #+end_src
-*** [[https://github.com/magnars/expand-region.el][expand-region]] :external:
+*** [[https://github.com/magnars/expand-region.el][expand-region]] :external:archive:noexport:
  Emacs extension to increase selected region by semantic units.
 #+begin_src emacs-lisp :tangle no
   (use-package expand-region
@@ -3357,6 +3357,7 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
        "C-=" 'er/expand-region)))
 #+end_src
 *** ispell :builtin:
+#+name: ispell
 #+begin_src emacs-lisp
   (use-package ispell
     :ensure nil
@@ -3383,6 +3384,22 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
                 (lambda ()
                   (setq-local ispell-extra-args
                               (remove "--run-together" ispell-extra-args)))))
+    (when (executable-find "hunspell")
+      (setq ispell-program-name (executable-find "hunspell")))
+    (when (executable-find "enchant-2")
+      (setq ispell-program-name (executable-find "enchant-2")
+            ispell-cmd-args '("-a"))))
+#+end_src
+*** flymake 
+#+name: flymake
+#+begin_src emacs-lisp
+  (use-package flyspell
+    :ensure nil
+    :config
+    (when (executable-find "aspell")
+      (setq ispell-program-name (executable-find "aspell")
+            ispell-extra-args '("--sug-mode=ultra"
+                                "--run-together")))
     (when (executable-find "hunspell")
       (setq ispell-program-name (executable-find "hunspell")))
     (when (executable-find "enchant-2")
