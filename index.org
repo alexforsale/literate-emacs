@@ -3069,6 +3069,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :mode ("\\.bats\\'" . sh-mode)
     :mode ("\\.\\(?:zunit\\|env\\)\\'" . sh-mode)
     :mode ("/bspwmrc\\'" . sh-mode)
+    :mode ("PKGBUILD" . sh-mode)
     :hook (sh-mode-local-vars . lsp-deferred)
     :hook (sh-mode-local-vars . tree-sitter-mode)
     :config
