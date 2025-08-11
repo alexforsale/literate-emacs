@@ -4240,6 +4240,7 @@ This package looks promising, I'll wait until it mature a bit.
     :ensure nil
     :after org
     :custom
+    (org-agenda-breadcrumbs-separator " → ")
     (org-agenda-files (list (concat org-directory "/")))
     (org-agenda-file-regexp "\\`[^.].*\\.org\\|[0-9]+$\\'")
     (org-agenda-include-inactive-timestamps t)
