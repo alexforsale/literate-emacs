@@ -1832,14 +1832,16 @@ This built-in package is necessary when dealing with /Emacs lisp/.
 #+name: paren
 #+begin_src emacs-lisp
   (use-package paren
+    :ensure nil
+    :hook (prog-mode . show-paren-local-mode)
     :config
     (show-paren-mode 1)
     :custom
-    (show-paren-style 'mixed)
+    (show-paren-style 'parenthesis)
     (show-paren-delay 0.4)
-    (show-paren-highlight-openparen nil)
+    (show-paren-context-when-offscreen 'overlay)
     (show-paren-when-point-inside-paren nil)
-    (show-paren-when-point-in-periphery t))
+    (show-paren-when-point-in-periphery nil))
 #+end_src
 
 *** mouse :builtin:
@@ -3208,9 +3210,14 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 #+begin_src emacs-lisp
   (use-package text-mode
     :ensure nil
-    :hook (text-mode . visual-line-mode)
+    :hook ((text-mode . visual-line-mode)
+           (prog-mode . (lambda () (setq-local sentence-end-double-space t))))
     :config
-    (setq-default sentence-end-double-space nil))
+    (setq-default sentence-end-double-space nil)
+    (setq sentence-end-without-period nil)
+    (setq colon-double-space nil)
+    (setq use-hard-newlines t)
+    (setq adaptive-fill-mode t))
 #+end_src
 *** whitespace :builtin:
 #+begin_src emacs-lisp
