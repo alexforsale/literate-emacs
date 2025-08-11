@@ -788,6 +788,8 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
 #+begin_src emacs-lisp
   (setq my/c-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) 'global (kbd "<leader>c") (cons "Chat" my/c-map))
+  (with-eval-after-load 'org
+    (evil-define-key* nil my/c-map "c" '("org-capture" . org-capture)))
   (setq my/gptel-map (make-sparse-keymap))
   (with-eval-after-load 'gptel
     (evil-define-key* nil my/c-map "g" (cons "Gptel" my/gptel-map))
@@ -899,7 +901,8 @@ Commands for quick insertion ~<leader>i~.
 #+begin_src emacs-lisp
   (setq my/python-map (make-sparse-keymap))
   (with-eval-after-load 'python
-    (evil-define-key* '(normal visual) python-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map)))
+    (evil-define-key* '(normal visual) python-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map))
+    (evil-define-key* '(normal visual) python-ts-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map)))
 #+end_src
 **** haskell
 #+begin_src emacs-lisp
@@ -6592,7 +6595,13 @@ Run this for any buffer you want to skewer."
     :mode ("/Pipfile\\'" . conf-mode)
     :config
     (with-eval-after-load 'eglot
-      (add-hook 'python-mode-hook #'eglot-ensure))
+      (add-hook 'python-mode-hook #'eglot-ensure)
+      (add-hook 'python-ts-mode-hook #'eglot-ensure)
+      (add-to-list 'eglot-server-programs
+                 `(python-mode
+                   . ,(eglot-alternatives '(("pyright-langserver" "--stdio")
+                                            "jedi-language-server"
+                                            "pylsp")))))
     (with-eval-after-load 'lsp-mode
       (add-hook 'python-mode-hook #'lsp-deferred)
       (add-hook 'python-mode-hook #'lsp-ui-mode)
@@ -6744,7 +6753,7 @@ Run this for any buffer you want to skewer."
         (if (member version (pyenv-mode-versions))
             version  ;; return.
           (message "pyenv: version `%s' is not installed (set by `%s')."
-                   version file-path))))
+                   version file-path)))))
 
     (setq my/python-send-map (make-sparse-keymap))
     (evil-define-key* nil my/python-map (kbd "s") (cons "send to repl" my/python-send-map))
@@ -6757,7 +6766,7 @@ Run this for any buffer you want to skewer."
       "B" '("send block" . python-shell-send-block)
       "d" '("send defun" . python-shell-send-defun)
       "r" '("send region" . python-shell-send-region)
-      "s" '("send statement" . python-shell-send-statement))))
+      "s" '("send statement" . python-shell-send-statement)))
 #+end_src
 **** pydoc :external:noexport:archive:disabled:
 #+begin_src emacs-lisp :tangle no
