@@ -3064,6 +3064,26 @@ A shell-like command interpreter implemented in Emacs Lisp.
   (eshell-destroy-buffer-when-process-dies t)
   (eshell-prompt-regexp "^[^\)]*[\)] "))
 #+end_src
+*** sh-mode 
+#+name: sh-mode
+#+begin_src emacs-lisp
+  ;; install `bash-language-server' with npm install -g bash-language-server
+  (use-package sh-script
+    :ensure nil
+    :mode ("\\.bats\\'" . sh-mode)
+    :mode ("\\.\\(?:zunit\\|env\\)\\'" . sh-mode)
+    :mode ("/bspwmrc\\'" . sh-mode)
+    :mode ("PKGBUILD" . sh-mode)
+    :config
+    (setq sh-indent-after-continuation 'always)
+    (with-eval-after-load 'rainbow-delimiters
+      (add-hook 'sh-mode-hook #'rainbow-delimiters-mode)
+    (with-eval-after-load 'eglot
+      (add-to-list 'eglot-server-programs
+                   '((sh-mode bash-ts-mode) .("bash-language-server" "start"))))
+    (add-hook 'sh-mode-hook #'eglot-ensure)
+    (add-hook 'bash-ts-mode-hook #'eglot-ensure)))
+#+end_src
 *** eshell-syntax-highlighting :external:noexport:archive:disabled:
 #+name: eshell-syntax-highlighting
 #+begin_src emacs-lisp  :tangle no
@@ -3083,31 +3103,6 @@ A shell-like command interpreter implemented in Emacs Lisp.
   ;; line below instead:
   ;; :hook (eshell-mode-hook . esh-autosuggest-mode)
   )
-#+end_src
-*** sh-script :external:disabled:noexport:archive:
-#+name: sh-script :tangle no
-#+begin_src emacs-lisp
-  (use-package sh-script
-    :mode ("\\.bats\\'" . sh-mode)
-    :mode ("\\.\\(?:zunit\\|env\\)\\'" . sh-mode)
-    :mode ("/bspwmrc\\'" . sh-mode)
-    :mode ("PKGBUILD" . sh-mode)
-    :hook (sh-mode-local-vars . lsp-deferred)
-    :hook (sh-mode-local-vars . tree-sitter-mode)
-    :config
-    (with-eval-after-load 'lsp
-      (add-hook 'sh-mode-hook #'lsp-deferred)
-      (add-hook 'shell-mode-hook #'lsp-deferred)
-      (add-hook 'sh-mode-local-vars-hook #'lsp-deferred))
-    (with-eval-after-load 'rainbow-delimiters
-      (add-hook 'sh-mode #'rainbow-delimiters-mode))
-    ;; recognize function names with dashes in them
-    (setq sh-indent-after-continuation 'always)
-    (add-to-list 'sh-imenu-generic-expression
-                 '(sh (nil "^\\s-*function\\s-+\\([[:alpha:]_-][[:alnum:]_-]*\\)\\s-*\\(?:()\\)?" 1)
-                      (nil "^\\s-*\\([[:alpha:]_-][[:alnum:]_-]*\\)\\s-*()" 1)))
-    (with-eval-after-load 'smartparens
-      (sp-local-pair 'sh-mode "`" "`" :unless '(sp-point-before-word-p sp-point-before-same-p))))
 #+end_src
 *** vterm :external:
 #+name: vterm
@@ -3162,9 +3157,9 @@ A shell-like command interpreter implemented in Emacs Lisp.
                  (reusable-frames . visible)
                  (window-height . 0.4))))
 #+end_src
-*** bash-completion :external:
+*** bash-completion :external:archive:noexport:
 #+name: bash-completion
-#+begin_src emacs-lisp  :tangle no
+#+begin_src emacs-lisp :tangle no
 (use-package bash-completion
   :defer t
   :config
@@ -7207,7 +7202,7 @@ For the ~.authinfo.gpg~ files:
 #+begin_src emacs-lisp :tangle no
   (use-package yuck-mode)
 #+end_src
-*** java :external:
+*** java :external:noexport:archive:
 Lsp-java requires jdt-language-server, this package should automatically installs it using the =lsp-install-server= commands
 #+begin_src emacs-lisp :tangle no
   (use-package lsp-java
