@@ -1916,7 +1916,7 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     :ensure nil
     :hook (after-init . window-divider-mode)
     :config
-    (blink-cursor-mode -1)
+    (blink-cursor-mode 1)
     (setq window-divider-default-places t
           window-divider-default-bottom-width 1
           window-divider-default-right-width 1))
