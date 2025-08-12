@@ -7161,10 +7161,19 @@ For the ~.authinfo.gpg~ files:
     (haskell-process-log t)
     (haskell-tags-on-save t)
     :config
+    (with-eval-after-load 'eglot
+      (add-hook 'haskell-mode-hook #'eglot-ensure)
+      (setq-default eglot-workspace-configuration
+                    '((haskell
+                       (plugin
+                        (stan
+                         (globalOn . :json-false))))))
+      (setq eglot-autoshutdown t))
     (with-eval-after-load 'lsp-mode
       (add-hook 'haskell-mode-hook #'lsp-deferred)))
 
   (use-package lsp-haskell
+    :after lsp-mode
     :defer t
     :hook ((haskell-mode haskell-literate-mode) . lsp-deferred)
     :after lsp)
