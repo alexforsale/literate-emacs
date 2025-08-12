@@ -922,6 +922,12 @@ Commands for quick insertion ~<leader>i~.
   (with-eval-after-load 'zig-mode
     (evil-define-key* '(normal visual) zig-mode-map (kbd "<leader>m") (cons "zig" my/zig-map)))
 #+end_src
+**** go
+#+begin_src emacs-lisp
+  (setq my/golang-map (make-sparse-keymap))
+  (with-eval-after-load 'go-mode
+    (evil-define-key* '(normal visual) go-mode-map (kbd "<leader>m") (cons "golang" my/golang-map)))
+#+end_src
 *** Open/org
 Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
@@ -7270,6 +7276,23 @@ Lsp-java requires jdt-language-server, this package should automatically install
         "R" '("rename" . eglot-rename)))
     (if (>= emacs-major-version 28)
         (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)))
+#+end_src
+*** go
+#+name: go 
+#+begin_src emacs-lisp
+  (use-package go-mode
+    :ensure t
+    :config
+    (with-eval-after-load 'eglot
+      (add-hook 'go-mode-hook #'eglot-ensure))
+    (evil-define-key* nil my/golang-map
+      "a" '("code action" . eglot-code-actions)))
+
+  (use-package flymake-go
+    :ensure t)
+
+  (use-package go-eldoc
+    :ensure t)
 #+end_src
 *** fish-mode :noexport:archive:disabled:external:
 #+begin_src emacs-lisp :tangle no
