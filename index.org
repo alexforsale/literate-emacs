@@ -916,6 +916,12 @@ Commands for quick insertion ~<leader>i~.
   (with-eval-after-load 'tuareg
     (evil-define-key* '(normal visual) tuareg-mode-map (kbd "<leader>m") (cons "ocaml" my/ocaml-map)))
 #+end_src
+**** zig
+#+begin_src emacs-lisp
+  (setq my/zig-map (make-sparse-keymap))
+  (with-eval-after-load 'zig-mode
+    (evil-define-key* '(normal visual) zig-mode-map (kbd "<leader>m") (cons "zig" my/zig-map)))
+#+end_src
 *** Open/org
 Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
@@ -7248,6 +7254,20 @@ Lsp-java requires jdt-language-server, this package should automatically install
 
   (use-package dune
     :ensure t)
+#+end_src
+*** zig 
+#+name: zig
+#+begin_src emacs-lisp
+  (use-package zig-mode
+    :ensure t
+    :config
+    (with-eval-after-load 'eglot
+      (add-hook 'zig-mode-hook #'eglot-ensure)
+      (evil-define-key* nil my/zig-map
+        "a" '("code-action" . eglot-code-actions)
+        "R" '("rename" . eglot-rename)))
+    (if (>= emacs-major-version 28)
+        (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)))
 #+end_src
 *** fish-mode :noexport:archive:disabled:external:
 #+begin_src emacs-lisp :tangle no
