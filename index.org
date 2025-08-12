@@ -2013,11 +2013,12 @@ Highlight TODO keywords.
     (add-hook 'prog-mode-hook (lambda () (hl-todo-mode 1)))
     :config
     (setq hl-todo-keyword-faces
-        '(("TODO"   . "#FF0000")
-          ("FIXME"  . "#FF0000")
-          ("DEBUG"  . "#A020F0")
-          ("GOTCHA" . "#FF4500")
-          ("STUB"   . "#1E90FF")))
+        '(("TODO"   . "#dc322f")
+          ("FIXME"  . "#bf616a")
+          ("DEBUG"  . "#268bd2")
+          ("GOTCHA" . "#d08770")
+          ("STUB"   . "#ebcb8b")
+          ("NOTE"   . "#eceff4")))
     (with-eval-after-load 'magit
     (add-hook 'magit-log-wash-summary-hook
               #'hl-todo-search-and-highlight t)
