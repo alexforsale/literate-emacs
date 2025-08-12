@@ -910,6 +910,12 @@ Commands for quick insertion ~<leader>i~.
   (with-eval-after-load 'haskell-mode
     (evil-define-key* '(normal visual) haskell-mode-map (kbd "<leader>m") (cons "haskell-mode" my/haskell-map)))
 #+end_src
+**** ocaml 
+#+begin_src emacs-lisp
+  (setq my/ocaml-map (make-sparse-keymap))
+  (with-eval-after-load 'tuareg
+    (evil-define-key* '(normal visual) tuareg-mode-map (kbd "<leader>m") (cons "ocaml" my/ocaml-map)))
+#+end_src
 *** Open/org
 Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
@@ -3394,8 +3400,8 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
       (setq ispell-program-name (executable-find "enchant-2")
             ispell-cmd-args '("-a"))))
 #+end_src
-*** flymake 
-#+name: flymake
+*** flyspell 
+#+name: flyspell
 #+begin_src emacs-lisp
   (use-package flyspell
     :ensure nil
@@ -3911,6 +3917,16 @@ This package looks promising, I'll wait until it mature a bit.
     (require 'consult-web-gptel)
     (setq consult-web-dynamic-sources "gptel")
     (require 'consult-web-sources))
+#+end_src
+*** flymake 
+#+name: flymake 
+#+begin_src emacs-lisp
+  (use-package flymake
+    :ensure t
+    :pin gnu
+    :config
+    (setq flymake-diagnostic-format-alist
+          '((t . (origin code message)))))
 #+end_src
 *** [[https://www.flycheck.org/][flycheck]] :external:
 #+begin_src emacs-lisp :tangle no
@@ -7174,6 +7190,55 @@ Lsp-java requires jdt-language-server, this package should automatically install
   (use-package lsp-java
     :after lsp-mode
     :hook (java-mode . lsp))
+#+end_src
+*** ocaml 
+#+name: ocaml
+#+begin_src emacs-lisp
+  ;; opam site lisp
+  ;; install `tuareg' using `opam': opam install tuareg
+  ;; `merlin' need to be installed by `opam': opam install merlin
+  (let ((opam-site-lisp (expand-file-name ".opam/default/share/emacs/site-lisp" (getenv "HOME"))))
+    (when (file-directory-p opam-site-lisp)
+      (add-to-list 'load-path opam-site-lisp))
+    (when (file-directory-p (expand-file-name "tuareg-site-file" opam-site-lisp))
+      (load (expand-file-name"tuareg-site-file" opam-site-lisp)))
+    (autoload 'merlin-mode "merlin" nil t nil)
+    (add-hook 'tuareg-mode-hook 'merlin-mode t)
+    (add-hook 'caml-mode-hook 'merlin-mode t))
+
+  (use-package merlin-eldoc
+    :ensure t
+    :config
+    (evil-define-key* nil my/ocaml-map
+      "l" '("locate identifier" . merlin-locate)
+      "o" '("occurance" . merlin-occurrences)
+      "t" '("display expr" . merlin-type-expr)
+      "v" '("error check" . merlin-error-check)
+      "x" '("error next" . merlin-error-next)
+      "." '("get type" . merlin-type-enclosing)))
+
+  (use-package utop
+    :ensure t
+    :config
+    (add-hook 'tuareg-mode-hook #'utop-minor-mode))
+
+  (use-package tuareg
+    :ensure t
+    :mode (("\\.ocamlinit\\'" . tuareg-mode)))
+
+  (use-package ocaml-eglot
+    :ensure t
+    :after tuareg
+    :hook
+    (tuareg-mode . ocaml-eglot)
+    (ocaml-eglot . eglot-ensure)
+    :config
+    (with-eval-after-load 'eglot
+      (add-to-list 'eglot-server-programs
+                   '(tuareg-mode . ("ocamllsp" "--fallback-read-dot-merlin")))))
+
+  (use-package dune
+    :ensure t)
 #+end_src
 *** fish-mode :noexport:archive:disabled:external:
 #+begin_src emacs-lisp :tangle no
