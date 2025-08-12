@@ -887,9 +887,7 @@ Commands for quick insertion ~<leader>i~.
       (kbd "C-w") '("Refile" . org-refile)
       )
     (evil-define-key nil my/org-note-map
-      "c" '("capture" . org-capture)
-      "C" '("goto last capture" . org-capture-goto-last-stored)
-      "r" '("last stored refile" . org-refile-goto-last-stored)))
+      "c" '("capture" . org-capture)))
 #+end_src
 **** rustic
 #+name: rustic-mode-map
@@ -950,7 +948,9 @@ Misc quick commands, also for /org-mode/ ~<leader>o~.
     (kbd "n") '("Notes" . (lambda () (interactive) (find-file (expand-file-name "notes.org" +config/org-directory))))
     (kbd "r") '("Routines" . (lambda () (interactive) (find-file (expand-file-name "routines.org" +config/org-directory))))
     (kbd "p") '("Personal" . (lambda () (interactive) (find-file (expand-file-name "personal.org" +config/org-directory))))
-    (kbd "P") '("Projects" . (lambda () (interactive) (find-file (expand-file-name "projects.org" +config/org-directory)))))
+    (kbd "P") '("Projects" . (lambda () (interactive) (find-file (expand-file-name "projects.org" +config/org-directory))))
+    (kbd "R") '("Last refiled" . org-refile-goto-last-stored)
+    (kbd "C") '("Last Capture" . org-capture-goto-last-stored))
 #+end_src
 *** Search
 Maybe the third most used keys, ~<leader>s~.
