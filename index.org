@@ -5799,10 +5799,10 @@ For the ~.authinfo.gpg~ files:
   (use-package flycheck-guile
     :after geiser)
 #+end_src
-*** C and C++ :noexport:
+*** C and C++ :builtin:
 **** cc-mode :builtin:
 #+name: cc-mode
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package cc-mode
     :ensure nil
     :mode ("\\.mm\\'" . objc-mode)
@@ -5814,10 +5814,12 @@ For the ~.authinfo.gpg~ files:
     :config
     (setq c-basic-offset tab-width
           c-backspace-function #'delete-backward-char)
+    (with-eval-after-load 'eglot
+      (add-hook 'c-mode-common-hook #'eglot-ensure)
+      (add-hook 'c-mode-hook #'eglot-ensure)
+      (add-hook 'c-ts-mode-hook #'eglot-ensure))
     (with-eval-after-load 'ffap
       (add-to-list 'ffap-alist '(c-mode . ffap-c-mode)))
-    (with-eval-after-load 'tree-sitter
-      (add-hook 'c-mode-hook #'tree-sitter! 'append))
     (with-eval-after-load 'lsp-mode
       (add-hook 'c-mode-hook #'lsp-deferred)))
 #+end_src
