@@ -944,6 +944,10 @@ Misc quick commands, also for /org-mode/ ~<leader>o~.
     "L" '("Store org link" . org-store-link)
     "l" '("Avy open link" . link-hint-open-link))
 
+  (with-eval-after-load 'notmuch
+    (evil-define-key* nil my/open-map
+      "m" '("mail" . notmuch)))
+
   (evil-define-key* nil my/open-org
     (kbd "n") '("Notes" . (lambda () (interactive) (find-file (expand-file-name "notes.org" +config/org-directory))))
     (kbd "r") '("Routines" . (lambda () (interactive) (find-file (expand-file-name "routines.org" +config/org-directory))))
