@@ -4925,6 +4925,35 @@ This is taken from the [[https://github.com/lucc/khard/blob/main/doc/source/exam
   skip_unparsable = no
 #+end_src
 All the paths should reflect the configuration on =vdirsyncer=. See the [[https://khard.readthedocs.io/en/latest/][online documentation]] for more information.
+*** fzf
+#+name: fzf
+#+begin_src emacs-lisp
+  (use-package fzf
+    :if (executable-find "fzf")
+    :ensure t
+    :config
+    (setq my/fzf-map (make-sparse-keymap))
+    (evil-define-key* nil my/file-map (kbd "z") (cons "fzf" my/fzf-map))
+    (evil-define-key* nil my/fzf-map
+      "b" '("fzf find in buffer" . fzf-find-in-buffer)
+      "f" '("fzf" . fzf-find-file)
+      "d" '("fzf dir" . fzf-directory)
+      "r" '("fzf recentf" . fzf-recentf))
+    (evil-define-key* nil my/search-map "z" '("fzf-grep" . fzf-grep))
+    (evil-define-key* nil my/buffer-map "z" '("fzf switch buffer" . fzf-switch-buffer))
+    (with-eval-after-load 'projectile
+      (evil-define-key* nil projectile-command-map "z" '("fzf projectile" . fzf-projectile)))
+    (setq fzf/args "-x --color dark --print-query --margin=1,0 --no-hscroll"
+          fzf/executable "fzf"
+          fzf/git-grep-args "-i --line-number %s"
+          ;; command used for `fzf-grep-*` functions
+          ;; example usage for ripgrep:
+          ;; fzf/grep-command "rg --no-heading -nH"
+          fzf/grep-command "grep -nrH"
+          ;; If nil, the fzf buffer will appear at the top of the window
+          fzf/position-bottom t
+          fzf/window-height 15))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-tools)
