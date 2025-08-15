@@ -5902,12 +5902,13 @@ For the ~.authinfo.gpg~ files:
 #+begin_src emacs-lisp
   (use-package toml-mode
     :ensure t
+    :demand t
     :mode
     ("\\.toml\\'" . toml-mode)
     :config
-    (when (treesit-available-p)
-      (add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
-    (with-eval-after-load 'eglot
+    ;; (when (treesit-available-p)
+    ;;   (add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
+    (when (featurep 'eglot)
       (add-hook 'toml-mode-hook #'eglot-ensure)
       (add-hook 'toml-ts-mode-hook #'eglot-ensure)
       (add-to-list 'eglot-server-programs
@@ -7133,8 +7134,11 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     (setq rustic-indent-method-chain t)
     (setq rustic-babel-format-src-block nil
           rustic-format-trigger nil)
+    (setq my/cargo-map (make-sparse-keymap))
     (evil-define-key* '(normal visual) rustic-mode-map (kbd "<leader>m") (cons "rustic-mode" my/rustic-map))
-    (evil-define-key* nil my/rustic-map
+    (evil-define-key* nil my/rustic-map (kbd "c") (cons "Cargo" my/cargo-map))
+    (evil-define-key* nil my/cargo-map
+      "a" '("cargo add" . rustic-cargo-add)
       "B" '("cargo build" . rustic-cargo-build)
       "b" '("cargo bench" . rustic-cargo-bench)
       "c" '("cargo check" . rustic-cargo-check)
@@ -7152,7 +7156,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
       (evil-define-key* nil my/rustic-map
         "a" '("eglot code action" . eglot-code-actions)
         "I" '("eglot organize Import" . eglot-code-action-organize-imports)
-        "R" '("eglot rename" . eglot-rename))))
+        "r" '("eglot rename" . eglot-rename))))
 #+end_src
 **** flycheck-rust :external:archive:noexport:
 #+name: flycheck-rust
