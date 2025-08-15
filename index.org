@@ -5892,21 +5892,28 @@ For the ~.authinfo.gpg~ files:
      (yaml-mode . (lambda ()
                     (run-hooks 'prog-mode-hook)))))
 #+end_src
-*** TOML :noexport:
+*** TOML
 **** toml-mode :external:
 #+name: toml-mode
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package toml-mode
+    :ensure t
     :mode
     ("\\.toml\\'" . toml-mode)
     :config
-    ;; (when (treesit-available-p)
-    ;; 	(add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
+    (when (treesit-available-p)
+      (add-to-list 'major-mode-remap-alist '(toml-mode . toml-ts-mode)))
+    (with-eval-after-load 'eglot
+      (add-hook 'toml-mode-hook #'eglot-ensure)
+      (add-hook 'toml-ts-mode-hook #'eglot-ensure)
+      (add-to-list 'eglot-server-programs
+                   '(toml-ts-mode . ("taplo" "lsp" "stdio"))))
     (with-eval-after-load 'lsp-mode
-      (setq lsp-toml-command (executable-find "taplo")))
-    (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml"))
-    (add-hook 'toml-mode-hook #'lsp-deferred))
+      (add-hook 'toml-mode-hook #'lsp-deferred)
+      (setq lsp-toml-command (executable-find "taplo"))
+      (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml"))))
 #+end_src
+Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install taplo-cli --features lsp=.
 *** Lua :noexport:
 **** lua-mode :external:
 #+name: lua-mode
