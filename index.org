@@ -2279,18 +2279,21 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
     :ensure nil
     :hook ((prog-mode . prettify-symbols-mode)
            (prog-mode . visual-line-mode)
-           ;; (prog-mode . (lambda () (electric-pair-mode 1)))
            )
-    ;; :config
-    ;; (setq prettify-symbols-alist
-    ;;       '(("|>" . "▷  ")
-    ;;         ("<|" . "◁  ")
-    ;;         ("->>" . "↠  ")
-    ;;         ("->" . "→  ")
-    ;;         ("<-" . "←  ")
-    ;;         ("=>" . "⇒  ")
-    ;;         ("<=" . "≤ ")
-    ;;         (">=" . "≥ ")))
+    :config
+    (setq-default prettify-symbols-alist
+                  '(("|>" . "▷  ")
+                    ("<|" . "◁  ")
+                    ("&&" . "∧")
+                    ("||" . "∨")
+                    ("!=" . "≠")
+                    ("->>" . "↠  ")
+                    ("->" . "→  ")
+                    ("<-" . "←  ")
+                    ("=>" . "⇒  ")
+                    ("<=" . "≤ ")
+                    (">=" . "≥ ")))
+    (setq prettify-symbols-unprettify-at-point 'right-edge)
     )
 #+end_src
 Basically, in =prog-mode=, some combination of characters will look different.
@@ -6020,12 +6023,11 @@ For the ~.authinfo.gpg~ files:
     (defun +config/web-mode-hook ()
       "Hooks for Web mode."
       (local-set-key (kbd "RET") 'newline-and-indent))
+    (setq web-mode-prettify-symbols-alist
+          '(("=>" . "⇒  ") (">=" . "≥ ") ("<=" . "≤ ")))
     ;; Use // instead of /* as the default comment delimited in JS
-    (with-eval-after-load 'web-mode
-      (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
-            "//"))
-    ;; :hook ((html-mode-local-vars-hook
-    ;;         mhtml-mode-local-vars-hook) . tree-sitter)
+    (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
+          "//")
     :hook (web-mode . +config/django-web-mode)
     :hook (web-mode . +config/web-mode-fix-js-comment))
 #+end_src
@@ -7046,6 +7048,11 @@ For the ~.authinfo.gpg~ files:
     :ensure t
     :init
     (setq rust-mode-treesitter-derive t))
+
+  (with-eval-after-load 'rust-ts-mode
+    (setq rust-ts-mode-prettify-symbols-alist
+          '(("&&" . "⟑") ("||" . "⟇") ("<=" . "≤") (">=" . "⪭") ("!=" . "≠")
+            ("INFINITY" . "∞ " ) ("->" . "→ " ) ("=>" . "⇨ ") ("<=" . "← "))))
 
   (use-package rustic
     :ensure t
