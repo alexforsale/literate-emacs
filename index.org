@@ -5879,12 +5879,24 @@ For the ~.authinfo.gpg~ files:
     (setq nxml-slash-auto-complete-flag t
           nxml-auto-insert-xml-declaration-flag t))
 #+end_src
-*** YAML :noexport:
+*** YAML
 **** yaml-mode :external:
 #+name: yaml-mode
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package yaml-mode
+    :ensure t
     :config
+    (with-eval-after-load 'eglot
+      (add-hook 'yaml-mode-hook #'eglot-ensure)
+      (add-hook 'yaml-ts-mode-hook #'eglot-ensure)
+      (setq-default eglot-workspace-configuration
+                    '(:yaml (:format (:enable t)
+                                     :validate t
+                                     :hover t
+                                     :completion t
+                                     :schemas (https://raw.githubusercontent.com/my-user/my-project/project.schema.yml ["project.yml"]
+                                                                                                                       https://json.schemastore.org/yamllint.json ["/*.yml"])
+                                     :schemaStore (:enable t)))))
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
     (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
     (setq tab-width 2)
@@ -5896,6 +5908,7 @@ For the ~.authinfo.gpg~ files:
      (yaml-mode . (lambda ()
                     (run-hooks 'prog-mode-hook)))))
 #+end_src
+Needs the package =yaml-language-server=, can be obtain from the /archlinux/ repository.
 *** TOML
 **** toml-mode :external:
 #+name: toml-mode
