@@ -4958,6 +4958,12 @@ All the paths should reflect the configuration on =vdirsyncer=. See the [[https:
           fzf/position-bottom t
           fzf/window-height 15))
 #+end_src
+*** nixos
+#+name: nix-mode
+#+begin_src emacs-lisp
+  (use-package nix-mode
+    :ensure t)
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-tools)
