@@ -2896,8 +2896,9 @@ Asynchronous Fuzzy Finder for Emacs.
         "A" 'affe-find)))
 #+end_src
 **** cape
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package cape
+    :ensure t
     :defer t
     ;; Bind dedicated completion commands
     ;; Alternative prefix keys: C-c p, M-p, M-+, ...
@@ -2944,10 +2945,12 @@ Asynchronous Fuzzy Finder for Emacs.
       (add-hook 'completion-at-point-functions #'cape-file -10 t))
     (defun +corfu-add-cape-elisp-block-h ()
       (add-hook 'completion-at-point-functions #'cape-elisp-block 0 t))
-    (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
-    (advice-add #'lsp-completion-at-point :around #'cape-wrap-nonexclusive)
+    (with-eval-after-load 'lsp-mode
+      (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
+      (advice-add #'lsp-completion-at-point :around #'cape-wrap-nonexclusive))
     (advice-add #'comint-completion-at-point :around #'cape-wrap-nonexclusive)
-    (advice-add #'eglot-completion-at-point :around #'cape-wrap-nonexclusive)
+    (with-eval-after-load 'eglot
+      (advice-add #'eglot-completion-at-point :around #'cape-wrap-nonexclusive))
     (advice-add #'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive)
      ;; From the `cape' readme. Without this, Eshell autocompletion is broken on
     ;; Emacs28.
@@ -2982,6 +2985,13 @@ This is provided by yasnippet.
     (use-package consult-yasnippet :ensure t)
 
     (use-package yasnippet-snippets :ensure t)
+#+end_src
+**** yasnippet-capf
+#+begin_src emacs-lisp
+  (use-package yasnippet-capf
+    :after cape
+    :config
+    (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 #+end_src
 **** [[https://github.com/minad/tempel][tempel]] :disabled:noexport:archive:
 Simple templates for Emacs.
