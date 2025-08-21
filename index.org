@@ -969,6 +969,12 @@ Maybe the third most used keys, ~<leader>s~.
   (setq my/search-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) 'global (kbd "<leader>s") (cons "Search" my/search-map))
 #+end_src
+*** Tab 
+#+name: Tab 
+#+begin_src emacs-lisp
+  (setq my/tab-map (make-sparse-keymap))
+  (evil-define-key* '(normal visual) 'global (kbd "<leader>t") (cons "Tab" my/tab-map))
+#+end_src
 *** Terminal
 Sets to ~<leader>v~ since I mostly only use /vterm/.
 #+name: term
@@ -2452,6 +2458,49 @@ This is part of /corfu/ configuration.
     (setq ediff-diff-options "-w" ; turn off whitespace checking
           ediff-split-window-function #'split-window-horizontally
           ediff-window-setup-function #'ediff-setup-windows-plain))
+#+end_src
+*** tab-bar 
+#+begin_src emacs-lisp
+  (use-package tab-bar
+    :ensure nil
+    :custom
+    (tab-bar-close-button nil)
+    (tab-bar-tab-hints t)
+    (tab-bar-auto-width nil)
+    (tab-bar-separator " ")
+    (tab-bar-format '(tab-bar-format-history tab-bar-format-tabs tab-bar-separator
+                          tab-bar-format-add-tab))
+    :config
+    (custom-set-faces
+    '(tab-bar
+  	((t (:background "#232635" :foreground "#A6Accd"))))
+    '(tab-bar-tab
+  	((t (:background "#232635" :underline t))))
+    '(tab-bar-tab-inactive
+  	((t ( ;; :background "#232635" ;; uncomment to use this
+  		  ;; :box (:line-width 1 :color "#676E95")
+  		  ))))
+    '(tab-bar-tab-group-current
+  	((t (:background "#232635" :foreground "#A6Accd" :underline t))))
+    '(tab-bar-tab-group-inactive
+  	((t (:background "#232635" :foreground "#777")))))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/tab-map
+        "c" '("new tab" . tab-new)
+        "d" '("close tab" . tab-close)
+        "G" '("group tab" . tab-group)
+        "g" '("last tab" . tab-last)
+        "n" '("next tab" . tab-next)
+        "p" '("prev tab" . tab-previous)
+        "r" '("rename tab" . tab-rename)
+        "t" '("tab-bar-mode" . (lambda () (interactive) (tab-bar-mode 'toggle)))
+        "u" '("undo tab" . tab-undo)))
+    ;; (add-to-list 'display-buffer-alist
+    ;;   		   '("\\*scratch\\*"
+    ;;   			 (display-buffer-in-tab display-buffer-full-frame)
+    ;;   			 (tab-group . "[EMACS]")))
+    (when (display-graphic-p)
+      (tab-bar-mode 1)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
