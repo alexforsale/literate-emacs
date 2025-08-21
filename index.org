@@ -877,6 +877,7 @@ Commands for quick insertion ~<leader>i~.
   (setq my/insert-map (make-sparse-keymap))
   (evil-define-key* '(normal visual) 'global (kbd "<leader>i") (cons "Insert" my/insert-map))
   (evil-define-key* nil my/insert-map "c" '("insert character" . insert-char))
+  (evil-define-key* nil my/insert-map "d" '("duplicate-dwim" . duplicate-dwim))
 #+end_src
 *** minor-mode
 **** org-mode
