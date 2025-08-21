@@ -2841,8 +2841,9 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
 #+end_src
 =partial-completion= and =flex= are built-ins completion-styles.
 **** embark
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package embark
+    :ensure t
     :defer t
     :bind
     (("C-." . embark-act)         ;; pick some comfortable binding
@@ -2873,8 +2874,9 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
 #+end_src
 This is a package that I should learn more, but the configuration is overwhealming.
 **** embark-consult
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (use-package embark-consult
+    :ensure t
     :hook
     (embark-collect-mode . consult-preview-at-point-mode))
 #+end_src
