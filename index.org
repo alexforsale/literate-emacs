@@ -5523,7 +5523,7 @@ For the ~.authinfo.gpg~ files:
     :hook (lispy-mode . lispyville-mode))
 #+end_src
 
-**** Emacs-lisp
+**** Emacs-lisp :noexport:archive:
 ***** elisp-mode
 #+name: elisp-mode
 #+begin_src emacs-lisp :tangle no
@@ -5582,7 +5582,7 @@ For the ~.authinfo.gpg~ files:
     :bind (:map emacs-lisp-mode-map
                 ("C-c e" . macrostep-expand)))
 #+end_src
-**** Common lisp
+**** Common lisp :archive:noexport:
 #+name: common-lisp
 #+begin_src emacs-lisp :tangle no
 ;;;; common-lisp
@@ -5617,7 +5617,7 @@ For the ~.authinfo.gpg~ files:
     :load-path "site-lisp/sly-macrostep")
 #+end_src
 
-**** clojure
+**** clojure :archive:noexport:
 ***** clojure-mode :external:
 #+begin_src emacs-lisp :tangle no
   (use-package clojure-mode
@@ -5698,7 +5698,7 @@ For the ~.authinfo.gpg~ files:
       (cljr-add-keybindings-with-prefix "C-c r")))
 #+end_src
 
-**** Scheme
+**** Scheme :archive:noexport:
 #+begin_src emacs-lisp :tangle no
   (use-package scheme
     :ensure nil
@@ -5872,7 +5872,7 @@ For the ~.authinfo.gpg~ files:
   (use-package demangle-mode
     :hook llvm-mode)
 #+end_src
-*** XML :noexport:
+*** XML :noexport:archive:
 **** nxml-mode 
 #+name: nxml-mode
 #+begin_src emacs-lisp :tangle no
@@ -5938,7 +5938,7 @@ Needs the package =yaml-language-server=, can be obtain from the /archlinux/ rep
       (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml"))))
 #+end_src
 Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install taplo-cli --features lsp=.
-*** Lua :noexport:
+*** Lua :noexport:archive:
 **** lua-mode :external:
 #+name: lua-mode
 #+begin_src emacs-lisp :tangle no
@@ -5949,7 +5949,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
       (setq lsp-lua-hint-enable t
             lsp-lua-hint-set-type t)))
 #+end_src
-*** Jinja2 :noexport:
+*** Jinja2 :noexport:archive:
 **** jinja2-mode :external:
 #+name: jinja2-mode
 #+begin_src emacs-lisp :tangle no
@@ -5963,13 +5963,13 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
     (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode)))
 #+end_src
-*** Json :noexport:
+*** Json :noexport:archive:
 **** json-mode 
 #+name: json-mode
 #+begin_src emacs-lisp :tangle no
   (use-package json-mode)
 #+end_src
-*** Web :noexport:
+*** Web 
 **** web-mode :external:
 #+name: web-mode
 #+begin_src emacs-lisp
@@ -6463,7 +6463,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
   (use-package nodejs-repl
     :defer t)
 #+end_src
-*** Latex :noexport:
+*** Latex :noexport:archive:
 **** auctex 
 #+name: auctex
 #+begin_src emacs-lisp :tangle no
@@ -6577,7 +6577,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
       (substring fname-or-url 7)
     fname-or-url))
 #+end_src
-*** Markdown :noexport:
+*** Markdown 
 **** Basic Configuration
 #+name: markdown-mode
 #+begin_src emacs-lisp
@@ -6612,7 +6612,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     :ensure t
     :after markdown-mode)
 #+end_src
-*** PlantUML :noexport:
+*** PlantUML :noexport:archive:
 #+begin_src emacs-lisp :tangle no
   (use-package plantuml-mode
     :commands plantuml-download-jar
@@ -7219,7 +7219,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     (when (featurep 'evil)
       (evil-set-initial-state '(ansible-doc-module-mode) 'emacs)))
 #+end_src
-*** Perl
+*** Perl :archive:noexport:
 **** cperl-mode :external:
 #+name: cperl-mode
 #+begin_src emacs-lisp :tangle no
@@ -7265,7 +7265,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     "l" '("load and run" . haskell-load-and-run)
     "r" '("run haskell" . run-haskell))
 #+end_src
-*** Ron-mode :noexport:
+*** Ron-mode :noexport:archive:
 #+begin_src emacs-lisp :tangle no
   (use-package ron-mode)
 #+end_src
