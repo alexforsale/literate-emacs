@@ -387,6 +387,11 @@ This is a collection of Evil bindings for the parts of Emacs that Evil does not 
     :ensure t
     :init
     (evil-collection-init)
+    :config
+    (with-eval-after-load 'dired
+      (evil-collection-dired-setup))
+    (with-eval-after-load 'calendar
+      (evil-collection-calendar-setup))
     :custom
     (evil-collection-setup-minibuffer t)
     (evil-collection-calendar-want-org-bindings t))
@@ -1692,6 +1697,8 @@ My sole reason for using /dashboard/ is to avoid seeing an empty /scratch buffer
                                                    (projects . 5)
                                                    (agenda . 8)
                                                    (registers . 2)))
+    (with-eval-after-load 'evil-collection
+      (evil-collection-dashboard-setup))
     (with-eval-after-load 'nerd-icons
       (setq dashboard-icon-type 'nerd-icons))
     (with-eval-after-load 'projectile
@@ -1799,6 +1806,8 @@ Since /Emacs/ is a [[https://www.emacswiki.org/emacs/SelfDocumentation][self-doc
     :custom
     (helpful-max-buffers 2)
     :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-helpful-setup))
     (with-eval-after-load 'apropos
       (dolist (fun-bt '(apropos-function apropos-macro apropos-command))
         (button-type-put
@@ -2862,6 +2871,8 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
     ;; (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
     :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-embark-setup))
     (setq which-key-use-C-h-commands nil
           prefix-help-command #'embark-prefix-help-command)
     (evil-define-key* '(normal visual insert) 'global (kbd "C-.") 'embark-act)
@@ -3132,6 +3143,8 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :demand t
     :commands vterm-mode
     :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-vterm-setup))
     (add-hook 'vterm-mode-hook
               (lambda ()
                 (setq-local global-hl-line-mode nil)
@@ -3476,6 +3489,10 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
     :ensure t
     :demand t
     :config
+    (with-eval-after-load 'evil-collection 
+      (evil-collection-magit-repos-setup)
+      (evil-collection-magit-section-setup)
+      (evil-collection-magit-setup))
     (evil-set-initial-state #'git-commit-mode 'insert)
     (evil-define-key* nil my/git-map
       "g" '("git status" . magit-status))
@@ -3772,11 +3789,14 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
 #+begin_src emacs-lisp
   (use-package eglot
     :hook ((rust-mode nix-mode) . eglot-ensure)
-    :config (add-to-list 'eglot-server-programs
-                         `(rust-mode . ("rust-analyzer" :initializationOptions
-                                        ( :procMacro (:enable t)
-                                          :cargo ( :buildScripts (:enable t)
-                                                   :features "all"))))))
+    :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-eglot-setup))
+    (add-to-list 'eglot-server-programs
+                 `(rust-mode . ("rust-analyzer" :initializationOptions
+                                ( :procMacro (:enable t)
+                                  :cargo ( :buildScripts (:enable t)
+                                           :features "all"))))))
 #+end_src
 *** [[https://emacs-lsp.github.io/dap-mode/page/configuration/][dap-mode]] :external:archive:disabled:noexport:
 #+begin_src emacs-lisp :tangle no
@@ -3952,6 +3972,8 @@ This package looks promising, I'll wait until it mature a bit.
     :ensure t
     :pin gnu
     :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-flymake-setup))
     (setq flymake-diagnostic-format-alist
           '((t . (origin code message)))))
 #+end_src
@@ -4056,6 +4078,8 @@ This package looks promising, I'll wait until it mature a bit.
            (org-mode . (lambda () (electric-indent-local-mode -1)))
            (org-mode . variable-pitch-mode))
     :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-org-setup))
     (global-set-key (kbd "C-c l") #'org-store-link)
     (global-set-key (kbd "C-c a") #'org-agenda)
     (global-set-key (kbd "C-c c") #'org-capture)
@@ -4577,6 +4601,8 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
     (org-roam-setup)
     (org-roam-db-autosync-mode)
     (require 'org-roam-protocol)
+    (with-eval-after-load 'evil-collection
+      (evil-collection-org-roam-setup))
     (evil-define-key* nil my/open-roam-map
       "a" '("add alias" . org-roam-alias-add)
       "c" '("roam capture" . org-roam-capture)
@@ -4683,7 +4709,10 @@ Requires pandoc
 
   (use-package pass
     :ensure t
-    :defer t)
+    :defer t
+    :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-pass-setup)))
 
   (use-package auth-source-pass
     :ensure nil
@@ -4698,7 +4727,10 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
   (use-package rg
     :ensure t
     :if (executable-find "rg")
-    :defer t)
+    :defer t
+    :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-rg-setup)))
 #+end_src
 *** direnv :noexport:disabled:archive:
 *** ox-hugo                                                      :external:
@@ -4727,6 +4759,8 @@ An Emacs web feeds client.
     :ensure t
     :demand t
     :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-elfeed-setup))
     (evil-define-key* nil my/open-map "e" '("open elfeed" . elfeed)))
 #+end_src
 **** extensions
@@ -5008,7 +5042,9 @@ Stands for /Directory Editor/ (I guess), is a builtin file manager for /Emacs/.
           dired-listing-switches "-AGFhl --group-directories-first --time-style=long-iso"
           dired-clean-confirm-killing-deleted-buffers nil)
     :config
-    (setq dired-mouse-drag-files t))
+    (setq dired-mouse-drag-files t)
+    (with-eval-after-load 'evil-collection
+      (evil-collection-dired-setup)))
 #+end_src
 The arguments for =dired-listing-switches= are:
 - =-A= :: Show hidden files (“dotfiles”), such as =.bashrc=, but omit the implied =.== and =..= targets. The latter two refer to the present and parent directory, respectively.
@@ -5122,7 +5158,10 @@ Needs an external package =fd=, or =fd-find=
 #+begin_src emacs-lisp
   (use-package wdired
     :ensure nil
-    :commands (wdired-change-to-wdired-mode))
+    :commands (wdired-change-to-wdired-mode)
+    :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-wdired-setup)))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
@@ -6604,6 +6643,8 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     (when (executable-find "multimarkdown")
       (setq markdown-command "multimarkdown"))
     :config
+    (with-eval-after-load 'evil-collection 
+      (evil-collection-markdown-mode-setup))
     (with-eval-after-load 'lsp-mode
       (add-hook 'markdown-mode-hook #'lsp-deferred))
     (setq markdown-fontify-code-blocks-natively t))
@@ -6721,6 +6762,8 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     :mode ("[./]flake8\\'" . conf-mode)
     :mode ("/Pipfile\\'" . conf-mode)
     :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-python-setup))
     (with-eval-after-load 'eglot
       (add-hook 'python-mode-hook #'eglot-ensure)
       (add-hook 'python-ts-mode-hook #'eglot-ensure)
@@ -7325,7 +7368,10 @@ Lsp-java requires jdt-language-server, this package should automatically install
 
   (use-package tuareg
     :ensure t
-    :mode (("\\.ocamlinit\\'" . tuareg-mode)))
+    :mode (("\\.ocamlinit\\'" . tuareg-mode))
+    :config
+    (with-eval-after-load 'evil-collection
+      (evil-collection-tuareg-setup)))
 
   (use-package ocaml-eglot
     :ensure t
