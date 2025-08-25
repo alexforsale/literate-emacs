@@ -808,28 +808,44 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
 All keybindings will go with ~<leader>b~.
 #+name: buffers
 #+begin_src emacs-lisp
-  (setq my/buffer-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>b") (cons "Buffer" my/buffer-map))
-  (evil-define-key* nil my/buffer-map
-    "." '("set bookmark" . bookmark-set)
-    "[" '("previous buffer" . previous-buffer)
-    "]" '("next buffer" . next-buffer)
-    "c" '("clone indirect buffer" . clone-indirect-buffer)
-    "C" '("clone indirect buffer other window" . clone-indirect-buffer-other-window)
-    "d" '("kill buffer" . kill-buffer)
-    "i" '("ibuffer" . ibuffer)
-    "k" '("kill buffer" . kill-buffer)
-    "l" '("switch to last buffer" . evil-switch-to-windows-last-buffer)
-    "m" '("switch to message buffer". (lambda () (interactive) (switch-to-buffer "*Messages*")))
-    "n" '("next buffer" . next-buffer)
-    "N" '("new buffer" . evil-buffer-new)
-    "p" '("previous buffer" . previous-buffer)
-    "o" '("other buffer" . (lambda () (interactive) (switch-to-buffer nil)))
-    "r" '("revert buffer" . revert-buffer)
-    "R" '("rename buffer" . rename-buffer)
-    "s" '("save buffer" . save-buffer)
-    "x" '("switch to scratch buffer" . (lambda () (interactive) (switch-to-buffer "*scratch*")))
-    "z" '("bury buffer" . bury-buffer))
+  (with-eval-after-load 'evil
+    (setq my/buffer-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>b") (cons "Buffer" my/buffer-map))
+    (evil-define-key* nil my/buffer-map
+      "." '("set bookmark" . bookmark-set)
+      "[" '("previous buffer" . previous-buffer)
+      "]" '("next buffer" . next-buffer)
+      "c" '("clone indirect buffer" . clone-indirect-buffer)
+      "C" '("clone indirect buffer other window" . clone-indirect-buffer-other-window)
+      "d" '("kill buffer" . kill-buffer)
+      "i" '("ibuffer" . ibuffer)
+      "k" '("kill buffer" . kill-buffer)
+      "l" '("switch to last buffer" . evil-switch-to-windows-last-buffer)
+      "m" '("switch to message buffer". (lambda () (interactive) (switch-to-buffer "*Messages*")))
+      "n" '("next buffer" . next-buffer)
+      "N" '("new buffer" . evil-buffer-new)
+      "p" '("previous buffer" . previous-buffer)
+      "o" '("other buffer" . (lambda () (interactive) (switch-to-buffer nil)))
+      "r" '("revert buffer" . revert-buffer)
+      "R" '("rename buffer" . rename-buffer)
+      "s" '("save buffer" . save-buffer)
+      "x" '("switch to scratch buffer" . (lambda () (interactive) (switch-to-buffer "*scratch*")))
+      "z" '("bury buffer" . bury-buffer)))
+#+end_src
+
+**** repeat-map
+#+begin_src emacs-lisp
+  (with-eval-after-load 'evil
+    (defvar my/buffer-map-repeat-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "n" #'next-buffer)
+        (define-key map "p" #'previous-buffer)
+        (define-key map "[" #'previous-buffer)
+        (define-key map "]" #'next-buffer)
+        map)
+      "Keymap for my/buffer-map repeat")
+    (put 'next-buffer 'repeat-map 'my/buffer-map-repeat-map)
+    (put 'previous-buffer 'repeat-map 'my/buffer-map-repeat-map))
 #+end_src
 *** Filetree
 This is for /treemacs/ ~<leader>e~, would be good for /dired/ also.
@@ -878,6 +894,16 @@ Commands for quick insertion ~<leader>i~.
   (evil-define-key* '(normal visual) 'global (kbd "<leader>i") (cons "Insert" my/insert-map))
   (evil-define-key* nil my/insert-map "c" '("insert character" . insert-char))
   (evil-define-key* nil my/insert-map "d" '("duplicate-dwim" . duplicate-dwim))
+#+end_src
+**** repeat-map 
+#+begin_src emacs-lisp
+    (with-eval-after-load 'evil
+      (defvar my/insert-map-repeat-map
+        (let ((map (make-sparse-keymap)))
+          (define-key map "d" #'duplicate-dwim)
+          map)
+        "Keymap for my/insert-map repeat")
+      (put 'duplicate-dwim 'repeat-map 'my/insert-map-repeat-map))
 #+end_src
 *** minor-mode
 **** org-mode
@@ -997,7 +1023,7 @@ The second most used keybindings, I will try to use the default /vim/ keys.
     "}" '("enlarge horizontal" . enlarge-window-horizontally)
     "{" '("shrink horizontal" . shrink-window-horizontally)
     "+" '("increase height" . evil-window-increase-height)
-    "_" '("decrease height" . evil-window-decrease-height)
+    "-" '("decrease height" . evil-window-decrease-height)
     "<" '("decrease width" . evil-window-decrease-width)
     ">" '("increase width" . evil-window-increase-width)
     "b" '("bottom right" . evil-window-bottom-right)
@@ -1027,6 +1053,86 @@ The second most used keybindings, I will try to use the default /vim/ keys.
     (kbd "<right>") '("right window" . evil-window-right)
     (kbd "<down>") '("down window" . evil-window-down)
     (kbd "<up>") '("up window" . evil-window-up))
+#+end_src
+**** repeat-map
+#+begin_src emacs-lisp
+  (with-eval-after-load 'evil
+    (defvar my/window-map-repeat-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "h" #'evil-window-left)
+        (define-key map "l" #'evil-window-right)
+        (define-key map "j" #'evil-window-down)
+        (define-key map "k" #'evil-window-up)
+        (define-key map (kbd "<left>") #'evil-window-left)
+        (define-key map (kbd "<up>") #'evil-window-up)
+        (define-key map (kbd "<right>") #'evil-window-right)
+        (define-key map (kbd "<down>") #'evil-window-down)
+        map)
+      "Keymap for my/window-map repeat")
+    (put 'evil-window-down 'repeat-map 'my/window-map-repeat-map)
+    (put 'evil-window-up 'repeat-map 'my/window-map-repeat-map)
+    (put 'evil-window-right 'repeat-map 'my/window-map-repeat-map)
+    (put 'evil-window-left 'repeat-map 'my/window-map-repeat-map)
+    (put 'evil-window-rotate-upwards 'repeat-map 'my/window-map-repeat-map)
+    (put 'evil-window-rotate-downwards 'repeat-map 'my/window-map-repeat-map))
+
+  (with-eval-after-load 'evil
+    (defvar my/window-split-repeat-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "s" #'+evil/window-split-and-follow)
+        (define-key map "v" #'+evil/window-vsplit-and-follow)
+        map)
+      "Keymap for my/window-exchange repeat")
+    (put '+evil/window-split-and-follow 'repeat-map 'my/window-split-repeat-map)
+    (put '+evil/window-vsplit-and-follow 'repeat-map 'my/window-split-repeat-map))
+
+  (with-eval-after-load 'evil
+    (defvar my/window-exchange-repeat-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "x" #'evil-window-exchange)
+        map)
+      "Keymap for my/window-exchange repeat")
+    (put 'evil-window-exchange 'repeat-map 'my/window-exchange-repeat-map))
+
+  (with-eval-after-load 'evil
+    (defvar my/winner-undo-repeat-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "u" #'winner-undo)
+        map)
+      "Keymap for my/winner-undo repeat")
+    (put 'winner-undo 'repeat-map 'my/winner-undo-repeat-map))
+
+  (with-eval-after-load 'evil
+    (defvar my/window-rotate-repeat-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "r" #'evil-window-rotate-downwards)
+        (define-key map "R" #'evil-window-rotate-downwards)
+        map)
+      "Keymap for my/window-rotate repeat")
+    (put 'evil-window-rotate-upwards 'repeat-map 'my/window-rotate-repeat-map)
+    (put 'evil-window-rotate-downwards 'repeat-map 'my/window-rotate-repeat-map))
+
+  (with-eval-after-load 'evil
+    (defvar my/window-size-repeat-map
+      (let ((map (make-sparse-keymap)))
+        (define-key map "=" #'enlarge-window)
+        (define-key map "_" #'shrink-window)
+        (define-key map "{" #'enlarge-window-horizontally)
+        (define-key map "}" #'shrink-window-horizontally)
+        (define-key map "<" #'evil-window-decrease-width)
+        (define-key map ">" #'evil-window-increase-width)
+        (define-key map "+" #'evil-window-increase-height)
+        (define-key map "-" #'evil-window-decrease-height)
+        map)
+      "Keymap for my/buffer-map repeat")
+    (put 'evil-window-increase-height 'repeat-map 'my/window-size-repeat-map)
+    (put 'evil-window-decrease-height 'repeat-map 'my/window-size-repeat-map)
+    (put 'evil-window-decrease-width 'repeat-map 'my/window-size-repeat-map)
+    (put 'evil-window-increase-width 'repeat-map 'my/window-size-repeat-map)
+    (put 'enlarge-window-horizontally 'repeat-map 'my/window-size-repeat-map)
+    (put 'shrink-window-horizontally 'repeat-map 'my/window-size-repeat-map)
+    (put 'enlarge-window 'repeat-map 'my/window-size-repeat-map)
+    (put 'shrink-window 'repeat-map 'my/window-size-repeat-map))
 #+end_src
 *** Quit
 Also used for reloading configuration (like /Doomemacs/) ~<leader>q~.
@@ -6975,7 +7081,9 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
           (message "pyenv: version `%s' is not installed (set by `%s')."
                    version file-path)))))
 
+  (with-eval-after-load 'evil
     (setq my/python-send-map (make-sparse-keymap))
+    (setq my/python-repl-map (make-sparse-keymap))
     (evil-define-key* nil my/python-map (kbd "s") (cons "send to repl" my/python-send-map))
     (evil-define-key* nil my/python-map
       "c" '("check" . python-check)
@@ -6986,7 +7094,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
       "B" '("send block" . python-shell-send-block)
       "d" '("send defun" . python-shell-send-defun)
       "r" '("send region" . python-shell-send-region)
-      "s" '("send statement" . python-shell-send-statement)))
+      "s" '("send statement" . python-shell-send-statement))))
 #+end_src
 **** pydoc :external:noexport:archive:disabled:
 #+begin_src emacs-lisp :tangle no
