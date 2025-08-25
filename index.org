@@ -4568,7 +4568,22 @@ This package looks promising, I'll wait until it mature a bit.
     (org-show-notification-handler "notify-send")
     (org-agenda-skip-scheduled-if-deadline-is-shown t)
     :config
-    (org-clock-persistence-insinuate))
+    (org-clock-persistence-insinuate)
+    (with-eval-after-load 'evil
+      (setq my/org-clock-mode-map (make-sparse-keymap))
+      (evil-define-key* nil my/org-mode-map (kbd "C") (cons "Org Clock" my/org-clock-mode-map))
+      (evil-define-key* nil my/org-clock-mode-map
+        "d" '("display clock" . org-clock-display)
+        (kbd "C-d") '("display clock" . org-clock-display)
+        "e" '("modify clock estimate" . org-clock-modify-effort-estimate)
+        "i" '("clock in" . org-clock-in)
+        "l" '("clock in last clock" . org-clock-in-last)
+        (kbd "C-x") '("clock in last clock" . org-clock-in-last)
+        "o" '("clock out" . org-clock-out)
+        "g" '("goto clock" . org-clock-goto)
+        (kbd "C-j") '("goto clock" . org-clock-goto)
+        "q" '("cancel clock" . org-clock-cancel)
+        (kbd "q") '("cancel clock" . org-clock-cancel))))
 #+end_src
 *** org-timer :builtin:
 #+name: org-timer
