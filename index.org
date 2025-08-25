@@ -2930,33 +2930,35 @@ This is the basic configuration, with the addition of enabling corfu in the mini
           consult-async-refresh-delay  0.15
           consult-async-input-throttle 0.2
           consult-async-input-debounce 0.1)
-    (evil-define-key* '(normal visual) 'global
-      (kbd "<leader>.") '("Store register" . consult-register-store)
-      (kbd "<leader> C-.") '("Load register" . consult-register-load))
-    (evil-define-key* nil my/buffer-map
-      "b" '("buffers" . consult-buffer)
-      "B" '("project buffers" . consult-project-buffer)
-      )
-    (evil-define-key* nil my/org-mode-map
-      "O" '("search heading" . consult-org-heading))
-    (evil-define-key* nil my/search-map
-      "a" '("grep search" . consult-grep)
-      "b" '("search bookmarks" . consult-bookmark)
-      "B" '("search global mark" . consult-global-mark)
-      "f" '("focus line" . consult-focus-line)
-      "h" '("isearch history" . consult-isearch-history)
-      "m" '("search mark" . consult-mark)
-      "i" '("imenu" . consult-imenu)
-      "o" '("search outline" . consult-outline)
-      "s" '("search line" . consult-line)
-      "S" '("search multi line" . consult-line-multi)
-      "\"" '("search register" . consult-register))
-    (evil-define-key* '(normal visual) 'global (kbd "M-y") 'consult-yank-pop)
-    (cond ((executable-find "fd")
-           (evil-define-key* nil my/search-map "A" '("fd search" . consult-fd)))
-          (t (evil-define-key* nil my/search-map "A" '("find search" . consult-find))))
-    (when (executable-find "rg")
-      (evil-define-key* nil my/search-map "r" '("search ripgrep" . consult-ripgrep)))
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual) 'global
+        (kbd "<leader>.") '("Store register" . consult-register-store)
+        (kbd "<leader> C-.") '("Load register" . consult-register-load))
+      (evil-define-key* nil my/buffer-map
+        "b" '("buffers" . consult-buffer)
+        "B" '("project buffers" . consult-project-buffer))
+      (evil-define-key* nil my/open-map
+        "O" '("Open agenda files" . consult-org-agenda))
+      (evil-define-key* nil my/org-mode-map
+        "O" '("search heading" . consult-org-heading))
+      (evil-define-key* nil my/search-map
+        "a" '("grep search" . consult-grep)
+        "b" '("search bookmarks" . consult-bookmark)
+        "B" '("search global mark" . consult-global-mark)
+        "f" '("focus line" . consult-focus-line)
+        "h" '("isearch history" . consult-isearch-history)
+        "m" '("search mark" . consult-mark)
+        "i" '("imenu" . consult-imenu)
+        "o" '("search outline" . consult-outline)
+        "s" '("search line" . consult-line)
+        "S" '("search multi line" . consult-line-multi)
+        "\"" '("search register" . consult-register))
+      (evil-define-key* '(normal visual) 'global (kbd "M-y") 'consult-yank-pop)
+      (cond ((executable-find "fd")
+             (evil-define-key* nil my/search-map "A" '("fd search" . consult-fd)))
+            (t (evil-define-key* nil my/search-map "A" '("find search" . consult-find))))
+      (when (executable-find "rg")
+        (evil-define-key* nil my/search-map "r" '("search ripgrep" . consult-ripgrep))))
 
       (keymap-set isearch-mode-map "M-e" #'consult-isearch-history)
       (keymap-set isearch-mode-map "M-l" #'consult-line)
