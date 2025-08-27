@@ -2947,6 +2947,7 @@ This is the basic configuration, with the addition of enabling corfu in the mini
         "a" '("grep search" . consult-grep)
         "b" '("search bookmarks" . consult-bookmark)
         "B" '("search global mark" . consult-global-mark)
+        "d" '("search directory" . consult-dir)
         "f" '("consult find" . consult-find)
         "F" '("focus line" . consult-focus-line)
         "h" '("isearch history" . consult-isearch-history)
