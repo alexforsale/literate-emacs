@@ -858,19 +858,21 @@ This is for /treemacs/ ~<leader>e~, would be good for /dired/ also.
 Perhaps the most used keybindings, ~<leader>f~.
 #+name: files
 #+begin_src emacs-lisp
-  (setq my/file-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>f") (cons "Files" my/file-map))
-  (evil-define-key* nil my/file-map
-    "f" '("find file" . find-file)
-    "d" '("jump to current directory" . dired-jump)
-    "i" '("open init file" . (lambda () (interactive)
-                               (find-file
-                                (expand-file-name "init.el" user-emacs-directory))))
-    "k" '("delete frame" . delete-frame)
-    "r" '("recent file" . recentf)
-    "s" '("save buffer" . save-buffer)
-    "S" '("Save as" . (lambda () (interactive "F") (write-file "./" t)))
-    "w" '("find file other window" . find-file-other-window))
+  (with-eval-after-load 'evil
+    (setq my/file-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>f") (cons "Files" my/file-map))
+    (evil-define-key* nil my/file-map
+      "f" '("find file" . find-file)
+      "d" '("jump to current directory" . dired-jump)
+      "i" '("open init file" . (lambda () (interactive)
+                                 (find-file
+                                  (expand-file-name "init.el" user-emacs-directory))))
+      "k" '("delete frame" . delete-frame)
+      "r" '("recent file" . recentf)
+      "s" '("save buffer" . save-buffer)
+      "S" '("Save as" . (lambda () (interactive "F") (write-file "./" t)))
+      "t" '("find-file other tab" . find-file-other-tab)
+      "w" '("find file other window" . find-file-other-window)))
 #+end_src
 *** Git
 All /git/-related commands goes here, ~<leader>g~.
