@@ -5181,6 +5181,7 @@ All the paths should reflect the configuration on =vdirsyncer=. See the [[https:
 #+name: nix-mode
 #+begin_src emacs-lisp
   (use-package nix-mode
+    :if (executable-find "nix")
     :ensure t)
 #+end_src
 *** footer :noexport:
