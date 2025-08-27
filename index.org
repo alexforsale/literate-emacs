@@ -778,31 +778,33 @@ All the keybindings set here only for the built-in packages only, for keybinding
 This is taken from /vim/, The leader key in Vim and Neovim is a special key used as a prefix for custom keyboard shortcuts, also known as mappings. It creates a "namespace" for user-defined commands, allowing you to create personalized shortcuts without conflicting with Vim's default commands.
 #+name: leader key
 #+begin_src emacs-lisp
-  (evil-set-leader '(normal visual) (kbd "SPC"))
-  (evil-set-leader '(insert emacs) (kbd "C-c SPC"))
+  (with-eval-after-load 'evil
+    (evil-set-leader '(normal visual) (kbd "SPC"))
+    (evil-set-leader '(insert emacs) (kbd "C-c SPC")))
 #+end_src
 *** 1st level commands
 These commands is used often so it will need a faster keybindings (~<leader> <key>~).
 #+name: 1st level keybindings
 #+begin_src emacs-lisp
-  (evil-global-set-key 'normal (kbd "<leader>:") '("execute commands" . execute-extended-command))
-  (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
-  (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument))
+  (with-eval-after-load 'evil
+    (evil-global-set-key 'normal (kbd "<leader>:") '("execute commands" . execute-extended-command))
+    (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
+    (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument)))
 #+end_src
 *** Chat
 #+begin_src emacs-lisp
-  (setq my/c-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>c") (cons "Chat" my/c-map))
-  (with-eval-after-load 'org
-    (evil-define-key* nil my/c-map "c" '("org-capture" . org-capture)))
-  (setq my/gptel-map (make-sparse-keymap))
-  (with-eval-after-load 'gptel
-    (evil-define-key* nil my/c-map "g" (cons "Gptel" my/gptel-map))
-    (evil-define-key nil my/gptel-map "a" '("Add/remove region" . gptel-add))
-    (evil-define-key nil my/gptel-map "g" '("gptel" . gptel))
-    (evil-define-key nil my/gptel-map "G" '("gptel-menu" . gptel-menu))
-    (evil-define-key nil my/gptel-map "s" '("send" . gtpel-send)))
-
+  (with-eval-after-load 'evil
+    (setq my/c-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>c") (cons "Chat" my/c-map))
+    (with-eval-after-load 'org
+      (evil-define-key* nil my/c-map "c" '("org-capture" . org-capture)))
+    (setq my/gptel-map (make-sparse-keymap))
+    (with-eval-after-load 'gptel
+      (evil-define-key* nil my/c-map "g" (cons "Gptel" my/gptel-map))
+      (evil-define-key nil my/gptel-map "a" '("Add/remove region" . gptel-add))
+      (evil-define-key nil my/gptel-map "g" '("gptel" . gptel))
+      (evil-define-key nil my/gptel-map "G" '("gptel-menu" . gptel-menu))
+      (evil-define-key nil my/gptel-map "s" '("send" . gtpel-send))))
 #+end_src
 *** Buffers
 All keybindings will go with ~<leader>b~.
@@ -851,8 +853,9 @@ All keybindings will go with ~<leader>b~.
 This is for /treemacs/ ~<leader>e~, would be good for /dired/ also.
 #+name: tree
 #+begin_src emacs-lisp
-  (setq my/tree-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>e") (cons "Tree" my/tree-map))
+  (with-eval-after-load 'evil
+    (setq my/tree-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>e") (cons "Tree" my/tree-map)))
 #+end_src
 *** Files
 Perhaps the most used keybindings, ~<leader>f~.
@@ -878,24 +881,27 @@ Perhaps the most used keybindings, ~<leader>f~.
 All /git/-related commands goes here, ~<leader>g~.
 #+name: git
 #+begin_src emacs-lisp
-  (setq my/git-map (make-sparse-keymap))
-  (with-eval-after-load 'magit
-    (evil-define-key* '(normal visual) 'global (kbd "<leader>g") (cons "Git" my/git-map)))
+  (with-eval-after-load 'evil
+    (setq my/git-map (make-sparse-keymap))
+    (with-eval-after-load 'magit
+      (evil-define-key* '(normal visual) 'global (kbd "<leader>g") (cons "Git" my/git-map))))
 #+end_src
 *** Help
 This key ~<leader>h~ just simulate the standard Emacs ~C-h~.
 #+name: help
 #+begin_src emacs-lisp
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>h") (cons "Help" help-map))
+  (with-eval-after-load 'evil
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>h") (cons "Help" help-map)))
 #+end_src
 *** Insert
 Commands for quick insertion ~<leader>i~.
 #+name: insert
 #+begin_src emacs-lisp
-  (setq my/insert-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>i") (cons "Insert" my/insert-map))
-  (evil-define-key* nil my/insert-map "c" '("insert character" . insert-char))
-  (evil-define-key* nil my/insert-map "d" '("duplicate-dwim" . duplicate-dwim))
+  (with-eval-after-load 'evil
+    (setq my/insert-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>i") (cons "Insert" my/insert-map))
+    (evil-define-key* nil my/insert-map "c" '("insert character" . insert-char))
+    (evil-define-key* nil my/insert-map "d" '("duplicate-dwim" . duplicate-dwim)))
 #+end_src
 **** repeat-map 
 #+begin_src emacs-lisp
@@ -911,150 +917,161 @@ Commands for quick insertion ~<leader>i~.
 **** org-mode
 #+name: org-mode-map
 #+begin_src emacs-lisp
-  (with-eval-after-load 'org
-    (setq my/org-mode-map (make-sparse-keymap))
-    (setq my/org-note-map (make-sparse-keymap))
-    (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
-    (evil-define-key* nil my/org-mode-map "n" (cons "Notes" my/org-note-map))
-    (evil-define-key* nil my/org-mode-map
-      (kbd "M-l") 'org-insert-last-stored-link
-      (kbd "C-w") '("Refile" . org-refile)
-      )
-    (evil-define-key nil my/org-note-map
-      "c" '("capture" . org-capture)))
+  (with-eval-after-load 'evil
+    (with-eval-after-load 'org
+      (setq my/org-mode-map (make-sparse-keymap))
+      (setq my/org-note-map (make-sparse-keymap))
+      (evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
+      (evil-define-key* nil my/org-mode-map "n" (cons "Notes" my/org-note-map))
+      (evil-define-key* nil my/org-mode-map
+        (kbd "M-l") 'org-insert-last-stored-link
+        (kbd "C-w") '("Refile" . org-refile))
+      (evil-define-key nil my/org-note-map
+        "c" '("capture" . org-capture))))
 #+end_src
 **** rustic
 #+name: rustic-mode-map
 #+begin_src emacs-lisp
-  (setq my/rustic-map (make-sparse-keymap))
+  (with-eval-after-load 'evil
+    (setq my/rustic-map (make-sparse-keymap)))
 #+end_src
 **** python
 #+name: python-map
 #+begin_src emacs-lisp
-  (setq my/python-map (make-sparse-keymap))
-  (with-eval-after-load 'python
-    (evil-define-key* '(normal visual) python-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map))
-    (evil-define-key* '(normal visual) python-ts-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map)))
+  (with-eval-after-load 'evil
+    (setq my/python-map (make-sparse-keymap))
+    (with-eval-after-load 'python
+      (evil-define-key* '(normal visual) python-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map))
+      (evil-define-key* '(normal visual) python-ts-mode-map (kbd "<leader>m") (cons "python-mode" my/python-map))))
 #+end_src
 **** haskell
 #+begin_src emacs-lisp
-  (setq my/haskell-map (make-sparse-keymap))
-  (with-eval-after-load 'haskell-mode
-    (evil-define-key* '(normal visual) haskell-mode-map (kbd "<leader>m") (cons "haskell-mode" my/haskell-map)))
+  (with-eval-after-load 'evil
+    (setq my/haskell-map (make-sparse-keymap))
+    (with-eval-after-load 'haskell-mode
+      (evil-define-key* '(normal visual) haskell-mode-map (kbd "<leader>m") (cons "haskell-mode" my/haskell-map))))
 #+end_src
 **** ocaml 
 #+begin_src emacs-lisp
-  (setq my/ocaml-map (make-sparse-keymap))
-  (with-eval-after-load 'tuareg
-    (evil-define-key* '(normal visual) tuareg-mode-map (kbd "<leader>m") (cons "ocaml" my/ocaml-map)))
+  (with-eval-after-load 'evil
+    (setq my/ocaml-map (make-sparse-keymap))
+    (with-eval-after-load 'tuareg
+      (evil-define-key* '(normal visual) tuareg-mode-map (kbd "<leader>m") (cons "ocaml" my/ocaml-map))))
 #+end_src
 **** zig
 #+begin_src emacs-lisp
-  (setq my/zig-map (make-sparse-keymap))
-  (with-eval-after-load 'zig-mode
-    (evil-define-key* '(normal visual) zig-mode-map (kbd "<leader>m") (cons "zig" my/zig-map)))
+  (with-eval-after-load 'evil
+    (setq my/zig-map (make-sparse-keymap))
+    (with-eval-after-load 'zig-mode
+      (evil-define-key* '(normal visual) zig-mode-map (kbd "<leader>m") (cons "zig" my/zig-map))))
 #+end_src
 **** go
 #+begin_src emacs-lisp
-  (setq my/golang-map (make-sparse-keymap))
-  (with-eval-after-load 'go-mode
-    (evil-define-key* '(normal visual) go-mode-map (kbd "<leader>m") (cons "golang" my/golang-map)))
+  (with-eval-after-load 'evil
+    (setq my/golang-map (make-sparse-keymap))
+    (with-eval-after-load 'go-mode
+      (evil-define-key* '(normal visual) go-mode-map (kbd "<leader>m") (cons "golang" my/golang-map))))
 #+end_src
 *** Open/org
 Misc quick commands, also for /org-mode/ ~<leader>o~.
 #+name: open
 #+begin_src emacs-lisp
-  (setq my/open-map (make-sparse-keymap))
-  (setq my/open-org (make-sparse-keymap))
-  (setq my/open-roam-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Open" my/open-map))
-  (evil-define-key* nil my/open-map (kbd "o") (cons "Org files" my/open-org))
-  (with-eval-after-load 'org-roam
-    (evil-define-key* nil my/open-map (kbd "r") (cons "Org Roam" my/open-roam-map)))
+  (with-eval-after-load 'evil 
+    (setq my/open-map (make-sparse-keymap))
+    (setq my/open-org (make-sparse-keymap))
+    (setq my/open-roam-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>o") (cons "Open" my/open-map))
+    (evil-define-key* nil my/open-map (kbd "o") (cons "Org files" my/open-org))
+    (with-eval-after-load 'org-roam
+      (evil-define-key* nil my/open-map (kbd "r") (cons "Org Roam" my/open-roam-map)))
 
-  (evil-define-key* nil my/open-map
-    "a" '("Org Agenda" . org-agenda)
-    "c" '("Org Capture" . org-capture)
-    "L" '("Store org link" . org-store-link)
-    "l" '("Avy open link" . link-hint-open-link))
-
-  (with-eval-after-load 'notmuch
     (evil-define-key* nil my/open-map
-      "m" '("mail" . notmuch)))
+      "a" '("Org Agenda" . org-agenda)
+      "c" '("Org Capture" . org-capture)
+      "L" '("Store org link" . org-store-link)
+      "l" '("Avy open link" . link-hint-open-link))
 
-  (evil-define-key* nil my/open-org
-    (kbd "n") '("Notes" . (lambda () (interactive) (find-file (expand-file-name "notes.org" +config/org-directory))))
-    (kbd "r") '("Routines" . (lambda () (interactive) (find-file (expand-file-name "routines.org" +config/org-directory))))
-    (kbd "p") '("Personal" . (lambda () (interactive) (find-file (expand-file-name "personal.org" +config/org-directory))))
-    (kbd "P") '("Projects" . (lambda () (interactive) (find-file (expand-file-name "projects.org" +config/org-directory))))
-    (kbd "R") '("Last refiled" . org-refile-goto-last-stored)
-    (kbd "C") '("Last Capture" . org-capture-goto-last-stored))
+    (with-eval-after-load 'notmuch
+      (evil-define-key* nil my/open-map
+        "m" '("mail" . notmuch)))
+
+    (evil-define-key* nil my/open-org
+      (kbd "n") '("Notes" . (lambda () (interactive) (find-file (expand-file-name "notes.org" +config/org-directory))))
+      (kbd "r") '("Routines" . (lambda () (interactive) (find-file (expand-file-name "routines.org" +config/org-directory))))
+      (kbd "p") '("Personal" . (lambda () (interactive) (find-file (expand-file-name "personal.org" +config/org-directory))))
+      (kbd "P") '("Projects" . (lambda () (interactive) (find-file (expand-file-name "projects.org" +config/org-directory))))
+      (kbd "R") '("Last refiled" . org-refile-goto-last-stored)
+      (kbd "C") '("Last Capture" . org-capture-goto-last-stored)))
 #+end_src
 *** Search
 Maybe the third most used keys, ~<leader>s~.
 #+name: search
 #+begin_src emacs-lisp
-  (setq my/search-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>s") (cons "Search" my/search-map))
+  (with-eval-after-load 'evil
+    (setq my/search-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>s") (cons "Search" my/search-map)))
 #+end_src
 *** Tab 
 #+name: Tab 
 #+begin_src emacs-lisp
-  (setq my/tab-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>t") (cons "Tab" my/tab-map))
+  (with-eval-after-load 'evil
+    (setq my/tab-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>t") (cons "Tab" my/tab-map)))
 #+end_src
 *** Terminal
 Sets to ~<leader>v~ since I mostly only use /vterm/.
 #+name: term
 #+begin_src emacs-lisp
-  (setq my/vterm-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>v") (cons "Vterm" my/vterm-map))
+  (with-eval-after-load 'evil
+    (setq my/vterm-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>v") (cons "Vterm" my/vterm-map)))
 #+end_src
 *** Window
 The second most used keybindings, I will try to use the default /vim/ keys.
 #+name: window
 #+begin_src emacs-lisp
-  (setq my/window-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>w") (cons "Window" my/window-map))
-  (evil-define-key* nil my/window-map
-    "C-o" '("delete other window" . delete-other-windows)
-    "[" '("left window" . evil-window-left)
-    "]" '("right window" . evil-window-right)
-    "=" '("enlarge window" . enlarge-window)
-    "-" '("shrink window" . shrink-window)
-    "}" '("enlarge horizontal" . enlarge-window-horizontally)
-    "{" '("shrink horizontal" . shrink-window-horizontally)
-    "+" '("increase height" . evil-window-increase-height)
-    "-" '("decrease height" . evil-window-decrease-height)
-    "<" '("decrease width" . evil-window-decrease-width)
-    ">" '("increase width" . evil-window-increase-width)
-    "b" '("bottom right" . evil-window-bottom-right)
-    "c" '("delete" . evil-window-delete)
-    "d" '("delete" . evil-window-delete)
-    "h" '("left window" . evil-window-left)
-    "f" '("find file other window" . ffap-other-window)
-    "j" '("down window" . evil-window-down)
-    "k" '("up window" . evil-window-up)
-    "l" '("window right" . evil-window-right)
-    "n" '("new window" . evil-window-new)
-    "o" '("delete other" . delete-other-windows)
-    "m" '("mru" . evil-window-mru)
-    "q" '("quit window" . evil-quit)
-    "r" '("rotate downward" . evil-window-rotate-downwards)
-    "R" '("rotate upward" . evil-window-rotate-upwards)
-    "s" '("split horizontally and follow" . +evil/window-split-and-follow)
-    "T" '("tear off window" . tear-off-window)
-    "t" '("top left window" . evil-window-top-left)
-    "u" '("undo" . winner-undo)
-    "v" '("split vertical and follow" . +evil/window-vsplit-and-follow)
-    "w" '("other window" . other-window)
-    "W" '("previous window" . evil-window-prev)
-    "x" '("exchange window" . evil-window-exchange)
-    "|" '("set width" . evil-window-set-width)
-    (kbd "<left>") '("left window" . evil-window-left)
-    (kbd "<right>") '("right window" . evil-window-right)
-    (kbd "<down>") '("down window" . evil-window-down)
-    (kbd "<up>") '("up window" . evil-window-up))
+  (with-eval-after-load 'evil
+    (setq my/window-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>w") (cons "Window" my/window-map))
+    (evil-define-key* nil my/window-map
+      "C-o" '("delete other window" . delete-other-windows)
+      "[" '("left window" . evil-window-left)
+      "]" '("right window" . evil-window-right)
+      "=" '("enlarge window" . enlarge-window)
+      "-" '("shrink window" . shrink-window)
+      "}" '("enlarge horizontal" . enlarge-window-horizontally)
+      "{" '("shrink horizontal" . shrink-window-horizontally)
+      "+" '("increase height" . evil-window-increase-height)
+      "-" '("decrease height" . evil-window-decrease-height)
+      "<" '("decrease width" . evil-window-decrease-width)
+      ">" '("increase width" . evil-window-increase-width)
+      "b" '("bottom right" . evil-window-bottom-right)
+      "c" '("delete" . evil-window-delete)
+      "d" '("delete" . evil-window-delete)
+      "h" '("left window" . evil-window-left)
+      "f" '("find file other window" . ffap-other-window)
+      "j" '("down window" . evil-window-down)
+      "k" '("up window" . evil-window-up)
+      "l" '("window right" . evil-window-right)
+      "n" '("new window" . evil-window-new)
+      "o" '("delete other" . delete-other-windows)
+      "m" '("mru" . evil-window-mru)
+      "q" '("quit window" . evil-quit)
+      "r" '("rotate downward" . evil-window-rotate-downwards)
+      "R" '("rotate upward" . evil-window-rotate-upwards)
+      "s" '("split horizontally and follow" . +evil/window-split-and-follow)
+      "T" '("tear off window" . tear-off-window)
+      "t" '("top left window" . evil-window-top-left)
+      "u" '("undo" . winner-undo)
+      "v" '("split vertical and follow" . +evil/window-vsplit-and-follow)
+      "w" '("other window" . other-window)
+      "W" '("previous window" . evil-window-prev)
+      "x" '("exchange window" . evil-window-exchange)
+      "|" '("set width" . evil-window-set-width)
+      (kbd "<left>") '("left window" . evil-window-left)
+      (kbd "<right>") '("right window" . evil-window-right)
+      (kbd "<down>") '("down window" . evil-window-down)
+      (kbd "<up>") '("up window" . evil-window-up)))
 #+end_src
 **** repeat-map
 #+begin_src emacs-lisp
@@ -1140,19 +1157,21 @@ The second most used keybindings, I will try to use the default /vim/ keys.
 Also used for reloading configuration (like /Doomemacs/) ~<leader>q~.
 #+name: quit
 #+begin_src emacs-lisp
-  (setq my/quit-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>q") (cons "Quit" my/quit-map))
-  (evil-define-key* nil my/quit-map
-    "R" '("restart Emacs" . restart-emacs)
-    "r" '("reload configuration" . (lambda () (interactive) (load user-init-file)))
-    "q" '("quit Emacs and save" . save-buffers-kill-terminal))
+  (with-eval-after-load 'evil
+    (setq my/quit-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>q") (cons "Quit" my/quit-map))
+    (evil-define-key* nil my/quit-map
+      "R" '("restart Emacs" . restart-emacs)
+      "r" '("reload configuration" . (lambda () (interactive) (load user-init-file)))
+      "q" '("quit Emacs and save" . save-buffers-kill-terminal)))
 #+end_src
 *** Z keys
 This is for other /evil/ packages that need its own keybinding, and tbf, there's already a lot of them in the ~g~ and ~z~ keys.
 #+name: Z keys
 #+begin_src emacs-lisp
-  (setq my/z-map (make-sparse-keymap))
-  (evil-define-key* '(normal visual) 'global (kbd "<leader>z") (cons "Z" my/z-map))
+  (with-eval-after-load 'evil
+    (setq my/z-map (make-sparse-keymap))
+    (evil-define-key* '(normal visual) 'global (kbd "<leader>z") (cons "Z" my/z-map)))
 #+end_src
 *** Non-leader keys
 These keybindings is mostly package-specifics.
@@ -1764,8 +1783,9 @@ I use this theme when I'm not using any external theme.
     (custom-set-faces
      '(aw-leading-char-face
        ((t (:inherit ace-jump-face-foreground :height 4.0)))))
-    (evil-define-key* nil my/window-map
-      "S" '("swap window" . ace-swap-window))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/window-map
+        "S" '("swap window" . ace-swap-window)))
     :bind ([remap other-window] . ace-window))
 #+end_src
 Setting =aw-scope= to =frame= so it doesn't select other frames.
@@ -2064,7 +2084,8 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     :config
     (setq comint-prompt-read-only t
           comint-buffer-maximum-size 2048)
-    (evil-define-key* '(normal visual) comint-mode-map "q" '(lambda () (interactive) (kill-buffer nil))))
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual) comint-mode-map "q" '(lambda () (interactive) (kill-buffer nil)))))
 #+end_src
 *** winner :builtin:
 #+begin_src emacs-lisp
@@ -3042,7 +3063,8 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
       (evil-collection-embark-setup))
     (setq which-key-use-C-h-commands nil
           prefix-help-command #'embark-prefix-help-command)
-    (evil-define-key* '(normal visual insert) 'global (kbd "C-.") 'embark-act)
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual insert) 'global (kbd "C-.") 'embark-act))
 
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
@@ -3152,19 +3174,20 @@ Enchanted Spell Checker. Here I use /hunspell/ as a backend dictionary
 This is provided by yasnippet.
 #+name: snippets
 #+begin_src emacs-lisp
-    (use-package yasnippet
-      :ensure t
-      :init
-      (yas-global-mode)
-      :config
-      (setq yas-snippets-dir
-            (list (expand-file-name "snippets" user-emacs-directory)
-                  (expand-file-name "straight/build/yasnippet-snippets/snippets" user-emacs-directory)))
-      (evil-define-key* nil my/insert-map "s" '("insert snippet" . consult-yasnippet)))
+  (use-package yasnippet
+    :ensure t
+    :init
+    (yas-global-mode)
+    :config
+    (setq yas-snippets-dir
+          (list (expand-file-name "snippets" user-emacs-directory)
+                (expand-file-name "straight/build/yasnippet-snippets/snippets" user-emacs-directory)))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/insert-map "s" '("insert snippet" . consult-yasnippet))))
 
-    (use-package consult-yasnippet :ensure t)
+  (use-package consult-yasnippet :ensure t)
 
-    (use-package yasnippet-snippets :ensure t)
+  (use-package yasnippet-snippets :ensure t)
 #+end_src
 **** yasnippet-capf
 #+begin_src emacs-lisp
@@ -3326,10 +3349,11 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :after vterm
     :ensure t
     :config
-    (evil-define-key* nil my/vterm-map "v" '("toggle terminal" . multi-vterm-dedicated-toggle))
-    (evil-define-key* 'normal vterm-mode-map (kbd ",c") #'multi-vterm)
-    (evil-define-key* 'normal vterm-mode-map (kbd ",n") #'multi-vterm-next)
-    (evil-define-key* 'normal vterm-mode-map (kbd ",p") #'multi-vterm-prev))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/vterm-map "v" '("toggle terminal" . multi-vterm-dedicated-toggle))
+      (evil-define-key* 'normal vterm-mode-map (kbd ",c") #'multi-vterm)
+      (evil-define-key* 'normal vterm-mode-map (kbd ",n") #'multi-vterm-next)
+      (evil-define-key* 'normal vterm-mode-map (kbd ",p") #'multi-vterm-prev)))
 #+end_src
 *** vterm-toggle :external:noexport:disabled:archive:
 #+name: vterm-toggle
@@ -3660,9 +3684,10 @@ The keybinding I got from the [[https://github.com/Fuco1/.emacs.d/blob/master/fi
       (evil-collection-magit-repos-setup)
       (evil-collection-magit-section-setup)
       (evil-collection-magit-setup))
-    (evil-set-initial-state #'git-commit-mode 'insert)
-    (evil-define-key* nil my/git-map
-      "g" '("git status" . magit-status))
+    (with-eval-after-load 'evil
+      (evil-set-initial-state #'git-commit-mode 'insert)
+      (evil-define-key* nil my/git-map
+        "g" '("git status" . magit-status)))
     :custom
     (magit-revision-show-gravatars '("^Author:     " . "^Commit:     "))
     (magit-diff-refine-hunk 'all)
@@ -3710,8 +3735,9 @@ A project interaction library for /Emacs/, with little external dependency as po
     (global-set-key [remap find-tag]         #'projectile-find-tag)
     (projectile-mode +1)
     (put 'projectile-git-submodule-command 'initial-value projectile-git-submodule-command)
-    (evil-define-key* '(normal visual) 'global (kbd "<leader>SPC") '("find project file" . projectile-find-file))
-    (evil-define-key* '(normal visual) 'global (kbd "<leader>p") (cons "Project" projectile-command-map)))
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual) 'global (kbd "<leader>SPC") '("find project file" . projectile-find-file))
+      (evil-define-key* '(normal visual) 'global (kbd "<leader>p") (cons "Project" projectile-command-map))))
 #+end_src
 
 *** diff-hl :external:
@@ -3738,12 +3764,13 @@ A project interaction library for /Emacs/, with little external dependency as po
     :config
     (when (featurep 'flycheck)
       (setq flycheck-indication-mode 'right-fringe))
-    (evil-define-key* '(normal visual) 'global
-      "z*" '("show hunk" . diff-hl-show-hunk)
-      "z[" '("prev hunk" . diff-hl-previous-hunk)
-      "z]" '("next hunk" . diff-hl-next-hunk)
-      "z{" '("go and show prev hunk" . diff-hl-show-hunk-previous)
-      "z}" '("go and show next hunk" . diff-hl-show-hunk-next)))
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual) 'global
+        "z*" '("show hunk" . diff-hl-show-hunk)
+        "z[" '("prev hunk" . diff-hl-previous-hunk)
+        "z]" '("next hunk" . diff-hl-next-hunk)
+        "z{" '("go and show prev hunk" . diff-hl-show-hunk-previous)
+        "z}" '("go and show next hunk" . diff-hl-show-hunk-next))))
 #+end_src
 *** perspective :external:
 Useful when I'm working on several /projectile/ projects at once. With each /perspective/ having their own separate buffer list.
@@ -3771,15 +3798,16 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
                 :default  t
                 :items
                 #'(lambda () (consult--buffer-query :sort 'visibility
-                                                    :predicate '(lambda (buf) (persp-is-current-buffer buf t))
-                                                    :as #'buffer-name)))))
+                                               :predicate '(lambda (buf) (persp-is-current-buffer buf t))
+                                               :as #'buffer-name)))))
       (consult-customize consult--source-buffer :hidden t :default nil)
       (add-to-list 'consult-buffer-sources persp-consult-source))
-    (evil-define-key* '(normal visual) 'global
-      (kbd "<leader>TAB") (cons "Perspective" perspective-map))
-    (evil-define-key* nil perspective-map
-      (kbd "TAB") '("swich to last used perspective" . persp-switch-last)
-      "P" '("switch project" . projectile-persp-switch-project))
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual) 'global
+        (kbd "<leader>TAB") (cons "Perspective" perspective-map))
+      (evil-define-key* nil perspective-map
+        (kbd "TAB") '("swich to last used perspective" . persp-switch-last)
+        "P" '("switch project" . projectile-persp-switch-project)))
     :init
     (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
     (unless (equal persp-mode t)
@@ -4162,14 +4190,15 @@ This package looks promising, I'll wait until it mature a bit.
     (setq flycheck-buffer-switch-check-intermediate-buffers t)
     ;; Display errors a little quicker (default is 0.9s)
     (setq flycheck-display-errors-delay 0.25)
-    (evil-define-key* '(normal visual) 'global (kbd "<leader>!") (cons "Flycheck" flycheck-command-map))
-    (evil-define-key* '(normal visual) flycheck-error-list-mode-map
-      "C-n" 'flycheck-error-list-next-error
-      "C-p" 'flycheck-error-list-previous-error
-      "j" 'flycheck-error-list-next-error
-      "k" 'flycheck-error-list-previous-error
-      "RET" 'flycheck-error-list-goto-error
-      "[return]" 'flycheck-error-list-goto-error))
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual) 'global (kbd "<leader>!") (cons "Flycheck" flycheck-command-map))
+      (evil-define-key* '(normal visual) flycheck-error-list-mode-map
+        "C-n" 'flycheck-error-list-next-error
+        "C-p" 'flycheck-error-list-previous-error
+        "j" 'flycheck-error-list-next-error
+        "k" 'flycheck-error-list-previous-error
+        "RET" 'flycheck-error-list-goto-error
+        "[return]" 'flycheck-error-list-goto-error)))
 #+end_src
 **** [[https://github.com/flycheck/flycheck-color-mode-line][flycheck-color-mode-line]] :external:
 #+begin_src emacs-lisp :tangle no
@@ -4204,7 +4233,8 @@ This package looks promising, I'll wait until it mature a bit.
   (use-package consult-flycheck
     :after (consult flycheck)
     :config
-    (evil-define-key* nil my/search-map "F" '("Flycheck" . consult-flycheck)))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/search-map "F" '("Flycheck" . consult-flycheck))))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
@@ -4514,9 +4544,9 @@ This package looks promising, I'll wait until it mature a bit.
                           ("TODO" "NEXT" "IDEA" "PROG")
                           nil ""))
     :config
-    (evil-define-key 'normal org-agenda-mode-map "q" 'org-agenda-quit)
     (with-eval-after-load 'evil
-      (evil-set-initial-state #'org-agenda-mode 'normal))
+      (evil-set-initial-state #'org-agenda-mode 'normal)
+      (evil-define-key 'normal org-agenda-mode-map "q" 'org-agenda-quit))
     (setq org-agenda-custom-commands
           `(("w" "Work Agenda and all TODOs"
              ((agenda ""
@@ -4778,20 +4808,21 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
         :unnarrowed t)))
     (org-roam-capture-ref-templates
      '(("r" "ref" plain "#+author: %n\n#+date: %t\n#+description: \n#+hugo_base_dir: ..\n#+hugo_section: posts\n#+hugo_categories: reference\n#+property: header-args :exports both\n#+hugo_tags: \n%?\n* Links\n- %l" :target (file+head "${slug}.org" "#+title: ${title}")
-    :unnarrowed t)))
+        :unnarrowed t)))
     :config
     (org-roam-setup)
     (org-roam-db-autosync-mode)
     (require 'org-roam-protocol)
     (with-eval-after-load 'evil-collection
       (evil-collection-org-roam-setup))
-    (evil-define-key* nil my/open-roam-map
-      "a" '("add alias" . org-roam-alias-add)
-      "c" '("roam capture" . org-roam-capture)
-      "f" '("find roam node" . org-roam-node-find)
-      "i" '("insert roam node at point" . org-roam-node-insert)
-      "l" '("toggle roam buffer" . org-roam-buffer-toggle)
-      "r" '("remove alias" . org-roam-alias-remove)))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/open-roam-map
+        "a" '("add alias" . org-roam-alias-add)
+        "c" '("roam capture" . org-roam-capture)
+        "f" '("find roam node" . org-roam-node-find)
+        "i" '("insert roam node at point" . org-roam-node-insert)
+        "l" '("toggle roam buffer" . org-roam-buffer-toggle)
+        "r" '("remove alias" . org-roam-alias-remove))))
 #+end_src
 To be fair, this package is very powerful, but for me, at least, not all its feature is needed. I'll try to start simple, and make additional configuration as needed.
 **** org-roam-protocol
@@ -4943,7 +4974,8 @@ An Emacs web feeds client.
     :config
     (with-eval-after-load 'evil-collection
       (evil-collection-elfeed-setup))
-    (evil-define-key* nil my/open-map "e" '("open elfeed" . elfeed)))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/open-map "e" '("open elfeed" . elfeed))))
 #+end_src
 **** extensions
 ***** [[https://github.com/remyhonig/elfeed-org][elfeed-org]]
@@ -5090,7 +5122,8 @@ Emacs package integrating [[https://github.com/lucc/khard?tab=readme-ov-file][kh
     :ensure t
     :if (executable-find "khard")
     :config
-    (evil-define-key* nil my/insert-map "e" '("insert email" . khardel-insert-email)))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/insert-map "e" '("insert email" . khardel-insert-email))))
 #+end_src
 **** khard configuration
 This is taken from the [[https://github.com/lucc/khard/blob/main/doc/source/examples/khard.conf.example][example configuration]]. Should be placed in ~~/.config/khard/khard.conf~
@@ -5164,17 +5197,18 @@ All the paths should reflect the configuration on =vdirsyncer=. See the [[https:
     :if (executable-find "fzf")
     :ensure t
     :config
-    (setq my/fzf-map (make-sparse-keymap))
-    (evil-define-key* nil my/file-map (kbd "z") (cons "fzf" my/fzf-map))
-    (evil-define-key* nil my/fzf-map
-      "b" '("fzf find in buffer" . fzf-find-in-buffer)
-      "f" '("fzf" . fzf-find-file)
-      "d" '("fzf dir" . fzf-directory)
-      "r" '("fzf recentf" . fzf-recentf))
-    (evil-define-key* nil my/search-map "z" '("fzf-grep" . fzf-grep))
-    (evil-define-key* nil my/buffer-map "z" '("fzf switch buffer" . fzf-switch-buffer))
-    (with-eval-after-load 'projectile
-      (evil-define-key* nil projectile-command-map "z" '("fzf projectile" . fzf-projectile)))
+    (with-eval-after-load 'evil
+      (setq my/fzf-map (make-sparse-keymap))
+      (evil-define-key* nil my/file-map (kbd "z") (cons "fzf" my/fzf-map))
+      (evil-define-key* nil my/fzf-map
+        "b" '("fzf find in buffer" . fzf-find-in-buffer)
+        "f" '("fzf" . fzf-find-file)
+        "d" '("fzf dir" . fzf-directory)
+        "r" '("fzf recentf" . fzf-recentf))
+      (evil-define-key* nil my/search-map "z" '("fzf-grep" . fzf-grep))
+      (evil-define-key* nil my/buffer-map "z" '("fzf switch buffer" . fzf-switch-buffer))
+      (with-eval-after-load 'projectile
+        (evil-define-key* nil projectile-command-map "z" '("fzf projectile" . fzf-projectile))))
     (setq fzf/args "-x --color dark --print-query --margin=1,0 --no-hscroll"
           fzf/executable "fzf"
           fzf/git-grep-args "-i --line-number %s"
@@ -5402,7 +5436,7 @@ Needs an external package =fd=, or =fd-find=
           treemacs-position 'left
           treemacs-read-string-input 'from-child-frame
           treemacs-recenter-distance 0.1
-          treemacs-recenter-after-file-follow nil
+          
           treemacs-recenter-after-tag-follow nil
           treemacs-recenter-after-project-jump 'always
           treemacs-recenter-after-project-expand 'on-distance
@@ -5445,9 +5479,10 @@ Needs an external package =fd=, or =fd-find=
           ("C-x t C-t" . treemacs-find-file)
           ("C-x t M-t" . treemacs-find-tag))
     :config
-    (evil-define-key* nil my/tree-map "e" '("treemacs" . treemacs))
-    (evil-define-key nil treemacs-mode-map
-      "[mouse-1]" 'treemacs-single-click-expand-action))
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/tree-map "e" '("treemacs" . treemacs))
+      (evil-define-key nil treemacs-mode-map
+        "[mouse-1]" 'treemacs-single-click-expand-action)))
 #+end_src
 *** treemacs-projectile :external:
 #+name: treemacs-projectile
@@ -5478,7 +5513,7 @@ Needs an external package =fd=, or =fd-find=
     :ensure t
     :after treemacs evil)
 #+end_src
-*** lsp-treemacs :external:
+*** lsp-treemacs :external:archive:noexport:
 #+caption: symbols in /lsp-treemacs/
 [[./assets/img/emacs-lsp-treemacs-symbol.png][file:assets/img/emacs-lsp-treemacs-symbol.png]]
 #+name: lsp-treemacs
@@ -7371,7 +7406,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
       (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode 1)))
       )
     (with-eval-after-load 'org-src
-      (defalias 'org-babel-execute:rust #'org-babel-execute:rustic)
+      
       (add-to-list 'org-src-lang-modes '("rust" . rustic)))
     :config
     ;; (add-hook 'rustic-cargo-run-mode-hook (lambda ()
@@ -7394,28 +7429,30 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     (setq rustic-babel-format-src-block nil
           rustic-format-trigger nil)
     (setq my/cargo-map (make-sparse-keymap))
-    (evil-define-key* '(normal visual) rustic-mode-map (kbd "<leader>m") (cons "rustic-mode" my/rustic-map))
-    (evil-define-key* nil my/rustic-map (kbd "c") (cons "Cargo" my/cargo-map))
-    (evil-define-key* nil my/cargo-map
-      "a" '("cargo add" . rustic-cargo-add)
-      "B" '("cargo build" . rustic-cargo-build)
-      "b" '("cargo bench" . rustic-cargo-bench)
-      "c" '("cargo check" . rustic-cargo-check)
-      "C" '("cargo clippy" . rustic-cargo-clippy)
-      "F" '("cargo fix" . rustic-rustfix)
-      "f" '("cargo format workspace" . rustic-cargo-fmt)
-      "i" '("cargo initialize" . rustic-cargo-init)
-      "o" '("cargo outdated" . rustic-cargo-outdated)
-      "t" '("cargo test" . rustic-cargo-test)
-      "r" '("cargo run" . rustic-cargo-run))
-    (with-eval-after-load 'consult
-      (evil-define-key* nil my/rustic-map
-        "m" '("consult flymake" . consult-flymake)))
-    (with-eval-after-load 'eglot
-      (evil-define-key* nil my/rustic-map
-        "a" '("eglot code action" . eglot-code-actions)
-        "I" '("eglot organize Import" . eglot-code-action-organize-imports)
-        "r" '("eglot rename" . eglot-rename))))
+
+    (with-eval-after-load 'evil
+      (evil-define-key* '(normal visual) rustic-mode-map (kbd "<leader>m") (cons "rustic-mode" my/rustic-map))
+      (evil-define-key* nil my/rustic-map (kbd "c") (cons "Cargo" my/cargo-map))
+      (evil-define-key* nil my/cargo-map
+        "a" '("cargo add" . rustic-cargo-add)
+        "B" '("cargo build" . rustic-cargo-build)
+        "b" '("cargo bench" . rustic-cargo-bench)
+        "c" '("cargo check" . rustic-cargo-check)
+        "C" '("cargo clippy" . rustic-cargo-clippy)
+        "F" '("cargo fix" . rustic-rustfix)
+        "f" '("cargo format workspace" . rustic-cargo-fmt)
+        "i" '("cargo initialize" . rustic-cargo-init)
+        "o" '("cargo outdated" . rustic-cargo-outdated)
+        "t" '("cargo test" . rustic-cargo-test)
+        "r" '("cargo run" . rustic-cargo-run))
+      (with-eval-after-load 'consult
+        (evil-define-key* nil my/rustic-map
+          "m" '("consult flymake" . consult-flymake)))
+      (with-eval-after-load 'eglot
+        (evil-define-key* nil my/rustic-map
+          "a" '("eglot code action" . eglot-code-actions)
+          "I" '("eglot organize Import" . eglot-code-action-organize-imports)
+          "r" '("eglot rename" . eglot-rename)))))
 #+end_src
 **** flycheck-rust :external:archive:noexport:
 #+name: flycheck-rust
@@ -7578,11 +7615,12 @@ Lsp-java requires jdt-language-server, this package should automatically install
   (use-package zig-mode
     :ensure t
     :config
-    (with-eval-after-load 'eglot
-      (add-hook 'zig-mode-hook #'eglot-ensure)
+    (with-eval-after-load 'evil
       (evil-define-key* nil my/zig-map
         "a" '("code-action" . eglot-code-actions)
         "R" '("rename" . eglot-rename)))
+    (with-eval-after-load 'eglot
+      (add-hook 'zig-mode-hook #'eglot-ensure))
     (if (>= emacs-major-version 28)
         (add-hook 'compilation-filter-hook 'ansi-color-compilation-filter)))
 #+end_src
@@ -7592,10 +7630,11 @@ Lsp-java requires jdt-language-server, this package should automatically install
   (use-package go-mode
     :ensure t
     :config
-    (with-eval-after-load 'eglot
-      (add-hook 'go-mode-hook #'eglot-ensure))
-    (evil-define-key* nil my/golang-map
+    (with-eval-after-load 'evil
+      (evil-define-key* nil my/golang-map
       "a" '("code action" . eglot-code-actions)))
+    (with-eval-after-load 'eglot
+      (add-hook 'go-mode-hook #'eglot-ensure)))
 
   (use-package flymake-go
     :ensure t)
