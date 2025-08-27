@@ -2934,6 +2934,8 @@ This is the basic configuration, with the addition of enabling corfu in the mini
       (evil-define-key* '(normal visual) 'global
         (kbd "<leader>.") '("Store register" . consult-register-store)
         (kbd "<leader> C-.") '("Load register" . consult-register-load))
+      (evil-define-key* nil my/file-map
+        "r" '("recent files" . consult-recent-file))
       (evil-define-key* nil my/buffer-map
         "b" '("buffers" . consult-buffer)
         "B" '("project buffers" . consult-project-buffer))
