@@ -1076,26 +1076,6 @@ The second most used keybindings, I will try to use the default /vim/ keys.
 **** repeat-map
 #+begin_src emacs-lisp
   (with-eval-after-load 'evil
-    (defvar my/window-map-repeat-map
-      (let ((map (make-sparse-keymap)))
-        (define-key map "h" #'evil-window-left)
-        (define-key map "l" #'evil-window-right)
-        (define-key map "j" #'evil-window-down)
-        (define-key map "k" #'evil-window-up)
-        (define-key map (kbd "<left>") #'evil-window-left)
-        (define-key map (kbd "<up>") #'evil-window-up)
-        (define-key map (kbd "<right>") #'evil-window-right)
-        (define-key map (kbd "<down>") #'evil-window-down)
-        map)
-      "Keymap for my/window-map repeat")
-    (put 'evil-window-down 'repeat-map 'my/window-map-repeat-map)
-    (put 'evil-window-up 'repeat-map 'my/window-map-repeat-map)
-    (put 'evil-window-right 'repeat-map 'my/window-map-repeat-map)
-    (put 'evil-window-left 'repeat-map 'my/window-map-repeat-map)
-    (put 'evil-window-rotate-upwards 'repeat-map 'my/window-map-repeat-map)
-    (put 'evil-window-rotate-downwards 'repeat-map 'my/window-map-repeat-map))
-
-  (with-eval-after-load 'evil
     (defvar my/window-split-repeat-map
       (let ((map (make-sparse-keymap)))
         (define-key map "s" #'+evil/window-split-and-follow)
