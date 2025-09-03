@@ -2579,6 +2579,7 @@ This is part of /corfu/ configuration.
     (tab-bar-separator " ")
     (tab-bar-format '(tab-bar-format-history tab-bar-format-tabs tab-bar-separator
                           tab-bar-format-add-tab))
+    (tab-bar-new-tab-choice "*dashboard*")
     :config
     (custom-set-faces
     '(tab-bar
