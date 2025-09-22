@@ -56,3 +56,8 @@ vimish-fold/
 org-persist/
 codeium/
 projects
+bookmarks
+emojis/
+minimal-emacs/
+minimal-init.el
+mastodon.*
