@@ -2891,7 +2891,7 @@ There's lot of keybindings
     :config
     (with-eval-after-load 'evil-collection
       (evil-collection-python-setup))
-    (when (featurep 'eglot)
+    (with-eval-after-load 'eglot
       (add-hook 'python-mode-hook #'eglot-ensure)
       (add-hook 'python-ts-mode-hook #'eglot-ensure)
       (add-to-list 'eglot-server-programs
