@@ -2879,6 +2879,11 @@ There's lot of keybindings
   	(add-hook 'js-ts-mode-hook #'eglot-ensure)
   	(add-hook 'typescript-ts-mode-hook #'eglot-ensure)))
 #+end_src
+**** rjsx :external:
+#+begin_src emacs-lisp
+  (use-package rjsx-mode
+    :ensure t)
+#+end_src
 *** kdl-mode :external:
 #+begin_src emacs-lisp
   (use-package kdl-mode
