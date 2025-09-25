@@ -1620,7 +1620,8 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 #+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package eglot
     :hook ((rust-mode nix-mode python-mode
-  				  toml-mode markdown-mode) . eglot-ensure)
+  					toml-mode markdown-mode
+  					js-mode js-ts-mode typescript-ts-mode) . eglot-ensure)
     :init
     (setopt eglot-sync-connect 1
   		  eglot-autoshutdown t)
@@ -1634,7 +1635,11 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
                                 ( :procMacro (:enable t)
                                   :cargo ( :buildScripts (:enable t)
                                            :features "all"))))
-                 '(toml-ts-mode . ("taplo" "lsp" "stdio"))))
+                 '(toml-ts-mode . ("taplo" "lsp" "stdio")))
+    (add-to-list 'eglot-server-programs
+  			   '(web-mode . ("vscode-html-language-server" "--stdio")))
+    (add-to-list 'eglot-server-programs
+  			   '(css-mode . ("vscode-css-language-server" "--stdio"))))
 #+end_src
 *** consult-eglot :external:
 #+begin_src emacs-lisp
@@ -2843,6 +2848,37 @@ There's lot of keybindings
 :PROPERTIES:
 :header-args: :tangle ./modules/config-progmodes.el :mkdirp t
 :END:
+*** javascript :builtin:
+#+begin_src emacs-lisp
+  (use-package js
+    :ensure nil
+    :mode ("\\.[mc]?js\\'" . js-mode)
+    :mode ("\\.es6\\'" . js-mode)
+    :mode ("\\.pac\\'" . js-mode)
+    :config
+    (with-eval-after-load 'eglot
+  	(add-hook 'js-mode-hook #'eglot-ensure)
+  	(add-hook 'js-ts-mode-hook #'eglot-ensure))
+    (with-eval-after-load 'smartparens
+  	(sp-local-pair 'js-mode "<" nil :actions :rem)
+  	(sp-local-pair 'js-ts-mode "<" nil :actions :rem))
+    (setopt js-chain-indent t))
+#+end_src
+**** nodejs-repl :external:
+#+begin_src emacs-lisp
+  (use-package nodejs-repl
+    :ensure t)
+#+end_src
+**** typescript-mode :external:
+#+begin_src emacs-lisp
+  (use-package typescript-mode
+    :ensure t
+    :interpreter "ts-node"
+    :config
+    (with-eval-after-load 'eglot
+  	(add-hook 'js-ts-mode-hook #'eglot-ensure)
+  	(add-hook 'typescript-ts-mode-hook #'eglot-ensure)))
+#+end_src
 *** kdl-mode :external:
 #+begin_src emacs-lisp
   (use-package kdl-mode
@@ -3138,14 +3174,6 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
     (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
     (rustic-cargo-use-last-stored-arguments t))
 #+end_src
-*** scss-mode
-#+begin_src emacs-lisp
-  (use-package scss-mode
-    :ensure t
-    :init
-    (with-eval-after-load 'flymake
-  	(require 'flymake-proc nil t)))
-#+end_src
 *** toml-mode :external:
 #+name: toml-mode
 #+begin_src emacs-lisp
@@ -3166,6 +3194,87 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
       (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml"))))
 #+end_src
 Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install taplo-cli --features lsp=.
+*** web-mode
+**** emmet :external:
+#+begin_src emacs-lisp
+  (use-package emmet-mode
+    :ensure t
+    :hook (sgml-mode css-mode html-mode web-mode haml-mode nxml-mode rjsx-mode reason-mode)
+    :config
+    (setopt emmet-move-cursor-between-quotes t
+  		  emmet-self-closing-tag-style " /")
+    (when (require 'yasnippet nil t)
+  	(add-hook 'emmet-mode-hook #'yas-minor-mode-on))
+    (with-eval-after-load 'evil
+  	(evil-define-key 'visual emmet-mode-keymap
+  	  (kbd "<tab>") 'emmet-wrap-with-markup)
+  	(evil-define-key '(normal insert emacs) emmet-mode-keymap
+  	  (kbd "<tab>") 'emmet-expand-line)))
+#+end_src
+**** web-mode :external:
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode "\\.[px]?html?\\'"
+    :mode "\\.\\(?:tpl\\|blade\\)\\(?:\\.php\\)?\\'"
+    :mode "\\.erb\\'"
+    :mode "\\.[lh]?eex\\'"
+    :mode "\\.jsp\\'"
+    :mode "\\.as[cp]x\\'"
+    :mode "\\.ejs\\'"
+    :mode "\\.hbs\\'"
+    :mode "\\.mustache\\'"
+    :mode "\\.svelte\\'"
+    :mode "\\.twig\\'"
+    :mode "\\.jinja2?\\'"
+    :mode "\\.eco\\'"
+    :mode "wp-content/themes/.+/.+\\.php\\'"
+    :mode "templates/.+\\.php\\'"
+    :init
+    (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode) 'append)
+    :mode "\\.vue\\'"
+    :hook (web-mode . eglot-ensure)
+    :config
+    (setopt web-mode-enable-html-entities-fontification t
+  		  web-mode-auto-close-style 1)
+    (with-eval-after-load 'smartparens
+  	(defun +web-is-auto-close-style-3 (_id action _context)
+  	  (and (eq action 'insert)
+  		   (eq web-mode-auto-close-style 3)))
+  	(sp-local-pair 'web-mode "<" ">" :unless '(:add +web-is-auto-close-style-3))
+  	(setopt web-mode-enable-auto-quoting nil
+  			web-mode-enable-auto-pairing t)
+  	(dolist (alist web-mode-engines-auto-pairs)
+  	  (setcdr alist
+  			  (cl-loop for pair in (cdr alist)
+  					   unless (string-match-p "^[a-z-]" (cdr pair))
+  					   collect (cons (car pair)
+  									 (string-trim-right (cdr pair)
+  														"\\(?:>\\|]\\|}\\)+\\'")))))
+  	(cl-callf2 delq nil web-mode-engines-auto-pairs))
+    (add-to-list 'web-mode-engines-alist '("elixir" . "\\.eex\\'"))
+    (add-to-list 'web-mode-engines-alist '("phoenix" . "\\.[lh]eex\\'"))
+    (setf (alist-get "javascript" web-mode-comment-formats nil nil #'equal)
+  		"//"))
+#+end_src
+**** css-mode :builtin:
+#+begin_src emacs-lisp
+  (use-package css-mode
+    :ensure nil
+    :hook (css-mode . rainbow-mode)
+    :hook (css-mode . eglot-ensure))
+#+end_src
+**** scss-mode :external:
+#+begin_src emacs-lisp
+  (use-package scss-mode
+    :ensure t
+    :mode "\\.scss\\'"
+    :hook (scss-mode . rainbow-mode)
+    :hook (scss-mode . eglot-ensure)
+    :init
+    (with-eval-after-load 'flymake
+  	(require 'flymake-proc nil t)))
+#+end_src
 *** yaml-mode :external:
 #+name: yaml-mode
 #+begin_src emacs-lisp
