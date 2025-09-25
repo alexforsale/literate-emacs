@@ -675,7 +675,10 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
   (with-eval-after-load 'evil
     (evil-global-set-key 'normal (kbd "<leader>:") '("execute commands" . execute-extended-command))
     (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
-    (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument)))
+    (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument))
+    (when (featurep 'emms)
+  	(evil-global-set-key 'normal (kbd "<leader>>") '("emms next" . emms-next))
+  	(evil-global-set-key 'normal (kbd "<leader>>") '("emms previous" . emms-previous))))
 #+end_src
 *** C
 For now it's reserved only for =org-capture=.
@@ -2704,6 +2707,77 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
   		  mastodon-active-user "alexforsale"))
 #+end_src
 There's lot of keybindings
+*** emms :external:
+Autoload these functions.
+#+begin_src emacs-lisp
+  ;;;###autoload
+  (defun +emms/notification ()
+  (interactive)
+  (let ((artist (string-trim (shell-command-to-string "playerctl -p mpd metadata xesam:artist")))
+  	(album (string-trim (shell-command-to-string "playerctl -p mpd metadata xesam:album")))
+  	(cover (string-trim (shell-command-to-string "playerctl -p mpd metadata mpris:artUrl")))
+  	(title (string-trim (shell-command-to-string "playerctl -p mpd metadata --format '{{title}}'"))))
+  (call-process "notify-send" nil nil nil
+  			  "-a" "emms" "-t" "2600"
+  			  "-r" "27073"
+  			  (format "%s" title)
+  			  (format "<span color='#fdf6e3'>%s </span>\n<span color='#268bd2'>%s</span>" artist album)
+  			  "-i" cover)))
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package emms
+    :ensure t
+    :config
+    (require 'emms-setup)
+    (require 'emms-player-mpd)
+    (emms-all)
+    (setopt emms-player-mpd-music-directory (expand-file-name "Music" (getenv "HOME")))
+    (setopt emms-player-list '(emms-player-mpd))
+    (setopt emms-info-functions 'emms-info-mpd)
+    (add-hook 'emms-player-started-hook #'+emms/notification nil)
+    (emms-default-players)
+    (emms-cache-set-from-mpd-all)
+    (emms-player-mpd-connect)
+    ;(emms-mpris-enable)
+    (with-eval-after-load 'evil
+  	(evil-collection-emms-setup))
+
+    ;; keybindings
+    (with-eval-after-load 'evil
+  	(setopt my/emms-map (make-sparse-keymap))
+  	(evil-define-key nil my/open-map
+  	  (kbd "E") (cons "EMMS" my/emms-map))
+  	(evil-define-key* nil my/emms-map
+  	  "e" '("emms" . emms))
+  	)
+
+    ;; from `doom'
+    (defun +emms/mpd-start-music-daemon ()
+  	(interactive)
+  	(start-process "mpd" nil "mpd")
+  	(+emms/mpc-update-database)
+  	(emms-player-mpd-connect)
+  	(emms-cache-set-from-mpd-all)
+  	(message "MPD Started!"))
+
+    (defun +emms/mpd-kill-music-daemon ()
+  	(interactive)
+  	(emms-stop)
+  	(call-process "mpd" nil nil nil "--kill")
+  	(message "MPD Killed!"))
+    
+    (defun +emms/mpc-update-database ()
+  	(interactive)
+  	(call-process "mpc" nil nil nil "update")
+  	(message "MPD Database Updated!"))
+
+    (defun +emms/mpd-restart-music-daemon ()
+  	(interactive)
+  	(+emms/mpd-kill-music-daemon)
+  	(+emms/mpd-start-music-daemon)
+  	(message "MPD Restarted!")))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-tools)
