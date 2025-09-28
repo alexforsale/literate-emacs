@@ -1695,6 +1695,7 @@ Built-in on-the-fly syntax checking.
 I still have mixed feelings about AI, but I do want to explore, just don't use it from the start
 #+begin_src emacs-lisp
   (use-package copilot
+    :hook (prog-mode . copilot-mode)
     :load-path "site-lisp/copilot"
     :bind	(:map copilot-mode-map
               ("<tab>" . 'copilot-accept-completion)
