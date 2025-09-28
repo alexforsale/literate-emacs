@@ -1397,12 +1397,31 @@ By using ~gK~ or ~gJ~ in normal or visual mode.
     :config
     (setq rainbow-delimiters-max-face-count 4))
 #+end_src
-*** nord-theme :external:
+*** doom-themes :external:
 #+begin_src emacs-lisp
-  (use-package nord-theme
+  (use-package doom-themes
     :ensure t
-    :init
-    (load-theme 'nord t))
+    :custom
+    (doom-themes-enable-bold t)
+    (doom-themes-enable-italic t)
+    :config
+    (load-theme 'doom-nord t)
+    (doom-themes-visual-bell-config)
+    (doom-themes-org-config))
+#+end_src
+*** nerd-icons :external:
+#+begin_src emacs-lisp
+  (use-package nerd-icons
+    :ensure t)
+#+end_src
+*** doom-modeline :external:
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :hook (after-init . doom-modeline-mode)
+    :config
+    (setopt doom-modeline-project-detection 'auto
+  		  doom-modeline-indent-info t))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
