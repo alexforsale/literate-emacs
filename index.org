@@ -676,7 +676,7 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
     (evil-global-set-key 'normal (kbd "<leader>:") '("execute commands" . execute-extended-command))
     (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
     (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument))
-    (when (featurep 'emms)
+    (with-eval-after-load 'emms
   	(evil-global-set-key 'normal (kbd "<leader>>") '("emms next" . emms-next))
   	(evil-global-set-key 'normal (kbd "<leader>>") '("emms previous" . emms-previous))))
 #+end_src
