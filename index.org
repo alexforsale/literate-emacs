@@ -508,13 +508,13 @@ A [[http://www.vim.org/scripts/script.php?script_id=1218][Nerd Commenter]] emula
     (evil-define-key* nil my/evilnc-map
       "c" '("comment/uncomment" . evilnc-comment-operator)))
 #+end_src
-*** [[https://github.com/hlissner/evil-snipe][evil-snipe]] :external:
+*** [[https://github.com/hlissner/evil-snipe][evil-snipe]] :external:archive:
 Evil-snipe emulates [[https://github.com/goldfeld/vim-seek][vim-seek]] and/or [[https://github.com/justinmk/vim-sneak][vim-sneak]] in evil-mode.
 
 It provides 2-character motions for quickly (and more accurately) jumping around text, compared to evil's built-in f/F/t/T motions, incrementally highlighting candidate targets as you type.
 
 By default, snipe only binds ~s~ (forward) / ~S~ (backward) to =evil-snipe-s= and =evil-snipe-S=, respectively. In operator mode, snipe is bound to ~z~ / ~Z~ and ~x~ / ~X~ (exclusive).
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package evil-snipe
     :commands evil-snipe-local-mode evil-snipe-override-local-mode
     :after evil
