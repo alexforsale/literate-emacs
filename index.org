@@ -2729,6 +2729,7 @@ Autoload these functions.
   (use-package emms
     :ensure t
     :config
+    :if (executable-find "mpd")
     (require 'emms-setup)
     (require 'emms-player-mpd)
     (emms-all)
