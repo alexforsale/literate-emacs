@@ -1700,7 +1700,9 @@ I still have mixed feelings about AI, but I do want to explore, just don't use i
               ("<tab>" . 'copilot-accept-completion)
               ("Tab" . 'copilot-accept-completion)
               ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word)))
+              ("C-<tab>" . 'copilot-accept-completion-by-word))
+    :config
+    (setopt copilot-idle-delay 2))
 #+end_src
 *** projectile :external:
 A project interaction library for /Emacs/, with little external dependency as possible.
