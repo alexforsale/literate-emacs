@@ -2776,7 +2776,7 @@ Autoload these functions.
   	(evil-define-key* nil my/emms-map
   	  "e" '("emms" . emms)))
 
-    from `doom'
+    ;;from `doom'
     (defun +emms/mpd-start-music-daemon ()
   	(interactive)
   	(start-process "mpd" nil "mpd")
