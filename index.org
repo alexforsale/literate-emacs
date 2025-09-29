@@ -92,15 +92,21 @@ The =custom-file= is used to save customization settings for future use.
 ** Setup package
 Now much more simpler since [[https://github.com/jwiegley/use-package][use-package]] is built into /Emacs/. It's actually not used since I'm using =straight.el=.
 #+begin_src emacs-lisp
-    (with-eval-after-load 'package
-      (setq package-enable-at-startup nil)
-      ;; Add `melpa` to `package-archives`.
-      (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/") t)
-      ;; gnu-devel
-      (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/") t)
-      (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/") t)
-      (package-initialize))
+  (with-eval-after-load 'package
+    (setq package-enable-at-startup nil)
+    ;; Add `melpa` to `package-archives`.
+    (add-to-list 'package-archives
+  			   '("melpa" . "https://melpa.org/packages/") t)
+    ;; gnu-devel
+    (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/") t)
+    (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/") t)
+    (package-initialize))
+#+end_src
+
+By setting the variable =use-package-compute-statistics= to =t=, we'll be able to have reports to see which packages are taking too much time to set up.
+#+begin_src emacs-lisp
+  (customize-set-variable 'use-package-compute-statistics t)
+  (require 'use-package)
 #+end_src
 ** footer :noexport:
 #+begin_src emacs-lisp
