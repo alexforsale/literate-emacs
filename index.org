@@ -670,10 +670,7 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
   (with-eval-after-load 'evil
     (evil-global-set-key 'normal (kbd "<leader>:") '("execute commands" . execute-extended-command))
     (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
-    (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument))
-    (with-eval-after-load 'emms
-  	(evil-global-set-key 'normal (kbd "<leader>>") '("emms next" . emms-next))
-  	(evil-global-set-key 'normal (kbd "<leader>>") '("emms previous" . emms-previous))))
+    (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument)))
 #+end_src
 *** C
 For now it's reserved only for =org-capture=.
@@ -2762,20 +2759,18 @@ Autoload these functions.
     (emms-default-players)
     (emms-cache-set-from-mpd-all)
     (emms-player-mpd-connect)
-    ;(emms-mpris-enable)
-    (with-eval-after-load 'evil
-  	(evil-collection-emms-setup))
-
     ;; keybindings
     (with-eval-after-load 'evil
+  	(evil-collection-emms-setup)
+  	(evil-global-set-key 'normal (kbd "<leader>>") '("emms next" . emms-next))
+  	(evil-global-set-key 'normal (kbd "<leader><") '("emms previous" . emms-previous))
   	(setopt my/emms-map (make-sparse-keymap))
   	(evil-define-key nil my/open-map
   	  (kbd "E") (cons "EMMS" my/emms-map))
   	(evil-define-key* nil my/emms-map
-  	  "e" '("emms" . emms))
-  	)
+  	  "e" '("emms" . emms)))
 
-    ;; from `doom'
+    from `doom'
     (defun +emms/mpd-start-music-daemon ()
   	(interactive)
   	(start-process "mpd" nil "mpd")
