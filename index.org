@@ -2520,9 +2520,8 @@ Configure the Elfeed RSS reader with an Orgmode file.
   (use-package elfeed-org
     :after elfeed
     :ensure t
-    :init
-    (elfeed-org)
     :config
+    (elfeed-org)
     (setq rmh-elfeed-org-files (list (expand-file-name "elfeed.org" org-directory))))
 #+end_src
 ***** [[https://github.com/jeetelongname/elfeed-goodies][elfeed-goodies]]
