@@ -2746,8 +2746,8 @@ Autoload these functions.
 #+begin_src emacs-lisp
   (use-package emms
     :ensure t
-    :config
     :if (executable-find "mpd")
+    :config
     (require 'emms-setup)
     (require 'emms-player-mpd)
     (emms-all)
