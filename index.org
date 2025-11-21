@@ -1784,8 +1784,9 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
         "P" '("switch project" . projectile-persp-switch-project)))
     :init
     (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
-    (unless (equal persp-mode t)
-      (persp-mode 1))
+    (with-eval-after-load 'persp-mode 
+  	(unless (equal persp-mode t)
+  	  (persp-mode 1)))
     :bind (([remap switch-to-buffer] . persp-switch-to-buffer*)
            ([remap kill-buffer] . persp-kill-buffer*))
     :hook (kill-emacs . persp-state-save))
