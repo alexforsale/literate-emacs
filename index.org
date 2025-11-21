@@ -81,11 +81,6 @@ Here I disable the menu-bar, tool-bar and vertical scroll bar.
   			 '(font . "Iosevka Nerd Font Mono-8"))
   (add-to-list 'default-frame-alist
   			 '(font . "Iosevka Nerd Font Mono-8"))
-
-  (use-package emacs
-    :ensure nil
-    :init
-    (load-theme 'modus-vivendi-tinted t))
 #+end_src
 ** Define the location of =custom-file=
 The =custom-file= is used to save customization settings for future use.
