@@ -3996,10 +3996,5 @@ This file is intended to be used on a remote system, so configuration should onl
   (add-to-list 'initial-frame-alist '(fullscreen . maximized))
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
-  (use-package emacs
-    :ensure nil
-    :init
-    (load-theme 'modus-vivendi-tinted t))
-
   <<minimal-config>>
 #+end_src
