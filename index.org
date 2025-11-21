@@ -1826,8 +1826,8 @@ This is provided by yasnippet.
     :config
     (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 #+end_src
-*** treesit-auto :external:
-#+begin_src emacs-lisp
+*** treesit-auto :external:archive:
+#+begin_src emacs-lisp :tangle no
   (use-package treesit-auto
     :ensure t
     :custom
@@ -3211,7 +3211,8 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
     :ensure t
     :init
     (add-hook 'rustic-mode-hook (lambda () flymake-mode -1))
-    (setq rust-mode-treesitter-derive t))
+    ;; (setq rust-mode-treesitter-derive t)
+    )
 
   (use-package rustic
     :ensure t
