@@ -1805,9 +1805,8 @@ This is provided by yasnippet.
 #+begin_src emacs-lisp
   (use-package yasnippet
     :ensure t
-    :init
-    (yas-global-mode)
     :config
+    (yas-global-mode)
     (define-key yas-keymap [tab] 'yas-next-field)
     (setq yas-snippets-dir
           (list (expand-file-name "snippets" user-emacs-directory)
@@ -2531,7 +2530,7 @@ Configure the Elfeed RSS reader with an Orgmode file.
   (use-package elfeed-goodies
     :after elfeed
     :ensure t
-    :init
+    :config
     (elfeed-goodies/setup))
 #+end_src
 *** ox-hugo                                                      :external:
