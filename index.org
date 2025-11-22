@@ -2376,7 +2376,7 @@ I've tried different Emacs packages for note taking. Although this is not a ligh
 #+begin_src emacs-lisp
   (use-package org-roam
     :ensure t
-    :if (not (string-match-p "microsoft" (shell-command-to-string "uname -a")))
+    :if (not (equal 'windows-nt system-type))
     :demand t
     :after org
     :custom
