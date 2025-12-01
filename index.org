@@ -1692,12 +1692,11 @@ I still have mixed feelings about AI, but I do want to explore, just don't use i
   (use-package copilot
     :if (executable-find "copilot-language-server")
     :hook (prog-mode . copilot-mode)
-    :load-path "site-lisp/copilot"
-    :bind	(:map copilot-mode-map
-              ("<tab>" . 'copilot-accept-completion)
-              ("Tab" . 'copilot-accept-completion)
-              ("C-TAB" . 'copilot-accept-completion-by-word)
-              ("C-<tab>" . 'copilot-accept-completion-by-word))
+    :bind
+    (:map copilot-completion-map
+  		("<tab>" . 'copilot-accept-completion)
+  		("C-TAB" . 'copilot-accept-completion-by-word)
+  		("C-<tab>" . 'copilot-accept-completion-by-word))
     :config
     (setopt copilot-idle-delay 2))
 #+end_src
