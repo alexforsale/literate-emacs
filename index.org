@@ -1862,15 +1862,11 @@ I've tried to use the built-in =electric-pair= for a while, it just doesn't have
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** org-mode core package :builtin:
-#+name: org-mode
+*** variables
+**** +config/org-directory
+This is for checking the correct directory for =org-mode= files between my various machines.
 #+begin_src emacs-lisp
-  (use-package org
-    :demand t
-    :commands org-tempo
-    :hook (org-mode . flyspell-mode)
-    :preface
-    (if (not +config/org-directory)
+  (if (not +config/org-directory)
         (cond
          ((file-directory-p
            (expand-file-name "Dropbox/org" (getenv "HOME")))
@@ -1882,6 +1878,28 @@ I've tried to use the built-in =electric-pair= for a while, it just doesn't have
            (expand-file-name "Documents/google-drive/org" (getenv "HOME")))
           (setq org-directory (expand-file-name "Documents/google-drive/org" (getenv "HOME")))))
       (customize-set-variable 'org-directory +config/org-directory))
+#+end_src
+*** org-mode core package :builtin:
+#+name: org-mode
+#+begin_src emacs-lisp
+  (defun +confing/org-mode-keybindings ()
+    (with-eval-after-load 'evil
+  	(setq my/org-note-map (make-sparse-keymap))
+  	(evil-define-key* '(normal visual) org-mode-map (kbd "<leader>m") (cons "org-mode" my/org-mode-map))
+  	(evil-define-key* nil my/org-mode-map "n" (cons "Notes" my/org-note-map))
+  	(evil-define-key* nil my/org-mode-map
+  	  (kbd "M-l") 'org-insert-last-stored-link
+  	  (kbd "C-w") '("Refile" . org-refile))
+  	(evil-define-key nil my/org-note-map
+  	  "c" '("capture" . org-capture)))
+    (global-set-key (kbd "C-c l") #'org-store-link)
+    (global-set-key (kbd "C-c a") #'org-agenda)
+    (global-set-key (kbd "C-c c") #'org-capture))
+
+  (use-package org
+    :demand t
+    :commands org-tempo
+    :hook (org-mode . flyspell-mode)
     :hook ((org-mode . org-indent-mode)
            (org-mode . +config/org-prettify-symbols)
            (org-mode . variable-pitch-mode))
@@ -3412,6 +3430,12 @@ Needs the package =yaml-language-server=, can be obtain from the /archlinux/ rep
 #+begin_src emacs-lisp
   (use-package yuck-mode
     :ensure t)
+#+end_src
+*** nix-mode
+#+begin_src emacs-lisp
+  (use-package nix-mode
+    :ensure t
+    :mode "\\.nix\\'")
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
