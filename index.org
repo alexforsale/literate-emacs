@@ -2694,8 +2694,8 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
     (with-eval-after-load 'evil-collection
       (evil-collection-rg-setup)))
 #+end_src
-*** mastodon :external:
-#+begin_src emacs-lisp
+*** mastodon :external:archive:
+#+begin_src emacs-lisp :tangle no
   (use-package mpv
     :ensure t)
 
@@ -2769,9 +2769,9 @@ Packaged as =ripgrep= in /archlinux/. The =:if= keyword won't load this if the e
   		  mastodon-active-user "alexforsale"))
 #+end_src
 There's lot of keybindings
-*** emms :external:
+*** emms :external:archive:
 Autoload these functions.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ;;;###autoload
   (defun +emms/notification ()
   (interactive)
@@ -2787,7 +2787,7 @@ Autoload these functions.
   			  "-i" cover)))
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package emms
     :ensure t
     :if (executable-find "mpd")
