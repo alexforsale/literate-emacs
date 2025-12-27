@@ -1686,7 +1686,11 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
   		(add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
   		(setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
   	:config
-  	(evil-define-key 'normal lsp-mode-map (kbd "gD") 'lsp-goto-implementation)
+  	(evil-define-key 'normal lsp-mode-map
+  		(kbd "gD") 'lsp-goto-implementation
+  		(kbd "gA") 'lsp-code-actions-at-point
+  		(kbd "K")  'lsp-describe-thing-at-point
+  		(kbd "<leader>aA") 'lsp-code-actions-at-point)
   	:custom
   	(lsp-completion-provider :none))
 
