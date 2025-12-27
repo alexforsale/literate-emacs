@@ -1458,14 +1458,9 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :mode ("/bspwmrc\\'" . sh-mode)
     :mode ("PKGBUILD" . sh-mode)
     :config
-    (setopt sh-indent-after-continuation 'always)
-    (with-eval-after-load 'rainbow-delimiters
-      (add-hook 'sh-mode-hook #'rainbow-delimiters-mode)
-    (with-eval-after-load 'eglot
-      (add-to-list 'eglot-server-programs
-                   '((sh-mode bash-ts-mode) .("bash-language-server" "start"))))
-    (add-hook 'sh-mode-hook #'eglot-ensure)
-    (add-hook 'bash-ts-mode-hook #'eglot-ensure)))
+  	(setopt sh-indent-after-continuation 'always)
+  	(with-eval-after-load 'rainbow-delimiters
+  		(add-hook 'sh-mode-hook #'rainbow-delimiters-mode)))
 #+end_src
 *** vterm :external:
 #+name: vterm
@@ -1635,9 +1630,9 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
             lisp-interaction-mode
             ielm-mode) . eldoc-mode))
 #+end_src
-*** eglot :builtin:
+*** eglot :builtin:archive:
 #+name: eglot
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package eglot
     :hook ((rust-mode nix-mode python-mode
   					toml-mode markdown-mode
@@ -1661,17 +1656,17 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
     (add-to-list 'eglot-server-programs
   			   '(css-mode . ("vscode-css-language-server" "--stdio"))))
 #+end_src
-*** consult-eglot :external:
-#+begin_src emacs-lisp
+*** consult-eglot :external:archive:
+#+begin_src emacs-lisp :tangle no
   (use-package consult-eglot
     :after '(consult eglot)
     :ensure t)
 #+end_src
-*** consult-eglot :external:
+*** consult-eglot-embark :external:archive:
 :PROPERTIES:
 :ID:       c0065744-c407-4e9e-9063-c291d677df30
 :END:
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package consult-eglot-embark
     :ensure t
     :after consult-eglot)
@@ -2972,13 +2967,10 @@ Autoload these functions.
     :mode ("\\.es6\\'" . js-mode)
     :mode ("\\.pac\\'" . js-mode)
     :config
-    (with-eval-after-load 'eglot
-  	(add-hook 'js-mode-hook #'eglot-ensure)
-  	(add-hook 'js-ts-mode-hook #'eglot-ensure))
     (with-eval-after-load 'smartparens
-  	(sp-local-pair 'js-mode "<" nil :actions :rem)
-  	(sp-local-pair 'js-ts-mode "<" nil :actions :rem))
-    (setopt js-chain-indent t))
+  		(sp-local-pair 'js-mode "<" nil :actions :rem)
+  		(sp-local-pair 'js-ts-mode "<" nil :actions :rem))
+  	(setopt js-chain-indent t))
 #+end_src
 **** nodejs-repl :external:
 #+begin_src emacs-lisp
@@ -2989,11 +2981,7 @@ Autoload these functions.
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :ensure t
-    :interpreter "ts-node"
-    :config
-    (with-eval-after-load 'eglot
-  	(add-hook 'js-ts-mode-hook #'eglot-ensure)
-  	(add-hook 'typescript-ts-mode-hook #'eglot-ensure)))
+    :interpreter "ts-node")
 #+end_src
 **** rjsx :external:
 #+begin_src emacs-lisp
@@ -3009,23 +2997,21 @@ Autoload these functions.
 #+name: markdown-mode
 #+begin_src emacs-lisp
   (use-package markdown-mode
-    :ensure t
-    :defer t
-    :mode
-    ("README\\.md\\'" . gfm-mode)
-    :init
-    (with-eval-after-load 'eglot
-  	(add-hook 'markdown-mode-hook 'eglot-ensure))
-    (when (executable-find "markdown")
-      (setopt markdown-command "markdown"))
-    (when (executable-find "multimarkdown")
-      (setopt markdown-command "multimarkdown"))
-    :config
-    (with-eval-after-load 'evil-collection
-      (evil-collection-markdown-mode-setup))
-    (with-eval-after-load 'lsp-mode
-      (add-hook 'markdown-mode-hook #'lsp-deferred))
-    (setopt markdown-fontify-code-blocks-natively t))
+  	:ensure t
+  	:defer t
+  	:mode
+  	("README\\.md\\'" . gfm-mode)
+  	:init
+  	(when (executable-find "markdown")
+  		(setopt markdown-command "markdown"))
+  	(when (executable-find "multimarkdown")
+  		(setopt markdown-command "multimarkdown"))
+  	:config
+  	(with-eval-after-load 'evil-collection
+  		(evil-collection-markdown-mode-setup))
+  	(with-eval-after-load 'lsp-mode
+  		(add-hook 'markdown-mode-hook #'lsp-deferred))
+  	(setopt markdown-fontify-code-blocks-natively t))
 
   (use-package poly-markdown
     :ensure t
@@ -3048,19 +3034,6 @@ Autoload these functions.
     :config
     (with-eval-after-load 'evil-collection
       (evil-collection-python-setup))
-    (with-eval-after-load 'eglot
-      (add-hook 'python-mode-hook #'eglot-ensure)
-      (add-hook 'python-ts-mode-hook #'eglot-ensure)
-      (add-to-list 'eglot-server-programs
-                   `(python-mode
-                     . ,(eglot-alternatives '(("pyright-langserver" "--stdio")
-                                              "jedi-language-server"
-                                              "pylsp")))))
-    (with-eval-after-load 'lsp-mode
-      (add-hook 'python-mode-hook #'lsp-deferred)
-      (add-hook 'python-mode-hook #'lsp-ui-mode)
-      (add-hook 'python-mode-hook #'lsp-ui-doc-mode)
-      (add-hook 'python-mode-local-vars-hook '(lambda () (lsp-deferred))))
     (if (executable-find "ipython")
         (setopt python-interpreter (executable-find "ipython"))
       (setopt python-interpreter (executable-find "python3")))
@@ -3072,26 +3045,6 @@ Autoload these functions.
           python-shell-completion-native-enable nil
           python-shell-exec-path (list "/usr/bin/" "/usr/local/bin" (expand-file-name ".local/bin/" (getenv "HOME")))
           python-indent-guess-indent-offset-verbose nil)
-    (when (featurep 'lsp-mode)
-      (setopt lsp-pylsp-plugins-rope-completion-enabled t ; needs python-rope package
-            lsp-pylsp-plugins-mccabe-enabled t ; needs python-mccabe package
-            lsp-ruff-lsp-python-path (executable-find "python3"))
-      (when (executable-find "black")
-        (setopt lsp-pylsp-plugins-black-enabled t))
-      (when (executable-find "autopep8")
-        (setopt lsp-pylsp-plugins-autopep8-enabled t))
-      (when (executable-find "flake8")
-        (setopt lsp-pylsp-plugins-flake8-enabled t))
-      (when (executable-find "pycodestyle")
-        (setopt lsp-pylsp-plugins-pycodestyle-enabled t))
-      (when (executable-find "pydocstyle")
-        (setopt lsp-pylsp-plugins-pydocstyle-enabled t))
-      (when (executable-find "pylint")
-        (setopt lsp-pylsp-plugins-pylint-enabled t))
-      (when (executable-find "pyflakes")
-        (setopt lsp-pylsp-plugins-pyflakes-enabled t))
-      (when (executable-find "yapf")
-        (setopt lsp-pylsp-plugins-yapf-enabled t)))
     (when (featurep 'flycheck)
       (setopt flycheck-python-mypy-executable (executable-find "mypy")
             flycheck-python-flake8-executable (executable-find "flake8")
@@ -3247,13 +3200,6 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
       (remove-hook 'rustic-mode-hook #'flymake-mode-off)
       (remove-hook 'flycheck-mode-hook #'rustic-flycheck-setup))
     (add-hook 'rustic-mode-hook (lambda () flymake-mode -1))
-    (with-eval-after-load 'eglot
-      (setopt rustic-lsp-client 'eglot
-            rustic-lsp-setup-p nil)
-      (add-hook 'eglot--managed-mode-hook (lambda () (flymake-mode +1)))
-    (add-to-list 'eglot-server-programs
-                 '((rust-ts-mode rust-mode rustic-mode)
-                   ("rust-analyzer" :initializationOptions (:check (:command "clippy"))))))
     (with-eval-after-load 'org-src
       (add-to-list 'org-src-lang-modes '("rust" . rustic)))
     :config
@@ -3286,12 +3232,7 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
         "r" '("cargo run" . rustic-cargo-run))
       (with-eval-after-load 'consult
         (evil-define-key* nil my/rustic-map
-          "m" '("consult flymake" . consult-flymake)))
-      (with-eval-after-load 'eglot
-        (evil-define-key* nil my/rustic-map
-          "a" '("eglot code action" . eglot-code-actions)
-          "I" '("eglot organize Import" . eglot-code-action-organize-imports)
-          "r" '("eglot rename" . eglot-rename))))
+          "m" '("consult flymake" . consult-flymake))))
     :custom
     (rustic-analyzer-command '("rustup" "run" "stable" "rust-analyzer"))
     (rustic-cargo-use-last-stored-arguments t))
@@ -3303,17 +3244,7 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
     :ensure t
     :demand t
     :mode
-    ("\\.toml\\'" . toml-mode)
-    :config
-    (with-eval-after-load 'eglot
-      (add-hook 'toml-mode-hook #'eglot-ensure)
-      (add-hook 'toml-ts-mode-hook #'eglot-ensure)
-      (add-to-list 'eglot-server-programs
-                   '(toml-ts-mode . ("taplo" "lsp" "stdio"))))
-    (with-eval-after-load 'lsp-mode
-      (add-hook 'toml-mode-hook #'lsp-deferred)
-      (setopt lsp-toml-command (executable-find "taplo"))
-      (add-to-list 'lsp-language-id-configuration '("\\.toml$" . "toml"))))
+    ("\\.toml\\'" . toml-mode))
 #+end_src
 Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install taplo-cli --features lsp=.
 *** web-mode
@@ -3355,7 +3286,6 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     :init
     (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode) 'append)
     :mode "\\.vue\\'"
-    :hook (web-mode . eglot-ensure)
     :config
     (setopt web-mode-enable-html-entities-fontification t
   		  web-mode-auto-close-style 1)
@@ -3383,8 +3313,7 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
 #+begin_src emacs-lisp
   (use-package css-mode
     :ensure nil
-    :hook (css-mode . rainbow-mode)
-    :hook (css-mode . eglot-ensure))
+    :hook (css-mode . rainbow-mode))
 #+end_src
 **** scss-mode :external:
 #+begin_src emacs-lisp
@@ -3392,7 +3321,6 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     :ensure t
     :mode "\\.scss\\'"
     :hook (scss-mode . rainbow-mode)
-    :hook (scss-mode . eglot-ensure)
     :init
     (with-eval-after-load 'flymake
   	(require 'flymake-proc nil t)))
@@ -3403,17 +3331,6 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
   (use-package yaml-mode
     :ensure t
     :config
-    (with-eval-after-load 'eglot
-      (add-hook 'yaml-mode-hook #'eglot-ensure)
-      (add-hook 'yaml-ts-mode-hook #'eglot-ensure)
-      (setq-default eglot-workspace-configuration
-                    '(:yaml (:format (:enable t)
-                                     :validate t
-                                     :hover t
-                                     :completion t
-                                     :schemas (https://raw.githubusercontent.com/my-user/my-project/project.schema.yml ["project.yml"]
-                                                                                                                       https://json.schemastore.org/yamllint.json ["/*.yml"])
-                                     :schemaStore (:enable t)))))
     (add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
     (add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
     (setopt tab-width 2)
@@ -3808,42 +3725,40 @@ This is the basic configuration, with the addition of enabling corfu in the mini
 #+end_src
 *** cape :external:
 #+begin_src emacs-lisp
-    (use-package cape
-      :ensure t
-      ;; Bind dedicated completion commands
-  	;; Alternative prefix keys: C-c p, M-p, M-+, ...
-  	:bind (("C-c p p" . completion-at-point) ;; capf
-  		   ("C-c p t" . complete-tag)        ;; etags
-  		   ("C-c p d" . cape-dabbrev))       ;; or dabbrev-completion
-      :hook
-      (prog-mode . +corfu-add-cape-file-h)
-      ((org-mode markdown-mode) . +corfu-add-cape-elisp-block-h)
-      :init
-      ;; Add to the global default value of `completion-at-point-functions' which is
-      ;; used by `completion-at-point'.  The order of the functions matters, the
-      ;; first function returning a result wins.  Note that the list of buffer-local
-      ;; completion functions takes precedence over the global list.
-      (add-hook 'completion-at-point-functions #'cape-dabbrev)
-      (add-hook 'completion-at-point-functions #'cape-file)
-      (add-hook 'completion-at-point-functions #'cape-elisp-block)
-      :config
-      (setopt cape-dabbrev-check-other-buffers t)
-      (defun +corfu-add-cape-file-h ()
-        (add-hook 'completion-at-point-functions #'cape-file -10 t))
-      (defun +corfu-add-cape-elisp-block-h ()
-        (add-hook 'completion-at-point-functions #'cape-elisp-block 0 t))
-      (with-eval-after-load 'lsp-mode
-        (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
-        (advice-add #'lsp-completion-at-point :around #'cape-wrap-nonexclusive))
-      (advice-add #'comint-completion-at-point :around #'cape-wrap-nonexclusive)
-      (with-eval-after-load 'eglot
-        (advice-add #'eglot-completion-at-point :around #'cape-wrap-nonexclusive))
-      (advice-add #'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive)
-       ;; From the `cape' readme. Without this, Eshell autocompletion is broken on
-      ;; Emacs28.
-      (when (< emacs-major-version 29)
-        (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
-        (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)))
+  (use-package cape
+    :ensure t
+    ;; Bind dedicated completion commands
+  ;; Alternative prefix keys: C-c p, M-p, M-+, ...
+  :bind (("C-c p p" . completion-at-point) ;; capf
+  	   ("C-c p t" . complete-tag)        ;; etags
+  	   ("C-c p d" . cape-dabbrev))       ;; or dabbrev-completion
+    :hook
+    (prog-mode . +corfu-add-cape-file-h)
+    ((org-mode markdown-mode) . +corfu-add-cape-elisp-block-h)
+    :init
+    ;; Add to the global default value of `completion-at-point-functions' which is
+    ;; used by `completion-at-point'.  The order of the functions matters, the
+    ;; first function returning a result wins.  Note that the list of buffer-local
+    ;; completion functions takes precedence over the global list.
+    (add-hook 'completion-at-point-functions #'cape-dabbrev)
+    (add-hook 'completion-at-point-functions #'cape-file)
+    (add-hook 'completion-at-point-functions #'cape-elisp-block)
+    :config
+    (setopt cape-dabbrev-check-other-buffers t)
+    (defun +corfu-add-cape-file-h ()
+      (add-hook 'completion-at-point-functions #'cape-file -10 t))
+    (defun +corfu-add-cape-elisp-block-h ()
+      (add-hook 'completion-at-point-functions #'cape-elisp-block 0 t))
+    (with-eval-after-load 'lsp-mode
+      (advice-add #'lsp-completion-at-point :around #'cape-wrap-noninterruptible)
+      (advice-add #'lsp-completion-at-point :around #'cape-wrap-nonexclusive))
+    (advice-add #'comint-completion-at-point :around #'cape-wrap-nonexclusive)
+    (advice-add #'pcomplete-completions-at-point :around #'cape-wrap-nonexclusive)
+     ;; From the `cape' readme. Without this, Eshell autocompletion is broken on
+    ;; Emacs28.
+    (when (< emacs-major-version 29)
+      (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-silent)
+      (advice-add 'pcomplete-completions-at-point :around #'cape-wrap-purify)))
 #+end_src
 
 *** kind-icon :external:
