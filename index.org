@@ -1675,7 +1675,9 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
 #+begin_src emacs-lisp
   (use-package lsp-mode
   	:ensure t
-  	:hook ((nix-ts-mode) . lsp-deferred)
+  	:hook ((nix-ts-mode lua-ts-mode python-ts-mode
+  						yaml-ts-mode toml-ts-mode
+  						bash-ts-mode) . lsp-deferred)
   	:hook (lsp-completion-mode . my/lsp-mode-setup-completion)
   	:commands (lsp lsp-deferred)
   	:init
@@ -1688,9 +1690,9 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
   	:config
   	(evil-define-key 'normal lsp-mode-map
   		(kbd "gD") 'lsp-goto-implementation
-  		(kbd "gA") 'lsp-code-actions-at-point
+  		(kbd "gA") 'lsp-execute-code-action
   		(kbd "K")  'lsp-describe-thing-at-point
-  		(kbd "<leader>aA") 'lsp-code-actions-at-point)
+  		(kbd "<leader>aA") 'lsp-execute-code-action)
   	:custom
   	(lsp-completion-provider :none))
 
@@ -3353,9 +3355,9 @@ Install taplo-cli from /archlinux/ package or using /cargo/ with =cargo install 
     (with-eval-after-load 'flymake
   	(require 'flymake-proc nil t)))
 #+end_src
-*** yaml-mode :external:
+*** yaml-mode :external:archive:
 #+name: yaml-mode
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package yaml-mode
     :ensure t
     :config
