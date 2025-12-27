@@ -1287,8 +1287,8 @@ the =:height= value is 1/10 pt, so 100 height means 10 pt.
     :init
     (global-font-lock-mode t))
 #+end_src
-*** hs-mode :builtin:
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+*** hs-mode :builtin:archive:
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package hideshow
     :hook (prog-mode . hs-minor-mode))
 #+end_src
@@ -1671,6 +1671,30 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
     :ensure t
     :after consult-eglot)
 #+end_src
+*** lsp-mode
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+  	:ensure t
+  	:hook ((nix-ts-mode) . lsp-deferred)
+  	:hook (lsp-completion-mode . my/lsp-mode-setup-completion)
+  	:commands (lsp lsp-deferred)
+  	:init
+  	(setopt lsp-keymap-prefix "C-c l")
+  	(defun my/lsp-mode-setup-completion ()
+  		(setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+  					'(orderless))
+  		(add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+  		(setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+  	:config
+  	(evil-define-key 'normal lsp-mode-map (kbd "gD") 'lsp-goto-implementation)
+  	:custom
+  	(lsp-completion-provider :none))
+
+  (use-package lsp-ui
+  	:ensure t
+  	:commands lsp-ui-mode)
+
+#+end_src
 *** flymake :builtin:
 Built-in on-the-fly syntax checking.
 #+name: flymake
@@ -1823,15 +1847,15 @@ This is provided by yasnippet.
     :config
     (add-to-list 'completion-at-point-functions #'yasnippet-capf))
 #+end_src
-*** treesit-auto :external:archive:
-#+begin_src emacs-lisp :tangle no
+*** treesit-auto :external:
+#+begin_src emacs-lisp
   (use-package treesit-auto
-    :ensure t
-    :custom
-    (treesit-auto-install 'prompt)
-    :config
-    (treesit-auto-add-to-auto-mode-alist 'all)
-    (global-treesit-auto-mode))
+  	:ensure t
+  	:custom
+  	(treesit-auto-install 'prompt)
+  	:config
+  	(treesit-auto-add-to-auto-mode-alist 'all)
+  	(global-treesit-auto-mode))
 #+end_src
 *** smartparens :external:
 I've tried to use the built-in =electric-pair= for a while, it just doesn't have the default configuration for many of the major-modes that I frequently used, and I don't like spending time configuring for each of them. So =smartparens= it is!
@@ -3350,7 +3374,7 @@ Needs the package =yaml-language-server=, can be obtain from the /archlinux/ rep
 #+end_src
 *** nix-mode
 #+begin_src emacs-lisp
-  (use-package nix-mode
+  (use-package nix-ts-mode
     :ensure t
     :mode "\\.nix\\'")
 #+end_src
