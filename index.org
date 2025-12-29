@@ -1473,7 +1473,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
     (with-eval-after-load 'evil
         (setopt my/vterm-map (make-sparse-keymap))
   	  (evil-define-key* '(normal visual) 'global (kbd "<leader>v") (cons "Vterm" my/vterm-map))
-  	  (evil-define-key* nil my/vterm-map "v" '("terminal" . vterm)))
+  	  (evil-define-key* nil my/vterm-map "V" '("terminal" . vterm)))
     (with-eval-after-load 'evil-collection
       (evil-collection-vterm-setup))
     (add-hook 'vterm-mode-hook
@@ -1492,7 +1492,7 @@ A shell-like command interpreter implemented in Emacs Lisp.
     :config
     (setopt multi-vterm-dedicated-window-height-percent 20)
     (with-eval-after-load 'evil
-      (evil-define-key* nil my/vterm-map "V" '("toggle terminal" . multi-vterm-dedicated-toggle))
+      (evil-define-key* nil my/vterm-map "v" '("toggle terminal" . multi-vterm-dedicated-toggle))
       (evil-define-key* 'normal vterm-mode-map (kbd ",c") #'multi-vterm)
       (evil-define-key* 'normal vterm-mode-map (kbd ",n") #'multi-vterm-next)
       (evil-define-key* 'normal vterm-mode-map (kbd ",p") #'multi-vterm-prev)))
