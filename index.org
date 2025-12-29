@@ -1322,12 +1322,12 @@ This built-in package is necessary when dealing with /Emacs lisp/.
     :init
     (repeat-mode +1))
 #+end_src
-*** [[https://github.com/justbur/emacs-which-key][which-key]] :external:
-Emacs package that displays available keybindings in popup. This is one of the top /Emacs/ packages that I must have in my configuration.
+*** [[https://github.com/justbur/emacs-which-key][which-key]] :builtin:
+Emacs package that displays available keybindings in popup. This is one of the top /Emacs/ packages that I must have in my configuration. Now built in into Emacs.
 #+name: which-key
 #+begin_src emacs-lisp
   (use-package which-key
-    :ensure t
+    :ensure nil
     :custom
     (which-key-lighter "")
     (which-key-sort-order #'which-key-key-order-alpha)
@@ -3965,7 +3965,7 @@ Needs an external package =fd=, or =fd-find=
   (provide 'config-dired)
   ;;; config-dired.el ends here
 #+end_src
-* minimal emacs
+* minimal Emacs
 ** minimal-init.el
 :PROPERTIES:
 :header-args: :tangle ./minimal-init.el
