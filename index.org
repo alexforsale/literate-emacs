@@ -1677,7 +1677,7 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
   	:ensure t
   	:hook ((nix-ts-mode lua-ts-mode python-ts-mode
   						yaml-ts-mode toml-ts-mode
-  						bash-ts-mode) . lsp-deferred)
+  						bash-ts-mode js-ts-mode) . lsp-deferred)
   	:hook (lsp-completion-mode . my/lsp-mode-setup-completion)
   	:commands (lsp lsp-deferred)
   	:init
@@ -1691,7 +1691,10 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
   	(evil-define-key 'normal lsp-mode-map
   		(kbd "gD") 'lsp-goto-implementation
   		(kbd "gA") 'lsp-execute-code-action
+  		(kbd "gr") 'lsp-find-references
+  		(kbd "gR") 'lsp-rename
   		(kbd "K")  'lsp-describe-thing-at-point
+  		(kbd "<leader>ma") 'lsp-avy-lens
   		(kbd "<leader>aA") 'lsp-execute-code-action)
   	:custom
   	(lsp-completion-provider :none))
@@ -1839,8 +1842,7 @@ This is provided by yasnippet.
     (setopt yas-snippets-dir
           (list (expand-file-name "snippets" user-emacs-directory)
                 (expand-file-name "straight/build/yasnippet-snippets/snippets" user-emacs-directory)))
-    (with-eval-after-load 'evil
-      (evil-define-key* nil my/insert-map "s" '("insert snippet" . consult-yasnippet))))
+    (evil-define-key* nil my/insert-map "s" '("insert snippet" . consult-yasnippet)))
 
   (use-package consult-yasnippet :ensure t)
 
@@ -3005,9 +3007,9 @@ Autoload these functions.
 #+begin_src emacs-lisp
   (use-package js
     :ensure nil
-    :mode ("\\.[mc]?js\\'" . js-mode)
-    :mode ("\\.es6\\'" . js-mode)
-    :mode ("\\.pac\\'" . js-mode)
+    :mode ("\\.[mc]?js\\'" . js-ts-mode)
+    :mode ("\\.es6\\'" . js-ts-mode)
+    :mode ("\\.pac\\'" . js-ts-mode)
     :config
     (with-eval-after-load 'smartparens
   		(sp-local-pair 'js-mode "<" nil :actions :rem)
@@ -3246,6 +3248,7 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
       (add-to-list 'org-src-lang-modes '("rust" . rustic)))
     :config
     (setopt rustic-format-on-save nil)
+    (evil-set-initial-state #'rustic-popup-mode 'insert)
     (when (executable-find "rustup")
       (setopt rustic-analyzer-command
             `(,(executable-find "rustup")
@@ -3259,7 +3262,9 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
       (setopt my/rustic-map (make-sparse-keymap))
       (setopt my/cargo-map (make-sparse-keymap))
       (evil-define-key* '(normal visual) rustic-mode-map (kbd "<leader>m") (cons "rustic-mode" my/rustic-map))
-      (evil-define-key* nil my/rustic-map (kbd "c") (cons "Cargo" my/cargo-map))
+      (evil-define-key* nil my/rustic-map
+  	  (kbd "c") (cons "Cargo" my/cargo-map)
+  	  (kbd "p") '("rustic popup" . rustic-popup))
       (evil-define-key* nil my/cargo-map
         "a" '("cargo add" . rustic-cargo-add)
         "B" '("cargo build" . rustic-cargo-build)
