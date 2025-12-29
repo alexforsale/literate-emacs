@@ -1781,41 +1781,42 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
     :ensure t
     :demand t
     :config
+    (persp-mode)
     (setopt persp-initial-frame-name "Main"
-          persp-suppress-no-prefix-key-warning t)
+  		  persp-suppress-no-prefix-key-warning t)
     (if (featurep 'no-littering)
-        (setopt persp-state-default-file (expand-file-name ".perspective-state" no-littering-var-directory))
-      (setopt persp-state-default-file (expand-file-name ".perspective-state" user-emacs-directory)))
+  	  (setopt persp-state-default-file (expand-file-name ".perspective-state" no-littering-var-directory))
+  	(setopt persp-state-default-file (expand-file-name ".perspective-state" user-emacs-directory)))
     (global-set-key [remap switch-to-buffer] #'persp-switch-to-buffer*)
     (when (featurep 'consult)
-      (require 'consult)
-      (unless (boundp 'persp-consult-source)
-        (defvar persp-consult-source
-          (list :name     "Perspective"
-                :narrow   ?s
-                :category 'buffer
-                :state    #'consult--buffer-state
-                :history  'buffer-name-history
-                :default  t
-                :items
-                #'(lambda () (consult--buffer-query :sort 'visibility
-                                               :predicate '(lambda (buf) (persp-is-current-buffer buf t))
-                                               :as #'buffer-name)))))
-      (consult-customize consult--source-buffer :hidden t :default nil)
-      (add-to-list 'consult-buffer-sources persp-consult-source))
+  	(require 'consult)
+  	(unless (boundp 'persp-consult-source)
+  	  (defvar persp-consult-source
+  		(list :name     "Perspective"
+  			  :narrow   ?s
+  			  :category 'buffer
+  			  :state    #'consult--buffer-state
+  			  :history  'buffer-name-history
+  			  :default  t
+  			  :items
+  			  #'(lambda () (consult--buffer-query :sort 'visibility
+  												  :predicate '(lambda (buf) (persp-is-current-buffer buf t))
+  												  :as #'buffer-name)))))
+  	(consult-customize consult--source-buffer :hidden t :default nil)
+  	(add-to-list 'consult-buffer-sources persp-consult-source))
     (with-eval-after-load 'evil
-      (evil-define-key* '(normal visual) 'global
-        (kbd "<leader>TAB") (cons "Perspective" perspective-map))
-      (evil-define-key* nil perspective-map
-        (kbd "TAB") '("swich to last used perspective" . persp-switch-last)
-        "P" '("switch project" . projectile-persp-switch-project)))
+  	(evil-define-key* '(normal visual) 'global
+  	  (kbd "<leader>TAB") (cons "Perspective" perspective-map))
+  	(evil-define-key* nil perspective-map
+  	  (kbd "TAB") '("swich to last used perspective" . persp-switch-last)
+  	  "P" '("switch project" . projectile-persp-switch-project)))
     :init
     (customize-set-variable 'persp-mode-prefix-key (kbd "C-c TAB"))
-    (with-eval-after-load 'persp-mode 
-  	(unless (equal persp-mode t)
-  	  (persp-mode 1)))
+    ;; (with-eval-after-load 'persp-mode 
+    ;; 	(unless (equal persp-mode t)
+    ;; 	  (persp-mode 1)))
     :bind (([remap switch-to-buffer] . persp-switch-to-buffer*)
-           ([remap kill-buffer] . persp-kill-buffer*))
+  		 ([remap kill-buffer] . persp-kill-buffer*))
     :hook (kill-emacs . persp-state-save))
 #+end_src
 *** persp-projectile :external:
@@ -2498,6 +2499,17 @@ Requires pandoc
                  `("w" "Web site" entry
                    (file+headline ,(expand-file-name "links.org" org-directory) "Links")
                    "** %a :website:\n\n:PROPERTIES:\n:CREATED: %U\n:END:\n %?\n\n%:initial")))
+#+end_src
+*** pdf-tools
+#+begin_src emacs-lisp
+  (use-package pdf-tools
+    :ensure t
+    :config
+    (pdf-tools-install)
+    (setq-default pdf-view-display-size 'fit-width)
+    (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward)
+    :custom
+    (pdf-annot-activate-created-annotations t "automatically annotate highlights"))
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
