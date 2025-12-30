@@ -76,11 +76,6 @@ Here I disable the menu-bar, tool-bar and vertical scroll bar.
 
   (add-to-list 'initial-frame-alist '(fullscreen . maximized))
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
-
-  (add-to-list 'initial-frame-alist
-  			 '(font . "Iosevka Nerd Font Mono-8"))
-  (add-to-list 'default-frame-alist
-  			 '(font . "Iosevka Nerd Font Mono-8"))
 #+end_src
 ** Define the location of =custom-file=
 The =custom-file= is used to save customization settings for future use.
@@ -137,7 +132,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 #+name: identity
 #+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (setopt user-mail-address "alexforsale@yahoo.com"
-        user-full-name "Kristian Alexander P")
+  		user-full-name "Kristian Alexander P")
 #+end_src
 
 *** merge-list-to-list function :archive:
@@ -154,10 +149,10 @@ This function is just a wrapper to easily merge lists. I don't think I need it a
 #+name: +config/org-directory
 #+begin_src emacs-lisp
   (cond ((file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
-         (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
-        ((string-match-p "microsoft" (shell-command-to-string "uname -a"))
-         (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
-             (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
+  	   (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
+  	  ((string-match-p "microsoft" (shell-command-to-string "uname -a"))
+  	   (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
+  		   (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
 #+end_src
 I put my org files inside /syncthing/ default directory (=~/Sync= if on /Linux/) so it will automatically synced to all my devices. But on /windows/ WSL the location will vary depending on how you install /syncthing/ so I won't even bother set it up.
 ** Load each modular configuration file.
@@ -978,7 +973,7 @@ This is for other /evil/ packages that need its own keybinding, and tbf, there's
 *** base :builtin:
 Usually configuration that defined at the /C source code/.
 #+name: base
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package emacs
     :ensure nil
     :custom
@@ -1018,7 +1013,7 @@ Usually configuration that defined at the /C source code/.
 *** files :builtin:
 Usually configurations related to file manipulations.
 #+name: files
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package files
     :ensure nil
     :config
@@ -1052,7 +1047,7 @@ Usually configurations related to file manipulations.
 *** saveplace :builtin:
 When closing a file (like when exiting /Emacs/ or killing a buffer), the point (or cursor) in that buffer will be saved. I find this a must-have feature.
 #+name: saveplace
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package saveplace
     :init
     (save-place-mode 1)
@@ -1062,7 +1057,7 @@ When closing a file (like when exiting /Emacs/ or killing a buffer), the point (
 *** autorevert :builtin:
 Here I'm using =global-auto-revert-mode= to automatically revert all opened buffer.
 #+name: autorevert
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package autorevert
     :hook (focus-in . doom-auto-revert-buffers-h)
     :hook (after-save . doom-auto-revert-buffers-h)
@@ -1104,7 +1099,7 @@ Here I'm using =global-auto-revert-mode= to automatically revert all opened buff
 *** savehist :builtin:
 Saving the /minibuffer/ history.
 #+name: savehist
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package savehist
     :init
     (savehist-mode 1)
@@ -1125,7 +1120,7 @@ Saving the /minibuffer/ history.
 #+end_src
 *** recentf :builtin:
 #+name: recentf
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package recentf
     :bind ("C-c f" . recentf)
     :commands recentf-open-files
@@ -1195,7 +1190,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
 :header-args: :tangle ./modules/config-ui.el :mkdirp t
 :END:
 *** Base UI :builtin:
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package emacs
     :ensure nil
     :hook ((prog-mode text-mode conf-mode) . display-line-numbers-mode)
@@ -1232,7 +1227,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
     (setq-default display-line-numbers-widen t))
 #+end_src
 *** frame :builtin:
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package frame
     :ensure nil
     :hook (after-init . window-divider-mode)
@@ -1243,7 +1238,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
           window-divider-default-right-width 1))
 #+end_src
 *** window :builtin:
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package window
     :ensure nil
     :config
@@ -1256,9 +1251,9 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
     :ensure nil
     :config
     (setopt comint-prompt-read-only t
-          comint-buffer-maximum-size 2048)
+  		  comint-buffer-maximum-size 2048)
     (with-eval-after-load 'evil
-      (evil-define-key* '(normal visual) comint-mode-map "q" '(lambda () (interactive) (kill-buffer nil)))))
+  	(evil-define-key* '(normal visual) comint-mode-map "q" '(lambda () (interactive) (kill-buffer nil)))))
 #+end_src
 *** winner :builtin:
 #+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
@@ -1273,7 +1268,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
 #+end_src
 *** Fonts
 #+name: fonts
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 80)
   (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 80)
 
@@ -1303,7 +1298,7 @@ the =:height= value is 1/10 pt, so 100 height means 10 pt.
 *** paren :builtin:
 This built-in package is necessary when dealing with /Emacs lisp/.
 #+name: paren
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
   (use-package paren
     :ensure nil
     :hook (prog-mode . show-paren-local-mode)
@@ -1422,7 +1417,7 @@ By using ~gK~ or ~gJ~ in normal or visual mode.
     (setopt doom-modeline-project-detection 'auto
   		  doom-modeline-indent-info t))
 #+end_src
-*** indent-bars
+*** indent-bars :external:
 #+begin_src emacs-lisp
   (use-package indent-bars
     :ensure t
@@ -1443,7 +1438,7 @@ By using ~gK~ or ~gJ~ in normal or visual mode.
 
 A shell-like command interpreter implemented in Emacs Lisp.
 #+name: eshell
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
 (use-package eshell
   :ensure nil
   :custom
@@ -3852,7 +3847,7 @@ This is the basic configuration, with the addition of enabling corfu in the mini
   ;;; Code:
 #+end_src
 Stands for /Directory Editor/ (I guess), is a builtin file manager for /Emacs/.
-*** dired
+*** dired :builtin:
 #+name: dired
 #+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package dired
@@ -3880,7 +3875,7 @@ The arguments for =dired-listing-switches= are:
 - =-l= :: Produce a long, detailed listing. Dired requires this.
 - =--group-directories-first= :: Just as it said.
 - =--time-style=long-iso= :: Uses the international standard for time representation in the file listing. So we have something like 2023-12-30 06:38 to show the last modified time.
-*** image-dired
+*** image-dired :builtin:
 #+name: image-dired
 #+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package image-dired
@@ -3890,7 +3885,7 @@ The arguments for =dired-listing-switches= are:
           image-dired-thumbnail-storage 'standard
           image-dired-external-viewer "xdg-open"))
 #+end_src
-*** dired-x
+*** dired-x :builtin:
 #+name: dired-x
 #+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package dired-x
