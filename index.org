@@ -1404,7 +1404,7 @@ By using ~gK~ or ~gJ~ in normal or visual mode.
     (doom-themes-enable-bold t)
     (doom-themes-enable-italic t)
     :config
-    (load-theme 'doom-nord t)
+    (load-theme 'doom-moonlight t)
     (doom-themes-visual-bell-config)
     (doom-themes-org-config))
 #+end_src
