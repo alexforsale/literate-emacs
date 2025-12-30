@@ -1268,7 +1268,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
 #+end_src
 *** Fonts
 #+name: fonts
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 80)
   (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 80)
 
