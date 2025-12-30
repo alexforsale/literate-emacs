@@ -1421,6 +1421,12 @@ By using ~gK~ or ~gJ~ in normal or visual mode.
     (setopt doom-modeline-project-detection 'auto
   		  doom-modeline-indent-info t))
 #+end_src
+*** indent-bars
+#+begin_src emacs-lisp
+  (use-package indent-bars
+    :ensure t
+    :hook (prog-mode . indent-bars-mode))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-ui)
