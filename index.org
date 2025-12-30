@@ -1545,7 +1545,6 @@ When enabled, typed text replaces the selection if the selection is active.  Oth
     (setq-default sentence-end-double-space nil)
     (setopt sentence-end-without-period nil)
     (setopt colon-double-space nil)
-    (setopt use-hard-newlines t)
     (setopt adaptive-fill-mode t))
 #+end_src
 *** whitespace :builtin:
