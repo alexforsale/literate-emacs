@@ -3008,6 +3008,19 @@ Autoload these functions.
 :PROPERTIES:
 :header-args: :tangle ./modules/config-progmodes.el :mkdirp t
 :END:
+*** tab-width function
+#+begin_src emacs-lisp
+  (defun my/two-spaces-soft-tabs ()
+    (setq-local tab-width 2))
+
+  (defun my/four-spaces-soft-tabs ()
+    (setq-local tab-width 2))
+#+end_src
+**** For misc languages/modes
+#+begin_src emacs-lisp
+  ;; yaml
+  (add-hook 'yaml-ts-mode-hook #'my/two-spaces-soft-tabs)
+#+end_src
 *** javascript :builtin:
 #+begin_src emacs-lisp
   (use-package js
@@ -3015,6 +3028,7 @@ Autoload these functions.
     :mode ("\\.[mc]?js\\'" . js-ts-mode)
     :mode ("\\.es6\\'" . js-ts-mode)
     :mode ("\\.pac\\'" . js-ts-mode)
+    :hook (js-ts-mode . my/two-spaces-soft-tabs)
     :config
     (with-eval-after-load 'smartparens
   		(sp-local-pair 'js-mode "<" nil :actions :rem)
@@ -3030,6 +3044,7 @@ Autoload these functions.
 #+begin_src emacs-lisp
   (use-package typescript-mode
     :ensure t
+    :hook (typescript-ts-mode my/two-spaces-soft-tabs)
     :interpreter "ts-node")
 #+end_src
 **** rjsx :external:
@@ -3080,6 +3095,7 @@ Autoload these functions.
     :ensure nil
     :mode ("[./]flake8\\'" . conf-mode)
     :mode ("/Pipfile\\'" . conf-mode)
+    :hook (python-ts-mode . my/four-spaces-soft-tabs)
     :config
     (with-eval-after-load 'evil-collection
       (evil-collection-python-setup))
@@ -3242,6 +3258,7 @@ For rust there are two options: [[https://github.com/rust-lang/rust-mode][rust-m
   (use-package rustic
     :ensure t
     :after rust-mode
+    :hook (rustic-mode . my/four-spaces-soft-tabs)
     :init
     (with-eval-after-load 'rustic-flycheck
       (remove-hook 'rustic-mode-hook #'flycheck-mode)
