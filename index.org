@@ -100,7 +100,8 @@ Now much more simpler since [[https://github.com/jwiegley/use-package][use-packa
     ;; gnu-devel
     (add-to-list 'package-archives '("gnu-devel" . "https://elpa.gnu.org/devel/") t)
     (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/") t)
-    (package-initialize))
+    (unless package-archive-contents
+  	(package-refresh-contents)))
 #+end_src
 
 By setting the variable =use-package-compute-statistics= to =t=, we'll be able to have reports to see which packages are taking too much time to set up.
