@@ -615,6 +615,12 @@ These commands is used often so it will need a faster keybindings (~<leader> <ke
     (evil-global-set-key 'normal (kbd "<leader>;") '("eval expression" . eval-expression))
     (evil-global-set-key 'normal (kbd "<leader>u") '("universal arguments" . universal-argument)))
 #+end_src
+*** A
+#+begin_src emacs-lisp
+    (with-eval-after-load 'evil
+      (setopt my/a-map (make-sparse-keymap))
+      (evil-define-key* '(normal visual) 'global (kbd "<leader>a") (cons "Act" my/a-map)))
+#+end_src
 *** C
 For now it's reserved only for =org-capture=.
 #+begin_src emacs-lisp
@@ -2913,13 +2919,15 @@ Apart from the =consult-projectile-function=, this is pretty much the default.
     ;; (setopt eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
 
     :config
-    (with-eval-after-load 'evil-collection
-      (evil-collection-embark-setup))
+    (global-set-key (kbd "C-.") #'embark-act)
+    (global-set-key (kbd "C-;") #'embark-dwim)
+    (global-set-key (kbd "C-h b") #'embark-bindings)
+    (evil-collection-embark-setup)
+    (evil-define-key nil my/a-map
+      (kbd ";") '("Embark DWIM" . embark-dwim)
+      (kbd "a") '("Embark Act" . embark-act))
     (setopt which-key-use-C-h-commands nil
-          prefix-help-command #'embark-prefix-help-command)
-    (with-eval-after-load 'evil
-      (evil-define-key* '(normal visual insert) 'global (kbd "C-.") 'embark-act))
-
+  	  prefix-help-command #'embark-prefix-help-command)
     ;; Hide the mode line of the Embark live/completions buffers
     (add-to-list 'display-buffer-alist
                  '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
