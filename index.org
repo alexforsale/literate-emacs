@@ -1223,6 +1223,8 @@ Emacs package that displays available keybindings in popup. This is one of the t
     :config
     (setopt multi-vterm-dedicated-window-height-percent 20)
     (evil-define-key* nil my/vterm-map "v" '("toggle terminal" . multi-vterm-dedicated-toggle))
+    (global-set-key (kbd "C-\\") #'multi-vterm-dedicated-toggle)
+    (evil-define-key 'insert vterm-mode-map (kbd "C-\\") #'multi-vterm-dedicated-toggle)
     (evil-define-key* 'normal vterm-mode-map (kbd ",c") #'multi-vterm)
     (evil-define-key* 'normal vterm-mode-map (kbd ",n") #'multi-vterm-next)
     (evil-define-key* 'normal vterm-mode-map (kbd ",p") #'multi-vterm-prev))
