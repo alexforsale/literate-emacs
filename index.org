@@ -138,7 +138,7 @@ This file is already added in my git repositories for initial Emacs loading. But
 *** merge-list-to-list function :archive:
 This function is just a wrapper to easily merge lists. I don't think I need it anymore.
 #+name: merge-list-to-list
-#+begin_src emacs-lisp :tangle no
+#+begin_src emacs-lisp
   ;;; From https://emacs.stackexchange.com/questions/38008/adding-many-items-to-a-list/68048#68048
   (defun merge-list-to-list (dst src)
     "Merges content of the 2nd list with the 1st one"
@@ -942,7 +942,7 @@ All the built-in functions that doesn't fit to other categories.
 *** files :builtin:
 Usually configurations related to file manipulations.
 #+name: files
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package files
     :ensure nil
     :config
@@ -976,7 +976,7 @@ Usually configurations related to file manipulations.
 *** savehist :builtin:
 Saving the /minibuffer/ history.
 #+name: savehist
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package savehist
     :init
     (savehist-mode 1)
@@ -1176,7 +1176,7 @@ Emacs package that displays available keybindings in popup. This is one of the t
   	  doom-modeline-indent-info t))
 #+end_src
 *** window :builtin:
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package window
     :ensure nil
     :config
@@ -1253,7 +1253,7 @@ Emacs package that displays available keybindings in popup. This is one of the t
 *** saveplace :builtin:
 When closing a file (like when exiting /Emacs/ or killing a buffer), the point (or cursor) in that buffer will be saved. I find this a must-have feature.
 #+name: saveplace
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package saveplace
     :init
     (save-place-mode 1)
@@ -1293,7 +1293,7 @@ Even though I use /consult-find-file/ the actual /recentf/ package is still used
 *** autorevert :builtin:
 Here I'm using =global-auto-revert-mode= to automatically revert all opened buffer.
 #+name: autorevert
-#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n" :tangle no
+#+begin_src emacs-lisp :noweb-ref minimal-config :noweb-sep "\n\n"
   (use-package autorevert
     :hook (focus-in . doom-auto-revert-buffers-h)
     :hook (after-save . doom-auto-revert-buffers-h)
