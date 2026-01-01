@@ -2574,6 +2574,16 @@ Blogging tools
   (use-package yuck-mode
     :ensure t)
 #+end_src
+*** [[https://git.isincredibly.gay/srxl/astro-ts-mode][astro-ts-mode]] :external:
+#+begin_src emacs-lisp
+  (use-package astro-ts-mode
+    :ensure t
+    :mode "\\.astro\\'"
+    :hook (astro-ts-mode . lsp-deferred)
+    :config
+    (setq treesit-language-source-alist
+  	'((astro "https://github.com/virchau13/tree-sitter-astro"))))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
