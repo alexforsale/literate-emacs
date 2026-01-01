@@ -1403,6 +1403,8 @@ Here I'm using =global-auto-revert-mode= to automatically revert all opened buff
     (add-hook 'json-ts-mode-hook '(lambda () (setq-local tab-width 2)))
     (add-hook 'python-ts-mode-hook '(lambda () (setq-local tab-width 4)))
     (add-hook 'c-ts-mode-hook '(lambda () (setq-local tab-width 4)))
+    ;; mjs
+    (add-to-list 'auto-mode-alist '("\\.mjs\\'" . js-ts-mode))
     (treesit-auto-add-to-auto-mode-alist 'all)
     (global-treesit-auto-mode))
 #+end_src
