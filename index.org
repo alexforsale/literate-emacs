@@ -2589,6 +2589,16 @@ Blogging tools
     (setq treesit-language-source-alist
   	'((astro "https://github.com/virchau13/tree-sitter-astro"))))
 #+end_src
+*** [[https://github.com/taquangtrung/emacs-kdl-mode][kdl-mode]] :external:
+#+begin_src emacs-lisp
+  (use-package kdl-mode
+    :ensure t
+    :mode "\\.kdl\\'"
+    :hook (kdl-mode . my/kdl-mode-hook)
+    :config
+    (defun my/kdl-mode-hook ()
+      (setq-local tab-width 4)))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
