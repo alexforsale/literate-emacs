@@ -1250,6 +1250,13 @@ Emacs package that displays available keybindings in popup. This is one of the t
   ;;; Commentary:
   ;;; Code:
 #+end_src
+*** indent-tabs-mode
+#+begin_src emacs-lisp
+  (use-package simple
+    :ensure nil
+    :config
+    (setq-default indent-tabs-mode nil))
+#+end_src
 *** saveplace :builtin:
 When closing a file (like when exiting /Emacs/ or killing a buffer), the point (or cursor) in that buffer will be saved. I find this a must-have feature.
 #+name: saveplace
