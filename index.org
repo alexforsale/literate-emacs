@@ -2606,6 +2606,28 @@ Blogging tools
     (defun my/kdl-mode-hook ()
       (setq-local tab-width 4)))
 #+end_src
+*** [[https://web-mode.org/][web-mode]] :external:
+#+begin_src emacs-lisp
+  (use-package web-mode
+    :ensure t
+    :mode "\\.phtml\\'"
+    :mode "\\.tpl\\.php\\'"
+    :mode "\\.[agj]sp\\'"
+    :mode "\\.as[cp]x\\'"
+    :mode "\\.erb\\'"
+    :mode "\\.mustache\\'"
+    :mode "\\.djhtml\\'"
+    :mode "\\.html?\\'"
+    :hook (web-mode . my/web-mode-hook)
+    :config
+    (defun my/web-mode-hook ()
+      "My web-mode hook."
+      (setopt web-mode-markup-indent-offset 2
+              web-mode-css-indent-offset 2))
+    (setopt web-mode-engines-alist
+            '(("php" . "\\.phtml\\'")
+              ("blade"  . "\\.blade\\."))))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
