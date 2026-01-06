@@ -1250,7 +1250,7 @@ Emacs package that displays available keybindings in popup. This is one of the t
   ;;; Commentary:
   ;;; Code:
 #+end_src
-*** indent-tabs-mode
+*** indent-tabs-mode :builtin:
 #+begin_src emacs-lisp
   (use-package simple
     :ensure nil
