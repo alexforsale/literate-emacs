@@ -2607,6 +2607,9 @@ Blogging tools
       (setq-local tab-width 4)))
 #+end_src
 *** [[https://web-mode.org/][web-mode]] :external:
+:PROPERTIES:
+:ID:       800e11a2-3522-4f46-aac3-e72a80a5b481
+:END:
 #+begin_src emacs-lisp
   (use-package web-mode
     :ensure t
@@ -2623,7 +2626,8 @@ Blogging tools
     (defun my/web-mode-hook ()
       "My web-mode hook."
       (setopt web-mode-markup-indent-offset 2
-              web-mode-css-indent-offset 2))
+              web-mode-css-indent-offset 2
+              js-indent-level 2))
     (setopt web-mode-engines-alist
             '(("php" . "\\.phtml\\'")
               ("blade"  . "\\.blade\\."))))
