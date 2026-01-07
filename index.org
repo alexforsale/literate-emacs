@@ -2570,6 +2570,13 @@ Blogging tools
     :hook
     (after-save . executable-make-buffer-file-executable-if-script-p))
 #+end_src
+*** sh-script :builtin:
+#+begin_src emacs-lisp
+  (use-package sh-script
+    :ensure nil
+    :config
+    (setopt sh-indentation 2))
+#+end_src
 *** [[https://github.com/nix-community/nix-ts-mode][nix-ts-mode]] :external:
 :LOGBOOK:
 - Refiled on [2025-12-30 Tue 20:57]
