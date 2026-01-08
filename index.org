@@ -2637,7 +2637,18 @@ Blogging tools
               js-indent-level 2))
     (setopt web-mode-engines-alist
             '(("php" . "\\.phtml\\'")
-              ("blade"  . "\\.blade\\."))))
+              ("blade"  . "\\.blade\\.")
+              ("django" . "\\.html\\'"))))
+#+end_src
+*** [[https://github.com/jorgenschaefer/pyvenv][pyvenv]] :external:
+#+begin_src emacs-lisp
+  (use-package pyvenv
+    :ensure t)
+#+end_src
+*** [[https://github.com/pythonic-emacs/djangonaut][djangonaut]] :external:
+#+begin_src emacs-lisp
+  (use-package djangonaut
+    :ensure t)
 #+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
