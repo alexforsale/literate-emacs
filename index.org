@@ -2389,7 +2389,6 @@ Blogging tools
   ,#+date: %t
   ,#+hugo_categories: %^{Categories|misc|desktop|emacs|learning}
   ,#+hugo_tags: %^{Tags}
-  ,#+hugo_auto_set_lastmod: t
   ,#+hugo_section: posts
   ,#+hugo_base_dir: ../../
   ,#+language: en
