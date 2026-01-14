@@ -2592,6 +2592,8 @@ Blogging tools
     (add-hook 'nix-ts-mode-hook (lambda () (setq-local tab-width 2)))
     (setopt lsp-nix-nixd-nixos-options-expr
             (concat "(builtins.getFlake \"/etc/nixos\").nixosConfigurations." system-name ".options")
+            lsp-nix-nixd-home-manager-options-expr
+            (concat "(builtins.getFlake \"/etc/nixos\").homeConfigurations." "\"" user-login-name "@" system-name "\".options")
             lsp-nix-nixd-server-path (executable-find "nixd")
             lsp-nix-nixd-formatting-command [(executable-find "nixpkgs-fmt")]))
 #+end_src
