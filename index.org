@@ -2590,6 +2590,9 @@ Blogging tools
     :mode "\\.nix\\'"
     :config
     (add-hook 'nix-ts-mode-hook (lambda () (setq-local tab-width 2)))
+    :custom
+    (lsp-disabled-clients '((nix-mode . nix-nil)
+                            (nix-ts-mode . nix-nil)))
     (setopt lsp-nix-nixd-nixos-options-expr
             (concat "(builtins.getFlake \"/etc/nixos\").nixosConfigurations." system-name ".options")
             lsp-nix-nixd-home-manager-options-expr
