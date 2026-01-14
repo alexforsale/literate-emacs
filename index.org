@@ -1537,23 +1537,23 @@ Useful when I'm working on several /projectile/ projects at once. With each /per
         (setopt persp-state-default-file (expand-file-name ".perspective-state" no-littering-var-directory))
       (setopt persp-state-default-file (expand-file-name ".perspective-state" user-emacs-directory)))
     (global-set-key [remap switch-to-buffer] #'persp-switch-to-buffer*)
-    (when (featurep 'consult)
-      (require 'consult)
-      (unless (boundp 'persp-consult-source)
-        (defvar persp-consult-source
-  	(list :name     "Perspective"
-  	      :narrow   ?s
-  	      :category 'buffer
-  	      :state    #'consult--buffer-state
-  	      :history  'buffer-name-history
-  	      :default  t
-  	      :items
-  	      #'(lambda () (consult--buffer-query
-  			    :sort 'visibility
-  			    :predicate '(lambda (buf) (persp-is-current-buffer buf t))
-  			    :as #'buffer-name)))))
-      (consult-customize consult--source-buffer :hidden t :default nil)
-      (add-to-list 'consult-buffer-sources persp-consult-source))
+    ;; (when (featurep 'consult)
+    ;;   (require 'consult)
+    ;;   (unless (boundp 'persp-consult-source)
+    ;;     (defvar persp-consult-source
+    ;;       (list :name     "Perspective"
+    ;;             :narrow   ?s
+    ;;             :category 'buffer
+    ;;             :state    #'consult--buffer-state
+    ;;             :history  'buffer-name-history
+    ;;             :default  t
+    ;;             :items
+    ;;             #'(lambda () (consult--buffer-query
+    ;;       		    :sort 'visibility
+    ;;       		    :predicate '(lambda (buf) (persp-is-current-buffer buf t))
+    ;;       		    :as #'buffer-name)))))
+    ;;   (consult-customize consult--source-buffer :hidden t :default nil)
+    ;;   (add-to-list 'consult-buffer-sources persp-consult-source))
     (evil-define-key* '(normal visual) 'global
       (kbd "<leader>TAB") (cons "Perspective" perspective-map))
     (evil-define-key* nil perspective-map
@@ -2880,15 +2880,16 @@ This is the basic configuration, with the addition of enabling corfu in the mini
     ;; (setopt consult-preview-key '("S-<down>" "S-<up>"))
     ;; For some commands and buffer sources it is useful to configure the
     ;; :preview-key on a per-command basis using the `consult-customize' macro.
-    (consult-customize
-     consult-theme :preview-key '(:debounce 0.2 any)
-     consult-ripgrep consult-git-grep consult-grep
-     consult-bookmark consult-recent-file consult-xref
-     consult--source-bookmark consult--source-file-register
-     consult--source-recent-file consult--source-project-recent-file
-     ;; :preview-key "M-."
-     :preview-key '(:debounce 0.4 any))
-    ;; Optionally configure the narrowing key.
+    ;; (consult-customize
+    ;;  consult-theme :preview-key '(:debounce 0.2 any)
+    ;;  consult-ripgrep consult-git-grep consult-grep
+    ;;  consult-bookmark consult-recent-file consult-xref
+    ;;  consult--source-file-register
+    ;;  consult--source-recent-file consult--source-project-recent-file
+    ;;  ;; :preview-key "M-."
+    ;;  :preview-key '(:debounce 0.4 any))
+    ;; ;; Optionally
+    ;; configure the narrowing key.
     ;; Both < and C-+ work reasonably well.
     (setopt consult-narrow-key "<") ;; "C-+"
     ;; Optionally make narrowing help available in the minibuffer.
