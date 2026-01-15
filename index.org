@@ -1164,7 +1164,7 @@ Emacs package that displays available keybindings in popup. This is one of the t
     (doom-themes-enable-italic t)
     :config
     (cond ((string-equal "uganda" system-name)
-           (load-theme 'doom-tokyo-night t))
+           (load-theme 'doom-material-dark t))
           ((string-equal "kenya" system-name)
            (load-theme 'doom-solarized-dark-high-contrast t)))
     (doom-themes-visual-bell-config)
