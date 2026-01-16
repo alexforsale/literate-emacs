@@ -1166,7 +1166,9 @@ Emacs package that displays available keybindings in popup. This is one of the t
     (cond ((string-equal "uganda" system-name)
            (load-theme 'doom-one t))
           ((string-equal "kenya" system-name)
-           (load-theme 'doom-material-dark t)))
+           (load-theme 'doom-material-dark t))
+          ((string-equal "zaire" system-name)
+           (load-theme 'doom-monokai-ristretto t)))
     (doom-themes-visual-bell-config)
     (doom-themes-org-config))
 #+end_src
