@@ -1054,8 +1054,8 @@ Saving the /minibuffer/ history.
 **** Fonts
 #+name: fonts
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 80)
-  (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 80)
+  (set-face-attribute 'default nil :family "Iosevka Nerd Font Mono" :height 100)
+  (set-face-attribute 'variable-pitch nil :family "Iosevka Nerd Font Mono" :height 100)
 
   ;;(set-frame-font "Iosevka Nerd Font Mono 8" nil t)
 #+end_src
