@@ -2596,6 +2596,7 @@ Blogging tools
             (concat "(builtins.getFlake \"/etc/nixos\").nixosConfigurations." system-name ".options")
             lsp-nix-nixd-home-manager-options-expr
             (concat "(builtins.getFlake \"/etc/nixos\").homeConfigurations." "\"" user-login-name "@" system-name "\".options")
+            lsp-nix-nixd-nixpkgs-expr "import (builtins.getFlake \"/etc/nixos\").input.nixpkgs { }"
             lsp-nix-nixd-server-path (executable-find "nixd")
             lsp-nix-nixd-formatting-command [(executable-find "nixpkgs-fmt")])
     :custom
