@@ -1606,6 +1606,12 @@ I've tried to use the built-in =electric-pair= for a while, it just doesn't have
   (use-package dap-mode
     :ensure t)
 #+end_src
+*** [[https://www.flycheck.org/][flycheck]] :external:
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :hook (prog-mode . flycheck-mode))
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-ide)
