@@ -152,8 +152,8 @@ This function is just a wrapper to easily merge lists. I don't think I need it a
   (cond ((file-directory-p (expand-file-name "Sync/org" (getenv "HOME")))
   	   (customize-set-variable '+config/org-directory (expand-file-name "Sync/org" (getenv "HOME"))))
   	  ((string-match-p "microsoft" (shell-command-to-string "uname -a"))
-  	   (if (file-directory-p "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org")
-  		   (customize-set-variable '+config/org-directory "/mnt/c/Users/SyncthingServiceAcct/Default Folder/org"))))
+  	   (if (file-directory-p "/mnt/c/Users/alexf/Sync/org")
+  		   (customize-set-variable '+config/org-directory "/mnt/c/Users/alexf/Sync/org"))))
 #+end_src
 I put my org files inside /syncthing/ default directory (=~/Sync= if on /Linux/) so it will automatically synced to all my devices. But on /windows/ WSL the location will vary depending on how you install /syncthing/ so I won't even bother set it up.
 ** Load each modular configuration file.
