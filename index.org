@@ -2730,6 +2730,16 @@ Blogging tools
   (use-package djangonaut
     :ensure t)
 #+end_src
+*** [[https://github.com/haskell/haskell-mode][haskell-mode]] :external:
+#+begin_src emacs-lisp
+  (use-package haskell-mode
+    :ensure t
+    :hook (haskell-mode . lsp-deferred)
+    :hook (haskell-literate-mode . lsp-deferred))
+
+  (use-package lsp-haskell
+    :ensure t)
+#+end_src
 *** footer :noexport:
 #+begin_src emacs-lisp
   (provide 'config-progmodes)
